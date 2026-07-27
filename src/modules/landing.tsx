@@ -92,8 +92,10 @@ export const LandingView = ({
         string | null
     >(null);
     const [indiceImagenApp, fijarIndiceImagenApp] = useState(0);
+    const [menuAbierto, fijarMenuAbierto] = useState(false);
 
-    // Referencias y estado para el scroll con el mouse
+    // Referencias y estado para el scroll de los carruseles (funciona con touch de forma nativa
+    // y también permite arrastrar con mouse cuando se previsualiza en escritorio)
     const refServicios = useRef<HTMLDivElement | null>(null);
     const refDrones = useRef<HTMLDivElement | null>(null);
     const estadoArrastre = useRef({
@@ -171,19 +173,19 @@ export const LandingView = ({
 
     const datosServicios = [
         {
-            icono: <Droplets size={22} />,
+            icono: <Droplets size={20} />,
             titulo: "Fumigación y Riego",
             descripcion:
                 "Despliegues autónomos calibrados milimétricamente para la aspersión uniforme de insumos.",
         },
         {
-            icono: <Eye size={22} />,
+            icono: <Eye size={20} />,
             titulo: "Mapeo Multiespectral",
             descripcion:
                 "Diagnóstico exhaustivo de estrés hídrico y vigor vegetal mediante procesamiento de imágenes NIR.",
         },
         {
-            icono: <Truck size={22} />,
+            icono: <Truck size={20} />,
             titulo: "Logística de Carga",
             descripcion:
                 "Transporte pesado totalmente autónomo de herramientas, muestras e insumos al lote.",
@@ -303,7 +305,7 @@ export const LandingView = ({
             imagen: "src/img/Freefly_Alta_X.png",
             precio: "L 620,000",
             descripcion:
-                "With an impressive lifting capacity of 35 lbs (15 kg), Freefly Alta X redefines what's possible in cinematography. Whether you're aiming to capture breathtaking landscapes, dynamic action sequences, or intricate aerial shots, the Alta X empowers your creative vision like never before.",
+                "Con una capacidad de elevación de 15 kg, el Freefly Alta X redefine lo posible en cinematografía y captura de imágenes aéreas para inspección de cultivos.",
             destacado: false,
             especificaciones: {
                 "Capacidad de Carga": "15 kg",
@@ -322,7 +324,7 @@ export const LandingView = ({
             imagen: "src/img/JOUAV_CW-80E.png",
             precio: "L 1,150,000",
             descripcion:
-                "The CW-80E can stay afloat for more than 840 minutes at a maximum speed of 135 km/h. With a payload capacity of up to 25 kg, the long range drone allows the flexibility to carry large high-end sensors, such as hyperspectral and bathymetric LiDARs.",
+                "El CW-80E puede permanecer en vuelo más de 840 minutos a una velocidad máxima de 135 km/h, con capacidad de carga de hasta 25 kg para sensores hiperespectrales y LiDAR batimétrico.",
             destacado: false,
             especificaciones: {
                 "Capacidad de Carga": "25 kg",
@@ -354,110 +356,145 @@ export const LandingView = ({
 
     return (
         <div className="w-full h-full bg-white flex flex-col overflow-hidden relative">
-            {/* ─── NAVBAR ─── */}
-            <nav className="sticky top-0 z-40 bg-white/95 border-b-2 border-gray-200 px-8 flex items-center gap-6 h-14 w-full shrink-0 shadow-sm backdrop-blur">
-                <div className="flex items-center gap-3 shrink-0">
+            {/* ─── NAVBAR MÓVIL ─── */}
+            <nav className="sticky top-0 z-40 bg-white/95 border-b-2 border-gray-200 px-4 flex items-center justify-between h-14 w-full shrink-0 shadow-sm backdrop-blur">
+                <div className="flex items-center gap-2 min-w-0">
                     <img
                         src="src/img/logo_bio_dron.png"
                         alt="BioDron Logo"
-                        className="w-15 h-15 object-contain"
+                        className="w-8 h-8 object-contain shrink-0"
                         onError={(e) => {
                             (e.target as HTMLElement).style.display = "none";
                         }}
                     />
-                    <Title className="text-2xl font-bold text-[#0E5E6F] tracking-tight uppercase">
+                    <Title className="text-base font-bold text-[#0E5E6F] tracking-tight uppercase truncate">
                         BioDron
                     </Title>
                 </div>
+
+                <button
+                    onClick={() => fijarMenuAbierto((prev) => !prev)}
+                    aria-label={menuAbierto ? "Cerrar menú" : "Abrir menú"}
+                    className="w-9 h-9 shrink-0 flex flex-col items-center justify-center gap-[5px] rounded-[4px] border-2 border-gray-200 bg-white cursor-pointer"
+                >
+                    <span
+                        className={`block w-4 h-0.5 bg-gray-700 rounded-full transition-all duration-200 ${menuAbierto ? "rotate-45 translate-y-[6px]" : ""}`}
+                    />
+                    <span
+                        className={`block w-4 h-0.5 bg-gray-700 rounded-full transition-all duration-200 ${menuAbierto ? "opacity-0" : "opacity-100"}`}
+                    />
+                    <span
+                        className={`block w-4 h-0.5 bg-gray-700 rounded-full transition-all duration-200 ${menuAbierto ? "-rotate-45 -translate-y-[6px]" : ""}`}
+                    />
+                </button>
+            </nav>
+
+            {/* ─── MENÚ DESPLEGABLE MÓVIL ─── */}
+            {menuAbierto && (
                 <div
-                    className="flex items-center gap-6 ml-6"
+                    className="sticky top-14 z-30 w-full bg-white border-b-2 border-gray-200 shadow-sm px-4 py-3 flex flex-col gap-1 shrink-0"
                     style={{ fontFamily: "'Roboto', sans-serif" }}
                 >
                     <a
                         href="#inicio"
-                        className="text-sm text-gray-500 hover:text-[#0E5E6F] transition-colors tracking-wider"
+                        onClick={() => fijarMenuAbierto(false)}
+                        className="text-sm text-gray-600 py-2.5 border-b border-gray-100 tracking-wide"
                     >
                         Características
                     </a>
                     <a
                         href="#servicios"
-                        className="text-sm text-gray-500 hover:text-[#0E5E6F] transition-colors tracking-wider"
+                        onClick={() => fijarMenuAbierto(false)}
+                        className="text-sm text-gray-600 py-2.5 border-b border-gray-100 tracking-wide"
                     >
                         Servicios
                     </a>
                     <a
                         href="#precios"
-                        onClick={() => fijarPestanaPrecios("subs")}
-                        className="text-sm text-gray-500 hover:text-[#0E5E6F] transition-colors tracking-wider"
+                        onClick={() => {
+                            fijarPestanaPrecios("subs");
+                            fijarMenuAbierto(false);
+                        }}
+                        className="text-sm text-gray-600 py-2.5 border-b border-gray-100 tracking-wide"
                     >
                         Suscripciones
                     </a>
                     <a
                         href="#precios"
-                        onClick={() => fijarPestanaPrecios("equipos")}
-                        className="text-sm text-gray-500 hover:text-[#0E5E6F] transition-colors tracking-wider"
+                        onClick={() => {
+                            fijarPestanaPrecios("equipos");
+                            fijarMenuAbierto(false);
+                        }}
+                        className="text-sm text-gray-600 py-2.5 tracking-wide"
                     >
                         Equipos
                     </a>
+
+                    <div className="flex flex-col gap-2 mt-3">
+                        <WireframeButton
+                            onClick={() => {
+                                fijarMenuAbierto(false);
+                                alIniciarSesion();
+                            }}
+                            className="w-full py-2.5 text-sm rounded-[4px] border-gray-300 bg-white text-gray-700"
+                        >
+                            Ingresar
+                        </WireframeButton>
+                        <WireframeButton
+                            primary
+                            onClick={() => {
+                                fijarMenuAbierto(false);
+                                alRegistrar();
+                            }}
+                            className="w-full py-2.5 text-sm rounded-[4px]"
+                        >
+                            Registrarse
+                        </WireframeButton>
+                    </div>
                 </div>
-                <div className="ml-auto flex items-center gap-3">
-                    <WireframeButton
-                        onClick={alIniciarSesion}
-                        className="py-2 px-5 text-sm rounded-[4px] border-gray-300 bg-white text-gray-700"
-                    >
-                        Ingresar
-                    </WireframeButton>
-                    <WireframeButton
-                        primary
-                        onClick={alRegistrar}
-                        className="py-2 px-5 text-sm rounded-[4px]"
-                    >
-                        Registrarse
-                    </WireframeButton>
-                </div>
-            </nav>
+            )}
 
             {/* ─── CONTENEDOR PRINCIPAL CON SCROLL ─── */}
             <div className="flex-1 w-full overflow-y-auto scroll-smooth">
                 {/* SECCIÓN 1: HERO */}
                 <section
                     id="inicio"
-                    className="w-full px-16 flex flex-col lg:flex-row items-center justify-center gap-12 bg-white border-b-2 border-gray-100 box-border py-20"
+                    className="w-full px-4 flex flex-col items-center justify-center gap-6 bg-white border-b-2 border-gray-100 box-border py-8"
                 >
-                    <div className="flex-1 max-w-xl">
-                        <div className="inline-flex items-center gap-2 bg-[#0E5E6F]/10 text-[#0E5E6F] px-3.5 py-1.5 rounded-[4px] mb-4 border border-[#0E5E6F]/20">
-                            <Zap size={14} />
-                            <Text className="text-xs font-black tracking-widest">
+                    <div className="w-full">
+                        <div className="inline-flex items-center gap-2 bg-[#0E5E6F]/10 text-[#0E5E6F] px-3 py-1.5 rounded-[4px] mb-3 border border-[#0E5E6F]/20">
+                            <Zap size={12} />
+                            <Text className="text-[10px] font-black tracking-widest">
                                 Plataforma líder en Honduras
                             </Text>
                         </div>
-                        <Title className="text-4xl lg:text-[2.5rem] leading-[1.15] font-extrabold text-gray-900 mb-4 normal-case tracking-tight">
+                        <Title className="text-2xl leading-[1.2] font-extrabold text-gray-900 mb-3 normal-case tracking-tight">
                             Monitoreo Agrícola Autónomo con Drones
                         </Title>
-                        <Text className="text-sm text-gray-500 leading-relaxed mb-6 max-w-md">
+                        <Text className="text-xs text-gray-500 leading-relaxed mb-4">
                             Automatiza el riego, fumigación y transporte de carga pesada con
                             tecnología de precisión aeroespacial. Diseñado para optimizar el
                             rendimiento y la eficiencia de tus parcelas productoras.
                         </Text>
-                        <div className="flex gap-4">
+                        <div className="flex flex-col gap-2.5">
                             <WireframeButton
                                 primary
                                 onClick={alRegistrar}
-                                className="py-2.5 px-5 rounded-[4px] flex items-center gap-2 text-sm"
+                                className="w-full py-2.5 px-4 rounded-[4px] flex items-center justify-center gap-2 text-sm"
                             >
-                                <Droplets size={18} /> Soy agricultor
+                                <Droplets size={16} /> Soy agricultor
                             </WireframeButton>
                             <WireframeButton
                                 onClick={alRegistrar}
-                                className="py-2.5 px-5 rounded-[4px] flex items-center gap-2 bg-white border-[#0E5E6F] text-[#0E5E6F] text-sm"
+                                className="w-full py-2.5 px-4 rounded-[4px] flex items-center justify-center gap-2 bg-white border-[#0E5E6F] text-[#0E5E6F] text-sm"
                             >
-                                <Navigation size={18} /> Soy piloto
+                                <Navigation size={16} /> Soy piloto
                             </WireframeButton>
                         </div>
                     </div>
 
-                    <div className="flex-1 w-full max-w-lg relative">
-                        <div className="relative h-72 w-full overflow-hidden rounded-[4px] bg-gray-900 shadow-md">
+                    <div className="w-full relative">
+                        <div className="relative h-48 w-full overflow-hidden rounded-[4px] bg-gray-900 shadow-md">
                             <img
                                 src={imagenesCarruselPrincipal[indiceImagenPrincipal].src}
                                 alt={imagenesCarruselPrincipal[indiceImagenPrincipal].titulo}
@@ -466,22 +503,22 @@ export const LandingView = ({
                                     (e.target as HTMLElement).style.display = "none";
                                 }}
                             />
-                            <div className="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-gray-950 via-gray-900/40 to-transparent">
-                                <span className="text-[10px] font-bold text-[#0E5E6F] tracking-widest bg-white/90 px-2 py-0.5 rounded-[4px] w-max mb-1">
+                            <div className="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-gray-950 via-gray-900/40 to-transparent">
+                                <span className="text-[9px] font-bold text-[#0E5E6F] tracking-widest bg-white/90 px-2 py-0.5 rounded-[4px] w-max mb-1">
                                     Vista aérea activa
                                 </span>
                                 <Title
                                     as="h3"
-                                    className="text-lg font-bold text-white normal-case"
+                                    className="text-sm font-bold text-white normal-case"
                                 >
                                     {imagenesCarruselPrincipal[indiceImagenPrincipal].titulo}
                                 </Title>
-                                <Text className="text-xs text-gray-300 mt-0.5">
+                                <Text className="text-[10px] text-gray-300 mt-0.5">
                                     {imagenesCarruselPrincipal[indiceImagenPrincipal].descripcion}
                                 </Text>
                             </div>
                         </div>
-                        <div className="flex justify-center gap-1.5 mt-4">
+                        <div className="flex justify-center gap-1.5 mt-3">
                             {imagenesCarruselPrincipal.map((_, idx) => (
                                 <button
                                     key={idx}
@@ -496,23 +533,22 @@ export const LandingView = ({
                 {/* SECCIÓN 2: SERVICIOS CON GALERÍA Y CARRUSEL */}
                 <section
                     id="servicios"
-                    className="w-full px-8 lg:px-16 bg-gray-50 border-b-2 border-gray-200 flex flex-col justify-center box-border py-10"
+                    className="w-full px-4 bg-gray-50 border-b-2 border-gray-200 flex flex-col justify-center box-border py-8"
                 >
-                    <div className="max-w-6xl mx-auto w-full">
-                        {/* Título centrado sobre ambos elementos */}
-                        <div className="w-full text-center mb-10">
-                            <Title className="text-2xl font-bold text-gray-900 mb-1 normal-case tracking-tight">
+                    <div className="w-full">
+                        <div className="w-full text-center mb-6">
+                            <Title className="text-lg font-bold text-gray-900 mb-1 normal-case tracking-tight">
                                 Servicios de la Plataforma
                             </Title>
-                            <Text className="text-gray-500 text-xs max-w-md mx-auto">
+                            <Text className="text-gray-500 text-[11px] max-w-xs mx-auto">
                                 Pilares de infraestructura tecnológica dedicados a la
                                 agricultura de precisión.
                             </Text>
                         </div>
 
-                        <div className="flex flex-col lg:flex-row gap-8 items-stretch w-full">
-                            {/* Carrusel Izquierdo (App Móvil) - Altura fija de 280px */}
-                            <div className="w-full lg:w-1/3 max-w-sm relative shrink-0 h-[280px]">
+                        <div className="flex flex-col gap-7 items-stretch w-full">
+                            {/* Carrusel App Móvil */}
+                            <div className="w-full relative h-[200px]">
                                 <div className="relative h-full w-full overflow-hidden rounded-[4px] bg-gray-900 shadow-md">
                                     <img
                                         src={imagenesAppMovil[indiceImagenApp].src}
@@ -522,23 +558,22 @@ export const LandingView = ({
                                             (e.target as HTMLElement).style.display = "none";
                                         }}
                                     />
-                                    <div className="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-gray-950 via-gray-900/40 to-transparent">
-                                        <span className="text-[10px] font-bold text-[#0E5E6F] uppercase tracking-widest bg-white/90 px-2 py-0.5 rounded-[4px] w-max mb-1">
+                                    <div className="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-gray-950 via-gray-900/40 to-transparent">
+                                        <span className="text-[9px] font-bold text-[#0E5E6F] uppercase tracking-widest bg-white/90 px-2 py-0.5 rounded-[4px] w-max mb-1">
                                             App Móvil
                                         </span>
                                         <Title
                                             as="h3"
-                                            className="text-lg font-bold text-white normal-case"
+                                            className="text-sm font-bold text-white normal-case"
                                         >
                                             {imagenesAppMovil[indiceImagenApp].titulo}
                                         </Title>
-                                        <Text className="text-xs text-gray-300 mt-0.5">
+                                        <Text className="text-[10px] text-gray-300 mt-0.5">
                                             {imagenesAppMovil[indiceImagenApp].descripcion}
                                         </Text>
                                     </div>
                                 </div>
-                                {/* Indicadores del carrusel ubicados debajo (fuera del h-[280px] o absolutos) */}
-                                <div className="absolute -bottom-6 left-0 right-0 flex justify-center gap-1.5">
+                                <div className="absolute -bottom-5 left-0 right-0 flex justify-center gap-1.5">
                                     {imagenesAppMovil.map((_, idx) => (
                                         <button
                                             key={idx}
@@ -549,11 +584,10 @@ export const LandingView = ({
                                 </div>
                             </div>
 
-                            {/* Galería de Servicios (Derecha) - Misma altura de 280px */}
-                            <div className="w-full lg:w-2/3 relative h-[280px]">
-                                {/* Degradados laterales para indicar scroll oculto en gris-50 */}
-                                <div className="absolute top-0 left-0 bottom-0 w-12 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none" />
-                                <div className="absolute top-0 right-0 bottom-0 w-12 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none" />
+                            {/* Galería de Servicios (carrusel horizontal, deslizable con el dedo) */}
+                            <div className="w-full relative h-[190px] mt-2">
+                                <div className="absolute top-0 left-0 bottom-0 w-8 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none" />
+                                <div className="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none" />
 
                                 <div
                                     ref={refServicios}
@@ -561,23 +595,23 @@ export const LandingView = ({
                                     onMouseLeave={manejarFinArrastre}
                                     onMouseUp={manejarFinArrastre}
                                     onMouseMove={(e) => manejarArrastre(e, refServicios)}
-                                    className="flex gap-4 w-full h-full overflow-x-auto snap-x snap-mandatory cursor-grab active:cursor-grabbing select-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-6"
+                                    className="flex gap-3 w-full h-full overflow-x-auto snap-x snap-mandatory cursor-grab active:cursor-grabbing select-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-1"
                                 >
                                     {datosServicios.map((servicio) => (
                                         <div
                                             key={servicio.titulo}
-                                            className="min-w-[260px] w-[260px] h-full shrink-0 snap-center bg-white border-2 border-gray-200 rounded-[4px] p-6 group hover:border-[#0E5E6F] transition-all shadow-sm flex flex-col items-start justify-center"
+                                            className="min-w-[210px] w-[210px] h-full shrink-0 snap-center bg-white border-2 border-gray-200 rounded-[4px] p-4 group hover:border-[#0E5E6F] transition-all shadow-sm flex flex-col items-start justify-center"
                                         >
-                                            <div className="w-12 h-12 bg-gray-100 rounded-[4px] flex items-center justify-center mb-4 text-[#0E5E6F] group-hover:bg-[#0E5E6F] group-hover:text-white transition-colors border-2 border-transparent group-hover:border-[#0E5E6F]">
+                                            <div className="w-10 h-10 bg-gray-100 rounded-[4px] flex items-center justify-center mb-3 text-[#0E5E6F] group-hover:bg-[#0E5E6F] group-hover:text-white transition-colors border-2 border-transparent group-hover:border-[#0E5E6F]">
                                                 {servicio.icono}
                                             </div>
                                             <Title
                                                 as="h3"
-                                                className="text-sm font-bold mb-2 text-gray-900 normal-case"
+                                                className="text-xs font-bold mb-1.5 text-gray-900 normal-case"
                                             >
                                                 {servicio.titulo}
                                             </Title>
-                                            <Text className="text-xs text-gray-600 leading-relaxed">
+                                            <Text className="text-[10px] text-gray-600 leading-relaxed">
                                                 {servicio.descripcion}
                                             </Text>
                                         </div>
@@ -591,22 +625,22 @@ export const LandingView = ({
                 {/* SECCIÓN 3: PRECIOS Y EQUIPOS */}
                 <section
                     id="precios"
-                    className="w-full bg-white box-border pt-6 pb-12 border-b-2 border-gray-100"
+                    className="w-full bg-white box-border pt-6 pb-10 border-b-2 border-gray-100"
                 >
-                    <div className="max-w-5xl mx-auto w-full px-6">
-                        <div className="mb-5 text-center">
-                            <Title className="text-2xl font-bold text-center text-gray-900 mb-1 normal-case tracking-tight">
+                    <div className="w-full px-4">
+                        <div className="mb-4 text-center">
+                            <Title className="text-lg font-bold text-center text-gray-900 mb-1 normal-case tracking-tight">
                                 Modelos de Inversión Tecnológica
                             </Title>
-                            <Text className="text-center text-gray-500 text-xs">
+                            <Text className="text-center text-gray-500 text-[11px]">
                                 Elige el plan operativo mensual o adquiere drones comerciales de
                                 alto tonelaje.
                             </Text>
                         </div>
 
-                        <div className="flex justify-center mb-5">
+                        <div className="flex justify-center mb-4">
                             <div
-                                className="flex bg-gray-100 p-1.5 rounded-[4px] border-2 border-gray-200 gap-1"
+                                className="flex bg-gray-100 p-1 rounded-[4px] border-2 border-gray-200 gap-1 w-full"
                                 style={{ fontFamily: "'Roboto', sans-serif" }}
                             >
                                 <button
@@ -614,25 +648,25 @@ export const LandingView = ({
                                         fijarPestanaPrecios("subs");
                                         fijarIdTarjetaSeleccionada(null);
                                     }}
-                                    className={`px-4 py-1.5 rounded-[4px] text-xs font-bold transition-all border-0 cursor-pointer ${pestanaPrecios === "subs" ? "bg-[#0E5E6F] text-white shadow-sm" : "text-gray-500"}`}
+                                    className={`flex-1 px-2 py-2 rounded-[4px] text-[11px] font-bold transition-all border-0 cursor-pointer ${pestanaPrecios === "subs" ? "bg-[#0E5E6F] text-white shadow-sm" : "text-gray-500"}`}
                                 >
-                                    Suscripciones Mensuales
+                                    Suscripciones
                                 </button>
                                 <button
                                     onClick={() => {
                                         fijarPestanaPrecios("equipos");
                                         fijarIdTarjetaSeleccionada(null);
                                     }}
-                                    className={`px-4 py-1.5 rounded-[4px] text-xs font-bold transition-all border-0 cursor-pointer ${pestanaPrecios === "equipos" ? "bg-[#0E5E6F] text-white shadow-sm" : "text-gray-500"}`}
+                                    className={`flex-1 px-2 py-2 rounded-[4px] text-[11px] font-bold transition-all border-0 cursor-pointer ${pestanaPrecios === "equipos" ? "bg-[#0E5E6F] text-white shadow-sm" : "text-gray-500"}`}
                                 >
-                                    Equipos Avanzados
+                                    Equipos
                                 </button>
                             </div>
                         </div>
 
                         <div className="w-full relative">
                             {pestanaPrecios === "subs" ? (
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full items-stretch">
+                                <div className="grid grid-cols-1 gap-4 w-full items-stretch">
                                     {datosPlanes.map((plan) => {
                                         const estaSeleccionado =
                                             idTarjetaSeleccionada === plan.id ||
@@ -642,7 +676,7 @@ export const LandingView = ({
                                             <div
                                                 key={plan.id}
                                                 onClick={() => fijarIdTarjetaSeleccionada(plan.id)}
-                                                className={`border-2 rounded-[4px] p-3.5 flex flex-col justify-between bg-white h-[260px] cursor-pointer transition-all duration-200 relative ${estaSeleccionado
+                                                className={`border-2 rounded-[4px] p-4 flex flex-col justify-between bg-white cursor-pointer transition-all duration-200 relative ${estaSeleccionado
                                                     ? "border-[#0E5E6F] shadow-sm ring-2 ring-[#0E5E6F]/5"
                                                     : "border-gray-200 hover:border-gray-300"
                                                     }`}
@@ -659,51 +693,51 @@ export const LandingView = ({
                                                 )}
 
                                                 <div>
-                                                    <div className="flex justify-between items-start gap-2 mb-0.5">
+                                                    <div className="flex justify-between items-start gap-2 mb-1">
                                                         <Title
                                                             as="h3"
-                                                            className={`text-xs font-bold normal-case truncate ${estaSeleccionado ? "text-[#0E5E6F]" : "text-gray-900"}`}
+                                                            className={`text-sm font-bold normal-case truncate ${estaSeleccionado ? "text-[#0E5E6F]" : "text-gray-900"}`}
                                                         >
                                                             {plan.nombre}
                                                         </Title>
-                                                        <span className="bg-gray-100 text-gray-700 text-[7px] font-bold uppercase tracking-wider px-1 py-0.5 rounded-[4px] border border-gray-200 shrink-0">
+                                                        <span className="bg-gray-100 text-gray-700 text-[8px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-[4px] border border-gray-200 shrink-0">
                                                             {plan.etiqueta}
                                                         </span>
                                                     </div>
 
-                                                    <div className="mb-1">
+                                                    <div className="mb-1.5">
                                                         <span
-                                                            className="font-black text-lg text-gray-900"
+                                                            className="font-black text-xl text-gray-900"
                                                             style={{
                                                                 fontFamily: "'Roboto', sans-serif",
                                                             }}
                                                         >
                                                             {plan.precio}
                                                         </span>
-                                                        <span className="text-gray-400 text-[9px] ml-0.5">
+                                                        <span className="text-gray-400 text-[10px] ml-0.5">
                                                             {plan.periodo}
                                                         </span>
                                                     </div>
 
-                                                    <Text className="text-[10px] text-gray-500 leading-snug mb-2 pb-1 border-b border-gray-100 line-clamp-2">
+                                                    <Text className="text-[11px] text-gray-500 leading-snug mb-2.5 pb-2 border-b border-gray-100">
                                                         {plan.descripcion}
                                                     </Text>
 
-                                                    <ul className="space-y-1">
+                                                    <ul className="space-y-1.5">
                                                         {plan.caracteristicas.map((caracteristica) => (
                                                             <li
                                                                 key={caracteristica}
                                                                 className="flex items-center gap-1.5"
                                                             >
                                                                 <CheckCircle
-                                                                    size={10}
+                                                                    size={11}
                                                                     className={
                                                                         estaSeleccionado
                                                                             ? "text-gray-800"
                                                                             : "text-gray-400"
                                                                     }
                                                                 />
-                                                                <Text className="text-[10px] text-gray-600 truncate">
+                                                                <Text className="text-[11px] text-gray-600">
                                                                     {caracteristica}
                                                                 </Text>
                                                             </li>
@@ -711,14 +745,14 @@ export const LandingView = ({
                                                     </ul>
                                                 </div>
 
-                                                <div className="pt-2 border-t border-gray-100">
+                                                <div className="pt-3 mt-3 border-t border-gray-100">
                                                     <WireframeButton
                                                         primary={estaSeleccionado}
                                                         onClick={(e: any) => {
                                                             e.stopPropagation();
                                                             alRegistrar();
                                                         }}
-                                                        className="w-full fond-bold rounded-[4px] text-[10px] py-1.5"
+                                                        className="w-full fond-bold rounded-[4px] text-xs py-2"
                                                     >
                                                         Adquirir plan
                                                     </WireframeButton>
@@ -730,9 +764,8 @@ export const LandingView = ({
                             ) : (
                                 /* CONTENEDOR HORIZONTAL DE EQUIPOS */
                                 <div className="relative">
-                                    {/* Degradados laterales para indicar scroll oculto en blanco */}
-                                    <div className="absolute top-0 left-0 bottom-4 w-12 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-                                    <div className="absolute top-0 right-0 bottom-4 w-12 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+                                    <div className="absolute top-0 left-0 bottom-4 w-8 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+                                    <div className="absolute top-0 right-0 bottom-4 w-8 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
                                     <div
                                         ref={refDrones}
@@ -740,7 +773,7 @@ export const LandingView = ({
                                         onMouseLeave={manejarFinArrastre}
                                         onMouseUp={manejarFinArrastre}
                                         onMouseMove={(e) => manejarArrastre(e, refDrones)}
-                                        className="flex gap-4 w-full overflow-x-auto snap-x snap-mandatory pb-4 cursor-grab active:cursor-grabbing select-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-6"
+                                        className="flex gap-3 w-full overflow-x-auto snap-x snap-mandatory pb-4 cursor-grab active:cursor-grabbing select-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-1"
                                     >
                                         {datosDrones.map((dron) => {
                                             const estaSeleccionado =
@@ -751,7 +784,7 @@ export const LandingView = ({
                                                 <div
                                                     key={dron.id}
                                                     onClick={() => fijarIdTarjetaSeleccionada(dron.id)}
-                                                    className={`min-w-[280px] w-[280px] shrink-0 snap-center border-2 rounded-[4px] overflow-hidden bg-white flex flex-col h-[280px] justify-between transition-all duration-200 relative ${estaSeleccionado
+                                                    className={`min-w-[235px] w-[235px] shrink-0 snap-center border-2 rounded-[4px] overflow-hidden bg-white flex flex-col h-[280px] justify-between transition-all duration-200 relative ${estaSeleccionado
                                                         ? "border-[#0E5E6F] shadow-sm ring-2 ring-[#0E5E6F]/5"
                                                         : "border-gray-200 hover:border-gray-300"
                                                         }`}
@@ -784,7 +817,7 @@ export const LandingView = ({
                                                                 e.stopPropagation();
                                                                 fijarDronSeleccionado(dron);
                                                             }}
-                                                            className="absolute top-1.5 right-1.5 z-30 flex items-center justify-center w-6 h-6 rounded-[4px] bg-white/90 backdrop-blur-md border border-gray-200 text-gray-600 hover:text-[#0E5E6F] hover:bg-white shadow-sm transition-all border-0 cursor-pointer pointer-events-auto"
+                                                            className="absolute top-1.5 right-1.5 z-30 flex items-center justify-center w-7 h-7 rounded-[4px] bg-white/90 backdrop-blur-md border border-gray-200 text-gray-600 hover:text-[#0E5E6F] hover:bg-white shadow-sm transition-all border-0 cursor-pointer pointer-events-auto"
                                                             title="Ver información detallada"
                                                         >
                                                             <Info size={13} />
@@ -856,33 +889,35 @@ export const LandingView = ({
                 </section>
             </div>
 
-            {/* ─── MODAL HORIZONTAL AMPLIO ─── */}
+            {/* ─── MODAL TIPO HOJA INFERIOR (BOTTOM SHEET) ─── */}
             {dronSeleccionado && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4">
-                    <div className="bg-white border-2 border-gray-200 w-full max-w-3xl rounded-[4px] p-5 shadow-2xl relative my-auto">
+                <div className="fixed inset-0 z-50 flex items-end justify-center bg-gray-900/60 backdrop-blur-sm">
+                    <div className="bg-white border-t-2 border-gray-200 w-full rounded-t-[14px] p-4 shadow-2xl relative max-h-[88%] overflow-y-auto">
+                        <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-3" />
+
                         <div className="flex justify-between items-start border-b border-gray-200 pb-2 mb-3">
-                            <div>
-                                <span className="text-[10px] bg-[#0E5E6F]/10 text-[#0E5E6F] font-black uppercase tracking-widest px-2 py-0.5 rounded-[4px] mb-0.5 inline-block">
+                            <div className="min-w-0 pr-2">
+                                <span className="text-[9px] bg-[#0E5E6F]/10 text-[#0E5E6F] font-black uppercase tracking-widest px-2 py-0.5 rounded-[4px] mb-0.5 inline-block">
                                     {dronSeleccionado.etiqueta}
                                 </span>
                                 <Title
                                     as="h3"
-                                    className="text-lg font-bold text-gray-900 normal-case"
+                                    className="text-base font-bold text-gray-900 normal-case truncate"
                                 >
                                     {dronSeleccionado.nombre}
                                 </Title>
                             </div>
                             <button
                                 onClick={() => fijarDronSeleccionado(null)}
-                                className="w-6 h-6 flex items-center justify-center rounded-[4px] bg-gray-100 text-gray-500 hover:text-gray-900 font-bold text-xs bg-transparent border-0 cursor-pointer transition-colors"
+                                className="w-7 h-7 shrink-0 flex items-center justify-center rounded-[4px] bg-gray-100 text-gray-500 hover:text-gray-900 font-bold text-xs bg-transparent border-0 cursor-pointer transition-colors"
                             >
                                 ✕
                             </button>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-center">
+                        <div className="flex flex-col gap-4">
                             <div className="flex flex-col gap-2.5">
-                                <div className="w-full h-40 bg-gray-100 rounded-[4px] overflow-hidden border border-gray-200 relative shadow-sm">
+                                <div className="w-full h-36 bg-gray-100 rounded-[4px] overflow-hidden border border-gray-200 relative shadow-sm">
                                     <img
                                         src={dronSeleccionado.imagen}
                                         alt={dronSeleccionado.nombre}
@@ -892,7 +927,7 @@ export const LandingView = ({
                                         }}
                                     />
                                     <div
-                                        className="absolute bottom-2.5 right-2.5 bg-gray-900/90 backdrop-blur-md text-white font-black text-sm px-3 py-1 rounded-[4px] shadow-md"
+                                        className="absolute bottom-2 right-2 bg-gray-900/90 backdrop-blur-md text-white font-black text-xs px-2.5 py-1 rounded-[4px] shadow-md"
                                         style={{ fontFamily: "'Lexend Deca', sans-serif" }}
                                     >
                                         {dronSeleccionado.precio}
@@ -900,10 +935,10 @@ export const LandingView = ({
                                 </div>
 
                                 <div>
-                                    <span className="text-[11px] font-bold text-gray-700 block mb-0.5">
+                                    <span className="text-[10px] font-bold text-gray-700 block mb-0.5">
                                         Descripción del Equipo:
                                     </span>
-                                    <Text className="text-[11px] text-gray-600 leading-snug bg-gray-50 p-2.5 rounded-[4px] border border-gray-100">
+                                    <Text className="text-[10px] text-gray-600 leading-snug bg-gray-50 p-2.5 rounded-[4px] border border-gray-100">
                                         {dronSeleccionado.descripcion}
                                     </Text>
                                 </div>
@@ -911,15 +946,15 @@ export const LandingView = ({
 
                             <div className="flex flex-col justify-between">
                                 <div>
-                                    <span className="text-[11px] font-bold text-gray-700 block mb-1">
+                                    <span className="text-[10px] font-bold text-gray-700 block mb-1">
                                         Especificaciones Técnicas Completas:
                                     </span>
-                                    <div className="border border-gray-200 rounded-[4px] overflow-hidden text-[11px]">
+                                    <div className="border border-gray-200 rounded-[4px] overflow-hidden text-[10px]">
                                         {Object.entries(dronSeleccionado.especificaciones).map(
                                             ([clave, valor]: any, indice) => (
                                                 <div
                                                     key={clave}
-                                                    className={`flex justify-between py-1.5 px-3 ${indice % 2 === 0 ? "bg-gray-50" : "bg-white"} border-b border-gray-100 last:border-b-0`}
+                                                    className={`flex justify-between py-1.5 px-2.5 ${indice % 2 === 0 ? "bg-gray-50" : "bg-white"} border-b border-gray-100 last:border-b-0`}
                                                 >
                                                     <span className="text-gray-500 font-medium">
                                                         {clave}
@@ -933,22 +968,22 @@ export const LandingView = ({
                                     </div>
                                 </div>
 
-                                <div className="mt-4 flex gap-3 border-t border-gray-200 pt-3">
-                                    <WireframeButton
-                                        onClick={() => fijarDronSeleccionado(null)}
-                                        className="flex-1 py-2 text-xs rounded-[4px] bg-white text-gray-700 border-gray-300"
-                                    >
-                                        Cerrar
-                                    </WireframeButton>
+                                <div className="mt-4 flex flex-col gap-2 border-t border-gray-200 pt-3">
                                     <WireframeButton
                                         primary
                                         onClick={() => {
                                             fijarDronSeleccionado(null);
                                             alRegistrar();
                                         }}
-                                        className="flex-1 py-2 text-xs rounded-[4px]"
+                                        className="w-full py-2.5 text-xs rounded-[4px]"
                                     >
                                         Cotizar Equipo
+                                    </WireframeButton>
+                                    <WireframeButton
+                                        onClick={() => fijarDronSeleccionado(null)}
+                                        className="w-full py-2.5 text-xs rounded-[4px] bg-white text-gray-700 border-gray-300"
+                                    >
+                                        Cerrar
                                     </WireframeButton>
                                 </div>
                             </div>
@@ -959,7 +994,6 @@ export const LandingView = ({
         </div>
     );
 };
-
 
 // 2. Inicio de sesion y registro
 type AuthStep = "login" | "register" | "recover" | "verify" | "success";
@@ -1048,12 +1082,59 @@ export const AuthView = ({
     return (
         <div
             key="auth-card-root"
-            className="w-full max-w-4xl mx-auto bg-white antialiased select-none py-3"
+            className="w-full h-full bg-white antialiased select-none flex flex-col overflow-hidden relative"
         >
-            <div className="bg-white border-2 border-gray-200 rounded-[4px] overflow-hidden grid grid-cols-1 md:grid-cols-12 shadow-md transition-all">
-                
-                {/* LADO IZQUIERDO: CARRUSEL DE IMÁGENES AUTOMÁTICO */}
-                <div className="hidden md:flex md:col-span-5 bg-gray-100 border-r-2 border-gray-200 relative items-center justify-center overflow-hidden h-[480px]">
+            {/* ENCABEZADO STICKY */}
+            {step !== "success" && (
+                <div className="sticky top-0 z-10 bg-gray-50/95 backdrop-blur border-b-2 border-gray-200 px-4 py-3 flex items-center justify-between gap-2 shrink-0">
+                    <div className="min-w-0">
+                        <Title className="text-sm text-[#0E5E6F] font-black tracking-tight mb-0">
+                            BIODRON
+                        </Title>
+                        <Text className="text-[9px] text-gray-500 font-bold tracking-wide block">
+                            Acceso al sistema
+                        </Text>
+                    </div>
+
+                    {(step === "login" || step === "register") && (
+                        <div
+                            className="flex bg-gray-200/70 p-0.5 rounded-[4px] border border-gray-300 gap-0.5 shrink-0 shadow-inner"
+                            style={{ fontFamily: "'Roboto', sans-serif" }}
+                        >
+                            <button
+                                onClick={() => {
+                                    setStep("login");
+                                    setRegSubStep(1);
+                                }}
+                                className={`flex-1 px-3 py-1 rounded-[4px] text-[11px] font-bold transition-all border-0 cursor-pointer ${
+                                    step === "login"
+                                        ? "bg-[#0E5E6F] text-white shadow-sm"
+                                        : "text-gray-600 hover:text-gray-900 bg-transparent"
+                                }`}
+                            >
+                                Ingresar
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setStep("register");
+                                    setRegSubStep(1);
+                                }}
+                                className={`flex-1 px-3 py-1 rounded-[4px] text-[11px] font-bold transition-all border-0 cursor-pointer ${
+                                    step === "register"
+                                        ? "bg-[#0E5E6F] text-white shadow-sm"
+                                        : "text-gray-600 hover:text-gray-900 bg-transparent"
+                                }`}
+                            >
+                                Registrar
+                            </button>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* BANNER COMPACTO DE CARRUSEL (solo en login/registro) */}
+            {(step === "login" || step === "register") && (
+                <div className="relative w-full h-24 shrink-0 overflow-hidden bg-gray-900">
                     {carouselImages.map((src, index) => (
                         <img
                             key={src}
@@ -1065,913 +1146,445 @@ export const AuthView = ({
                         />
                     ))}
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-5 text-white z-10 pointer-events-none">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#0E5E6F] bg-white px-2 py-0.5 rounded-[4px] w-fit mb-1 shadow-sm">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-3 text-white z-10 pointer-events-none">
+                        <span className="text-[8px] font-bold uppercase tracking-wider text-[#0E5E6F] bg-white px-1.5 py-0.5 rounded-[4px] w-fit mb-0.5 shadow-sm">
                             BIODRON
                         </span>
-                        <p className="text-xs text-gray-200 font-medium leading-relaxed">
+                        <p className="text-[9px] text-gray-200 font-medium leading-snug">
                             Plataforma de gestión e infraestructura de vuelo autónomo.
                         </p>
                     </div>
                 </div>
+            )}
 
-                {/* LADO DERECHO: FORMULARIO */}
-                <div className="col-span-1 md:col-span-7 flex flex-col justify-between bg-white h-[480px]">
-                    
-                    {/* ENCABEZADO */}
-                    {step !== "success" && (
-                        <div className="bg-gray-50/90 border-b-2 border-gray-200 px-6 py-3 flex items-center justify-between gap-2 h-[56px] shrink-0">
-                            <div>
-                                <Title className="text-base text-[#0E5E6F] font-black tracking-tight mb-0">
-                                    BIODRON
-                                </Title>
-                                <Text className="text-[10px] text-gray-500 font-bold tracking-wide block">
-                                    Acceso al sistema
-                                </Text>
-                            </div>
+            {/* CUERPO CENTRAL CON SCROLL */}
+            <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col justify-center items-center">
 
-                            {(step === "login" || step === "register") && (
-                                <div
-                                    className="flex bg-gray-200/70 p-0.5 rounded-[4px] border border-gray-300 w-40 gap-0.5 shrink-0 shadow-inner"
-                                    style={{ fontFamily: "'Roboto', sans-serif" }}
-                                >
+                {/* INICIAR SESIÓN */}
+                {step === "login" && (
+                    <div className="w-full max-w-[320px] mx-auto space-y-3 animate-in fade-in duration-150">
+                        <div>
+                            <label className="text-[10px] font-bold text-gray-500 tracking-wider block mb-1 text-left">
+                                1. Rol operativo
+                            </label>
+                            <div className="grid grid-cols-2 gap-1.5">
+                                {roles.map((r) => (
                                     <button
-                                        onClick={() => {
-                                            setStep("login");
-                                            setRegSubStep(1);
-                                        }}
-                                        className={`flex-1 py-1 rounded-[4px] text-[11px] font-bold transition-all border-0 cursor-pointer ${
-                                            step === "login"
-                                                ? "bg-[#0E5E6F] text-white shadow-sm"
-                                                : "text-gray-600 hover:text-gray-900 bg-transparent"
+                                        key={r.key}
+                                        type="button"
+                                        onClick={() => setSelectedRole(r.key)}
+                                        className={`flex items-center gap-1.5 p-1.5 rounded-[4px] border-2 text-left transition-all bg-white cursor-pointer ${
+                                            selectedRole === r.key
+                                                ? "border-[#0E5E6F] bg-[#0E5E6F]/5"
+                                                : "border-gray-200 hover:border-gray-300"
                                         }`}
                                     >
-                                        Ingresar
+                                        <div
+                                            className={`p-1 rounded-[4px] border shrink-0 ${
+                                                selectedRole === r.key
+                                                    ? "bg-[#0E5E6F] text-white border-[#0E5E6F]"
+                                                    : "bg-gray-100 text-gray-500 border-gray-200"
+                                            }`}
+                                        >
+                                            {r.icon}
+                                        </div>
+                                        <Text className="font-bold text-[11px] truncate">
+                                            {r.label}
+                                        </Text>
                                     </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block text-left">
+                                2. Credenciales
+                            </label>
+                            <WireframeInput
+                                label="Correo electrónico"
+                                placeholder="usuario@ejemplo.hn"
+                            />
+                            <div className="relative">
+                                <WireframeInput
+                                    label="Contraseña"
+                                    type={mostrarPassword ? "text" : "password"}
+                                    placeholder="••••••••"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setMostrarPassword(!mostrarPassword)}
+                                    className="absolute right-2 bottom-1.5 flex items-center justify-center text-gray-400 hover:text-gray-600 border-0 bg-transparent cursor-pointer p-1"
+                                >
+                                    {mostrarPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-between text-[11px] pt-1">
+                            <label className="flex items-center gap-1.5 cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    className="w-3.5 h-3.5 rounded-[4px] border-gray-300 accent-[#0E5E6F]"
+                                />
+                                <span className="text-gray-600 text-[11px]">Recordarme</span>
+                            </label>
+                            <button
+                                onClick={() => setStep("recover")}
+                                className="text-[#0E5E6F] font-bold text-[11px] hover:underline bg-transparent border-0 cursor-pointer"
+                            >
+                                Recuperar clave
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* REGISTRO PASO 1, PASO 2 Y PASO 3 */}
+                {step === "register" && (
+                    <div className="w-full max-w-[320px] mx-auto space-y-2.5 animate-in fade-in duration-150">
+                        <div className="flex items-center justify-between border-b border-gray-100 pb-1.5 h-[28px]">
+                            <span className="text-xs font-bold text-gray-700">
+                                {regSubStep === 1 && "Paso 1: Credenciales"}
+                                {regSubStep === 2 && "Paso 2: Datos de perfil"}
+                                {regSubStep === 3 && "Paso 3: Método de verificación"}
+                            </span>
+                            <span className="text-[10px] text-gray-400 font-bold">
+                                Paso {regSubStep} de 3
+                            </span>
+                        </div>
+
+                        {/* PASO 1 */}
+                        {regSubStep === 1 && (
+                            <div className="space-y-1.5">
+                                <WireframeInput
+                                    label="Correo electrónico"
+                                    placeholder="usuario@ejemplo.hn"
+                                />
+
+                                <div className="relative">
+                                    <WireframeInput
+                                        label="Contraseña"
+                                        type={mostrarPassword ? "text" : "password"}
+                                        placeholder="••••••••"
+                                    />
                                     <button
-                                        onClick={() => {
-                                            setStep("register");
-                                            setRegSubStep(1);
-                                        }}
-                                        className={`flex-1 py-1 rounded-[4px] text-[11px] font-bold transition-all border-0 cursor-pointer ${
-                                            step === "register"
-                                                ? "bg-[#0E5E6F] text-white shadow-sm"
-                                                : "text-gray-600 hover:text-gray-900 bg-transparent"
-                                        }`}
+                                        type="button"
+                                        onClick={() => setMostrarPassword(!mostrarPassword)}
+                                        className="absolute right-2 bottom-1.5 flex items-center justify-center text-gray-400 hover:text-gray-600 border-0 bg-transparent cursor-pointer p-1"
                                     >
-                                        Registrar
+                                        {mostrarPassword ? <EyeOff size={14} /> : <Eye size={14} />}
                                     </button>
                                 </div>
-                            )}
-                        </div>
-                    )}
 
-                    {/* CUERPO CENTRAL */}
-                    <div className="p-5 flex-1 flex flex-col justify-center items-center h-[370px]">
-                        
-                        {/* INICIAR SESIÓN */}
-                        {step === "login" && (
-                            <div className="w-full max-w-[320px] mx-auto space-y-3 animate-in fade-in duration-150">
+                                <div className="relative">
+                                    <WireframeInput
+                                        label="Confirmar contraseña"
+                                        type={mostrarConfirmarPassword ? "text" : "password"}
+                                        placeholder="••••••••"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setMostrarConfirmarPassword(!mostrarConfirmarPassword)
+                                        }
+                                        className="absolute right-2 bottom-1.5 flex items-center justify-center text-gray-400 hover:text-gray-600 border-0 bg-transparent cursor-pointer p-1"
+                                    >
+                                        {mostrarConfirmarPassword ? (
+                                            <EyeOff size={14} />
+                                        ) : (
+                                            <Eye size={14} />
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* PASO 2 */}
+                        {regSubStep === 2 && (
+                            <div className="space-y-2">
                                 <div>
                                     <label className="text-[10px] font-bold text-gray-500 tracking-wider block mb-1 text-left">
-                                        1. Rol operativo
+                                        Selecciona tu rol
                                     </label>
-                                    <div className="grid grid-cols-2 gap-1.5">
-                                        {roles.map((r) => (
+                                    <div className="grid grid-cols-2 gap-1 bg-gray-100 p-0.5 rounded-[4px] border border-gray-200">
+                                        {(
+                                            [
+                                                { key: "cliente", label: "Cliente" },
+                                                { key: "piloto", label: "Piloto" },
+                                                { key: "tecnico", label: "Técnico" },
+                                                { key: "admin", label: "Admin" },
+                                            ] as { key: Role; label: string }[]
+                                        ).map((r) => (
                                             <button
                                                 key={r.key}
                                                 type="button"
                                                 onClick={() => setSelectedRole(r.key)}
-                                                className={`flex items-center gap-1.5 p-1.5 rounded-[4px] border-2 text-left transition-all bg-white cursor-pointer ${
+                                                className={`py-1.5 text-[10px] font-bold rounded-[4px] transition-all border-0 cursor-pointer ${
                                                     selectedRole === r.key
-                                                        ? "border-[#0E5E6F] bg-[#0E5E6F]/5"
-                                                        : "border-gray-200 hover:border-gray-300"
+                                                        ? "bg-[#0E5E6F] text-white"
+                                                        : "text-gray-600 hover:text-gray-900 bg-transparent"
                                                 }`}
                                             >
-                                                <div
-                                                    className={`p-1 rounded-[4px] border shrink-0 ${
-                                                        selectedRole === r.key
-                                                            ? "bg-[#0E5E6F] text-white border-[#0E5E6F]"
-                                                            : "bg-gray-100 text-gray-500 border-gray-200"
-                                                    }`}
-                                                >
-                                                    {r.icon}
-                                                </div>
-                                                <Text className="font-bold text-[11px] truncate">
-                                                    {r.label}
-                                                </Text>
+                                                {r.label}
                                             </button>
                                         ))}
                                     </div>
                                 </div>
 
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block text-left">
-                                        2. Credenciales
-                                    </label>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <WireframeInput label="Nombre" placeholder="Nombre" />
+                                    <WireframeInput label="Apellido" placeholder="Apellido" />
+                                </div>
+
+                                <WireframeInput
+                                    label="Teléfono"
+                                    placeholder="+504 9999-0000"
+                                />
+
+                                {/* CAMPO SEGÚN ROL */}
+                                {selectedRole === "cliente" && (
                                     <WireframeInput
-                                        label="Correo electrónico"
-                                        placeholder="usuario@ejemplo.hn"
+                                        label="Identificación (DNI / RTN)"
+                                        placeholder="0801-1990-00000"
                                     />
-                                    <div className="relative">
-                                        <WireframeInput
-                                            label="Contraseña"
-                                            type={mostrarPassword ? "text" : "password"}
-                                            placeholder="••••••••"
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => setMostrarPassword(!mostrarPassword)}
-                                            className="absolute right-2 bottom-1.5 flex items-center justify-center text-gray-400 hover:text-gray-600 border-0 bg-transparent cursor-pointer p-1"
-                                        >
-                                            {mostrarPassword ? <EyeOff size={14} /> : <Eye size={14} />}
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center justify-between text-[11px] pt-1">
-                                    <label className="flex items-center gap-1.5 cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            className="w-3.5 h-3.5 rounded-[4px] border-gray-300 accent-[#0E5E6F]"
-                                        />
-                                        <span className="text-gray-600 text-[11px]">Recordarme</span>
-                                    </label>
-                                    <button
-                                        onClick={() => setStep("recover")}
-                                        className="text-[#0E5E6F] font-bold text-[11px] hover:underline bg-transparent border-0 cursor-pointer"
-                                    >
-                                        Recuperar clave
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* REGISTRO PASO 1, PASO 2 Y PASO 3 */}
-                        {step === "register" && (
-                            <div className="w-full max-w-[320px] mx-auto space-y-2.5 animate-in fade-in duration-150">
-                                <div className="flex items-center justify-between border-b border-gray-100 pb-1.5 h-[28px]">
-                                    <span className="text-xs font-bold text-gray-700">
-                                        {regSubStep === 1 && "Paso 1: Credenciales"}
-                                        {regSubStep === 2 && "Paso 2: Datos de perfil"}
-                                        {regSubStep === 3 && "Paso 3: Método de verificación"}
-                                    </span>
-                                    <span className="text-[10px] text-gray-400 font-bold">
-                                        Paso {regSubStep} de 3
-                                    </span>
-                                </div>
-
-                                {/* PASO 1 */}
-                                {regSubStep === 1 && (
-                                    <div className="space-y-1.5">
-                                        <WireframeInput
-                                            label="Correo electrónico"
-                                            placeholder="usuario@ejemplo.hn"
-                                        />
-
-                                        <div className="relative">
-                                            <WireframeInput
-                                                label="Contraseña"
-                                                type={mostrarPassword ? "text" : "password"}
-                                                placeholder="••••••••"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => setMostrarPassword(!mostrarPassword)}
-                                                className="absolute right-2 bottom-1.5 flex items-center justify-center text-gray-400 hover:text-gray-600 border-0 bg-transparent cursor-pointer p-1"
-                                            >
-                                                {mostrarPassword ? <EyeOff size={14} /> : <Eye size={14} />}
-                                            </button>
-                                        </div>
-
-                                        <div className="relative">
-                                            <WireframeInput
-                                                label="Confirmar contraseña"
-                                                type={mostrarConfirmarPassword ? "text" : "password"}
-                                                placeholder="••••••••"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    setMostrarConfirmarPassword(!mostrarConfirmarPassword)
-                                                }
-                                                className="absolute right-2 bottom-1.5 flex items-center justify-center text-gray-400 hover:text-gray-600 border-0 bg-transparent cursor-pointer p-1"
-                                            >
-                                                {mostrarConfirmarPassword ? (
-                                                    <EyeOff size={14} />
-                                                ) : (
-                                                    <Eye size={14} />
-                                                )}
-                                            </button>
-                                        </div>
-                                    </div>
                                 )}
 
-                                {/* PASO 2 */}
-                                {regSubStep === 2 && (
-                                    <div className="space-y-2">
-                                        <div>
-                                            <label className="text-[10px] font-bold text-gray-500 tracking-wider block mb-1 text-left">
-                                                Selecciona tu rol
-                                            </label>
-                                            <div className="grid grid-cols-4 gap-1 bg-gray-100 p-0.5 rounded-[4px] border border-gray-200">
-                                                {(
-                                                    [
-                                                        { key: "cliente", label: "Cliente" },
-                                                        { key: "piloto", label: "Piloto" },
-                                                        { key: "tecnico", label: "Técnico" },
-                                                        { key: "admin", label: "Admin" },
-                                                    ] as { key: Role; label: string }[]
-                                                ).map((r) => (
-                                                    <button
-                                                        key={r.key}
-                                                        type="button"
-                                                        onClick={() => setSelectedRole(r.key)}
-                                                        className={`py-1 text-[10px] font-bold rounded-[4px] transition-all border-0 cursor-pointer ${
-                                                            selectedRole === r.key
-                                                                ? "bg-[#0E5E6F] text-white"
-                                                                : "text-gray-600 hover:text-gray-900 bg-transparent"
-                                                        }`}
-                                                    >
-                                                        {r.label}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-2 gap-2">
-                                            <WireframeInput label="Nombre" placeholder="Nombre" />
-                                            <WireframeInput label="Apellido" placeholder="Apellido" />
-                                        </div>
-
-                                        <WireframeInput
-                                            label="Teléfono"
-                                            placeholder="+504 9999-0000"
-                                        />
-
-                                        {/* CAMPO SEGÚN ROL */}
-                                        {selectedRole === "cliente" && (
-                                            <WireframeInput
-                                                label="Identificación (DNI / RTN)"
-                                                placeholder="0801-1990-00000"
-                                            />
-                                        )}
-
-                                        {selectedRole === "admin" && (
-                                            <WireframeInput
-                                                label="Código empresarial"
-                                                placeholder="ADM-2026-X9"
-                                            />
-                                        )}
-
-                                        {selectedRole === "piloto" && (
-                                            <WireframeInput
-                                                label="Código de la AHAC"
-                                                placeholder="AHAC-RPAS-2026-0415"
-                                            />
-                                        )}
-
-                                        {selectedRole === "tecnico" && (
-                                            <WireframeInput
-                                                label="Identificación (DNI / RTN)"
-                                                placeholder="0801-1990-00000"
-                                            />
-                                        )}
-                                    </div>
+                                {selectedRole === "admin" && (
+                                    <WireframeInput
+                                        label="Código empresarial"
+                                        placeholder="ADM-2026-X9"
+                                    />
                                 )}
 
-                                {/* PASO 3 */}
-                                {regSubStep === 3 && (
-                                    <div className="space-y-3 text-center py-2 animate-in fade-in duration-150">
-                                        <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] w-fit mx-auto">
-                                            <Shield size={20} />
-                                        </div>
-                                        <div>
-                                            <Title className="text-xs text-gray-900 font-bold">
-                                                Verificación de cuenta
-                                            </Title>
-                                            <p className="text-[11px] text-gray-500 leading-tight">
-                                                Selecciona cómo deseas recibir tu código único de 6 dígitos.
-                                            </p>
-                                        </div>
+                                {selectedRole === "piloto" && (
+                                    <WireframeInput
+                                        label="Código de la AHAC"
+                                        placeholder="AHAC-RPAS-2026-0415"
+                                    />
+                                )}
 
-                                        <div className="flex bg-gray-100 p-0.5 rounded-[4px] border border-gray-200 gap-0.5">
-                                            <button
-                                                type="button"
-                                                onClick={() => setRecoverMethod("email")}
-                                                className={`flex-1 py-2 rounded-[4px] text-[10px] font-bold border-0 cursor-pointer transition-all ${
-                                                    recoverMethod === "email"
-                                                        ? "bg-[#0E5E6F] text-white shadow-sm"
-                                                        : "text-gray-600 bg-transparent"
-                                                }`}
-                                            >
-                                                Correo electrónico
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => setRecoverMethod("phone")}
-                                                className={`flex-1 py-2 rounded-[4px] text-[10px] font-bold border-0 cursor-pointer transition-all ${
-                                                    recoverMethod === "phone"
-                                                        ? "bg-[#0E5E6F] text-white shadow-sm"
-                                                        : "text-gray-600 bg-transparent"
-                                                }`}
-                                            >
-                                                Teléfono móvil
-                                            </button>
-                                        </div>
-                                    </div>
+                                {selectedRole === "tecnico" && (
+                                    <WireframeInput
+                                        label="Identificación (DNI / RTN)"
+                                        placeholder="0801-1990-00000"
+                                    />
                                 )}
                             </div>
                         )}
 
-                        {/* RECUPERAR CLAVE */}
-                        {step === "recover" && (
-                            <div className="w-full max-w-[320px] mx-auto space-y-3 text-center animate-in fade-in duration-150">
+                        {/* PASO 3 */}
+                        {regSubStep === 3 && (
+                            <div className="space-y-3 text-center py-2 animate-in fade-in duration-150">
                                 <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] w-fit mx-auto">
                                     <Shield size={20} />
                                 </div>
                                 <div>
-                                    <Title className="text-sm text-gray-900 font-bold">
-                                        Recuperación de cuenta
+                                    <Title className="text-xs text-gray-900 font-bold">
+                                        Verificación de cuenta
                                     </Title>
-                                    <p className="text-[11px] text-gray-500">
-                                        Selecciona el canal para la entrega del código.
+                                    <p className="text-[11px] text-gray-500 leading-tight">
+                                        Selecciona cómo deseas recibir tu código único de 6 dígitos.
                                     </p>
                                 </div>
 
                                 <div className="flex bg-gray-100 p-0.5 rounded-[4px] border border-gray-200 gap-0.5">
                                     <button
+                                        type="button"
                                         onClick={() => setRecoverMethod("email")}
-                                        className={`flex-1 py-1 rounded-[4px] text-[10px] font-bold border-0 cursor-pointer ${
+                                        className={`flex-1 py-2 rounded-[4px] text-[10px] font-bold border-0 cursor-pointer transition-all ${
                                             recoverMethod === "email"
-                                                ? "bg-[#0E5E6F] text-white"
-                                                : "text-gray-500 bg-transparent"
+                                                ? "bg-[#0E5E6F] text-white shadow-sm"
+                                                : "text-gray-600 bg-transparent"
                                         }`}
                                     >
-                                        Correo
+                                        Correo electrónico
                                     </button>
                                     <button
+                                        type="button"
                                         onClick={() => setRecoverMethod("phone")}
-                                        className={`flex-1 py-1 rounded-[4px] text-[10px] font-bold border-0 cursor-pointer ${
+                                        className={`flex-1 py-2 rounded-[4px] text-[10px] font-bold border-0 cursor-pointer transition-all ${
                                             recoverMethod === "phone"
-                                                ? "bg-[#0E5E6F] text-white"
-                                                : "text-gray-500 bg-transparent"
+                                                ? "bg-[#0E5E6F] text-white shadow-sm"
+                                                : "text-gray-600 bg-transparent"
                                         }`}
                                     >
-                                        Teléfono
+                                        Teléfono móvil
                                     </button>
                                 </div>
-
-                                <div className="text-left">
-                                    {recoverMethod === "email" ? (
-                                        <WireframeInput
-                                            label="Correo registrado"
-                                            placeholder="usuario@ejemplo.hn"
-                                        />
-                                    ) : (
-                                        <WireframeInput
-                                            label="Teléfono registrado"
-                                            placeholder="+504 9999-0000"
-                                        />
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* VERIFICACIÓN */}
-                        {step === "verify" && (
-                            <div className="w-full max-w-[320px] mx-auto space-y-3 text-center animate-in fade-in duration-150">
-                                <div className="p-2 bg-amber-50 text-amber-600 rounded-[4px] w-fit mx-auto">
-                                    <Shield size={20} className="animate-pulse" />
-                                </div>
-                                <div>
-                                    <Title className="text-sm text-gray-900 font-bold">
-                                        Verificación de seguridad
-                                    </Title>
-                                    <p className="text-[11px] text-gray-500">
-                                        Ingresa el código enviado de 6 dígitos.
-                                    </p>
-                                </div>
-
-                                <div className="flex gap-1.5 justify-center py-1">
-                                    {codeDigits.map((digit, index) => (
-                                        <input
-                                            key={index}
-                                            id={`digit-${index}`}
-                                            type="text"
-                                            maxLength={1}
-                                            value={digit}
-                                            placeholder={String(index + 1)}
-                                            onChange={(e) => handleDigitChange(e.target.value, index)}
-                                            onKeyDown={(e) => handleKeyDown(e, index)}
-                                            className="w-8 h-9 text-center text-sm font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-gray-50/50 uppercase placeholder-gray-300"
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* ÉXITO */}
-                        {step === "success" && (
-                            <div className="w-full max-w-[320px] mx-auto space-y-3 text-center animate-in zoom-in-95 duration-150">
-                                <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-[4px] w-fit mx-auto">
-                                    <Check size={26} />
-                                </div>
-                                <div>
-                                    <Title className="text-base text-[#0E5E6F] font-bold">
-                                        ¡Operación completada!
-                                    </Title>
-                                    <p className="text-[11px] text-gray-500 leading-relaxed">
-                                        Tu cuenta ha sido confirmada con éxito.
-                                    </p>
-                                </div>
-                                <button
-                                    onClick={handleSuccessFinish}
-                                    className="w-full text-xs font-bold py-2 rounded-[4px] border-2 border-[#0E5E6F] bg-[#0E5E6F] text-white cursor-pointer"
-                                >
-                                    Ir al inicio de sesión
-                                </button>
                             </div>
                         )}
                     </div>
+                )}
 
-                    {/* PIE DE PÁGINA FIXTURE */}
-                    {step !== "success" && (
-                        <div className="border-t-2 border-gray-200 px-6 py-3 bg-gray-50/90 flex items-center justify-between gap-2 h-[54px] shrink-0">
-                            <button
-                                onClick={() => {
-                                    if (step === "register" && regSubStep > 1) {
-                                        setRegSubStep((prev) => (prev - 1) as 1 | 2 | 3);
-                                    } else if (step === "verify") {
-                                        setStep("register");
-                                        setRegSubStep(3);
-                                    } else if (step === "recover") {
-                                        setStep("login");
-                                    } else {
-                                        onBack();
-                                    }
-                                }}
-                                className="flex items-center gap-1 text-gray-600 hover:text-gray-900 text-xs font-bold transition-colors bg-transparent border-0 cursor-pointer"
-                            >
-                                <ChevronLeft size={14} />{" "}
-                                {step === "register" && regSubStep > 1
-                                    ? "Anterior"
-                                    : step === "verify" || step === "recover"
-                                    ? "Regresar"
-                                    : "Cancelar"}
-                            </button>
-
-                            <WireframeButton
-                                primary
-                                onClick={() => {
-                                    if (step === "login") {
-                                        onLogin(selectedRole);
-                                    } else if (step === "register") {
-                                        if (regSubStep === 1) {
-                                            setRegSubStep(2);
-                                        } else if (regSubStep === 2) {
-                                            setRegSubStep(3);
-                                        } else {
-                                            setStep("verify");
-                                        }
-                                    } else if (step === "recover") {
-                                        setStep("verify");
-                                    } else if (step === "verify") {
-                                        setStep("success");
-                                    }
-                                }}
-                                className="text-xs font-bold py-1.5 px-4 rounded-[4px] border-2 border-[#0E5E6F] bg-[#0E5E6F] text-white flex items-center gap-1 cursor-pointer shadow-sm"
-                            >
-                                {step === "login" && "Ingresar"}
-                                {step === "register" &&
-                                    (regSubStep < 3 ? (
-                                        <>
-                                            Siguiente <ArrowRight size={13} />
-                                        </>
-                                    ) : (
-                                        "Enviar código"
-                                    ))}
-                                {step === "recover" && "Enviar código"}
-                                {step === "verify" && "Verificar"}
-                            </WireframeButton>
+                {/* RECUPERAR CLAVE */}
+                {step === "recover" && (
+                    <div className="w-full max-w-[320px] mx-auto space-y-3 text-center animate-in fade-in duration-150">
+                        <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] w-fit mx-auto">
+                            <Shield size={20} />
                         </div>
-                    )}
-                </div>
-            </div>
-        </div>
-    );
-};
+                        <div>
+                            <Title className="text-sm text-gray-900 font-bold">
+                                Recuperación de cuenta
+                            </Title>
+                            <p className="text-[11px] text-gray-500">
+                                Selecciona el canal para la entrega del código.
+                            </p>
+                        </div>
 
-// ═══════════════════════════════════════════════════════════════════════
-// 8. PROFILE (Universal)
-// ═══════════════════════════════════════════════════════════════════════
-export const ProfileView = ({ role, onLogout }: ProfileViewProps) => {
-    // Configuración base por rol con rutas absolutas de la carpeta public/
-    const initialProfiles = {
-        admin: {
-            initials: "CS",
-            name: "Carlos Sosa",
-            email: "carlos.sosa@technodactylus.hn",
-            phone: "+504 9845-1200",
-            password: "••••••••••••",
-            avatar: "src/img/admin_perfil.png",
-            avatarBg: "bg-[#0E5E6F] text-white",
-            roleLabel: "Administrador · Operaciones",
-            location: "Valle del Aguán, Olanchito, Yoro",
-            area: "—",
-            services: "142 misiones",
-            standing: "Activo",
-            roleColor: "text-[#0E5E6F] bg-[#0E5E6F]/10 border-[#0E5E6F]/30",
-            description:
-                "Coordinador regional de flota agrícola y geodatos en Olanchito.",
-        },
-        piloto: {
-            initials: "JR",
-            name: "Javier Reyes",
-            email: "j.reyes@technodactylus.hn",
-            phone: "+504 9712-3489",
-            password: "••••••••••••",
-            avatar: "src/img/piloto_perfil.png",
-            avatarBg: "bg-blue-600 text-white",
-            roleLabel: "Piloto Licenciado · DJI Agras T50",
-            location: "Base Aérea San Lorenzo, Olanchito",
-            area: "—",
-            services: "128 vuelos",
-            standing: "Activo",
-            roleColor: "text-blue-700 bg-blue-50 border-blue-300",
-            description:
-                "Especialista en mapeo NDVI y fumigación en fincas bananeras.",
-        },
-        cliente: {
-            initials: "CR",
-            name: "Carlos Reyes",
-            email: "creyes.aguan@gmail.com",
-            phone: "+504 9567-8821",
-            password: "••••••••••••",
-            avatar: "src/img/granjero_perfil.png",
-            avatarBg: "bg-emerald-700 text-white",
-            roleLabel: "Productor Agrícola · Verificado",
-            location: "Sabana de Tepusteca, Olanchito",
-            area: "145 ha (Maíz / Banano)",
-            services: "12 solicitudes",
-            standing: "Activo",
-            roleColor: "text-emerald-800 bg-emerald-50 border-emerald-300",
-            description: "Productor de maíz híbrido y banano con monitoreo aéreo.",
-        },
-        tecnico: {
-            initials: "CR",
-            name: "Carlos Kings",
-            email: "ckings.aguan@gmail.com",
-            phone: "+504 9567-8821",
-            password: "••••••••••••",
-            avatar: "src/img/granjero_perfil.png",
-            avatarBg: "bg-emerald-700 text-white",
-            roleLabel: "Productor Agrícola · Verificado",
-            location: "Sabana de Tepusteca, Olanchito",
-            area: "145 ha (Maíz / Banano)",
-            services: "12 solicitudes",
-            standing: "Activo",
-            roleColor: "text-emerald-800 bg-emerald-50 border-emerald-300",
-            description: "Productor de maíz híbrido y banano con monitoreo aéreo.",
-        },
-    };
-
-    const currentRole = role || "cliente";
-    const [profileData, setProfileData] = useState(initialProfiles[currentRole]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
-    const [saveSuccess, setSaveSuccess] = useState(false);
-    const [imgError, setImgError] = useState(false);
-
-    const [editForm, setEditForm] = useState({
-        phone: profileData.phone,
-        email: profileData.email,
-        password: profileData.password,
-    });
-
-    const handleOpenModal = () => {
-        setEditForm({
-            phone: profileData.phone,
-            email: profileData.email,
-            password: profileData.password,
-        });
-        setIsModalOpen(true);
-    };
-
-    const handleSave = (e: React.FormEvent) => {
-        e.preventDefault();
-        setProfileData((prev) => ({
-            ...prev,
-            phone: editForm.phone,
-            email: editForm.email,
-            password: editForm.password,
-        }));
-        setIsModalOpen(false);
-        setSaveSuccess(true);
-        setTimeout(() => setSaveSuccess(false), 2500);
-    };
-
-    return (
-        
-        <div className="w-full h-full max-w-6xl mx-auto p-2 sm:p-3 bg-white antialiased select-none font-sans flex flex-col justify-center items-center relative">
-            <div className="w-full h-full flex-1 bg-white border-2 border-gray-200 rounded-2xl overflow-hidden flex flex-col justify-between shadow-xs">
-                {/* CABECERA (INTACTA) */}
-                <div className="bg-gray-50 border-b-2 border-gray-200 px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                        {/* AVATAR */}
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white border-2 border-gray-300 overflow-hidden shrink-0 shadow-xs relative group flex items-center justify-center">
-                            {!imgError ? (
-                                <img
-                                    src={profileData.avatar}
-                                    alt={profileData.name}
-                                    className="w-full h-full object-cover"
-                                    onError={() => setImgError(true)}
-                                />
-                            ) : (
-                                <div
-                                    className={`w-full h-full flex items-center justify-center font-black text-xl ${profileData.avatarBg}`}
-                                >
-                                    {profileData.initials}
-                                </div>
-                            )}
-                            <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <ShieldCheck size={20} className="text-white drop-shadow" />
-                            </div>
+                        <div className="flex bg-gray-100 p-0.5 rounded-[4px] border border-gray-200 gap-0.5">
+                            <button
+                                onClick={() => setRecoverMethod("email")}
+                                className={`flex-1 py-1.5 rounded-[4px] text-[10px] font-bold border-0 cursor-pointer ${
+                                    recoverMethod === "email"
+                                        ? "bg-[#0E5E6F] text-white"
+                                        : "text-gray-500 bg-transparent"
+                                }`}
+                            >
+                                Correo
+                            </button>
+                            <button
+                                onClick={() => setRecoverMethod("phone")}
+                                className={`flex-1 py-1.5 rounded-[4px] text-[10px] font-bold border-0 cursor-pointer ${
+                                    recoverMethod === "phone"
+                                        ? "bg-[#0E5E6F] text-white"
+                                        : "text-gray-500 bg-transparent"
+                                }`}
+                            >
+                                Teléfono
+                            </button>
                         </div>
 
                         <div className="text-left">
-                            <Title className="text-xl sm:text-2xl text-gray-900 font-black tracking-tight normal-case leading-tight">
-                                {profileData.name}
+                            {recoverMethod === "email" ? (
+                                <WireframeInput
+                                    label="Correo registrado"
+                                    placeholder="usuario@ejemplo.hn"
+                                />
+                            ) : (
+                                <WireframeInput
+                                    label="Teléfono registrado"
+                                    placeholder="+504 9999-0000"
+                                />
+                            )}
+                        </div>
+                    </div>
+                )}
+
+                {/* VERIFICACIÓN */}
+                {step === "verify" && (
+                    <div className="w-full max-w-[320px] mx-auto space-y-3 text-center animate-in fade-in duration-150">
+                        <div className="p-2 bg-amber-50 text-amber-600 rounded-[4px] w-fit mx-auto">
+                            <Shield size={20} className="animate-pulse" />
+                        </div>
+                        <div>
+                            <Title className="text-sm text-gray-900 font-bold">
+                                Verificación de seguridad
                             </Title>
-                            <Text className="text-gray-500 font-semibold text-xs sm:text-sm mt-1">
-                                {profileData.email}
-                            </Text>
+                            <p className="text-[11px] text-gray-500">
+                                Ingresa el código enviado de 6 dígitos.
+                            </p>
+                        </div>
+
+                        <div className="flex gap-1.5 justify-center py-1">
+                            {codeDigits.map((digit, index) => (
+                                <input
+                                    key={index}
+                                    id={`digit-${index}`}
+                                    type="text"
+                                    maxLength={1}
+                                    value={digit}
+                                    placeholder={String(index + 1)}
+                                    onChange={(e) => handleDigitChange(e.target.value, index)}
+                                    onKeyDown={(e) => handleKeyDown(e, index)}
+                                    className="w-8 h-9 text-center text-sm font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-gray-50/50 uppercase placeholder-gray-300"
+                                />
+                            ))}
                         </div>
                     </div>
+                )}
 
-                    <div className="flex flex-col items-start sm:items-end gap-2 w-full sm:w-auto">
-                        <span
-                            className={`text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-lg border-2 ${profileData.roleColor}`}
-                            style={{ fontFamily: "'Instrument Sans', sans-serif" }}
-                        >
-                            {profileData.roleLabel}
-                        </span>
-
-                        {saveSuccess && (
-                            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-md flex items-center gap-1 animate-in fade-in duration-150">
-                                <Check size={13} /> Actualizado
-                            </span>
-                        )}
-                    </div>
-                </div>
-
-                {/* MÉTRICAS PRINCIPALES (SECCIÓN INFERIOR 1 - COMPACTADA) */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x-2 divide-gray-100 bg-white border-b-2 border-gray-200 text-left flex-1 items-center">
-                    {/* Base Regional */}
-                    <div className="p-3 sm:p-3.5 hover:bg-gray-50/50 transition-colors flex items-start gap-2.5 h-full justify-center flex-col">
-                        <div className="flex items-center gap-2">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1.5 border-2 border-gray-200 rounded-lg">
-                                <MapPin size={16} />
-                            </div>
-                            <Text className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
-                                Base Regional
-                            </Text>
+                {/* ÉXITO */}
+                {step === "success" && (
+                    <div className="w-full max-w-[320px] mx-auto space-y-3 text-center animate-in zoom-in-95 duration-150">
+                        <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-[4px] w-fit mx-auto">
+                            <Check size={26} />
                         </div>
-                        <span className="text-xs sm:text-sm text-gray-800 font-bold block break-words leading-tight mt-0.5">
-                            {profileData.location}
-                        </span>
-                    </div>
-
-                    {/* Extensión */}
-                    <div className="p-3 sm:p-3.5 hover:bg-gray-50/50 transition-colors flex items-start gap-2.5 h-full justify-center flex-col">
-                        <div className="flex items-center gap-2">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1.5 border-2 border-gray-200 rounded-lg">
-                                <Layers size={16} />
-                            </div>
-                            <Text className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
-                                Extensión
-                            </Text>
-                        </div>
-                        <span className="text-xs sm:text-sm text-gray-800 font-bold block break-words leading-tight mt-0.5">
-                            {profileData.area}
-                        </span>
-                    </div>
-
-                    {/* Actividad */}
-                    <div className="p-3 sm:p-3.5 hover:bg-gray-50/50 transition-colors flex items-start gap-2.5 h-full justify-center flex-col">
-                        <div className="flex items-center gap-2">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1.5 border-2 border-gray-200 rounded-lg">
-                                <BarChart2 size={16} />
-                            </div>
-                            <Text className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
-                                Actividad
-                            </Text>
-                        </div>
-                        <span className="text-xs sm:text-sm text-gray-800 font-bold block truncate leading-tight mt-0.5">
-                            {profileData.services}
-                        </span>
-                    </div>
-
-                    {/* Estado */}
-                    <div className="p-3 sm:p-3.5 hover:bg-gray-50/50 transition-colors flex items-start gap-2.5 h-full justify-center flex-col">
-                        <div className="flex items-center gap-2">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1.5 border-2 border-gray-200 rounded-lg">
-                                <CheckCircle size={16} />
-                            </div>
-                            <Text className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
-                                Estado
-                            </Text>
-                        </div>
-                        <span className="text-xs font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-md uppercase inline-block mt-0.5">
-                            {profileData.standing}
-                        </span>
-                    </div>
-                </div>
-
-                {/* DATOS DE CONTACTO Y CREDENCIALES (SECCIÓN INFERIOR 2 - COMPACTADA) */}
-                <div className="p-3.5 sm:p-4 bg-white flex-1 flex flex-col justify-center">
-                    <div className="flex items-center justify-between mb-2.5 pb-2 border-b-2 border-gray-100">
-                        <div className="flex items-center gap-2">
-                            <Settings size={16} className="text-[#0E5E6F]" />
-                            <Title
-                                as="h3"
-                                className="text-xs sm:text-sm font-black text-gray-800 normal-case"
-                            >
-                                Credenciales y Datos de Contacto
+                        <div>
+                            <Title className="text-base text-[#0E5E6F] font-bold">
+                                ¡Operación completada!
                             </Title>
+                            <p className="text-[11px] text-gray-500 leading-relaxed">
+                                Tu cuenta ha sido confirmada con éxito.
+                            </p>
                         </div>
-
                         <button
-                            onClick={handleOpenModal}
-                            className="py-1 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-lg text-xs flex items-center gap-1.5 transition-colors active:scale-95 shadow-xs"
+                            onClick={handleSuccessFinish}
+                            className="w-full text-xs font-bold py-2.5 rounded-[4px] border-2 border-[#0E5E6F] bg-[#0E5E6F] text-white cursor-pointer"
                         >
-                            <Edit2 size={13} className="text-[#0E5E6F]" /> Editar Información
+                            Ir al inicio de sesión
                         </button>
                     </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-left">
-                        <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-xl">
-                            <Text className="text-[10px] font-black text-gray-400 uppercase tracking-wider flex items-center gap-1">
-                                <Phone size={12} className="text-[#0E5E6F]" /> Teléfono
-                            </Text>
-                            <Text className="font-bold text-xs sm:text-sm text-gray-800 mt-0.5">
-                                {profileData.phone}
-                            </Text>
-                        </div>
-
-                        <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-xl">
-                            <Text className="text-[10px] font-black text-gray-400 uppercase tracking-wider flex items-center gap-1">
-                                <Mail size={12} className="text-[#0E5E6F]" /> Correo
-                            </Text>
-                            <Text className="font-bold text-xs sm:text-sm text-gray-800 mt-0.5 truncate">
-                                {profileData.email}
-                            </Text>
-                        </div>
-
-                        <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-xl">
-                            <Text className="text-[10px] font-black text-gray-400 uppercase tracking-wider flex items-center gap-1">
-                                <Lock size={12} className="text-[#0E5E6F]" /> Contraseña
-                            </Text>
-                            <Text className="font-mono font-bold text-xs sm:text-sm text-gray-800 mt-0.5">
-                                ••••••••••••
-                            </Text>
-                        </div>
-                    </div>
-                </div>
-
-                {/* PIE DE PÁGINA (SECCIÓN INFERIOR 3 - COMPACTADA) */}
-                <div className="border-t-2 border-gray-200 px-6 py-2 bg-gray-50 flex items-center justify-between gap-2">
-                    <span className="text-xs text-gray-400 font-medium text-left truncate">
-                        Base Olanchito, Yoro
-                    </span>
-
-                    <button
-                        onClick={onLogout}
-                        className="flex items-center gap-1.5 py-1 px-3 rounded-lg border-2 border-rose-200 bg-white hover:bg-rose-50 text-rose-600 transition-all active:scale-95 shadow-xs"
-                        style={{ fontFamily: "'Instrument Sans', sans-serif" }}
-                    >
-                        <LogOut size={13} className="shrink-0" />
-                        <span className="text-xs font-black uppercase tracking-wider">
-                            SALIR
-                        </span>
-                    </button>
-                </div>
+                )}
             </div>
 
-            {/* MODAL VERTICAL FLOTANTE DE EDICIÓN */}
-            {isModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
-                    <div className="bg-white border-2 border-gray-300 rounded-2xl p-5 w-full max-w-md shadow-xl space-y-4 text-left">
-                        {/* Encabezado del Modal */}
-                        <div className="flex items-center justify-between pb-2.5 border-b-2 border-gray-100">
-                            <div className="flex items-center gap-2">
-                                <div className="p-1.5 bg-[#0E5E6F]/10 rounded-lg text-[#0E5E6F]">
-                                    <Edit2 size={15} />
-                                </div>
-                                <Title
-                                    as="h3"
-                                    className="text-sm font-black text-gray-800 normal-case"
-                                >
-                                    Editar Credenciales
-                                </Title>
-                            </div>
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-                            >
-                                <X size={16} />
-                            </button>
-                        </div>
+            {/* PIE DE PÁGINA STICKY */}
+            {step !== "success" && (
+                <div className="border-t-2 border-gray-200 px-4 py-3 bg-gray-50/90 flex items-center justify-between gap-2 shrink-0">
+                    <button
+                        onClick={() => {
+                            if (step === "register" && regSubStep > 1) {
+                                setRegSubStep((prev) => (prev - 1) as 1 | 2 | 3);
+                            } else if (step === "verify") {
+                                setStep("register");
+                                setRegSubStep(3);
+                            } else if (step === "recover") {
+                                setStep("login");
+                            } else {
+                                onBack();
+                            }
+                        }}
+                        className="flex items-center gap-1 text-gray-600 hover:text-gray-900 text-xs font-bold transition-colors bg-transparent border-0 cursor-pointer"
+                    >
+                        <ChevronLeft size={14} />{" "}
+                        {step === "register" && regSubStep > 1
+                            ? "Anterior"
+                            : step === "verify" || step === "recover"
+                            ? "Regresar"
+                            : "Cancelar"}
+                    </button>
 
-                        {/* Formulario Vertical */}
-                        <form onSubmit={handleSave} className="space-y-3">
-                            <div>
-                                <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider mb-1">
-                                    Teléfono
-                                </label>
-                                <div className="relative">
-                                    <Phone
-                                        size={13}
-                                        className="absolute left-3 top-3 text-gray-400"
-                                    />
-                                    <input
-                                        type="text"
-                                        value={editForm.phone}
-                                        onChange={(e) =>
-                                            setEditForm({ ...editForm, phone: e.target.value })
-                                        }
-                                        className="w-full pl-8 pr-3 py-2 text-xs font-bold border-2 border-gray-200 rounded-lg focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider mb-1">
-                                    Correo Electrónico
-                                </label>
-                                <div className="relative">
-                                    <Mail
-                                        size={13}
-                                        className="absolute left-3 top-3 text-gray-400"
-                                    />
-                                    <input
-                                        type="email"
-                                        value={editForm.email}
-                                        onChange={(e) =>
-                                            setEditForm({ ...editForm, email: e.target.value })
-                                        }
-                                        className="w-full pl-8 pr-3 py-2 text-xs font-bold border-2 border-gray-200 rounded-lg focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider mb-1">
-                                    Nueva Contraseña
-                                </label>
-                                <div className="relative">
-                                    <Lock
-                                        size={13}
-                                        className="absolute left-3 top-3 text-gray-400"
-                                    />
-                                    <input
-                                        type={showPassword ? "text" : "password"}
-                                        value={editForm.password}
-                                        onChange={(e) =>
-                                            setEditForm({ ...editForm, password: e.target.value })
-                                        }
-                                        className="w-full pl-8 pr-8 py-2 text-xs font-bold border-2 border-gray-200 rounded-lg focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
-                                        required
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600"
-                                    >
-                                        {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsModalOpen(false)}
-                                    className="py-1.5 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-600 font-bold rounded-lg text-xs flex items-center gap-1 transition-colors active:scale-95"
-                                >
-                                    <X size={13} /> Cancelar
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="py-1.5 px-4 bg-[#0E5E6F] border-2 border-[#0E5E6F] text-white font-bold rounded-lg text-xs flex items-center gap-1 transition-all active:scale-95 shadow-xs"
-                                >
-                                    <Save size={13} /> Guardar
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                    <WireframeButton
+                        primary
+                        onClick={() => {
+                            if (step === "login") {
+                                onLogin(selectedRole);
+                            } else if (step === "register") {
+                                if (regSubStep === 1) {
+                                    setRegSubStep(2);
+                                } else if (regSubStep === 2) {
+                                    setRegSubStep(3);
+                                } else {
+                                    setStep("verify");
+                                }
+                            } else if (step === "recover") {
+                                setStep("verify");
+                            } else if (step === "verify") {
+                                setStep("success");
+                            }
+                        }}
+                        className="text-xs font-bold py-2 px-4 rounded-[4px] border-2 border-[#0E5E6F] bg-[#0E5E6F] text-white flex items-center gap-1 cursor-pointer shadow-sm"
+                    >
+                        {step === "login" && "Ingresar"}
+                        {step === "register" &&
+                            (regSubStep < 3 ? (
+                                <>
+                                    Siguiente <ArrowRight size={13} />
+                                </>
+                            ) : (
+                                "Enviar código"
+                            ))}
+                        {step === "recover" && "Enviar código"}
+                        {step === "verify" && "Verificar"}
+                    </WireframeButton>
                 </div>
             )}
         </div>

@@ -8,13 +8,14 @@ import { TecnicoLayout } from './components/layouts/TecnicoLayout';
 
 // Módulo Menú / Kit UI
 import { KitUiView } from '../modules/menu';
+import { MenuView } from '../modules/menu';
 
 // Módulo Landing & Auth (sin Sidebar)
 import { LandingView, AuthView } from '../modules/landing';
 
 // Módulo Admin
 import {
-  AdminDashboardView, AdminPricesView, AdminHelpView, AdminConfigMapView,
+  AdminDashboardView, AdminPricesView, AdminHelpView,
   AdminConfigCargoView, AdminCheckoutView, AdminTrackingView, AdminHistoryView,
   AdminMapsView, AdminDataView, AdminProfileView
 } from '../modules/admin';
@@ -48,6 +49,7 @@ const NAVIGATION_SECTIONS: NavSection[] = [
     title: "Menú",
     views: [
       { id: "kit-ui", label: "Kit UI" },
+      { id: "menu", label: "Inicio" },
     ],
   },
   {
@@ -134,6 +136,9 @@ export default function App() {
       // 1. Vistas Públicas / Landing / Kit UI
       case 'kit-ui':
         return <KitUiView />;
+
+        case 'menu':
+        return <MenuView />;
 
       case 'landing':
         return (
@@ -388,14 +393,14 @@ export default function App() {
 
   return (
     <div
-      className="min-h-screen flex items-start justify-center p-4 sm:p-8 gap-6"
+      className="min-h-screen flex items-center justify-center p-2 sm:p-4 gap-6"
       style={{
         background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
         fontFamily: "'Roboto', sans-serif"
       }}
     >
       {/* MENÚ DESPLEGABLE EXTERIOR */}
-      <div className="hidden lg:flex flex-col gap-3 w-64 pt-2 flex-shrink-0 max-h-[90vh] overflow-y-auto pr-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <div className="hidden lg:flex flex-col gap-3 w-64 pt-2 flex-shrink-0 max-h-[92vh] overflow-y-auto pr-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <div className="bg-[#111827]/90 backdrop-blur border border-slate-700/60 rounded-[4px] p-3.5 text-white shadow-xl">
           {/* Title Case */}
           <p className="text-[11px] tracking-wider text-[#cbd5e1] mb-3 font-bold border-b border-slate-700/50 pb-1">
@@ -465,84 +470,40 @@ export default function App() {
         </div>
       </div>
 
-      {/* MONITOR PANTALLA PRINCIPAL */}
-      <div className="w-full max-w-[1000px] flex flex-col items-center select-none">
+      {/* DISPOSITIVO MÓVIL ESTILO IPHONE (RECTANGULAR CON BORDES PLANOS) */}
+      <div
+        className="relative flex-shrink-0 select-none"
+        style={{
+          height: "92vh",
+          aspectRatio: "9 / 19.5",
+          maxHeight: "960px",
+          border: "4px solid #1f1f24",
+          borderRadius: 18, // Bordes menos curvos, más rectos
+          overflow: "hidden",
+          boxShadow: "0 0 0 5px #3a3a40, 0 30px 80px rgba(0,0,0,0.65)",
+          background: "#F2F2F2",
+        }}
+      >
+        {/* Dynamic Island (Isla Dinámica de iPhone) */}
         <div
-          className="w-full"
-          style={{
-            background: "#2a2a2a",
-            borderRadius: "16px 16px 0 0",
-            padding: "12px 12px 0 12px",
-            boxShadow: "0 30px 80px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.1)",
-          }}
+          className="absolute top-3 left-1/2 -translate-x-1/2 z-20 bg-[#000000] shadow-md flex items-center justify-between px-2.5"
+          style={{ width: 100, height: 25, borderRadius: 18 }}
         >
-          <div className="flex items-center justify-center mb-2 gap-2">
-            <div className="w-2 h-2 rounded-full bg-gray-600"></div>
-            <div className="w-1.5 h-1.5 rounded-full bg-gray-700 mx-1"></div>
-          </div>
+          {/* Lente cámara */}
+          <div className="w-2.5 h-2.5 rounded-full bg-[#11111a] border border-[#222]" />
+          {/* Sensor */}
+          <div className="w-2 h-2 rounded-full bg-[#0a0a10]" />
+        </div>
 
-          {/* Screen Browser */}
-          <div
-            className="w-full bg-white rounded-t-lg overflow-hidden flex flex-col"
-            style={{
-              height: "78vh",
-              boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.3)",
-            }}
-          >
-            {/* Chrome Bar */}
-            <div className="h-10 bg-gray-200 border-b border-gray-300 flex items-center px-4 gap-4 shrink-0">
-              <div className="flex gap-2">
-                <div className="w-3 h-3 rounded-full bg-red-500 border border-red-600"></div>
-                <div className="w-3 h-3 rounded-full bg-yellow-400 border border-yellow-500"></div>
-                <div className="w-3 h-3 rounded-full bg-green-500 border border-green-600"></div>
-              </div>
-              <div className="flex-1 flex justify-center">
-                <div
-                  className="bg-white px-4 py-1 text-xs text-gray-500 rounded-[4px] w-[40%] min-w-[220px] text-center border border-gray-300 flex items-center justify-center gap-1 font-sans"
-                >
-                  <span className="opacity-40">https://</span>biodron.hn
-                </div>
-              </div>
-            </div>
-
-            {/* App Viewport Container */}
-            <div className="flex-1 flex w-full h-full relative overflow-hidden bg-gray-50 text-gray-800">
-              {renderView()}
-            </div>
+        {/* Viewport contenedor de la App */}
+        <div className="absolute inset-0 flex flex-col overflow-hidden pt-10">
+          <div className="flex-1 overflow-y-auto flex flex-col">
+            {renderView()}
           </div>
         </div>
 
-        {/* Laptop Stand Base */}
-        <div
-          className="w-full h-4 flex items-center justify-center"
-          style={{
-            background: "linear-gradient(to bottom, #3a3a3a, #2a2a2a)",
-            borderRadius: "0 0 4px 4px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
-          }}
-        >
-          <div
-            className="w-24 h-1.5 rounded-full"
-            style={{ background: "rgba(255,255,255,0.08)" }}
-          ></div>
-        </div>
-        <div
-          className="w-[108%] h-6 flex items-end justify-center pb-1"
-          style={{
-            background: "linear-gradient(to bottom, #2e2e2e, #252525)",
-            borderRadius: "0 0 12px 12px",
-            boxShadow: "0 8px 24px rgba(0,0,0,0.6)",
-          }}
-        >
-          <div
-            className="w-32 h-1.5 rounded-full"
-            style={{ background: "rgba(0,0,0,0.3)" }}
-          ></div>
-        </div>
-        <div
-          className="w-[115%] h-3 rounded-full mt-1"
-          style={{ background: "rgba(0,0,0,0.4)", filter: "blur(8px)" }}
-        ></div>
+        {/* Indicador Home Bar (Línea Inferior de iOS) */}
+        <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-32 h-1 bg-[#111111]/60 rounded-full z-20 pointer-events-none" />
       </div>
     </div>
   );

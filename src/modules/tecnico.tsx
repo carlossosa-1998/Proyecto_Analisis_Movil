@@ -470,132 +470,145 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
 
     const unreadCount = notificaciones.filter((n) => n.unread).length;
 
+    // Formatea números grandes de forma compacta para el eje Y en pantallas angostas
+    const formatCompactHNL = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(1)}k` : `${n}`);
+
     return (
         <div
             style={{ fontFamily: "'Roboto', sans-serif" }}
-            className="p-6 md:p-8 max-w-[1400px] mx-auto bg-white antialiased text-gray-800 font-sans"
+            className="p-4 w-full mx-auto bg-white antialiased text-gray-800 font-sans"
         >
-            {/* BARRA SUPERIOR (TITLE CASE EN TÍTULOS) */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b-2 border-gray-100 select-none">
-                <div className="text-left space-y-0.5">
-                    <h1 className="text-2xl font-black text-gray-900 tracking-tight">
-                        Dashboard de Ganancias y Soporte Técnico
-                    </h1>
-                    <p className="text-gray-500 text-xs font-medium tracking-wide">
-                        Consola del Especialista • Configuración, Diagnóstico y Reparación de Flotas
-                    </p>
+            {/* BARRA SUPERIOR (APILADA EN MÓVIL) */}
+            <div className="flex flex-col gap-3 mb-5 pb-4 border-b-2 border-gray-100 select-none">
+                <div className="flex items-start justify-between gap-2">
+                    <div className="text-left space-y-0.5 min-w-0">
+                        <h1 className="text-base font-black text-gray-900 tracking-tight leading-tight">
+                            Dashboard de Ganancias y Soporte Técnico
+                        </h1>
+                        <p className="text-gray-500 text-[10px] font-medium tracking-wide leading-tight">
+                            Consola del Especialista • Configuración, Diagnóstico y Reparación
+                        </p>
+                    </div>
+
+                    {/* CAMPANA (abre bottom sheet en móvil) */}
+                    <button
+                        onClick={() => setShowNotifications(true)}
+                        style={{ borderRadius: "4px" }}
+                        className="relative p-2 bg-white border-2 border-gray-200 hover:border-gray-300 transition-colors shadow-xs active:scale-95 flex items-center justify-center shrink-0"
+                    >
+                        <Bell size={17} className="text-gray-600" />
+                        {unreadCount > 0 && (
+                            <span
+                                style={{
+                                    backgroundColor: HEX_COLORS.red,
+                                    borderRadius: "4px",
+                                }}
+                                className="absolute -top-1 -right-1 px-1 py-0.2 text-[9px] text-white font-black shadow-xs"
+                            >
+                                {unreadCount}
+                            </span>
+                        )}
+                    </button>
                 </div>
 
-                <div className="flex items-center gap-3 self-end sm:self-auto">
-                    {/* Badge Nivel Técnico */}
-                    <div
-                        style={{
-                            backgroundColor: HEX_COLORS.emerald100,
-                            color: "#065F46",
-                            borderRadius: "4px",
-                        }}
-                        className="px-2.5 py-1 border border-emerald-300 flex items-center gap-1.5 shadow-xs"
-                    >
-                        <span className="w-1.5 h-1.5 bg-[#065F46] rounded-full animate-pulse"></span>
-                        <span className="text-[10px] font-bold">Técnico certificado master</span>
-                    </div>
-
-                    {/* CAMPANA Y DROPDOWN DE NOTIFICACIONES */}
-                    <div className="relative">
-                        <button
-                            onClick={() => setShowNotifications(!showNotifications)}
-                            style={{ borderRadius: "4px" }}
-                            className="relative p-2 bg-white border-2 border-gray-200 hover:border-gray-300 transition-colors shadow-xs active:scale-95 flex items-center justify-center"
-                        >
-                            <Bell size={18} className="text-gray-600" />
-                            {unreadCount > 0 && (
-                                <span
-                                    style={{
-                                        backgroundColor: HEX_COLORS.red,
-                                        borderRadius: "4px",
-                                    }}
-                                    className="absolute -top-1 -right-1 px-1 py-0.2 text-[9px] text-white font-black shadow-xs"
-                                >
-                                    {unreadCount}
-                                </span>
-                            )}
-                        </button>
-
-                        {/* PANEL DROPDOWN DE NOTIFICACIONES */}
-                        {showNotifications && (
-                            <div
-                                style={{ borderRadius: "4px" }}
-                                className="absolute right-0 mt-2 w-80 sm:w-96 bg-white border-2 border-gray-200 shadow-2xl z-50 p-4 text-left animate-in fade-in duration-150"
-                            >
-                                <div className="flex justify-between items-center pb-2.5 mb-2.5 border-b border-gray-100">
-                                    <div className="flex items-center gap-2">
-                                        <Bell size={15} className="text-gray-700" />
-                                        <h3 className="text-xs font-black text-gray-900">
-                                            Centro de Alertas Técnicas
-                                        </h3>
-                                    </div>
-                                    <button
-                                        onClick={() => setShowNotifications(false)}
-                                        className="text-gray-400 hover:text-gray-600 p-1"
-                                    >
-                                        <X size={14} />
-                                    </button>
-                                </div>
-
-                                <div className="space-y-2 max-h-72 overflow-y-auto custom-scrollbar pr-1">
-                                    {notificaciones.map((n) => (
-                                        <div
-                                            key={n.id}
-                                            style={{ borderRadius: "4px" }}
-                                            className={`p-2.5 border text-xs transition-colors ${n.unread ? "bg-gray-50 border-gray-200" : "bg-white border-gray-100"
-                                                }`}
-                                        >
-                                            <div className="flex justify-between items-start gap-2 mb-1">
-                                                <span
-                                                    style={{
-                                                        backgroundColor: n.colorBg,
-                                                        color: n.textColor,
-                                                        borderRadius: "4px",
-                                                    }}
-                                                    className="px-2 py-0.5 text-[9px] font-bold flex items-center gap-1"
-                                                >
-                                                    {n.icono}
-                                                    {n.titulo}
-                                                </span>
-                                                <span className="text-[9px] font-mono text-gray-400">{n.tiempo}</span>
-                                            </div>
-                                            <p className="text-gray-700 font-medium text-[11px] leading-snug">
-                                                {n.detalle}
-                                            </p>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className="pt-2.5 mt-2.5 border-t border-gray-100 text-center">
-                                    <button
-                                        onClick={() => {
-                                            setNotificaciones(notificaciones.map((n) => ({ ...n, unread: false })));
-                                        }}
-                                        className="text-[11px] font-bold text-[#0E5E6F] hover:underline"
-                                    >
-                                        Marcar todas como leídas
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                {/* Badge Nivel Técnico */}
+                <div
+                    style={{
+                        backgroundColor: HEX_COLORS.emerald100,
+                        color: "#065F46",
+                        borderRadius: "4px",
+                    }}
+                    className="px-2.5 py-1 border border-emerald-300 flex items-center gap-1.5 shadow-xs w-fit"
+                >
+                    <span className="w-1.5 h-1.5 bg-[#065F46] rounded-full animate-pulse"></span>
+                    <span className="text-[10px] font-bold">Técnico certificado master</span>
                 </div>
             </div>
 
-            {/* MÉTRICAS SUMMARY */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 text-left">
+            {/* BOTTOM SHEET DE NOTIFICACIONES */}
+            {showNotifications && (
+                <div className="fixed inset-0 z-50 flex items-end justify-center">
+                    {/* Overlay */}
+                    <div
+                        className="absolute inset-0 bg-black/40 animate-in fade-in duration-150"
+                        onClick={() => setShowNotifications(false)}
+                    ></div>
+
+                    {/* Panel */}
+                    <div
+                        style={{ borderRadius: "12px 12px 0 0" }}
+                        className="relative w-full max-h-[80vh] bg-white border-t-2 border-gray-200 shadow-2xl p-4 text-left animate-in slide-in-from-bottom duration-200 flex flex-col"
+                    >
+                        {/* Handle */}
+                        <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-3"></div>
+
+                        <div className="flex justify-between items-center pb-2.5 mb-2.5 border-b border-gray-100">
+                            <div className="flex items-center gap-2">
+                                <Bell size={15} className="text-gray-700" />
+                                <h3 className="text-xs font-black text-gray-900">
+                                    Centro de Alertas Técnicas
+                                </h3>
+                            </div>
+                            <button
+                                onClick={() => setShowNotifications(false)}
+                                className="text-gray-400 hover:text-gray-600 p-1"
+                            >
+                                <X size={16} />
+                            </button>
+                        </div>
+
+                        <div className="space-y-2 overflow-y-auto custom-scrollbar pr-1">
+                            {notificaciones.map((n) => (
+                                <div
+                                    key={n.id}
+                                    style={{ borderRadius: "4px" }}
+                                    className={`p-2.5 border text-xs transition-colors ${n.unread ? "bg-gray-50 border-gray-200" : "bg-white border-gray-100"
+                                        }`}
+                                >
+                                    <div className="flex justify-between items-start gap-2 mb-1">
+                                        <span
+                                            style={{
+                                                backgroundColor: n.colorBg,
+                                                color: n.textColor,
+                                                borderRadius: "4px",
+                                            }}
+                                            className="px-2 py-0.5 text-[9px] font-bold flex items-center gap-1"
+                                        >
+                                            {n.icono}
+                                            {n.titulo}
+                                        </span>
+                                        <span className="text-[9px] font-mono text-gray-400 shrink-0">{n.tiempo}</span>
+                                    </div>
+                                    <p className="text-gray-700 font-medium text-[11px] leading-snug">
+                                        {n.detalle}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="pt-2.5 mt-2.5 border-t border-gray-100 text-center">
+                            <button
+                                onClick={() => {
+                                    setNotificaciones(notificaciones.map((n) => ({ ...n, unread: false })));
+                                }}
+                                className="text-[11px] font-bold text-[#0E5E6F] hover:underline"
+                            >
+                                Marcar todas como leídas
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* MÉTRICAS SUMMARY (2 COLUMNAS EN MÓVIL) */}
+            <div className="grid grid-cols-2 gap-3 mb-6 text-left">
                 {/* CARD 1 */}
                 <div
                     style={{ borderRadius: "4px" }}
-                    className="bg-white border-2 border-gray-200 p-3.5 shadow-xs flex flex-col justify-between"
+                    className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between"
                 >
                     <div className="flex justify-between items-center mb-1.5">
-                        <span className="text-[10px] font-black text-gray-500 truncate">
+                        <span className="text-[9px] font-black text-gray-500 truncate">
                             Ganancias del mes
                         </span>
                         <div
@@ -606,24 +619,24 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                             }}
                             className="p-1 flex items-center justify-center shrink-0"
                         >
-                            <DollarSign size={14} />
+                            <DollarSign size={13} />
                         </div>
                     </div>
-                    <p className="text-lg lg:text-xl font-black text-gray-900 mb-0.5 truncate">
+                    <p className="text-sm font-black text-gray-900 mb-0.5 truncate">
                         L. 71,250.00
                     </p>
-                    <p className="text-[10px] text-emerald-600 font-bold truncate">
-                        ↑ +14.5% vs mes anterior
+                    <p className="text-[9px] text-emerald-600 font-bold truncate">
+                        ↑ +14.5% vs anterior
                     </p>
                 </div>
 
                 {/* CARD 2 */}
                 <div
                     style={{ borderRadius: "4px" }}
-                    className="bg-white border-2 border-gray-200 p-3.5 shadow-xs flex flex-col justify-between"
+                    className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between"
                 >
                     <div className="flex justify-between items-center mb-1.5">
-                        <span className="text-[10px] font-black text-gray-500 truncate">
+                        <span className="text-[9px] font-black text-gray-500 truncate">
                             Drones reparados
                         </span>
                         <div
@@ -634,13 +647,13 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                             }}
                             className="p-1 flex items-center justify-center shrink-0"
                         >
-                            <Wrench size={14} />
+                            <Wrench size={13} />
                         </div>
                     </div>
-                    <p className="text-lg lg:text-xl font-black text-gray-900 mb-0.5 truncate">
+                    <p className="text-sm font-black text-gray-900 mb-0.5 truncate">
                         32 Unidades
                     </p>
-                    <p className="text-[10px] text-gray-400 font-semibold truncate">
+                    <p className="text-[9px] text-gray-400 font-semibold truncate">
                         100% pruebas superadas
                     </p>
                 </div>
@@ -648,10 +661,10 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                 {/* CARD 3 */}
                 <div
                     style={{ borderRadius: "4px" }}
-                    className="bg-white border-2 border-gray-200 p-3.5 shadow-xs flex flex-col justify-between"
+                    className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between"
                 >
                     <div className="flex justify-between items-center mb-1.5">
-                        <span className="text-[10px] font-black text-gray-500 truncate">
+                        <span className="text-[9px] font-black text-gray-500 truncate">
                             Tiempo promedio
                         </span>
                         <div
@@ -662,13 +675,13 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                             }}
                             className="p-1 flex items-center justify-center shrink-0"
                         >
-                            <Clock size={14} />
+                            <Clock size={13} />
                         </div>
                     </div>
-                    <p className="text-lg lg:text-xl font-black text-gray-900 mb-0.5 truncate">
-                        1.8 Horas / Serv.
+                    <p className="text-sm font-black text-gray-900 mb-0.5 truncate">
+                        1.8 Hrs / Serv.
                     </p>
-                    <p className="text-[10px] text-gray-400 font-semibold truncate">
+                    <p className="text-[9px] text-gray-400 font-semibold truncate">
                         Eficiencia optimizada
                     </p>
                 </div>
@@ -676,10 +689,10 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                 {/* CARD 4 */}
                 <div
                     style={{ borderRadius: "4px" }}
-                    className="bg-white border-2 border-gray-200 p-3.5 shadow-xs flex flex-col justify-between"
+                    className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between"
                 >
                     <div className="flex justify-between items-center mb-1.5">
-                        <span className="text-[10px] font-black text-gray-500 truncate">
+                        <span className="text-[9px] font-black text-gray-500 truncate">
                             Valor promedio
                         </span>
                         <div
@@ -690,25 +703,25 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                             }}
                             className="p-1 flex items-center justify-center shrink-0"
                         >
-                            <Activity size={14} />
+                            <Activity size={13} />
                         </div>
                     </div>
-                    <p className="text-lg lg:text-xl font-black text-gray-900 mb-0.5 truncate">
-                        L. 1,625.00 / hr
+                    <p className="text-sm font-black text-gray-900 mb-0.5 truncate">
+                        L. 1,625 / hr
                     </p>
-                    <p className="text-[10px] text-gray-400 font-semibold truncate">
+                    <p className="text-[9px] text-gray-400 font-semibold truncate">
                         Tarifa certificada
                     </p>
                 </div>
             </div>
 
-            {/* PESTAÑAS TÉCNICAS */}
-            <div className="border-b-2 border-gray-200 mb-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-1 select-none">
+            {/* PESTAÑAS TÉCNICAS (SCROLL HORIZONTAL EN MÓVIL) */}
+            <div className="border-b-2 border-gray-200 mb-6 flex gap-1 overflow-x-auto custom-scrollbar select-none -mx-4 px-4">
                 {[
-                    { id: "mantenimiento", label: "Reparación y mantenimiento", icon: <Wrench size={13} /> },
-                    { id: "configuracion", label: "Configuración y firmware", icon: <Sliders size={13} /> },
-                    { id: "diagnostico", label: "Diagnósticos físicos", icon: <Cpu size={13} /> },
-                    { id: "guardias", label: "Guardias y emergencias", icon: <Zap size={13} /> },
+                    { id: "mantenimiento", label: "Reparación", icon: <Wrench size={13} /> },
+                    { id: "configuracion", label: "Firmware", icon: <Sliders size={13} /> },
+                    { id: "diagnostico", label: "Diagnósticos", icon: <Cpu size={13} /> },
+                    { id: "guardias", label: "Guardias", icon: <Zap size={13} /> },
                 ].map((tab) => {
                     const isActive = activeTab === tab.id;
                     return (
@@ -716,40 +729,40 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             style={{ borderRadius: "4px 4px 0 0" }}
-                            className={`px-1.5 py-3 text-[11px] sm:text-xs font-bold flex items-center justify-center gap-1.5 border-t-2 border-x-2 -mb-[2px] transition-all text-center ${isActive
+                            className={`shrink-0 px-3 py-3 text-[11px] font-bold flex items-center justify-center gap-1.5 border-t-2 border-x-2 -mb-[2px] transition-all text-center whitespace-nowrap ${isActive
                                     ? "border-t-[#0E5E6F] border-x-gray-200 border-b-white bg-white text-[#0E5E6F] shadow-xs"
                                     : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                                 }`}
                         >
                             <span className={isActive ? "text-[#0E5E6F]" : "text-gray-400"}>{tab.icon}</span>
-                            <span className="truncate">{tab.label}</span>
+                            <span>{tab.label}</span>
                         </button>
                     );
                 })}
             </div>
 
-            {/* GRÁFICO SUPERIOR (TAMAÑO DE BARRAS RESTAURADO Y AMPLIO) */}
+            {/* GRÁFICO SUPERIOR (COMPACTO PARA MÓVIL) */}
             <div
                 style={{ borderRadius: "4px" }}
-                className="bg-white border-2 border-gray-200 p-5 shadow-xs mb-8 text-left"
+                className="bg-white border-2 border-gray-200 p-3.5 shadow-xs mb-8 text-left"
             >
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 pb-3 border-b border-gray-100">
+                <div className="flex flex-col gap-3 mb-4 pb-3 border-b border-gray-100">
                     <div className="flex items-center gap-2">
-                        <BarChart3 size={18} className="text-[#0E5E6F]" />
-                        <div>
-                            <h3 className="text-xs font-black text-gray-900">
-                                Desglose de Ingresos por Categoria
+                        <BarChart3 size={17} className="text-[#0E5E6F] shrink-0" />
+                        <div className="min-w-0">
+                            <h3 className="text-[11px] font-black text-gray-900 leading-tight">
+                                Desglose de Ingresos por Categoría
                             </h3>
-                            <p className="text-[11px] text-gray-500 font-medium">
+                            <p className="text-[10px] text-gray-500 font-medium leading-tight truncate">
                                 Escala eje Y: <strong className="text-gray-700">{chartUnit}</strong>
                             </p>
                         </div>
                     </div>
 
-                    {/* Selector de escala temporal */}
+                    {/* Selector de escala temporal (ancho completo) */}
                     <div
                         style={{ borderRadius: "4px" }}
-                        className="bg-gray-100 p-1 flex items-center gap-1 border border-gray-200"
+                        className="bg-gray-100 p-1 grid grid-cols-3 gap-1 border border-gray-200"
                     >
                         {[
                             { id: "semana", label: "Semana" },
@@ -760,7 +773,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                                 key={p.id}
                                 onClick={() => setChartPeriod(p.id as any)}
                                 style={{ borderRadius: "4px" }}
-                                className={`px-2.5 py-1 text-[11px] font-bold transition-all ${chartPeriod === p.id
+                                className={`px-2 py-1.5 text-[11px] font-bold transition-all ${chartPeriod === p.id
                                         ? "bg-[#0E5E6F] text-white shadow-xs"
                                         : "text-gray-500 hover:text-gray-900"
                                     }`}
@@ -771,226 +784,208 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                     </div>
                 </div>
 
-                {/* CONTENEDOR DEL GRÁFICO BARRAS CÓMODAS */}
-                <div className="relative pt-4 pb-2 pr-2">
-                    <div className="flex h-56">
-                        {/* EJE Y */}
-                        <div className="w-20 flex flex-col justify-between items-end pr-3 border-r-2 border-gray-300 text-[10px] font-mono font-bold text-gray-400 py-1 select-none">
+                {/* CONTENEDOR DEL GRÁFICO — eje Y angosto y scroll horizontal para las barras */}
+                <div className="relative pt-4 pb-2">
+                    <div className="flex h-48">
+                        {/* EJE Y (valores compactos, ej. 71.3k) */}
+                        <div className="w-11 flex flex-col justify-between items-end pr-2 border-r-2 border-gray-300 text-[9px] font-mono font-bold text-gray-400 py-1 select-none shrink-0">
                             {yAxisTicks.map((tick, i) => (
-                                <span key={i}>L.{tick.toLocaleString()}</span>
+                                <span key={i}>L.{formatCompactHNL(tick)}</span>
                             ))}
                         </div>
 
-                        {/* BARRAS RESTAURADAS */}
-                        <div className="flex-1 relative flex items-end justify-between pl-4 pr-2 h-full">
-                            <div className="absolute inset-x-0 top-0 bottom-0 flex flex-col justify-between pointer-events-none z-0 px-2">
-                                <div className="border-b border-gray-100 w-full h-0"></div>
-                                <div className="border-b border-gray-100 w-full h-0"></div>
-                                <div className="border-b border-gray-100 w-full h-0"></div>
-                                <div className="border-b border-gray-100 w-full h-0"></div>
-                                <div className="border-b-2 border-gray-300 w-full h-0"></div>
+                        {/* BARRAS con scroll horizontal táctil */}
+                        <div className="flex-1 overflow-x-auto custom-scrollbar">
+                            <div className="relative flex items-end h-full pl-3 pr-2 min-w-[420px]">
+                                <div className="absolute inset-x-0 top-0 bottom-0 flex flex-col justify-between pointer-events-none z-0 px-2">
+                                    <div className="border-b border-gray-100 w-full h-0"></div>
+                                    <div className="border-b border-gray-100 w-full h-0"></div>
+                                    <div className="border-b border-gray-100 w-full h-0"></div>
+                                    <div className="border-b border-gray-100 w-full h-0"></div>
+                                    <div className="border-b-2 border-gray-300 w-full h-0"></div>
+                                </div>
+
+                                {currentChartSet.map((item, idx) => {
+                                    const heightPercent = Math.max(8, Math.min(100, (item.valor / maxChartValue) * 100));
+
+                                    const barColors = [
+                                        HEX_COLORS.blue100,
+                                        HEX_COLORS.purple100,
+                                        HEX_COLORS.amber100,
+                                        HEX_COLORS.orange100,
+                                        HEX_COLORS.emerald100,
+                                        HEX_COLORS.brandGreen,
+                                    ];
+                                    const currentColor = barColors[idx % barColors.length];
+
+                                    return (
+                                        <div
+                                            key={idx}
+                                            className="flex-1 flex flex-col items-center justify-end h-full relative group cursor-pointer z-10 px-1.5 min-w-[48px]"
+                                            onClick={() => setHoveredBar(hoveredBar === idx ? null : idx)}
+                                        >
+                                            {/* Tooltip (tap en móvil) */}
+                                            {hoveredBar === idx && (
+                                                <div
+                                                    style={{ borderRadius: "4px" }}
+                                                    className="absolute -top-11 z-30 bg-gray-900 text-white px-2.5 py-1 text-[10px] font-mono shadow-xl whitespace-nowrap text-center animate-in fade-in duration-100"
+                                                >
+                                                    <p className="font-bold">
+                                                        L. {item.valor.toLocaleString()} HNL
+                                                    </p>
+                                                    <p className="text-gray-300 text-[9px]">{item.detalle}</p>
+                                                </div>
+                                            )}
+
+                                            <span className="text-[9px] font-black text-gray-700 mb-1 opacity-80 group-active:opacity-100">
+                                                L.{formatCompactHNL(item.valor)}
+                                            </span>
+
+                                            <div
+                                                style={{
+                                                    height: `${heightPercent}%`,
+                                                    backgroundColor: currentColor,
+                                                    borderRadius: "4px 4px 0 0",
+                                                }}
+                                                className="w-full transition-all duration-300 border-t border-x border-black/10"
+                                            ></div>
+                                        </div>
+                                    );
+                                })}
                             </div>
 
-                            {currentChartSet.map((item, idx) => {
-                                const heightPercent = Math.max(8, Math.min(100, (item.valor / maxChartValue) * 100));
-
-                                const barColors = [
-                                    HEX_COLORS.blue100,
-                                    HEX_COLORS.purple100,
-                                    HEX_COLORS.amber100,
-                                    HEX_COLORS.orange100,
-                                    HEX_COLORS.emerald100,
-                                    HEX_COLORS.brandGreen,
-                                ];
-                                const currentColor = barColors[idx % barColors.length];
-
-                                return (
-                                    <div
+                            {/* EJE X (dentro del mismo scroll para alinear con las barras) */}
+                            <div className="flex pt-2 pl-3 pr-2 border-t-2 border-gray-300 min-w-[420px]">
+                                {currentChartSet.map((item, idx) => (
+                                    <span
                                         key={idx}
-                                        className="flex-1 flex flex-col items-center justify-end h-full relative group cursor-pointer z-10 px-1"
-                                        onMouseEnter={() => setHoveredBar(idx)}
-                                        onMouseLeave={() => setHoveredBar(null)}
+                                        className="flex-1 text-center text-[9px] font-bold text-gray-500 tracking-wider min-w-[48px]"
                                     >
-                                        {/* Tooltip Hover */}
-                                        {hoveredBar === idx && (
-                                            <div
-                                                style={{ borderRadius: "4px" }}
-                                                className="absolute -top-11 z-30 bg-gray-900 text-white px-2.5 py-1 text-[10px] font-mono shadow-xl whitespace-nowrap text-center animate-in fade-in duration-100"
-                                            >
-                                                <p className="font-bold">
-                                                    L. {item.valor.toLocaleString()} HNL
-                                                </p>
-                                                <p className="text-gray-300 text-[9px]">{item.detalle}</p>
-                                            </div>
-                                        )}
-
-                                        <span className="text-[10px] font-black text-gray-700 mb-1 opacity-80 group-hover:opacity-100">
-                                            L.{item.valor >= 1000 ? `${(item.valor / 1000).toFixed(1)}k` : item.valor}
-                                        </span>
-
-                                        <div
-                                            style={{
-                                                height: `${heightPercent}%`,
-                                                backgroundColor: currentColor,
-                                                borderRadius: "4px 4px 0 0",
-                                            }}
-                                            className="w-full transition-all duration-300 hover:brightness-90 border-t border-x border-black/10"
-                                        ></div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    {/* EJE X */}
-                    <div className="flex pl-20 pt-2 border-t-2 border-gray-300">
-                        <div className="flex-1 flex justify-between px-4">
-                            {currentChartSet.map((item, idx) => (
-                                <span
-                                    key={idx}
-                                    className="flex-1 text-center text-[10px] font-bold text-gray-500 tracking-wider"
-                                >
-                                    {item.label}
-                                </span>
-                            ))}
+                                        {item.label}
+                                    </span>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* TABLA DE TRABAJOS Y REPARACIONES (COLUMNAS DE TABLA MÁS DELGADAS Y COMPACTAS) */}
+            {/* HISTORIAL DE INTERVENCIONES — TARJETAS EN VEZ DE TABLA */}
             <div
                 style={{ borderRadius: "4px" }}
                 className="bg-white border-2 border-gray-200 shadow-xs text-left overflow-hidden mb-8"
             >
-                <div className="p-3 sm:p-4 border-b-2 border-gray-100 bg-gray-50/50 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3">
+                <div className="p-3.5 border-b-2 border-gray-100 bg-gray-50/50 flex flex-col gap-3">
                     <div>
                         <h3 className="text-xs font-black text-gray-900">
                             Historial de Intervenciones Técnicas
                         </h3>
                         <p className="text-[11px] text-gray-500 font-medium">
-                            Detalle de mantenimiento, piezas y honorarios generados (HNL)
+                            Detalle de mantenimiento, piezas y honorarios (HNL)
                         </p>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full lg:w-auto">
-                        {/* Buscador */}
-                        <div className="relative flex-1 sm:w-56">
-                            <SearchIcon
-                                size={13}
-                                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                            />
-                            <input
-                                type="text"
-                                value={tableSearch}
-                                onChange={(e) => setTableSearch(e.target.value)}
-                                placeholder="Buscar id, dron, repuesto..."
-                                style={{ borderRadius: "4px" }}
-                                className="w-full pl-8 pr-3 py-1 text-xs bg-white border border-gray-300 focus:outline-none focus:border-[#0E5E6F] font-medium"
-                            />
-                            {tableSearch && (
-                                <button
-                                    onClick={() => setTableSearch("")}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                                >
-                                    <X size={12} />
-                                </button>
-                            )}
-                        </div>
+                    {/* Buscador (ancho completo) */}
+                    <div className="relative w-full">
+                        <SearchIcon
+                            size={13}
+                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                        />
+                        <input
+                            type="text"
+                            value={tableSearch}
+                            onChange={(e) => setTableSearch(e.target.value)}
+                            placeholder="Buscar id, dron, repuesto..."
+                            style={{ borderRadius: "4px" }}
+                            className="w-full pl-8 pr-8 py-2 text-xs bg-white border border-gray-300 focus:outline-none focus:border-[#0E5E6F] font-medium"
+                        />
+                        {tableSearch && (
+                            <button
+                                onClick={() => setTableSearch("")}
+                                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            >
+                                <X size={12} />
+                            </button>
+                        )}
+                    </div>
 
-                        {/* Filtros */}
-                        <div className="flex items-center gap-1">
-                            {[
-                                { id: "todos", label: "Todos" },
-                                { id: "completado", label: "Completados" },
-                                { id: "proceso", label: "En proceso" },
-                                { id: "alerta", label: "En revisión" },
-                            ].map((f) => (
-                                <button
-                                    key={f.id}
-                                    onClick={() => setStatusFilter(f.id)}
-                                    style={{
-                                        borderRadius: "4px",
-                                        backgroundColor: statusFilter === f.id ? HEX_COLORS.brandGreen : "#FFFFFF",
-                                        color: statusFilter === f.id ? "#FFFFFF" : "#0E5E6F",
-                                        borderColor: HEX_COLORS.brandGreen,
-                                    }}
-                                    className="px-2 py-0.5 text-[10px] font-bold border transition-all hover:opacity-90 active:scale-95 whitespace-nowrap"
-                                >
-                                    {f.label}
-                                </button>
-                            ))}
-                        </div>
+                    {/* Filtros (scroll horizontal) */}
+                    <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar -mx-3.5 px-3.5">
+                        {[
+                            { id: "todos", label: "Todos" },
+                            { id: "completado", label: "Completados" },
+                            { id: "proceso", label: "En proceso" },
+                            { id: "alerta", label: "En revisión" },
+                        ].map((f) => (
+                            <button
+                                key={f.id}
+                                onClick={() => setStatusFilter(f.id)}
+                                style={{
+                                    borderRadius: "4px",
+                                    backgroundColor: statusFilter === f.id ? HEX_COLORS.brandGreen : "#FFFFFF",
+                                    color: statusFilter === f.id ? "#FFFFFF" : "#0E5E6F",
+                                    borderColor: HEX_COLORS.brandGreen,
+                                }}
+                                className="shrink-0 px-2.5 py-1 text-[10px] font-bold border transition-all active:scale-95 whitespace-nowrap"
+                            >
+                                {f.label}
+                            </button>
+                        ))}
                     </div>
                 </div>
 
-                {/* Tabla con celdas ajustadas (px-2 py-1.5) para columnas ultra delgadas */}
-                <div className="overflow-x-auto custom-scrollbar">
-                    <table className="w-full text-left text-xs table-fixed">
-                        <thead className="bg-white text-gray-400 font-bold border-b border-gray-200 text-[10px]">
-                            <tr>
-                                <th className="w-24 px-2.5 py-1.5 whitespace-nowrap">Código / fecha</th>
-                                <th className="w-36 px-2.5 py-1.5 whitespace-nowrap">Ubicación / taller</th>
-                                <th className="px-2.5 py-1.5">Diagnóstico y trabajo</th>
-                                <th className="w-44 px-2.5 py-1.5">Dron y repuestos</th>
-                                <th className="w-28 px-2.5 py-1.5 text-right whitespace-nowrap">Ganancia (HNL)</th>
-                                <th className="w-24 px-2.5 py-1.5 text-center whitespace-nowrap">Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-100">
-                            {registrosActuales.length > 0 ? (
-                                registrosActuales.map((row) => (
-                                    <tr key={row.id} className="hover:bg-gray-50/80 transition-colors">
-                                        <td className="px-2.5 py-1.5 whitespace-nowrap">
-                                            <p className="font-extrabold text-gray-900 leading-tight">{row.id}</p>
-                                            <p className="text-[9px] text-gray-400 font-mono leading-none">{row.fecha}</p>
-                                        </td>
-                                        <td className="px-2.5 py-1.5 font-bold text-gray-700 whitespace-nowrap truncate">
-                                            <span className="flex items-center gap-1 truncate" title={row.ubicacion}>
-                                                <MapPin size={11} className="text-gray-400 shrink-0" />
-                                                <span className="truncate">{row.ubicacion}</span>
-                                            </span>
-                                        </td>
-                                        <td className="px-2.5 py-1.5 font-medium text-gray-800 leading-snug">
-                                            <p className="truncate" title={row.objetivo}>{row.objetivo}</p>
-                                            <p className="text-[9px] text-gray-400 leading-none mt-0.5">Tiempo: {row.duracion}</p>
-                                        </td>
-                                        <td className="px-2.5 py-1.5 whitespace-nowrap truncate">
-                                            <p className="font-bold text-[#0E5E6F] text-[11px] leading-tight truncate">{row.dron}</p>
-                                            <p className="text-[9px] text-gray-500 font-mono bg-gray-100 px-1 py-0.2 rounded inline-block truncate max-w-full" title={row.repuestos}>
-                                                📦 {row.repuestos}
-                                            </p>
-                                        </td>
-                                        <td className="px-2.5 py-1.5 text-right font-black text-emerald-700 text-xs whitespace-nowrap">
-                                            {row.ganancia}
-                                        </td>
-                                        <td className="px-2.5 py-1.5 text-center whitespace-nowrap">
-                                            <span
-                                                style={{
-                                                    backgroundColor: row.tagColorBg,
-                                                    color: row.tagTextColor,
-                                                    borderRadius: "4px",
-                                                }}
-                                                className="px-1.5 py-0.2 font-bold text-[9px] inline-block border border-black/5"
-                                            >
-                                                {row.estado}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={6} className="px-3 py-4 text-center text-gray-400 font-medium">
-                                        No se encontraron servicios o trabajos registrados.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                {/* LISTA DE TARJETAS (reemplaza la tabla en móvil) */}
+                <div className="divide-y divide-gray-100">
+                    {registrosActuales.length > 0 ? (
+                        registrosActuales.map((row) => (
+                            <div key={row.id} className="p-3.5 active:bg-gray-50/80 transition-colors">
+                                <div className="flex justify-between items-start gap-2 mb-1.5">
+                                    <div>
+                                        <p className="font-extrabold text-gray-900 text-xs leading-tight">{row.id}</p>
+                                        <p className="text-[9px] text-gray-400 font-mono leading-none mt-0.5">{row.fecha}</p>
+                                    </div>
+                                    <span
+                                        style={{
+                                            backgroundColor: row.tagColorBg,
+                                            color: row.tagTextColor,
+                                            borderRadius: "4px",
+                                        }}
+                                        className="px-1.5 py-0.5 font-bold text-[9px] inline-block border border-black/5 shrink-0"
+                                    >
+                                        {row.estado}
+                                    </span>
+                                </div>
+
+                                <p className="font-medium text-gray-800 text-[11px] leading-snug mb-1.5">
+                                    {row.objetivo}
+                                </p>
+
+                                <div className="flex items-center gap-1 text-[10px] text-gray-500 font-bold mb-1">
+                                    <MapPin size={11} className="text-gray-400 shrink-0" />
+                                    <span className="truncate">{row.ubicacion}</span>
+                                    <span className="text-gray-300">•</span>
+                                    <span className="shrink-0">{row.duracion}</span>
+                                </div>
+
+                                <p className="text-[9px] text-gray-500 font-mono bg-gray-100 px-1.5 py-1 rounded inline-block mb-2">
+                                    📦 {row.repuestos}
+                                </p>
+
+                                <div className="flex justify-between items-center pt-1.5 border-t border-gray-100">
+                                    <span className="font-bold text-[#0E5E6F] text-[11px] truncate">{row.dron}</span>
+                                    <span className="font-black text-emerald-700 text-xs shrink-0">{row.ganancia}</span>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="px-3 py-6 text-center text-gray-400 font-medium text-xs">
+                            No se encontraron servicios o trabajos registrados.
+                        </div>
+                    )}
                 </div>
 
-                <div className="p-2.5 border-t border-gray-100 bg-gray-50/40 flex justify-between items-center">
-                    <span className="text-[10px] font-bold text-gray-400">
+                <div className="p-3 border-t border-gray-100 bg-gray-50/40 flex flex-col gap-2.5">
+                    <span className="text-[10px] font-bold text-gray-400 text-center">
                         {registrosActuales.length} registros técnicos encontrados
                     </span>
                     <button
@@ -998,7 +993,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                             borderRadius: "4px",
                             backgroundColor: HEX_COLORS.brandGreen,
                         }}
-                        className="px-2.5 py-1 text-white text-[11px] font-bold flex items-center gap-1.5 hover:bg-[#094350] transition-colors shadow-xs"
+                        className="w-full py-2.5 text-white text-[11px] font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-transform shadow-xs"
                     >
                         <Download size={12} />
                         Exportar reporte financiero PDF
@@ -1006,10 +1001,10 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                 </div>
             </div>
 
-            {/* BANNER INFERIOR DE ACCIÓN TÉCNICA */}
+            {/* BANNER INFERIOR DE ACCIÓN TÉCNICA (APILADO) */}
             <div
                 style={{ borderRadius: "4px" }}
-                className="border-2 border-gray-200 p-4 sm:p-5 bg-gradient-to-r from-gray-50 via-white to-gray-50 flex flex-col sm:flex-row justify-between items-center gap-4 text-left shadow-xs"
+                className="border-2 border-gray-200 p-4 bg-gradient-to-r from-gray-50 via-white to-gray-50 flex flex-col justify-between items-stretch gap-4 text-left shadow-xs"
             >
                 <div className="flex items-center gap-3.5">
                     <div
@@ -1019,11 +1014,11 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                         <ShieldCheck size={18} />
                     </div>
                     <div>
-                        <h4 className="text-xs sm:text-sm font-black text-gray-900">
+                        <h4 className="text-xs font-black text-gray-900 leading-tight">
                             ¿Un Dron BIODRON Requiere Asistencia Prioritaria en Campo?
                         </h4>
-                        <p className="text-[11px] text-gray-500 font-medium">
-                            Abre la bitácora de soporte técnico para atender tickets urgentes y solicitudes de refacciones.
+                        <p className="text-[11px] text-gray-500 font-medium leading-snug">
+                            Abre la bitácora de soporte técnico para atender tickets urgentes.
                         </p>
                     </div>
                 </div>
@@ -1035,7 +1030,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                         borderRadius: "4px",
                         backgroundColor: HEX_COLORS.brandGreen,
                     }}
-                    className="px-5 py-2 text-white text-xs font-bold hover:bg-[#094350] transition-all shadow-md active:scale-95 whitespace-nowrap shrink-0 flex items-center gap-2 cursor-pointer"
+                    className="w-full px-5 py-2.5 text-white text-xs font-bold hover:bg-[#094350] transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
                 >
                     <span>Atender tickets de soporte</span>
                     <ChevronRight size={14} />
@@ -1305,72 +1300,80 @@ export const TecnicoRequestView = () => {
   const countPending = requests.filter(r => r.status === "Pendiente").length;
   const countInProcess = requests.filter(r => r.status === "Aceptada" || r.status === "En diagnóstico").length;
 
+  // Colores de estado reutilizados en la vista de tarjetas
+  const statusClasses = (status: string) =>
+    status === "Aceptada" || status === "Completada"
+      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+      : status === "Rechazada"
+      ? "border-red-200 bg-red-50 text-red-700"
+      : status === "Pendiente"
+      ? "border-amber-300 bg-amber-100 text-amber-800"
+      : "border-purple-200 bg-purple-50 text-purple-700";
+
   return (
     <div
-      className="p-3 sm:p-5 max-w-7xl mx-auto bg-white antialiased text-gray-800 select-none"
+      className="p-4 w-full mx-auto bg-white antialiased text-gray-800 select-none"
       style={{ fontFamily: "'Roboto', sans-serif" }}
     >
-      {/* HEADER */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 pb-3 border-b-2 border-gray-200 text-left gap-2">
-        <div className="space-y-0.5">
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
-            Gestión de Solicitudes Técnicas y Mantenimiento
-          </h1>
-          <p className="text-gray-500 text-xs font-normal">
-            Atiende, diagnostica y resuelve incidentes mecánicos y de software reportados por clientes, administración y pilotos.
-          </p>
+      {/* HEADER (APILADO) */}
+      <div className="flex flex-col mb-5 pb-3 border-b-2 border-gray-200 text-left gap-1">
+        <h1 className="text-base font-bold text-gray-900 leading-tight">
+          Gestión de Solicitudes Técnicas y Mantenimiento
+        </h1>
+        <p className="text-gray-500 text-[11px] font-normal leading-snug">
+          Atiende, diagnostica y resuelve incidentes reportados por clientes, administración y pilotos.
+        </p>
+      </div>
+
+      {/* MÉTRICAS (2 COLUMNAS) */}
+      <div className="grid grid-cols-2 gap-3 mb-5 text-left">
+        <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
+          <div className="min-w-0">
+            <span className="text-[9px] font-bold text-gray-400 tracking-wider block truncate">Clientes</span>
+            <span className="text-lg font-black text-gray-900">{countByOrigin("client")}</span>
+          </div>
+          <div className="p-1.5 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0">
+            <Users size={16} />
+          </div>
+        </div>
+
+        <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
+          <div className="min-w-0">
+            <span className="text-[9px] font-bold text-gray-400 tracking-wider block truncate">Pilotos</span>
+            <span className="text-lg font-black text-gray-900">{countByOrigin("pilot")}</span>
+          </div>
+          <div className="p-1.5 bg-blue-50 text-blue-700 rounded-[4px] shrink-0">
+            <ShieldCheck size={16} />
+          </div>
+        </div>
+
+        <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
+          <div className="min-w-0">
+            <span className="text-[9px] font-bold text-gray-400 tracking-wider block truncate">Pendientes</span>
+            <span className="text-lg font-black text-amber-600">{countPending}</span>
+          </div>
+          <div className="p-1.5 bg-amber-50 text-amber-700 rounded-[4px] shrink-0">
+            <Clock size={16} />
+          </div>
+        </div>
+
+        <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
+          <div className="min-w-0">
+            <span className="text-[9px] font-bold text-gray-400 tracking-wider block truncate">En taller</span>
+            <span className="text-lg font-black text-purple-700">{countInProcess}</span>
+          </div>
+          <div className="p-1.5 bg-purple-50 text-purple-700 rounded-[4px] shrink-0">
+            <Wrench size={16} />
+          </div>
         </div>
       </div>
 
-      {/* METRIC CARDS SUMMARY */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-5 text-left">
-        <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-bold text-gray-400 tracking-wider block">Solicitudes clientes</span>
-            <span className="text-xl font-black text-gray-900">{countByOrigin("client")}</span>
-          </div>
-          <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px]">
-            <Users size={18} />
-          </div>
-        </div>
-
-        <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-bold text-gray-400 tracking-wider block">Reportes pilotos</span>
-            <span className="text-xl font-black text-gray-900">{countByOrigin("pilot")}</span>
-          </div>
-          <div className="p-2 bg-blue-50 text-blue-700 rounded-[4px]">
-            <ShieldCheck size={18} />
-          </div>
-        </div>
-
-        <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-bold text-gray-400 tracking-wider block">Pendientes</span>
-            <span className="text-xl font-black text-amber-600">{countPending}</span>
-          </div>
-          <div className="p-2 bg-amber-50 text-amber-700 rounded-[4px]">
-            <Clock size={18} />
-          </div>
-        </div>
-
-        <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-bold text-gray-400 tracking-wider block">En taller</span>
-            <span className="text-xl font-black text-purple-700">{countInProcess}</span>
-          </div>
-          <div className="p-2 bg-purple-50 text-purple-700 rounded-[4px]">
-            <Wrench size={18} />
-          </div>
-        </div>
-      </div>
-
-      {/* ESTILO DE PESTAÑAS */}
-      <div className="border-b-2 border-gray-200 mb-5 grid grid-cols-1 sm:grid-cols-3 gap-1 select-none">
+      {/* PESTAÑAS (SCROLL HORIZONTAL) */}
+      <div className="border-b-2 border-gray-200 mb-4 flex gap-1 overflow-x-auto custom-scrollbar select-none -mx-4 px-4">
         {[
-          { id: "client", label: `Solicitudes de clientes (${countByOrigin("client")})`, icon: <Users size={13} /> },
-          { id: "admin", label: `Órdenes de administradores (${countByOrigin("admin")})`, icon: <UserCheck size={13} /> },
-          { id: "pilot", label: `Reportes de pilotos (${countByOrigin("pilot")})`, icon: <ShieldCheck size={13} /> },
+          { id: "client", label: `Clientes (${countByOrigin("client")})`, icon: <Users size={13} /> },
+          { id: "admin", label: `Administradores (${countByOrigin("admin")})`, icon: <UserCheck size={13} /> },
+          { id: "pilot", label: `Pilotos (${countByOrigin("pilot")})`, icon: <ShieldCheck size={13} /> },
         ].map((tab) => {
           const isActive = activeTab === tab.id;
           return (
@@ -1381,7 +1384,7 @@ export const TecnicoRequestView = () => {
                 setStatusFilter("ALL");
               }}
               style={{ borderRadius: "4px 4px 0 0" }}
-              className={`px-1.5 py-2.5 text-[11px] font-bold flex items-center justify-center gap-1 border-t-2 border-x-2 -mb-[2px] transition-all text-center cursor-pointer ${
+              className={`shrink-0 px-3 py-2.5 text-[11px] font-bold flex items-center justify-center gap-1 border-t-2 border-x-2 -mb-[2px] transition-all text-center cursor-pointer whitespace-nowrap ${
                 isActive
                   ? "border-t-[#0E5E6F] border-x-gray-200 border-b-white bg-white text-[#0E5E6F] shadow-xs"
                   : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
@@ -1390,31 +1393,31 @@ export const TecnicoRequestView = () => {
               <span className={isActive ? "text-[#0E5E6F]" : "text-gray-400"}>
                 {tab.icon}
               </span>
-              <span className="truncate">{tab.label}</span>
+              <span>{tab.label}</span>
             </button>
           );
         })}
       </div>
 
-      {/* SEARCH AND FILTERS */}
-      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2 mb-3">
-        <div className="relative flex-1 max-w-sm">
+      {/* BUSCADOR Y FILTRO (ANCHO COMPLETO, APILADOS) */}
+      <div className="flex flex-col gap-2 mb-4">
+        <div className="relative w-full">
           <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             placeholder="Buscar por código, cliente o equipo..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-8 pr-2 py-1 border-2 border-gray-200 rounded-[4px] text-xs focus:border-[#0E5E6F] outline-none"
+            className="w-full pl-8 pr-2 py-2 border-2 border-gray-200 rounded-[4px] text-xs focus:border-[#0E5E6F] outline-none"
           />
         </div>
 
-        <div className="flex items-center gap-1.5 self-end sm:self-auto">
-          <Filter size={13} className="text-gray-400" />
+        <div className="flex items-center gap-1.5 w-full">
+          <Filter size={13} className="text-gray-400 shrink-0" />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="border-2 border-gray-200 rounded-[4px] px-2 py-1 text-xs bg-white text-gray-700 font-bold focus:border-[#0E5E6F] outline-none"
+            className="w-full border-2 border-gray-200 rounded-[4px] px-2 py-2 text-xs bg-white text-gray-700 font-bold focus:border-[#0E5E6F] outline-none"
           >
             <option value="ALL">Todos los estados</option>
             <option value="Pendiente">Pendientes</option>
@@ -1426,144 +1429,112 @@ export const TecnicoRequestView = () => {
         </div>
       </div>
 
-      {/* TABLA AJUSTADA SIN SCROLL */}
-      <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xs overflow-hidden flex flex-col text-left">
-        <div className="w-full">
-          <table className="w-full text-left border-collapse table-fixed">
-            <thead className="bg-gray-50 border-b-2 border-gray-200 text-[11px] font-semibold text-gray-600">
-              <tr>
-                <th className="py-2 px-2 w-[15%]">Código y fecha</th>
-                <th className="py-2 px-2 w-[20%]">Solicitante</th>
-                <th className="py-2 px-2 w-[19%]">Equipo</th>
-                <th className="py-2 px-2 w-[22%]">Problema</th>
-                <th className="py-2 px-2 text-center w-[10%]">Estado</th>
-                <th className="py-2 px-2 text-center w-[14%]">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 text-xs">
-              {filteredRequests.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="py-6 text-center text-gray-400 font-medium">
-                    No hay registros.
-                  </td>
-                </tr>
-              ) : (
-                filteredRequests.map((req) => (
-                  <tr key={req.id} className="hover:bg-gray-50/60 transition-colors">
-                    {/* CÓDIGO Y FECHA */}
-                    <td className="py-2 px-2 font-bold text-gray-900 align-top">
-                      <span className="block font-mono text-[10px] text-gray-600 truncate">{req.id}</span>
-                      <span className="text-[9px] text-gray-400 font-normal flex items-center gap-0.5 mt-0.5">
-                        <Calendar size={9} /> {req.date}
-                      </span>
-                    </td>
+      {/* LISTA DE SOLICITUDES — TARJETAS EN VEZ DE TABLA */}
+      <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xs overflow-hidden text-left mb-4">
+        {filteredRequests.length === 0 ? (
+          <div className="py-8 text-center text-gray-400 font-medium text-xs">
+            No hay registros.
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-100">
+            {filteredRequests.map((req) => (
+              <div key={req.id} className="p-3.5">
+                <div className="flex justify-between items-start gap-2 mb-1.5">
+                  <div className="min-w-0">
+                    <span className="block font-mono text-[10px] text-gray-600 truncate">{req.id}</span>
+                    <span className="text-[9px] text-gray-400 font-normal flex items-center gap-0.5 mt-0.5">
+                      <Calendar size={9} /> {req.date}
+                    </span>
+                  </div>
+                  <span
+                    className={`shrink-0 inline-block text-[9px] font-bold px-1.5 py-0.5 rounded-[3px] border ${statusClasses(req.status)}`}
+                  >
+                    {req.status}
+                  </span>
+                </div>
 
-                    {/* SOLICITANTE */}
-                    <td className="py-2 px-2 align-top">
-                      <span className="block font-bold text-gray-900 text-[11px] truncate" title={req.requesterName}>
-                        {req.requesterName}
-                      </span>
-                      <span className="text-[9px] text-gray-400 font-mono block truncate" title={req.requesterContact}>
-                        {req.requesterContact}
-                      </span>
-                    </td>
+                <div className="mb-1.5">
+                  <p className="font-bold text-gray-900 text-[12px] truncate">{req.requesterName}</p>
+                  <p className="text-[9px] text-gray-400 font-mono truncate">{req.requesterContact}</p>
+                </div>
 
-                    {/* EQUIPO */}
-                    <td className="py-2 px-2 text-gray-800 font-medium align-top">
-                      <div className="text-[11px] truncate font-semibold" title={req.equipment}>{req.equipment}</div>
-                      <div className="text-[9px] text-gray-400 flex items-center gap-0.5 truncate" title={req.location}>
-                        <MapPin size={9} className="shrink-0" /> <span className="truncate">{req.location}</span>
-                      </div>
-                    </td>
+                <div className="mb-1.5">
+                  <p className="text-[11px] font-semibold text-gray-800 truncate">{req.equipment}</p>
+                  <p className="text-[9px] text-gray-400 flex items-center gap-0.5 truncate">
+                    <MapPin size={9} className="shrink-0" /> <span className="truncate">{req.location}</span>
+                  </p>
+                </div>
 
-                    {/* PROBLEMA REPORTADO */}
-                    <td className="py-2 px-2 text-gray-700 align-top">
-                      <p className="line-clamp-2 text-[11px] leading-tight font-normal" title={req.issueSummary}>
-                        {req.issueSummary}
-                      </p>
-                    </td>
+                <p className="text-[11px] text-gray-700 leading-snug mb-2.5">
+                  {req.issueSummary}
+                </p>
 
-                    {/* ESTADO */}
-                    <td className="py-2 px-1 text-center align-top">
-                      <span
-                        className={`inline-block text-[9px] font-bold px-1.5 py-0.5 rounded-[3px] border ${
-                          req.status === "Aceptada" || req.status === "Completada"
-                            ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                            : req.status === "Rechazada"
-                            ? "border-red-200 bg-red-50 text-red-700"
-                            : req.status === "Pendiente"
-                            ? "border-amber-300 bg-amber-100 text-amber-800"
-                            : "border-purple-200 bg-purple-50 text-purple-700"
-                        }`}
-                      >
-                        {req.status}
-                      </span>
-                    </td>
+                <div className="flex items-center gap-1.5 pt-2 border-t border-gray-100">
+                  <button
+                    onClick={() => setEditingRequest({ ...req })}
+                    className="flex-1 px-2 py-1.5 bg-[#0E5E6F] text-white text-[11px] font-semibold rounded-[4px] hover:bg-[#0a4754] transition-colors cursor-pointer flex items-center justify-center gap-1"
+                  >
+                    <Edit3 size={11} />
+                    <span>Editar</span>
+                  </button>
 
-                    {/* ACCIONES - Botón editar con texto e icono del lápiz */}
-                    <td className="py-2 px-1 text-center align-top">
-                      <div className="flex items-center justify-center gap-1">
-                        <button
-                          onClick={() => setEditingRequest({ ...req })}
-                          className="px-2 py-1 bg-[#0E5E6F] text-white text-[11px] font-semibold rounded-[4px] hover:bg-[#0a4754] transition-colors cursor-pointer flex items-center gap-1"
-                          title="Editar solicitud"
-                        >
-                          <Edit3 size={11} />
-                          <span>Editar</span>
-                        </button>
-
-                        <button
-                          onClick={() => setDeletingRequestId(req.id)}
-                          className="p-1 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-[3px] transition-colors cursor-pointer"
-                          title="Eliminar solicitud"
-                        >
-                          <Trash2 size={11} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                  <button
+                    onClick={() => setDeletingRequestId(req.id)}
+                    className="px-2.5 py-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 border border-gray-200 rounded-[4px] transition-colors cursor-pointer flex items-center justify-center"
+                    title="Eliminar solicitud"
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* MODAL EDITAR / DETALLE */}
+      {/* BOTTOM SHEET EDITAR / DETALLE */}
       {editingRequest && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-3">
-          <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xl w-full max-w-lg overflow-hidden text-left">
-            <div className="flex justify-between items-center px-4 py-2.5 border-b-2 border-gray-100 bg-gray-50">
-              <div className="flex items-center gap-2">
-                <Wrench className="text-[#0E5E6F]" size={16} />
-                <h3 className="text-xs font-bold text-gray-900">
+        <div className="fixed inset-0 z-50 flex items-end justify-center">
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-xs animate-in fade-in duration-150"
+            onClick={() => setEditingRequest(null)}
+          ></div>
+
+          <div
+            style={{ borderRadius: "12px 12px 0 0" }}
+            className="relative bg-white border-t-2 border-gray-200 shadow-xl w-full max-h-[88vh] overflow-hidden text-left animate-in slide-in-from-bottom duration-200 flex flex-col"
+          >
+            <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mt-2.5"></div>
+
+            <div className="flex justify-between items-center px-4 py-2.5 border-b-2 border-gray-100 bg-gray-50 shrink-0">
+              <div className="flex items-center gap-2 min-w-0">
+                <Wrench className="text-[#0E5E6F] shrink-0" size={16} />
+                <h3 className="text-xs font-bold text-gray-900 truncate">
                   Editar solicitud #{editingRequest.id}
                 </h3>
               </div>
               <button
                 onClick={() => setEditingRequest(null)}
-                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer shrink-0"
               >
                 <X size={16} />
               </button>
             </div>
 
-            <div className="p-4 space-y-3 text-xs">
-              <div className="flex items-start justify-between border-b pb-2 border-gray-100">
-                <div>
-                  <h4 className="text-sm font-bold text-gray-900">{editingRequest.equipment}</h4>
-                  <p className="text-gray-500 font-medium">Solicitante: {editingRequest.requesterName}</p>
-                </div>
-                <span className="font-mono text-[10px] text-gray-400">{editingRequest.requesterContact}</span>
+            <div className="p-4 space-y-3 text-xs overflow-y-auto custom-scrollbar">
+              <div className="border-b pb-2 border-gray-100">
+                <h4 className="text-sm font-bold text-gray-900">{editingRequest.equipment}</h4>
+                <p className="text-gray-500 font-medium">Solicitante: {editingRequest.requesterName}</p>
+                <span className="font-mono text-[10px] text-gray-400 block mt-0.5">{editingRequest.requesterContact}</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-gray-700 bg-gray-50 p-2.5 rounded-[4px] border border-gray-200 text-[11px]">
+              <div className="grid grid-cols-1 gap-2 text-gray-700 bg-gray-50 p-2.5 rounded-[4px] border border-gray-200 text-[11px]">
                 <div className="flex items-center gap-1.5">
-                  <MapPin size={12} className="text-gray-400" />
+                  <MapPin size={12} className="text-gray-400 shrink-0" />
                   <span className="truncate">Lugar: <strong>{editingRequest.location}</strong></span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Calendar size={12} className="text-gray-400" />
+                  <Calendar size={12} className="text-gray-400 shrink-0" />
                   <span>Fecha: <strong>{editingRequest.date}</strong></span>
                 </div>
               </div>
@@ -1575,7 +1546,7 @@ export const TecnicoRequestView = () => {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 pt-1">
+              <div className="grid grid-cols-1 gap-2.5 pt-1">
                 <div className="space-y-1">
                   <label className="block font-bold text-gray-700 text-[11px]">Estado:</label>
                   <select
@@ -1586,7 +1557,7 @@ export const TecnicoRequestView = () => {
                         status: e.target.value as RequestStatus
                       })
                     }
-                    className="w-full border-2 border-gray-200 rounded-[4px] p-1.5 text-xs font-bold bg-white text-gray-800 focus:border-[#0E5E6F] outline-none"
+                    className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-bold bg-white text-gray-800 focus:border-[#0E5E6F] outline-none"
                   >
                     <option value="Pendiente">Pendiente</option>
                     <option value="Aceptada">Aceptada</option>
@@ -1606,7 +1577,7 @@ export const TecnicoRequestView = () => {
                         priority: e.target.value as PriorityLevel
                       })
                     }
-                    className="w-full border-2 border-gray-200 rounded-[4px] p-1.5 text-xs font-bold bg-white text-gray-800 focus:border-[#0E5E6F] outline-none"
+                    className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-bold bg-white text-gray-800 focus:border-[#0E5E6F] outline-none"
                   >
                     <option value="Baja">Baja</option>
                     <option value="Media">Media</option>
@@ -1615,29 +1586,29 @@ export const TecnicoRequestView = () => {
                   </select>
                 </div>
               </div>
+            </div>
 
-              <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
-                <button
-                  onClick={() => setEditingRequest(null)}
-                  className="px-3 py-1 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={handleSaveEditedRequest}
-                  className="px-3 py-1 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer"
-                >
-                  Guardar
-                </button>
-              </div>
+            <div className="flex gap-2 p-4 pt-3 border-t border-gray-100 shrink-0">
+              <button
+                onClick={() => setEditingRequest(null)}
+                className="flex-1 px-3 py-2.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleSaveEditedRequest}
+                className="flex-1 px-3 py-2.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer"
+              >
+                Guardar
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* MODAL ELIMINAR */}
+      {/* MODAL ELIMINAR (diálogo breve, se mantiene centrado) */}
       {deletingRequestId && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-3">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xl w-full max-w-xs overflow-hidden text-left p-4 space-y-3">
             <div className="flex items-center gap-2 text-red-600 font-bold text-xs">
               <AlertTriangle size={16} />
@@ -1649,13 +1620,13 @@ export const TecnicoRequestView = () => {
             <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
               <button
                 onClick={() => setDeletingRequestId(null)}
-                className="px-2.5 py-1 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
+                className="px-2.5 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
               >
                 Cancelar
               </button>
               <button
                 onClick={() => handleDeleteRequest(deletingRequestId)}
-                className="px-2.5 py-1 bg-red-600 text-white font-bold text-xs rounded-[4px] hover:bg-red-700 cursor-pointer"
+                className="px-2.5 py-1.5 bg-red-600 text-white font-bold text-xs rounded-[4px] hover:bg-red-700 cursor-pointer"
               >
                 Eliminar
               </button>
@@ -2849,100 +2820,100 @@ export const TecnicoHistoryView = () => {
   };
 
   return (
-    <div className="w-full h-full bg-[#f8fafc] overflow-y-auto p-3 sm:p-5 space-y-4 font-['Roboto',sans-serif]">
+    <div className="w-full h-full bg-[#f8fafc] overflow-y-auto p-4 space-y-4 font-['Roboto',sans-serif]">
 
-      {/* ================= ENCABEZADO Y RESUMEN ================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 sm:p-5 rounded-[4px] border border-gray-200 shadow-xs">
+      {/* ================= ENCABEZADO Y RESUMEN (APILADO) ================= */}
+      <div className="flex flex-col gap-3 bg-white p-4 rounded-[4px] border border-gray-200 shadow-xs">
         <div>
           {/* Title Case */}
-          <h1 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-base font-bold text-gray-900 leading-tight">
             Historial de Mantenimiento y Servicios Tácticos
-            <span className="text-xs bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-[4px] border border-gray-200">
-              {flights.length} registros
-            </span>
           </h1>
+          <span className="inline-block mt-1.5 text-[10px] bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-[4px] border border-gray-200 w-fit">
+            {flights.length} registros
+          </span>
           {/* Sentence Case */}
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-[11px] text-gray-500 mt-1.5 leading-snug">
             Registro detallado de intervenciones mecánicas, calibraciones de sensores y órdenes de taller.
           </p>
         </div>
 
-        {/* Botón: Sentence Case */}
+        {/* Botón: ancho completo en móvil */}
         <button
           onClick={() => { }}
-          className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-semibold rounded-[4px] transition cursor-pointer shadow-xs"
+          className="w-full flex items-center justify-center gap-1.5 px-3 py-2.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-semibold rounded-[4px] transition cursor-pointer shadow-xs"
         >
           <Download size={14} />
           <span>Exportar bitácora (CSV)</span>
         </button>
       </div>
 
-      {/* ================= TARJETAS DE KPIS RÁPIDOS ================= */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
-        <div className="bg-white p-3.5 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
-          <div>
+      {/* ================= TARJETAS DE KPIS RÁPIDOS (2 COLUMNAS) ================= */}
+      <div className="grid grid-cols-2 gap-2.5">
+        <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
+          <div className="min-w-0">
             {/* Subtítulo: Title Case */}
-            <p className="text-[11px] text-gray-500 font-medium">Equipos Intervenidos</p>
-            <h3 className="text-xl font-bold text-gray-900 mt-0.5">{flights.length} <span className="text-xs font-normal text-gray-500">und</span></h3>
+            <p className="text-[10px] text-gray-500 font-medium truncate">Equipos Intervenidos</p>
+            <h3 className="text-base font-bold text-gray-900 mt-0.5">{flights.length} <span className="text-[10px] font-normal text-gray-500">und</span></h3>
           </div>
-          <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
-            <Wrench size={18} />
+          <div className="p-2 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
+            <Wrench size={16} />
           </div>
         </div>
 
-        <div className="bg-white p-3.5 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
-          <div>
+        <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
+          <div className="min-w-0">
             {/* Subtítulo: Title Case */}
-            <p className="text-[11px] text-gray-500 font-medium">Horas de Taller</p>
-            <h3 className="text-xl font-bold text-gray-900 mt-0.5">{totalHours} <span className="text-xs font-normal text-gray-500">hrs</span></h3>
+            <p className="text-[10px] text-gray-500 font-medium truncate">Horas de Taller</p>
+            <h3 className="text-base font-bold text-gray-900 mt-0.5">{totalHours} <span className="text-[10px] font-normal text-gray-500">hrs</span></h3>
           </div>
-          <div className="p-2.5 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0">
-            <Clock size={18} />
+          <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0">
+            <Clock size={16} />
           </div>
         </div>
 
-        <div className="bg-white p-3.5 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
-          <div>
+        <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
+          <div className="min-w-0">
             {/* Subtítulo: Title Case */}
-            <p className="text-[11px] text-gray-500 font-medium">Efectividad Técnica</p>
-            <h3 className="text-xl font-bold text-emerald-700 mt-0.5">{successRate}%</h3>
+            <p className="text-[10px] text-gray-500 font-medium truncate">Efectividad Técnica</p>
+            <h3 className="text-base font-bold text-emerald-700 mt-0.5">{successRate}%</h3>
           </div>
-          <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
-            <ShieldCheck size={18} />
+          <div className="p-2 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
+            <ShieldCheck size={16} />
           </div>
         </div>
 
-        <div className="bg-white p-3.5 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
-          <div>
+        <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
+          <div className="min-w-0">
             {/* Subtítulo: Title Case */}
-            <p className="text-[11px] text-gray-500 font-medium">Repuestos Registrados</p>
-            <h3 className="text-xl font-bold text-gray-900 mt-0.5">5 <span className="text-xs font-normal text-gray-500">kits</span></h3>
+            <p className="text-[10px] text-gray-500 font-medium truncate">Repuestos Registrados</p>
+            <h3 className="text-base font-bold text-gray-900 mt-0.5">5 <span className="text-[10px] font-normal text-gray-500">kits</span></h3>
           </div>
-          <div className="p-2.5 bg-cyan-50 text-cyan-600 rounded-[4px] shrink-0">
-            <Compass size={18} />
+          <div className="p-2 bg-cyan-50 text-cyan-600 rounded-[4px] shrink-0">
+            <Compass size={16} />
           </div>
         </div>
       </div>
 
-      {/* ================= FILTROS Y BÚSQUEDA ================= */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs">
-        <div className="relative flex-1 max-w-xs">
+      {/* ================= FILTROS Y BÚSQUEDA (APILADOS) ================= */}
+      <div className="flex flex-col gap-2.5 bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs">
+        <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={15} />
           <input
             type="text"
             placeholder="Buscar por OT, equipo, taller o técnico..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
+            className="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
           />
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 text-xs">
+        <div className="grid grid-cols-2 gap-2 text-xs">
           {/* Selects: Sentence Case */}
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-[4px] text-xs text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
+            className="w-full px-2.5 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
           >
             <option value="all">Todas las intervenciones</option>
             <option value="maintenance">Mantenimiento</option>
@@ -2953,7 +2924,7 @@ export const TecnicoHistoryView = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-[4px] text-xs text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
+            className="w-full px-2.5 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
           >
             <option value="all">Todos los estados</option>
             <option value="completed">Completados</option>
@@ -2963,128 +2934,111 @@ export const TecnicoHistoryView = () => {
         </div>
       </div>
 
-      {/* ================= TABLA DE DATOS ================= */}
+      {/* ================= LISTA DE INTERVENCIONES — TARJETAS EN VEZ DE TABLA ================= */}
       <div className="bg-white rounded-[4px] border border-gray-200 shadow-xs overflow-hidden w-full">
-        <table className="w-full table-fixed text-left border-collapse">
-          <thead>
-            {/* Encabezados de Tabla: Sentence Case */}
-            <tr className="bg-gray-50 border-b border-gray-200 text-[11px] font-bold text-gray-500 tracking-wider">
-              <th className="py-2.5 px-3 w-[20%] sm:w-[16%]">OT / fecha</th>
-              <th className="py-2.5 px-2 w-[26%] sm:w-[22%]">Equipo / servicio</th>
-              <th className="py-2.5 px-2 hidden sm:table-cell w-[18%]">Ubicación / técnico</th>
-              <th className="py-2.5 px-2 w-[16%] sm:w-[12%] text-center">Duración / score</th>
-              <th className="py-2.5 px-2 w-[16%] sm:w-[12%] text-center">Estado</th>
-              <th className="py-2.5 px-2 w-[22%] sm:w-[20%] text-center">Acciones</th>
-            </tr>
-          </thead>
-
-          <tbody className="divide-y divide-gray-100 text-xs">
-            {filteredFlights.length > 0 ? (
-              filteredFlights.map((flight) => (
-                <tr
-                  key={flight.id}
-                  className="hover:bg-gray-50/70 transition cursor-pointer"
-                  onClick={() => setSelectedFlight(flight)}
-                >
-                  {/* ID y Fecha */}
-                  <td className="py-2.5 px-3">
+        {filteredFlights.length > 0 ? (
+          <div className="divide-y divide-gray-100">
+            {filteredFlights.map((flight) => (
+              <div
+                key={flight.id}
+                className="p-3.5 active:bg-gray-50/80 transition cursor-pointer"
+                onClick={() => setSelectedFlight(flight)}
+              >
+                <div className="flex justify-between items-start gap-2 mb-1.5">
+                  <div className="min-w-0">
                     <div className="font-bold text-gray-900 text-xs">{flight.workOrder}</div>
                     <div className="text-[10px] text-gray-400 font-medium flex items-center gap-1 mt-0.5">
                       <Calendar size={10} />
                       {flight.date}
                     </div>
-                  </td>
+                  </div>
+                  {getStatusBadge(flight.status)}
+                </div>
 
-                  {/* Equipo y Tipo */}
-                  <td className="py-2.5 px-2 truncate">
-                    <div className="font-semibold text-gray-800 truncate text-xs">
-                      {flight.equipmentName}
-                    </div>
-                    <div className="mt-0.5">{getTypeBadge(flight.type)}</div>
-                  </td>
+                <div className="mb-1.5">
+                  <div className="font-semibold text-gray-800 text-xs truncate">
+                    {flight.equipmentName}
+                  </div>
+                  <div className="mt-1">{getTypeBadge(flight.type)}</div>
+                </div>
 
-                  {/* Ubicación y Técnico */}
-                  <td className="py-2.5 px-2 hidden sm:table-cell truncate">
-                    <div className="text-gray-700 font-medium truncate flex items-center gap-1">
-                      <MapPin size={11} className="text-gray-400 shrink-0" />
-                      <span className="truncate">{flight.location}</span>
-                    </div>
-                    <div className="text-[10px] text-gray-400 truncate flex items-center gap-1 mt-0.5">
-                      <User size={10} />
-                      <span className="truncate">{flight.technician}</span>
-                    </div>
-                  </td>
+                <div className="text-gray-700 font-medium text-[11px] flex items-center gap-1 mb-0.5 truncate">
+                  <MapPin size={11} className="text-gray-400 shrink-0" />
+                  <span className="truncate">{flight.location}</span>
+                </div>
+                <div className="text-[10px] text-gray-400 flex items-center gap-1 mb-2 truncate">
+                  <User size={10} className="shrink-0" />
+                  <span className="truncate">{flight.technician}</span>
+                </div>
 
-                  {/* Duración y Score */}
-                  <td className="py-2.5 px-2 text-center">
+                <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                  <div>
                     <div className="font-bold text-gray-900 text-xs">{flight.duration}</div>
-                    <div className="text-[10px] text-emerald-600 font-bold flex items-center justify-center gap-0.5 mt-0.5">
+                    <div className="text-[10px] text-emerald-600 font-bold mt-0.5">
                       Score: {flight.diagnosticScore}%
                     </div>
-                  </td>
+                  </div>
 
-                  {/* Estado */}
-                  <td className="py-2.5 px-2 text-center">
-                    {getStatusBadge(flight.status)}
-                  </td>
+                  <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                    <button
+                      onClick={() => setSelectedFlight(flight)}
+                      className="flex items-center gap-1 px-2.5 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-medium rounded-[4px] transition cursor-pointer"
+                      title="Ver detalles"
+                    >
+                      <Eye size={13} className="text-[#0E5E6F]" />
+                      <span>Ver</span>
+                    </button>
 
-                  {/* Acciones: Botón Ver + Botón Descarga PDF fijo en #0E5E6F */}
-                  <td className="py-2.5 px-2 text-center">
-                    <div className="flex items-center justify-center gap-1.5" onClick={(e) => e.stopPropagation()}>
-                      <button
-                        onClick={() => setSelectedFlight(flight)}
-                        className="flex items-center gap-1 px-2 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-medium rounded-[4px] transition cursor-pointer"
-                        title="Ver detalles"
-                      >
-                        <Eye size={13} className="text-[#0E5E6F]" />
-                        <span>Ver</span>
-                      </button>
+                    <button
+                      onClick={() => { }}
+                      className="flex items-center gap-1 px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-[11px] font-medium rounded-[4px] transition cursor-pointer shadow-xs"
+                      title="Descargar reporte PDF"
+                    >
+                      <Download size={13} />
+                      <span>PDF</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="py-8 text-center text-gray-400 text-xs px-4">
+            No se encontraron registros técnicos con los filtros seleccionados.
+          </div>
+        )}
 
-                      <button
-                        onClick={() => { }}
-                        className="flex items-center gap-1 px-2 py-1 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-[11px] font-medium rounded-[4px] transition cursor-pointer shadow-xs"
-                        title="Descargar reporte PDF"
-                      >
-                        <Download size={13} />
-                        <span>PDF</span>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                {/* Sentence Case */}
-                <td colSpan={6} className="py-8 text-center text-gray-400 text-xs">
-                  No se encontraron registros técnicos con los filtros seleccionados.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-
-        {/* Footer estático: Sentence Case */}
-        <div className="p-3 px-4 bg-gray-50/80 border-t border-gray-200 text-[11px] text-gray-500 flex justify-between items-center">
+        {/* Footer estático */}
+        <div className="p-3 px-4 bg-gray-50/80 border-t border-gray-200 text-[11px] text-gray-500 text-center">
           <span>Mostrando {filteredFlights.length} de {flights.length} registros</span>
         </div>
       </div>
 
-      {/* ================= MODAL DETALLADO DE INTERVENCIÓN ================= */}
+      {/* ================= BOTTOM SHEET DETALLADO DE INTERVENCIÓN ================= */}
       {selectedFlight && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50 animate-fade-in">
-          <div className="bg-white w-full max-w-xl rounded-[4px] shadow-2xl overflow-hidden border border-gray-200 flex flex-col max-h-[90vh]">
+        <div className="fixed inset-0 z-50 flex items-end justify-center">
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-xs animate-in fade-in duration-150"
+            onClick={() => setSelectedFlight(null)}
+          ></div>
 
-            {/* Modal Header: Title Case */}
-            <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 bg-[#0E5E6F] text-white rounded-[4px] font-bold text-xs">
+          <div
+            style={{ borderRadius: "12px 12px 0 0" }}
+            className="relative bg-white w-full shadow-2xl overflow-hidden border-t-2 border-gray-200 flex flex-col max-h-[88vh] animate-in slide-in-from-bottom duration-200"
+          >
+            <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mt-2.5 shrink-0"></div>
+
+            {/* Modal Header */}
+            <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between shrink-0 gap-2">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="p-2 bg-[#0E5E6F] text-white rounded-[4px] font-bold text-xs shrink-0">
                   {selectedFlight.workOrder}
                 </div>
-                <div>
-                  <h3 className="font-bold text-gray-900 text-sm leading-tight">
+                <div className="min-w-0">
+                  <h3 className="font-bold text-gray-900 text-sm leading-tight truncate">
                     {selectedFlight.typeName}
                   </h3>
-                  <p className="text-[11px] text-gray-500">
+                  <p className="text-[11px] text-gray-500 truncate">
                     {selectedFlight.equipmentName} • {selectedFlight.date}
                   </p>
                 </div>
@@ -3092,67 +3046,62 @@ export const TecnicoHistoryView = () => {
 
               <button
                 onClick={() => setSelectedFlight(null)}
-                className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-[4px] transition cursor-pointer"
+                className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-[4px] transition cursor-pointer shrink-0"
               >
                 <X size={18} />
               </button>
             </div>
 
             {/* Modal Content */}
-            <div className="p-4 sm:p-5 overflow-y-auto space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-3 p-3 bg-gray-50 rounded-[4px] border border-gray-200">
+            <div className="p-4 overflow-y-auto custom-scrollbar space-y-4 text-xs">
+              <div className="grid grid-cols-1 gap-3 p-3 bg-gray-50 rounded-[4px] border border-gray-200">
                 <div>
-                  {/* Etiqueta: Sentence Case */}
                   <span className="text-gray-400 text-[10px] font-semibold uppercase block">Ubicación de taller</span>
                   <span className="font-bold text-gray-800 flex items-center gap-1 mt-0.5">
-                    <MapPin size={12} className="text-[#0E5E6F]" />
+                    <MapPin size={12} className="text-[#0E5E6F] shrink-0" />
                     {selectedFlight.location}
                   </span>
                 </div>
                 <div>
-                  {/* Etiqueta: Sentence Case */}
                   <span className="text-gray-400 text-[10px] font-semibold uppercase block">Técnico responsable</span>
                   <span className="font-semibold text-gray-800 flex items-center gap-1 mt-0.5">
-                    <User size={12} className="text-[#0E5E6F]" />
+                    <User size={12} className="text-[#0E5E6F] shrink-0" />
                     {selectedFlight.technician}
                   </span>
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-2">
-                <div className="p-2.5 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
-                  <span className="text-gray-400 text-[10px] uppercase font-semibold block">Duración</span>
-                  <span className="font-bold text-gray-900 text-sm">{selectedFlight.duration}</span>
-                  <span className="text-[9px] text-gray-400 block">{selectedFlight.startTime} - {selectedFlight.endTime}</span>
+                <div className="p-2 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
+                  <span className="text-gray-400 text-[9px] uppercase font-semibold block">Duración</span>
+                  <span className="font-bold text-gray-900 text-xs">{selectedFlight.duration}</span>
+                  <span className="text-[8px] text-gray-400 block leading-tight mt-0.5">{selectedFlight.startTime} - {selectedFlight.endTime}</span>
                 </div>
 
-                <div className="p-2.5 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
-                  <span className="text-gray-400 text-[10px] uppercase font-semibold block">Componentes</span>
-                  <span className="font-bold text-emerald-700 text-sm">Revisados</span>
-                  <span className="text-[9px] text-gray-400 block">{selectedFlight.componentsChecked}</span>
+                <div className="p-2 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
+                  <span className="text-gray-400 text-[9px] uppercase font-semibold block">Componentes</span>
+                  <span className="font-bold text-emerald-700 text-xs">Revisados</span>
+                  <span className="text-[8px] text-gray-400 block leading-tight mt-0.5">{selectedFlight.componentsChecked}</span>
                 </div>
 
-                <div className="p-2.5 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
-                  <span className="text-gray-400 text-[10px] uppercase font-semibold block">Diagnóstico</span>
-                  <span className="font-bold text-gray-900 text-sm">{selectedFlight.diagnosticScore}%</span>
-                  <span className="text-[9px] text-gray-400 block">Salud del equipo</span>
+                <div className="p-2 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
+                  <span className="text-gray-400 text-[9px] uppercase font-semibold block">Diagnóstico</span>
+                  <span className="font-bold text-gray-900 text-xs">{selectedFlight.diagnosticScore}%</span>
+                  <span className="text-[8px] text-gray-400 block leading-tight mt-0.5">Salud del equipo</span>
                 </div>
               </div>
 
               {selectedFlight.sparePartUsed && (
                 <div className="p-3 bg-cyan-50/60 border border-cyan-100 rounded-[4px]">
-                  {/* Subtítulo Modal: Title Case */}
                   <h4 className="font-bold text-cyan-950 text-xs mb-1 flex items-center gap-1.5">
                     Detalles de Repuestos y Costos
                   </h4>
-                  <div className="grid grid-cols-2 gap-2 text-xs text-cyan-900 mt-2">
+                  <div className="grid grid-cols-1 gap-2 text-xs text-cyan-900 mt-2">
                     <div>
-                      {/* Sentence Case */}
                       <span className="text-gray-500 text-[10px] block">Pieza / insumo instalado:</span>
                       <span className="font-semibold">{selectedFlight.sparePartUsed}</span>
                     </div>
                     <div>
-                      {/* Sentence Case */}
                       <span className="text-gray-500 text-[10px] block">Costo estimado:</span>
                       <span className="font-semibold">{selectedFlight.partCost}</span>
                     </div>
@@ -3161,7 +3110,6 @@ export const TecnicoHistoryView = () => {
               )}
 
               <div className="p-3 bg-gray-50 rounded-[4px] border border-gray-200">
-                {/* Sentence Case */}
                 <span className="text-gray-400 text-[10px] font-semibold uppercase block mb-1">
                   Observaciones de la intervención
                 </span>
@@ -3172,22 +3120,20 @@ export const TecnicoHistoryView = () => {
             </div>
 
             {/* Modal Footer */}
-            <div className="p-3 px-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between shrink-0">
-              {/* Botón Acción: Sentence Case */}
+            <div className="p-4 bg-gray-50 border-t border-gray-200 flex flex-col gap-2 shrink-0">
+              <button
+                onClick={() => setSelectedFlight(null)}
+                className="w-full px-3.5 py-2.5 bg-[#0E5E6F] text-white font-semibold text-xs rounded-[4px] hover:bg-[#0A4754] transition cursor-pointer"
+              >
+                Cerrar bitácora
+              </button>
+
               <button
                 onClick={() => { }}
-                className="flex items-center gap-1 text-[11px] font-bold text-[#0E5E6F] hover:underline cursor-pointer"
+                className="w-full flex items-center justify-center gap-1 text-[11px] font-bold text-[#0E5E6F] py-1 cursor-pointer"
               >
                 <Download size={13} />
                 <span>Descargar historial de taller</span>
-              </button>
-
-              {/* Botón Cierre: Sentence Case */}
-              <button
-                onClick={() => setSelectedFlight(null)}
-                className="px-3.5 py-1.5 bg-[#0E5E6F] text-white font-semibold text-xs rounded-[4px] hover:bg-[#0A4754] transition cursor-pointer"
-              >
-                Cerrar bitácora
               </button>
             </div>
 

@@ -6,9 +6,9 @@ import {
     History,
     Pencil,
     Database,
-    ChevronLeft,
-    ChevronRight,
     User,
+    Menu,
+    X,
     LucideIcon
 } from 'lucide-react';
 import adminPerfilImg from '../../../img/admin_perfil.png';
@@ -27,137 +27,229 @@ interface MenuItem {
 }
 
 export const AdminLayout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) => {
-    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    const menuItems: MenuItem[] = [
+    // Menú completo del Sidebar Lateral
+    const sidebarMenuItems: MenuItem[] = [
         { id: 'admin-dashboard', label: 'Dashboard admin', icon: LayoutDashboard },
         { id: 'admin-history', label: 'Historial', icon: History, hasDividerAfter: true },
-
         { id: 'admin-maps', label: 'Editor de mapas', icon: Pencil },
         { id: 'admin-data', label: 'Gestión de datos', icon: Database },
         { id: 'admin-prices', label: 'Precios y planes', icon: DollarSign, hasDividerAfter: true },
-
         { id: 'admin-help', label: 'Soporte', icon: HelpCircle },
         { id: 'admin-profile', label: 'Mi perfil', icon: User },
     ];
 
+    // Secciones de la Barra Navegación Inferior
+    const bottomNavLeft: MenuItem[] = [
+        { id: 'admin-history', label: 'Historial', icon: History },
+        { id: 'admin-maps', label: 'Editor', icon: Pencil },
+    ];
+
+    const bottomNavRight: MenuItem[] = [
+        { id: 'admin-data', label: 'Datos', icon: Database },
+        { id: 'admin-prices', label: 'Planes', icon: DollarSign },
+    ];
+
+    const handleNavigation = (viewId: string) => {
+        onNavigate(viewId);
+        setIsSidebarOpen(false);
+    };
+
     return (
-        <div className="flex h-full w-full min-h-0 bg-[#F8FAFC] font-['Roboto'] overflow-hidden">
-            {/* Sidebar Admin */}
-            <aside
-                className={`border-r border-slate-200 bg-white flex flex-col justify-between shrink-0 transition-all duration-300 ease-in-out relative ${isCollapsed ? 'w-16' : 'w-48'
-                    }`}
-            >
-                <div>
-                    {/* Header */}
-                    <div
-                        className={`p-2 border-b-2 border-slate-200 bg-slate-50 flex items-center justify-between gap-2 shrink-0 ${isCollapsed ? 'flex-col' : 'flex-row'
-                            }`}
-                    >
-                        {!isCollapsed ? (
-                            <div className="text-left">
-                                <h1 className="text-base text-[#0E5E6F] font-black uppercase tracking-tight leading-none">
-                                    BIODRON
-                                </h1>
-                                <span className="text-[9px] text-slate-400 mt-0.5 font-bold tracking-widest block">
-                                    Panel Administrativo
-                                </span>
+        <div className="flex flex-col h-full w-full bg-[#F8FAFC] font-['Roboto'] overflow-hidden relative">
+            {/* Header Superior Móvil */}
+            <header className="h-14 bg-white border-b border-slate-200 px-3 flex items-center justify-between shrink-0 z-20">
+                {/* Lado Izquierdo: Menú Hamburguesa */}
+                <button
+                    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    className="p-1.5 rounded-[4px] text-slate-600 hover:bg-slate-100 active:scale-95 transition-all"
+                    aria-label="Abrir menú"
+                >
+                    {isSidebarOpen ? <X size={22} /> : <Menu size={22} />}
+                </button>
+
+                {/* Centro: Nombre de la Empresa */}
+                <div className="text-center">
+                    <h1 className="text-sm text-[#0E5E6F] font-black uppercase tracking-tight leading-none">
+                        BIODRON
+                    </h1>
+                    <span className="text-[8px] text-slate-400 font-bold tracking-widest block mt-0.5">
+                        Panel Administrador
+                    </span>
+                </div>
+
+                {/* Lado Derecho: Foto de Perfil */}
+                <div 
+                    onClick={() => onNavigate('admin-profile')}
+                    className="w-8 h-8 rounded-[4px] overflow-hidden border border-slate-300 shrink-0 bg-slate-200 cursor-pointer active:scale-95 transition-transform"
+                >
+                    <img
+                        src={adminPerfilImg}
+                        alt="Foto Perfil"
+                        className="w-full h-full object-cover"
+                    />
+                </div>
+            </header>
+
+            {/* Sidebar Desplegable desde el Lado Izquierdo */}
+            {isSidebarOpen && (
+                <div className="absolute inset-0 top-14 z-40 flex">
+                    {/* Contenido del Sidebar */}
+                    <aside className="w-64 bg-white h-full border-r border-slate-200 shadow-2xl flex flex-col justify-between p-3 z-50 animate-in slide-in-from-left duration-200">
+                        <div>
+                            {/* Información del Perfil en el Sidebar */}
+                            <div className="flex items-center gap-3 p-2 mb-3 bg-slate-50 rounded-[4px] border border-slate-200">
+                                <div className="w-9 h-9 rounded-[4px] overflow-hidden border border-slate-300 shrink-0 bg-slate-200">
+                                    <img
+                                        src={adminPerfilImg}
+                                        alt="Carlos Rodríguez"
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                                <div className="text-left leading-tight truncate">
+                                    <p className="font-bold text-xs text-slate-900 truncate">
+                                        Carlos Rodríguez
+                                    </p>
+                                    <span className="text-[10px] text-[#0E5E6F] font-semibold block truncate">
+                                        Administrador
+                                    </span>
+                                </div>
                             </div>
-                        ) : (
-                            <div className="w-10 h-10 mx-auto bg-[#0E5E6F] text-white rounded-[4px] flex items-center justify-center font-black text-xs shadow-sm">
-                                BD
-                            </div>
-                        )}
 
-                        <button
-                            onClick={() => setIsCollapsed(!isCollapsed)}
-                            className={`p-1 rounded-[4px] border border-slate-200 text-slate-400 hover:text-slate-700 hover:border-slate-300 transition-colors bg-white active:scale-95 ${isCollapsed ? 'mx-auto mt-1' : ''
-                                }`}
-                            title={isCollapsed ? 'Expandir' : 'Colapsar'}
-                        >
-                            {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-                        </button>
-                    </div>
-
-                    {/* Navegación Principal */}
-                    <nav className="p-2 flex flex-col gap-1">
-                        {menuItems.map((item) => {
-                            const Icon = item.icon;
-                            const isActive = currentView === item.id;
-
-                            return (
-                                <React.Fragment key={item.id}>
-                                    <div className="relative group/tooltip">
-                                        <button
-                                            onClick={() => onNavigate(item.id)}
-                                            className={`flex items-center transition-colors ${isCollapsed
-                                                    ? `w-10 h-10 mx-auto justify-center rounded-[4px] ${isActive
-                                                        ? 'bg-[#0E5E6F] text-white shadow'
-                                                        : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-                                                    }`
-                                                    : `w-full gap-3 px-2.5 py-2 rounded-[4px] justify-start text-sm font-medium ${isActive
-                                                        ? 'bg-[#0E5E6F] text-white shadow'
-                                                        : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-                                                    }`
+                            {/* Opciones del Menú */}
+                            <nav className="flex flex-col gap-1">
+                                {sidebarMenuItems.map((item) => {
+                                    const Icon = item.icon;
+                                    const isActive = currentView === item.id;
+                                    return (
+                                        <React.Fragment key={item.id}>
+                                            <button
+                                                onClick={() => handleNavigation(item.id)}
+                                                className={`flex items-center gap-3 px-3 py-2 rounded-[4px] text-xs font-medium transition-colors ${
+                                                    isActive
+                                                        ? 'bg-[#0E5E6F] text-white shadow-sm'
+                                                        : 'text-slate-700 hover:bg-slate-100 active:bg-slate-200'
                                                 }`}
-                                        >
-                                            <Icon size={18} className="shrink-0" />
-                                            {!isCollapsed && <span className="truncate leading-tight">{item.label}</span>}
-                                        </button>
-
-                                        {/* Tooltip visible solo al colapsar */}
-                                        {isCollapsed && (
-                                            <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 px-2.5 py-1 bg-slate-900 text-white text-xs font-medium rounded-md whitespace-nowrap opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-150 z-50 shadow-lg border border-slate-800">
-                                                {item.label}
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Separador entre bloques */}
-                                    {item.hasDividerAfter && (
-                                        <div className="my-1.5 border-t border-slate-200" />
-                                    )}
-                                </React.Fragment>
-                            );
-                        })}
-                    </nav>
-                </div>
-
-                {/* Footer / Perfil de Usuario */}
-                <div className="p-2.5 border-t border-slate-200 bg-slate-50 relative group/tooltip shrink-0">
-                    <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-start gap-3'}`}>
-                        <div className="w-9 h-9 rounded-[4px] overflow-hidden border-2 border-slate-400 shrink-0 bg-slate-200 flex items-center justify-center">
-                            <img
-                                src={adminPerfilImg}
-                                alt="Carlos Sosa"
-                                className="w-full h-full object-cover"
-                            />
+                                            >
+                                                <Icon size={16} />
+                                                <span>{item.label}</span>
+                                            </button>
+                                            {item.hasDividerAfter && (
+                                                <div className="my-1 border-t border-slate-100" />
+                                            )}
+                                        </React.Fragment>
+                                    );
+                                })}
+                            </nav>
                         </div>
-                        {!isCollapsed && (
-                            <div className="text-left leading-tight truncate">
-                                <p className="font-bold text-sm text-slate-900 truncate">
-                                    Carlos Rodríguez
-                                </p>
-                                <span className="text-xs text-[#0E5E6F] font-semibold block truncate">
-                                    Administrador
-                                </span>
-                            </div>
-                        )}
-                    </div>
 
-                    {/* Tooltip flotante del usuario al colapsar */}
-                    {isCollapsed && (
-                        <div className="absolute left-full bottom-2.5 ml-3 px-2.5 py-1 bg-slate-900 text-white text-xs font-medium rounded-md whitespace-nowrap opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-150 z-50 shadow-lg border border-slate-800">
-                            Carlos Rodríguez (Administrador)
+                        {/* Pie del Sidebar */}
+                        <div className="text-center pt-2 border-t border-slate-100">
+                            <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
+                                BioDron System v1.0
+                            </span>
                         </div>
-                    )}
-                </div>
-            </aside>
+                    </aside>
 
-            {/* Contenido Principal con scroll vertical controlado */}
-            <main className="flex-1 overflow-y-auto h-full p-0 bg-[#F8FAFC]">
+                    {/* Overlay para cerrar al hacer clic afuera */}
+                    <div
+                        className="flex-1 bg-slate-900/40 backdrop-blur-xs"
+                        onClick={() => setIsSidebarOpen(false)}
+                    />
+                </div>
+            )}
+
+            {/* Contenido Principal (Sin paddings) */}
+            <main className="flex-1 overflow-y-auto pb-16 bg-[#F8FAFC]">
                 {children}
             </main>
+
+            {/* Barra de Navegación Inferior (Bottom Navigation) */}
+            <nav className="absolute bottom-1 left-0 right-0 h-16 bg-white border-t border-slate-200 flex items-center justify-around px-2 z-20 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+                {/* Lado Izquierdo (Historial y Editor) */}
+                {bottomNavLeft.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = currentView === item.id;
+                    return (
+                        <button
+                            key={item.id}
+                            onClick={() => onNavigate(item.id)}
+                            className="flex flex-col items-center justify-center flex-1 h-full gap-0.5 group"
+                        >
+                            <div
+                                className={`w-8 h-8 rounded-[4px] flex items-center justify-center transition-colors ${
+                                    isActive
+                                        ? 'bg-[#0E5E6F] text-white shadow-sm'
+                                        : 'bg-transparent text-slate-400 group-hover:text-slate-600'
+                                }`}
+                            >
+                                <Icon size={18} />
+                            </div>
+                            <span
+                                className={`text-[9px] font-semibold truncate max-w-[55px] ${
+                                    isActive ? 'text-[#0E5E6F]' : 'text-slate-400'
+                                }`}
+                            >
+                                {item.label}
+                            </span>
+                        </button>
+                    );
+                })}
+
+                {/* Centro: Dashboard Admin (Principal) */}
+                <button
+                    onClick={() => onNavigate('admin-dashboard')}
+                    className="flex flex-col items-center justify-center flex-1 h-full gap-0.5 group"
+                >
+                    <div
+                        className={`w-9 h-9 rounded-[4px] flex items-center justify-center transition-all ${
+                            currentView === 'admin-dashboard'
+                                ? 'bg-[#0E5E6F] text-white shadow-md'
+                                : 'bg-slate-100 text-slate-600 border border-slate-200'
+                        }`}
+                    >
+                        <LayoutDashboard size={20} />
+                    </div>
+                    <span
+                        className={`text-[9px] font-bold ${
+                            currentView === 'admin-dashboard' ? 'text-[#0E5E6F]' : 'text-slate-500'
+                        }`}
+                    >
+                        Dashboard
+                    </span>
+                </button>
+
+                {/* Lado Derecho (Datos y Planes) */}
+                {bottomNavRight.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = currentView === item.id;
+                    return (
+                        <button
+                            key={item.id}
+                            onClick={() => onNavigate(item.id)}
+                            className="flex flex-col items-center justify-center flex-1 h-full gap-0.5 group"
+                        >
+                            <div
+                                className={`w-8 h-8 rounded-[4px] flex items-center justify-center transition-colors ${
+                                    isActive
+                                        ? 'bg-[#0E5E6F] text-white shadow-sm'
+                                        : 'bg-transparent text-slate-400 group-hover:text-slate-600'
+                                }`}
+                            >
+                                <Icon size={18} />
+                            </div>
+                            <span
+                                className={`text-[9px] font-semibold truncate max-w-[55px] ${
+                                    isActive ? 'text-[#0E5E6F]' : 'text-slate-400'
+                                }`}
+                            >
+                                {item.label}
+                            </span>
+                        </button>
+                    );
+                })}
+            </nav>
         </div>
     );
 };

@@ -485,13 +485,13 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
   return (
     <div
       style={{ fontFamily: "'Roboto', sans-serif" }}
-      className="p-6 md:p-8 max-w-[1400px] mx-auto bg-white antialiased text-gray-800 font-sans"
+      className="p-4 w-full mx-auto bg-white antialiased text-gray-800 font-sans overflow-x-hidden"
     >
       {/* BARRA SUPERIOR DE ADMINISTRACIÓN */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b-2 border-gray-100 select-none">
+      <div className="flex flex-col justify-between items-start gap-3 mb-5 pb-4 border-b-2 border-gray-100 select-none">
         <div className="text-left space-y-0.5">
           {/* Title Case en Título Principal */}
-          <h1 className="text-2xl font-black text-gray-900 tracking-tight font-sans">
+          <h1 className="text-lg font-black text-gray-900 tracking-tight font-sans">
             Panel de Control Administrativo
           </h1>
           <p className="text-gray-500 text-xs font-medium tracking-wide font-sans">
@@ -499,7 +499,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
           </p>
         </div>
 
-        <div className="flex items-center gap-3 self-end sm:self-auto">
+        <div className="flex items-center justify-between gap-3 w-full">
           {/* Badge Rol Administrador (Tipo oración) */}
           <div
             style={{
@@ -513,97 +513,107 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
             <span className="text-[10px] font-bold tracking-wider font-sans">Super admin root</span>
           </div>
 
-          {/* CAMPANA Y DROPDOWN DE NOTIFICACIONES */}
-          <div className="relative">
-            <button
-              onClick={() => setShowNotifications(!showNotifications)}
-              style={{ borderRadius: "4px" }}
-              className="relative p-2 bg-white border-2 border-gray-200 hover:border-gray-300 transition-colors shadow-xs active:scale-95 flex items-center justify-center cursor-pointer"
-            >
-              <Bell size={18} className="text-gray-600" />
-              {unreadCount > 0 && (
-                <span
-                  style={{
-                    backgroundColor: HEX_COLORS.red,
-                    borderRadius: "4px",
-                  }}
-                  className="absolute -top-1 -right-1 px-1 py-0.2 text-[9px] text-white font-black shadow-xs font-sans"
-                >
-                  {unreadCount}
-                </span>
-              )}
-            </button>
-
-            {/* PANEL DROPDOWN DE NOTIFICACIONES */}
-            {showNotifications && (
-              <div
-                style={{ borderRadius: "4px" }}
-                className="absolute right-0 mt-2 w-80 sm:w-96 bg-white border-2 border-gray-200 shadow-2xl z-50 p-4 text-left animate-in fade-in duration-150 font-sans"
+          {/* CAMPANA (abre bottom sheet de notificaciones) */}
+          <button
+            onClick={() => setShowNotifications(!showNotifications)}
+            style={{ borderRadius: "4px" }}
+            className="relative p-2 bg-white border-2 border-gray-200 active:scale-95 flex items-center justify-center cursor-pointer shrink-0"
+          >
+            <Bell size={18} className="text-gray-600" />
+            {unreadCount > 0 && (
+              <span
+                style={{
+                  backgroundColor: HEX_COLORS.red,
+                  borderRadius: "4px",
+                }}
+                className="absolute -top-1 -right-1 px-1 py-0.2 text-[9px] text-white font-black shadow-xs font-sans"
               >
-                <div className="flex justify-between items-center pb-2.5 mb-2.5 border-b border-gray-100">
-                  <div className="flex items-center gap-2">
-                    <Bell size={15} className="text-gray-700" />
-                    {/* Title Case en Título del Dropdown */}
-                    <h3 className="text-xs font-black text-gray-900 tracking-wider font-sans">
-                      Centro de Control de Alertas
-                    </h3>
-                  </div>
-                  <button
-                    onClick={() => setShowNotifications(false)}
-                    className="text-gray-400 hover:text-gray-600 p-1 cursor-pointer"
-                  >
-                    <X size={14} />
-                  </button>
-                </div>
-
-                <div className="space-y-2 max-h-72 overflow-y-auto custom-scrollbar pr-1">
-                  {notificaciones.map((n) => (
-                    <div
-                      key={n.id}
-                      style={{ borderRadius: "4px" }}
-                      className={`p-2.5 border text-xs transition-colors ${
-                        n.unread ? "bg-gray-50 border-gray-200" : "bg-white border-gray-100"
-                      }`}
-                    >
-                      <div className="flex justify-between items-start gap-2 mb-1">
-                        <span
-                          style={{
-                            backgroundColor: n.colorBg,
-                            color: n.textColor,
-                            borderRadius: "4px",
-                          }}
-                          className="px-2 py-0.5 text-[9px] font-bold flex items-center gap-1 font-sans"
-                        >
-                          {n.icono}
-                          {n.titulo}
-                        </span>
-                        <span className="text-[9px] font-mono text-gray-400">{n.tiempo}</span>
-                      </div>
-                      <p className="text-gray-700 font-medium text-[11px] leading-snug font-sans">
-                        {n.detalle}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="pt-2.5 mt-2.5 border-t border-gray-100 text-center">
-                  <button
-                    onClick={() => {
-                      setNotificaciones(notificaciones.map((n) => ({ ...n, unread: false })));
-                    }}
-                    className="text-[11px] font-bold text-[#0E5E6F] hover:underline cursor-pointer font-sans"
-                  >
-                    Marcar alertas como atendidas
-                  </button>
-                </div>
-              </div>
+                {unreadCount}
+              </span>
             )}
-          </div>
+          </button>
         </div>
       </div>
 
+      {/* BOTTOM SHEET DE NOTIFICACIONES (patrón móvil, reemplaza al dropdown de escritorio) */}
+      {showNotifications && (
+        <>
+          {/* Fondo oscuro */}
+          <div
+            onClick={() => setShowNotifications(false)}
+            className="fixed inset-0 bg-black/40 z-40 animate-in fade-in duration-150"
+          ></div>
+
+          {/* Hoja inferior */}
+          <div
+            style={{ borderRadius: "16px 16px 0 0" }}
+            className="fixed inset-x-0 bottom-0 z-50 bg-white border-t-2 border-gray-200 shadow-2xl p-4 text-left font-sans animate-in slide-in-from-bottom duration-200 max-h-[80vh] flex flex-col"
+          >
+            {/* Manija visual del bottom sheet */}
+            <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto mb-3 shrink-0"></div>
+
+            <div className="flex justify-between items-center pb-2.5 mb-2.5 border-b border-gray-100 shrink-0">
+              <div className="flex items-center gap-2">
+                <Bell size={15} className="text-gray-700" />
+                {/* Title Case en Título del Dropdown */}
+                <h3 className="text-xs font-black text-gray-900 tracking-wider font-sans">
+                  Centro de Control de Alertas
+                </h3>
+              </div>
+              <button
+                onClick={() => setShowNotifications(false)}
+                className="text-gray-400 p-1 cursor-pointer"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="space-y-2 overflow-y-auto custom-scrollbar pr-1 flex-1">
+              {notificaciones.map((n) => (
+                <div
+                  key={n.id}
+                  style={{ borderRadius: "4px" }}
+                  className={`p-2.5 border text-xs transition-colors ${
+                    n.unread ? "bg-gray-50 border-gray-200" : "bg-white border-gray-100"
+                  }`}
+                >
+                  <div className="flex flex-col items-start gap-1 mb-1">
+                    <span
+                      style={{
+                        backgroundColor: n.colorBg,
+                        color: n.textColor,
+                        borderRadius: "4px",
+                      }}
+                      className="px-2 py-0.5 text-[9px] font-bold flex items-center gap-1 font-sans"
+                    >
+                      {n.icono}
+                      {n.titulo}
+                    </span>
+                    <span className="text-[9px] font-mono text-gray-400">{n.tiempo}</span>
+                  </div>
+                  <p className="text-gray-700 font-medium text-[11px] leading-snug font-sans">
+                    {n.detalle}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <div className="pt-2.5 mt-2.5 border-t border-gray-100 text-center shrink-0">
+              <button
+                onClick={() => {
+                  setNotificaciones(notificaciones.map((n) => ({ ...n, unread: false })));
+                }}
+                className="text-[11px] font-bold text-[#0E5E6F] cursor-pointer font-sans w-full py-2"
+              >
+                Marcar alertas como atendidas
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
       {/* MÉTRICAS GLOBALES DE LA EMPRESA */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 text-left font-sans">
+      <div className="grid grid-cols-1 gap-4 mb-6 text-left font-sans">
         <div
           style={{ borderRadius: "4px" }}
           className="bg-white border-2 border-gray-200 p-4 shadow-xs flex flex-col justify-between"
@@ -697,8 +707,8 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
         </div>
       </div>
 
-      {/* PESTAÑAS PRINCIPALES (Title Case en pestañas) */}
-      <div className="border-b-2 border-gray-200 mb-6 grid grid-cols-2 sm:grid-cols-4 gap-1 select-none font-sans">
+      {/* PESTAÑAS PRINCIPALES (carrusel de scroll horizontal táctil) */}
+      <div className="border-b-2 border-gray-200 mb-6 flex gap-2 select-none font-sans overflow-x-auto custom-scrollbar -mx-4 px-4">
         {[
           { id: "metricas", label: "Métricas y finanzas", icon: <BarChart3 size={14} /> },
           { id: "mapa", label: "Mapa en vivo", icon: <MapPin size={14} /> },
@@ -711,14 +721,14 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               style={{ borderRadius: "4px 4px 0 0" }}
-              className={`px-3 py-3 text-xs font-bold flex items-center justify-center gap-2 border-t-2 border-x-2 -mb-[2px] transition-all text-center cursor-pointer font-sans ${
+              className={`shrink-0 px-3 py-3 text-xs font-bold flex items-center justify-center gap-2 border-t-2 border-x-2 -mb-[2px] transition-all text-center cursor-pointer whitespace-nowrap font-sans ${
                 isActive
                   ? "border-t-[#0E5E6F] border-x-gray-200 border-b-white bg-white text-[#0E5E6F] shadow-xs"
-                  : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                  : "border-transparent text-gray-500 active:bg-gray-50"
               }`}
             >
               <span className={isActive ? "text-[#0E5E6F]" : "text-gray-400"}>{tab.icon}</span>
-              <span className="truncate">{tab.label}</span>
+              <span>{tab.label}</span>
             </button>
           );
         })}
@@ -730,15 +740,15 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
           {/* GRÁFICO 1: ANALÍTICA FINANCIERA GENERAL */}
           <div
             style={{ borderRadius: "4px" }}
-            className="bg-white border-2 border-gray-200 p-5 shadow-xs text-left"
+            className="bg-white border-2 border-gray-200 p-3 shadow-xs text-left"
           >
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 pb-3 border-b border-gray-100">
+            <div className="flex flex-col justify-between items-start gap-3 mb-4 pb-3 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <BarChart3 size={18} className="text-[#0E5E6F]" />
+                <BarChart3 size={18} className="text-[#0E5E6F] shrink-0" />
                 <div>
                   {/* Title Case en Título de Sección */}
                   <h3 className="text-xs font-black text-gray-900 tracking-wider font-sans">
-                    Analítica Financiera — Ganancias Totales por Período
+                    Analítica Financiera — Ganancias por Período
                   </h3>
                   <p className="text-[11px] text-gray-500 font-medium font-sans">
                     Escala eje Y: <strong className="text-gray-700">{chartUnit}</strong>
@@ -746,10 +756,10 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
                 </div>
               </div>
 
-              {/* Selector de escala temporal (Tipo oración) */}
+              {/* Selector de escala temporal (ancho completo) */}
               <div
                 style={{ borderRadius: "4px" }}
-                className="bg-gray-100 p-1 flex items-center gap-1 border border-gray-200"
+                className="bg-gray-100 p-1 flex items-center gap-1 border border-gray-200 w-full"
               >
                 {[
                   { id: "semana", label: "Semana" },
@@ -760,10 +770,10 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
                     key={p.id}
                     onClick={() => setChartPeriod(p.id as any)}
                     style={{ borderRadius: "4px" }}
-                    className={`px-2.5 py-1 text-[11px] font-bold transition-all cursor-pointer font-sans ${
+                    className={`flex-1 px-2.5 py-1.5 text-[11px] font-bold transition-all cursor-pointer font-sans ${
                       chartPeriod === p.id
                         ? "bg-[#0E5E6F] text-white shadow-xs"
-                        : "text-gray-500 hover:text-gray-900"
+                        : "text-gray-500"
                     }`}
                   >
                     {p.label}
@@ -772,17 +782,17 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
               </div>
             </div>
 
-            <div className="relative pt-4 pb-2 pr-2">
-              <div className="flex h-64">
+            <div className="relative pt-4 pb-2 pr-1">
+              <div className="flex h-56">
                 {/* Eje Y */}
-                <div className="w-14 flex flex-col justify-between items-end pr-3 border-r-2 border-gray-300 text-[10px] font-mono font-bold text-gray-400 py-1 select-none">
+                <div className="w-9 flex flex-col justify-between items-end pr-1.5 border-r-2 border-gray-300 text-[8px] font-mono font-bold text-gray-400 py-1 select-none">
                   {yAxisTicks.map((tick, i) => (
                     <span key={i}>${tick}</span>
                   ))}
                 </div>
 
                 {/* Barras Financieras */}
-                <div className="flex-1 relative flex items-end justify-between pl-4 pr-2 h-full">
+                <div className="flex-1 relative flex items-end justify-between pl-2 pr-1 h-full">
                   <div className="absolute inset-x-0 top-0 bottom-0 flex flex-col justify-between pointer-events-none z-0 px-2">
                     <div className="border-b border-gray-100 w-full h-0"></div>
                     <div className="border-b border-gray-100 w-full h-0"></div>
@@ -839,12 +849,12 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
               </div>
 
               {/* Eje X */}
-              <div className="flex pl-14 pt-2 border-t-2 border-gray-300">
-                <div className="flex-1 flex justify-between px-4">
+              <div className="flex pl-11 pt-2 border-t-2 border-gray-300">
+                <div className="flex-1 flex justify-between px-1">
                   {currentChartSet.map((item, idx) => (
                     <span
                       key={idx}
-                      className="flex-1 text-center text-[10px] font-bold text-gray-500 tracking-wider font-sans"
+                      className="flex-1 text-center text-[9px] font-bold text-gray-500 tracking-wider font-sans"
                     >
                       {item.label}
                     </span>
@@ -857,29 +867,29 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
           {/* GRÁFICO 2: DESGLOSE POR TIPOS DE SERVICIO */}
           <div
             style={{ borderRadius: "4px" }}
-            className="bg-white border-2 border-gray-200 p-5 shadow-xs text-left"
+            className="bg-white border-2 border-gray-200 p-3 shadow-xs text-left"
           >
             <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
-              <PieChart size={18} className="text-[#0E5E6F]" />
+              <PieChart size={18} className="text-[#0E5E6F] shrink-0" />
               <div>
                 {/* Title Case en Título de Sección */}
                 <h3 className="text-xs font-black text-gray-900 tracking-wider font-sans">
-                  Distribución de Ingresos y Operaciones por Servicio
+                  Distribución de Ingresos por Servicio
                 </h3>
                 <p className="text-[11px] text-gray-500 font-medium font-sans">
-                  Desglose de facturación e intensidad de vuelos por tipo de misión
+                  Facturación e intensidad de vuelos por tipo de misión
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               {/* Contenedor de Progress Bars por Servicio */}
               <div className="space-y-4">
                 {serviciosData.map((serv, index) => (
                   <div key={index} className="space-y-1">
-                    <div className="flex justify-between items-center text-xs">
+                    <div className="flex flex-col items-start gap-0.5 text-xs">
                       <span className="font-bold text-gray-800 font-sans">{serv.nombre}</span>
-                      <span className="font-mono font-black text-gray-900">{serv.ingreso} ({serv.porcentaje}%)</span>
+                      <span className="font-mono font-black text-gray-900 text-[11px]">{serv.ingreso} ({serv.porcentaje}%)</span>
                     </div>
                     <div className="w-full bg-gray-100 h-3 rounded-full overflow-hidden border border-gray-200">
                       <div
@@ -897,8 +907,8 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
                 ))}
               </div>
 
-              {/* Tarjetas resumen de servicios */}
-              <div className="grid grid-cols-2 gap-3">
+              {/* Tarjetas resumen de servicios: carrusel de scroll horizontal táctil */}
+              <div className="flex gap-3 overflow-x-auto custom-scrollbar pb-1 -mx-3 px-3">
                 {serviciosData.map((serv, index) => (
                   <div
                     key={index}
@@ -907,7 +917,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
                       backgroundColor: serv.color,
                       color: serv.textColor || "#FFFFFF",
                     }}
-                    className="p-3 border border-black/10 flex flex-col justify-between shadow-2xs"
+                    className="p-3 border border-black/10 flex flex-col justify-between shadow-2xs shrink-0 w-[150px]"
                   >
                     <div>
                       <span className="text-[9px] font-bold block opacity-80 font-sans">
@@ -931,18 +941,18 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
       {activeTab === "mapa" && (
         <div
           style={{ borderRadius: "4px" }}
-          className="bg-white border-2 border-gray-200 p-5 shadow-xs mb-8 text-left font-sans animate-in fade-in duration-200"
+          className="bg-white border-2 border-gray-200 p-3 shadow-xs mb-8 text-left font-sans animate-in fade-in duration-200"
         >
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 pb-3 border-b border-gray-100">
+          <div className="flex flex-col justify-between items-start gap-2 mb-4 pb-3 border-b border-gray-100">
             <div className="flex items-center gap-2">
-              <MapPin size={18} className="text-[#0E5E6F]" />
+              <MapPin size={18} className="text-[#0E5E6F] shrink-0" />
               <div>
                 {/* Title Case */}
                 <h3 className="text-xs font-black text-gray-900 tracking-wider font-sans">
-                  Mapa en Vivo — Flota de Drones Activos
+                  Mapa en Vivo — Flota de Drones
                 </h3>
                 <p className="text-[11px] text-gray-500 font-medium font-sans">
-                  Ubicación satelital y cobertura operacional en tiempo real
+                  Ubicación satelital en tiempo real
                 </p>
               </div>
             </div>
@@ -956,16 +966,16 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
               }}
               className="px-2.5 py-1 text-[10px] font-extrabold flex items-center gap-1 border border-emerald-200 font-sans"
             >
-              <span className="w-2 h-2 bg-[#065F46] rounded-full animate-ping"></span>
+              <span className="w-2 h-2 bg-[#065F46] rounded-full animate-ping shrink-0"></span>
               16 drones activos en sistema
             </span>
           </div>
 
-          <div className="relative w-full h-96 rounded bg-gray-100 overflow-hidden border border-gray-200 group">
+          <div className="relative w-full h-64 rounded bg-gray-100 overflow-hidden border border-gray-200 group">
             <img
               src="src/img/drones_activos.png"
               alt="Mapa en vivo de drones activos"
-              className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500"
+              className="w-full h-full object-cover grayscale-[20%]"
               onError={(e) => {
                 e.currentTarget.src =
                   "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1200&q=80";
@@ -975,25 +985,25 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none"></div>
 
             {/* Pin 1 */}
-            <div className="absolute top-1/3 left-1/4 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 bg-gray-900/90 text-white p-2 rounded border border-emerald-400 shadow-lg backdrop-blur-xs font-sans">
-              <span className="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse"></span>
+            <div className="absolute top-1/4 left-1/4 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 bg-gray-900/90 text-white p-1.5 rounded border border-emerald-400 shadow-lg backdrop-blur-xs font-sans">
+              <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shrink-0"></span>
               <div>
-                <p className="text-[10px] font-black leading-none font-sans">Agras T40 (#DRN-101)</p>
-                <p className="text-[8px] text-gray-300 font-mono">Piloto: C. Mendoza</p>
+                <p className="text-[9px] font-black leading-none whitespace-nowrap font-sans">Agras T40 (#DRN-101)</p>
+                <p className="text-[7px] text-gray-300 font-mono whitespace-nowrap">Piloto: C. Mendoza</p>
               </div>
             </div>
 
             {/* Pin 2 */}
-            <div className="absolute top-1/2 left-2/3 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 bg-gray-900/90 text-white p-2 rounded border border-blue-400 shadow-lg backdrop-blur-xs font-sans">
-              <span className="w-2.5 h-2.5 bg-blue-400 rounded-full animate-pulse"></span>
+            <div className="absolute top-1/2 left-[60%] transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 bg-gray-900/90 text-white p-1.5 rounded border border-blue-400 shadow-lg backdrop-blur-xs font-sans">
+              <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse shrink-0"></span>
               <div>
-                <p className="text-[10px] font-black leading-none font-sans">Matrice 300 (#DRN-204)</p>
-                <p className="text-[8px] text-gray-300 font-mono">Piloto: A. Bermúdez</p>
+                <p className="text-[9px] font-black leading-none whitespace-nowrap font-sans">Matrice 300 (#DRN-204)</p>
+                <p className="text-[7px] text-gray-300 font-mono whitespace-nowrap">Piloto: A. Bermúdez</p>
               </div>
             </div>
 
-            <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-md px-3 py-2 rounded border border-gray-200 text-gray-800 text-[10px] font-mono shadow-md font-sans">
-              <p className="font-bold text-gray-900">Coordenadas centro: 14.0723° N, 87.1921° W</p>
+            <div className="absolute bottom-2 left-2 right-2 bg-white/90 backdrop-blur-md px-2.5 py-1.5 rounded border border-gray-200 text-gray-800 text-[9px] font-mono shadow-md font-sans">
+              <p className="font-bold text-gray-900 leading-snug">Coordenadas centro: 14.0723° N, 87.1921° W</p>
               <p className="text-gray-500">Señal GPS: Excelente (18 satélites)</p>
             </div>
           </div>
@@ -1004,18 +1014,18 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
       {activeTab === "simulador" && (
         <div
           style={{ borderRadius: "4px" }}
-          className="bg-white border-2 border-gray-200 p-5 shadow-xs mb-8 text-left font-sans animate-in fade-in duration-200"
+          className="bg-white border-2 border-gray-200 p-3 shadow-xs mb-8 text-left font-sans animate-in fade-in duration-200"
         >
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 pb-3 border-b border-gray-100">
+          <div className="flex flex-col justify-between items-start gap-3 mb-4 pb-3 border-b border-gray-100">
             <div className="flex items-center gap-2">
-              <Sliders size={18} className="text-[#0E5E6F]" />
+              <Sliders size={18} className="text-[#0E5E6F] shrink-0" />
               <div>
                 {/* Title Case */}
                 <h3 className="text-xs font-black text-gray-900 tracking-wider font-sans">
-                  Simulador Interactivo de Rendimiento del Dron
+                  Simulador de Rendimiento del Dron
                 </h3>
                 <p className="text-[11px] text-gray-500 font-medium font-sans">
-                  Ajusta los controles para simular el comportamiento de telemetría y consumo
+                  Ajusta los controles para simular telemetría y consumo
                 </p>
               </div>
             </div>
@@ -1024,7 +1034,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
             <button
               onClick={resetSimulador}
               style={{ borderRadius: "4px" }}
-              className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold border border-gray-300 transition-colors flex items-center gap-1.5 cursor-pointer font-sans"
+              className="px-3 py-2 bg-gray-100 active:bg-gray-200 text-gray-700 text-xs font-bold border border-gray-300 transition-colors flex items-center justify-center gap-1.5 cursor-pointer font-sans w-full"
             >
               <RotateCcw size={13} />
               Restablecer valores
@@ -1032,7 +1042,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
           </div>
 
           {/* CONTROLES DESLIZANTES */}
-          <div className="bg-gray-50 border border-gray-200 p-4 rounded mb-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-gray-50 border border-gray-200 p-3 rounded mb-6 grid grid-cols-1 gap-6">
             <div>
               <div className="flex justify-between items-center mb-1">
                 <label className="text-xs font-bold text-gray-700 flex items-center gap-1 font-sans">
@@ -1095,7 +1105,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
           </div>
 
           {/* BARRAS DE PROGRESO */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <div className="bg-white border border-gray-200 p-4 rounded text-left shadow-2xs">
               <div className="flex justify-between items-center mb-1.5">
                 <span className="text-[11px] font-bold text-gray-700 flex items-center gap-1 font-sans">
@@ -1194,7 +1204,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
           style={{ borderRadius: "4px" }}
           className="bg-white border-2 border-gray-200 shadow-xs text-left overflow-hidden mb-8 font-sans animate-in fade-in duration-200"
         >
-          <div className="p-4 border-b-2 border-gray-100 bg-gray-50/50 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3">
+          <div className="p-4 border-b-2 border-gray-100 bg-gray-50/50 flex flex-col justify-between items-start gap-3">
             <div>
               {/* Title Case */}
               <h3 className="text-xs font-black text-gray-900 tracking-wider font-sans">
@@ -1205,9 +1215,9 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full lg:w-auto">
+            <div className="flex flex-col items-stretch gap-2 w-full ">
               {/* Buscador */}
-              <div className="relative flex-1 sm:w-64">
+              <div className="relative flex-1 ">
                 <SearchIcon
                   size={13}
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
@@ -1230,8 +1240,8 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
                 )}
               </div>
 
-              {/* Chips Filtros (Tipo oración) */}
-              <div className="flex items-center gap-1">
+              {/* Chips Filtros (Tipo oración, scroll horizontal táctil) */}
+              <div className="flex items-center gap-1 overflow-x-auto custom-scrollbar pb-1">
                 {[
                   { id: "todos", label: "Todos" },
                   { id: "completado", label: "Completados" },
@@ -1247,7 +1257,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
                       color: statusFilter === f.id ? "#FFFFFF" : "#0E5E6F",
                       borderColor: HEX_COLORS.brandGreen,
                     }}
-                    className="px-2.5 py-1 text-[11px] font-bold border transition-all hover:opacity-90 active:scale-95 whitespace-nowrap cursor-pointer font-sans"
+                    className="shrink-0 px-2.5 py-1 text-[11px] font-bold border transition-all active:scale-95 whitespace-nowrap cursor-pointer font-sans"
                   >
                     {f.label}
                   </button>
@@ -1256,74 +1266,56 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
             </div>
           </div>
 
-          {/* Tabla de Registros (Encabezados en Tipo Oración) */}
-          <div className="overflow-x-auto custom-scrollbar">
-            <table className="w-full text-left text-xs font-sans">
-              <thead className="bg-white text-gray-500 font-bold border-b border-gray-200 text-[10px] tracking-wider font-sans">
-                <tr>
-                  <th className="px-4 py-2.5 whitespace-nowrap">Código de misión</th>
-                  <th className="px-4 py-2.5">Cliente y servicio</th>
-                  <th className="px-4 py-2.5 whitespace-nowrap">Piloto asignado</th>
-                  <th className="px-4 py-2.5 whitespace-nowrap">Técnico a cargo</th>
-                  <th className="px-4 py-2.5 whitespace-nowrap">Dron e ingreso</th>
-                  <th className="px-4 py-2.5 text-center whitespace-nowrap">Estado</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 font-sans">
-                {registrosActuales.length > 0 ? (
-                  registrosActuales.map((row) => (
-                    <tr key={row.id} className="hover:bg-gray-50/80 transition-colors">
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        <p className="font-extrabold text-gray-900 font-sans">{row.id}</p>
-                      </td>
-                      <td className="px-4 py-3">
-                        <p className="font-bold text-gray-800 font-sans">{row.cliente}</p>
-                        <p className="text-[10px] text-gray-400 font-medium font-sans">{row.servicio}</p>
-                      </td>
-                      <td className="px-4 py-3 font-medium text-gray-700 whitespace-nowrap">
-                        <span className="flex items-center gap-1 font-sans">
-                          <UserCheck size={12} className="text-gray-400 shrink-0" />
-                          {row.piloto}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 font-medium text-gray-700 whitespace-nowrap">
-                        <span className="flex items-center gap-1 font-sans">
-                          <Wrench size={12} className="text-gray-400 shrink-0" />
-                          {row.tecnico}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        <p className="font-bold text-[#0E5E6F] font-sans">{row.dron}</p>
-                        <p className="text-[10px] text-emerald-700 font-mono font-bold">
-                          {row.ganancia}
-                        </p>
-                      </td>
-                      <td className="px-4 py-3 text-center whitespace-nowrap">
-                        <span
-                          style={{
-                            backgroundColor: row.tagColorBg,
-                            color: row.tagTextColor,
-                            borderRadius: "4px",
-                          }}
-                          className="px-2 py-0.5 font-bold text-[10px] inline-block border border-black/5 font-sans"
-                        >
-                          {row.estado}
-                        </span>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={6} className="px-4 py-6 text-center text-gray-400 font-medium font-sans">
-                      No se encontraron registros coincidentes.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+          {/* Lista de Registros en tarjetas (reemplaza a la tabla de escritorio, más natural al tacto) */}
+          <div className="divide-y divide-gray-100 font-sans">
+            {registrosActuales.length > 0 ? (
+              registrosActuales.map((row) => (
+                <div key={row.id} className="p-3.5 space-y-2">
+                  <div className="flex justify-between items-start gap-2">
+                    <div>
+                      <p className="font-extrabold text-gray-900 text-xs font-sans">{row.id}</p>
+                      <p className="font-bold text-gray-800 text-xs mt-0.5 font-sans">{row.cliente}</p>
+                      <p className="text-[10px] text-gray-400 font-medium font-sans">{row.servicio}</p>
+                    </div>
+                    <span
+                      style={{
+                        backgroundColor: row.tagColorBg,
+                        color: row.tagTextColor,
+                        borderRadius: "4px",
+                      }}
+                      className="px-2 py-0.5 font-bold text-[10px] inline-block border border-black/5 font-sans whitespace-nowrap shrink-0"
+                    >
+                      {row.estado}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-gray-700 font-medium font-sans">
+                    <span className="flex items-center gap-1">
+                      <UserCheck size={12} className="text-gray-400 shrink-0" />
+                      {row.piloto}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Wrench size={12} className="text-gray-400 shrink-0" />
+                      {row.tecnico}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center pt-1">
+                    <p className="font-bold text-[#0E5E6F] text-xs font-sans">{row.dron}</p>
+                    <p className="text-[11px] text-emerald-700 font-mono font-bold">
+                      {row.ganancia}
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="px-4 py-6 text-center text-gray-400 font-medium text-xs font-sans">
+                No se encontraron registros coincidentes.
+              </div>
+            )}
           </div>
 
-          <div className="p-3 border-t border-gray-100 bg-gray-50/40 flex justify-between items-center font-sans">
+          <div className="p-3 border-t border-gray-100 bg-gray-50/40 flex flex-col gap-2 font-sans">
             <span className="text-[11px] font-bold text-gray-400 font-sans">
               {registrosActuales.length} registros gestionados
             </span>
@@ -1333,7 +1325,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
                 borderRadius: "4px",
                 backgroundColor: HEX_COLORS.brandGreen,
               }}
-              className="px-3 py-1.5 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-[#094350] transition-colors shadow-xs cursor-pointer font-sans"
+              className="px-3 py-2 text-white text-xs font-bold flex items-center justify-center gap-1.5 active:bg-[#094350] transition-colors shadow-xs cursor-pointer font-sans w-full"
             >
               <Download size={13} />
               Exportar reporte administrativo
@@ -1345,7 +1337,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
       {/* BANNER INFERIOR DE ACCIÓN GLOBAL */}
       <div
         style={{ borderRadius: "4px" }}
-        className="border-2 border-gray-200 p-5 bg-gradient-to-r from-gray-50 via-white to-gray-50 flex flex-col sm:flex-row justify-between items-center gap-4 text-left shadow-xs font-sans"
+        className="border-2 border-gray-200 p-4 bg-gradient-to-r from-gray-50 via-white to-gray-50 flex flex-col justify-between items-start gap-4 text-left shadow-xs font-sans"
       >
         <div className="flex items-center gap-3.5">
           <div
@@ -1357,10 +1349,10 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
           <div>
             {/* Title Case en Título de Pregunta */}
             <h4 className="text-sm font-black text-gray-900 font-sans">
-              ¿Necesitas Dar de Alta un Nuevo Piloto o Dron en BIODRON?
+              ¿Necesitas Dar de Alta un Nuevo Piloto o Dron?
             </h4>
             <p className="text-xs text-gray-500 font-medium font-sans">
-              Gestiona los permisos de acceso y asignaciones técnicas desde la consola central
+              Gestiona permisos y asignaciones desde la consola central
             </p>
           </div>
         </div>
@@ -1373,7 +1365,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
             borderRadius: "4px",
             backgroundColor: HEX_COLORS.brandGreen,
           }}
-          className="px-6 py-2.5 text-white text-xs font-bold tracking-wider hover:bg-[#094350] transition-all shadow-md active:scale-95 whitespace-nowrap shrink-0 flex items-center gap-2 cursor-pointer font-sans"
+          className="px-6 py-3 text-white text-xs font-bold tracking-wider active:scale-95 transition-all shadow-md whitespace-nowrap flex items-center justify-center gap-2 cursor-pointer font-sans w-full"
         >
           <span>Gestionar flota y personal</span>
           <ChevronRight size={14} />
@@ -1550,13 +1542,13 @@ export const AdminPricesView = () => {
 
     return (
         <div
-            className="p-4 sm:p-6 max-w-5xl mx-auto bg-white antialiased text-gray-800 select-none"
+            className="p-4 w-full mx-auto bg-white antialiased text-gray-800 select-none overflow-x-hidden"
             style={{ fontFamily: "'Roboto', sans-serif" }}
         >
             {/* HEADER PRINCIPAL */}
-            <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-gray-200 text-left">
+            <div className="flex justify-between items-center mb-5 pb-4 border-b-2 border-gray-200 text-left">
                 <div className="space-y-1">
-                    <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                    <h1 className="text-lg font-bold text-gray-900">
                         Precios y Suscripciones
                     </h1>
                     <p className="text-gray-500 text-xs font-normal">
@@ -1565,22 +1557,22 @@ export const AdminPricesView = () => {
                 </div>
             </div>
 
-            {/* TABS SELECTORAS */}
+            {/* TABS SELECTORAS (ancho completo, mitad y mitad) */}
             <div className="flex border-b-2 border-gray-200 mb-6">
                 <button
                     onClick={() => setTab("subs")}
-                    className={`px-4 sm:px-6 py-2.5 font-bold text-xs transition-all border-b-2 -mb-px flex items-center gap-2 cursor-pointer ${tab === "subs"
+                    className={`flex-1 px-2 py-3 font-bold text-xs transition-all border-b-2 -mb-px flex items-center justify-center gap-1.5 cursor-pointer ${tab === "subs"
                             ? "border-[#0E5E6F] text-[#0E5E6F]"
-                            : "border-transparent text-gray-500 hover:text-gray-700"
+                            : "border-transparent text-gray-500"
                         }`}
                 >
-                    <Layers size={15} /> Planes de suscripción
+                    <Layers size={15} /> Planes
                 </button>
                 <button
                     onClick={() => setTab("ventas")}
-                    className={`px-4 sm:px-6 py-2.5 font-bold text-xs transition-all border-b-2 -mb-px flex items-center gap-2 cursor-pointer ${tab === "ventas"
+                    className={`flex-1 px-2 py-3 font-bold text-xs transition-all border-b-2 -mb-px flex items-center justify-center gap-1.5 cursor-pointer ${tab === "ventas"
                             ? "border-[#0E5E6F] text-[#0E5E6F]"
-                            : "border-transparent text-gray-500 hover:text-gray-700"
+                            : "border-transparent text-gray-500"
                         }`}
                 >
                     <ShoppingBag size={15} /> Venta de drones
@@ -1594,108 +1586,8 @@ export const AdminPricesView = () => {
                 <div className="space-y-8">
                     {/* TABLA DE PLANES COMPACTA */}
                     <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xs overflow-hidden flex flex-col text-left">
-                        {/* VISTA DE TABLA */}
-                        <div className="hidden md:block w-full">
-                            <table className="w-full text-left border-collapse">
-                                <thead className="bg-gray-50 border-b-2 border-gray-200 text-xs font-semibold text-gray-600">
-                                    <tr>
-                                        <th className="py-3 px-3">Plan</th>
-                                        <th className="py-3 px-3">Precio (L.)</th>
-                                        <th className="py-3 px-3">Ciclo</th>
-                                        <th className="py-3 px-3 text-center">Vuelos/mes</th>
-                                        <th className="py-3 px-3 text-center">Cobertura</th>
-                                        <th className="py-3 px-3 text-center">Estado</th>
-                                        <th className="py-3 px-3 text-center">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-100">
-                                    {planes.map((plan) => (
-                                        <tr
-                                            key={plan.id}
-                                            className="hover:bg-gray-50/50 transition-colors text-xs"
-                                        >
-                                            <td className="py-2.5 px-3 font-bold text-gray-900">
-                                                {plan.name}
-                                            </td>
-                                            <td className="py-2.5 px-3">
-                                                <div className="flex items-center gap-1">
-                                                    <span className="text-[10px] text-gray-400 font-bold">
-                                                        L.
-                                                    </span>
-                                                    <input
-                                                        type="number"
-                                                        value={plan.price}
-                                                        onChange={(e) => {
-                                                            const val = Number(e.target.value);
-                                                            setPlanes((prev) =>
-                                                                prev.map((p) =>
-                                                                    p.id === plan.id ? { ...p, price: val } : p,
-                                                                ),
-                                                            );
-                                                            setHasUnsavedChanges(true);
-                                                        }}
-                                                        className="border border-gray-200 rounded-[4px] px-2 py-0.5 text-xs font-mono w-20 focus:border-[#0E5E6F] focus:outline-none bg-white font-bold text-gray-800"
-                                                    />
-                                                </div>
-                                            </td>
-                                            <td className="py-2.5 px-3">
-                                                <select
-                                                    value={plan.cycle}
-                                                    onChange={(e) => {
-                                                        const val = e.target.value as Plan["cycle"];
-                                                        setPlanes((prev) =>
-                                                            prev.map((p) =>
-                                                                p.id === plan.id ? { ...p, cycle: val } : p,
-                                                            ),
-                                                        );
-                                                        setHasUnsavedChanges(true);
-                                                    }}
-                                                    className="border border-gray-200 rounded-[4px] px-2 py-0.5 text-xs focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-700 font-normal"
-                                                >
-                                                    <option value="Mensual">Mensual</option>
-                                                    <option value="Anual">Anual</option>
-                                                    <option value="Trimestral">Trimestral</option>
-                                                </select>
-                                            </td>
-                                            <td className="py-2.5 px-3 text-center font-mono font-bold text-gray-700">
-                                                {plan.flights}
-                                            </td>
-                                            <td className="py-2.5 px-3 text-center text-gray-700">
-                                                {plan.area}
-                                            </td>
-                                            <td className="py-2.5 px-3 text-center">
-                                                <span
-                                                    className={`inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-[4px] border ${plan.active
-                                                            ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                                                            : "border-amber-300 bg-amber-100 text-amber-800"
-                                                        }`}
-                                                >
-                                                    {plan.active ? "Activo" : "Inactivo"}
-                                                </span>
-                                            </td>
-                                            <td className="py-2.5 px-3 text-center">
-                                                <div className="flex items-center justify-center">
-                                                    <button
-                                                        onClick={() => {
-                                                            setEditingPlan(plan);
-                                                            setIsPlanModalOpen(true);
-                                                        }}
-                                                        className="px-2.5 py-1 hover:bg-gray-100 border border-gray-200 rounded-[4px] text-gray-700 hover:text-[#0E5E6F] font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
-                                                        title="Editar plan"
-                                                    >
-                                                        <Edit3 size={13} />
-                                                        Editar
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        {/* VISTA RESPONSIVA MÓVIL */}
-                        <div className="block md:hidden divide-y divide-gray-200">
+                        {/* VISTA DE TARJETAS (patrón móvil, reemplaza a la tabla de escritorio) */}
+                        <div className="divide-y divide-gray-200">
                             {planes.map((plan) => (
                                 <div key={plan.id} className="p-3 space-y-2 bg-white">
                                     <div className="flex items-center justify-between">
@@ -1781,7 +1673,7 @@ export const AdminPricesView = () => {
                                                 setEditingPlan(plan);
                                                 setIsPlanModalOpen(true);
                                             }}
-                                            className="px-2.5 py-1 hover:bg-gray-100 border border-gray-200 rounded-[4px] text-xs font-bold text-gray-700 flex items-center gap-1.5 cursor-pointer"
+                                            className="px-2.5 py-1 active:bg-gray-100 border border-gray-200 rounded-[4px] text-xs font-bold text-gray-700 flex items-center gap-1.5 cursor-pointer"
                                         >
                                             <Edit3 size={13} /> Editar
                                         </button>
@@ -1804,7 +1696,7 @@ export const AdminPricesView = () => {
                                     });
                                     setIsPlanModalOpen(true);
                                 }}
-                                className="py-1.5 px-3 bg-[#0E5E6F] hover:bg-[#0a4754] text-white text-xs font-bold rounded-[4px] flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer"
+                                className="w-full justify-center py-2.5 px-3 bg-[#0E5E6F] text-white text-xs font-bold rounded-[4px] flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer"
                             >
                                 <Plus size={14} /> Agregar nuevo plan
                             </button>
@@ -1816,7 +1708,7 @@ export const AdminPricesView = () => {
                         <h2 className="text-sm font-bold text-gray-900 mb-4">
                             Análisis y Proyección Mensual de Suscripciones Activas
                         </h2>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                        <div className="grid grid-cols-1 gap-8 items-center">
                             {/* Sliders de Distribución de Clientes */}
                             <div className="space-y-4">
                                 <div>
@@ -1901,7 +1793,7 @@ export const AdminPricesView = () => {
                                     <span className="text-[11px] font-bold text-gray-500 block">
                                         Ingreso mensual recurrente proyectado (MRR)
                                     </span>
-                                    <span className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight block">
+                                    <span className="text-2xl font-black text-gray-900 tracking-tight block">
                                         L.{" "}
                                         {mrrTotal.toLocaleString("en-US", {
                                             minimumFractionDigits: 2,
@@ -1957,7 +1849,7 @@ export const AdminPricesView = () => {
             {/* ========================================================================= */}
             {tab === "ventas" && (
                 <div className="space-y-5 text-left">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-1">
+                    <div className="flex flex-col justify-between items-start gap-3 mb-1">
                         <div>
                             <h2 className="text-base font-bold text-gray-900">
                                 Catálogo de Flota Comercial
@@ -1980,7 +1872,7 @@ export const AdminPricesView = () => {
                                 });
                                 setIsDroneModalOpen(true);
                             }}
-                            className="py-1.5 px-3 bg-[#0E5E6F] hover:bg-[#0a4754] text-white text-xs font-bold rounded-[4px] flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer"
+                            className="w-full justify-center py-2.5 px-3 bg-[#0E5E6F] text-white text-xs font-bold rounded-[4px] flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer"
                         >
                             <Plus size={14} /> Agregar dron comercial
                         </button>
@@ -1991,13 +1883,13 @@ export const AdminPricesView = () => {
                         {dronesVenta.map((drone) => (
                             <div
                                 key={drone.id}
-                                className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xs overflow-hidden flex flex-col md:flex-row hover:border-[#0E5E6F]/40 transition-all duration-200"
+                                className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xs overflow-hidden flex flex-col transition-all duration-200"
                             >
-                                <div className="relative w-full md:w-56 h-44 md:h-auto bg-gray-100 overflow-hidden shrink-0">
+                                <div className="relative w-full h-44 bg-gray-100 overflow-hidden shrink-0">
                                     <img
                                         src={drone.image}
                                         alt={drone.name}
-                                        className="w-full h-full object-cover rounded-[4px] hover:scale-105 transition-transform duration-300"
+                                        className="w-full h-full object-cover rounded-[4px]"
                                         onError={(e) => {
                                             e.currentTarget.onerror = null;
                                             e.currentTarget.src =
@@ -2011,10 +1903,10 @@ export const AdminPricesView = () => {
                                 </div>
 
                                 <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
-                                    <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
+                                    <div className="flex flex-col justify-between items-start gap-2">
                                         <div>
                                             <div className="flex items-center gap-1.5">
-                                                <h3 className="font-bold text-sm sm:text-base text-gray-900">
+                                                <h3 className="font-bold text-sm text-gray-900">
                                                     {drone.name}
                                                 </h3>
                                                 <ShieldCheck size={16} className="text-[#0E5E6F]" />
@@ -2025,7 +1917,7 @@ export const AdminPricesView = () => {
                                         </div>
 
                                         {/* Tags Badges */}
-                                        <div className="flex flex-wrap items-center gap-1 pt-1 sm:pt-0">
+                                        <div className="flex flex-wrap items-center gap-1 pt-1 ">
                                             {drone.tags.map((t, idx) => (
                                                 <span
                                                     key={idx}
@@ -2036,7 +1928,7 @@ export const AdminPricesView = () => {
                                             ))}
                                             <button
                                                 onClick={() => handleOpenTagModal(drone.id)}
-                                                className="bg-[#0E5E6F]/10 border border-[#0E5E6F]/30 text-[#0E5E6F] text-[10px] font-bold px-2 py-0.5 rounded-[4px] hover:bg-[#0E5E6F]/20 transition-colors cursor-pointer"
+                                                className="bg-[#0E5E6F]/10 border border-[#0E5E6F]/30 text-[#0E5E6F] text-[10px] font-bold px-2 py-0.5 rounded-[4px] active:bg-[#0E5E6F]/20 transition-colors cursor-pointer"
                                             >
                                                 + Tag
                                             </button>
@@ -2044,8 +1936,8 @@ export const AdminPricesView = () => {
                                     </div>
 
                                     {/* Controles Interactivos de Precio y Stock */}
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-gray-50 p-2.5 rounded-[4px] border border-gray-200">
-                                        <div className="flex items-center justify-between sm:justify-start sm:gap-3">
+                                    <div className="grid grid-cols-1 gap-3 bg-gray-50 p-2.5 rounded-[4px] border border-gray-200">
+                                        <div className="flex items-center justify-between ">
                                             <span className="text-xs font-bold text-gray-600">
                                                 Precio lempiras:
                                             </span>
@@ -2070,7 +1962,7 @@ export const AdminPricesView = () => {
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center justify-between sm:justify-start sm:gap-3">
+                                        <div className="flex items-center justify-between ">
                                             <span className="text-xs font-bold text-gray-600">
                                                 Stock disponible:
                                             </span>
@@ -2102,7 +1994,7 @@ export const AdminPricesView = () => {
                                                 setEditingDrone(drone);
                                                 setIsDroneModalOpen(true);
                                             }}
-                                            className="text-xs text-[#0E5E6F] font-bold hover:underline flex items-center gap-1 cursor-pointer"
+                                            className="text-xs text-[#0E5E6F] font-bold active:underline flex items-center gap-1 cursor-pointer"
                                         >
                                             <Edit3 size={13} /> Editar especificaciones
                                         </button>
@@ -2114,12 +2006,12 @@ export const AdminPricesView = () => {
                 </div>
             )}
 
-            {/* BARRA FLOTANTE DE CAMBIOS PENDIENTES */}
+            {/* BARRA FLOTANTE DE CAMBIOS PENDIENTES (snackbar de ancho completo) */}
             {hasUnsavedChanges && (
-                <div className="sticky bottom-6 z-20 flex justify-end mt-6">
-                    <div className="bg-gray-900 border-2 border-gray-800 text-white rounded-[4px] shadow-lg px-4 py-2.5 flex items-center gap-4">
+                <div className="fixed inset-x-0 bottom-0 z-20 p-3">
+                    <div className="bg-gray-900 border-2 border-gray-800 text-white rounded-[4px] shadow-lg p-3 flex flex-col gap-3">
                         <div className="flex items-center gap-2 text-amber-400">
-                            <AlertCircle size={16} />
+                            <AlertCircle size={16} className="shrink-0" />
                             <span className="text-xs text-gray-200 font-bold">
                                 Modificaciones sin guardar
                             </span>
@@ -2127,7 +2019,7 @@ export const AdminPricesView = () => {
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => setHasUnsavedChanges(false)}
-                                className="py-1 px-3 text-xs font-bold rounded-[4px] border border-gray-700 text-gray-300 hover:text-white hover:bg-gray-800 transition-colors cursor-pointer"
+                                className="flex-1 py-2 px-3 text-xs font-bold rounded-[4px] border border-gray-700 text-gray-300 cursor-pointer"
                             >
                                 Descartar
                             </button>
@@ -2136,7 +2028,7 @@ export const AdminPricesView = () => {
                                     setHasUnsavedChanges(false);
                                     alert("¡Cambios guardados exitosamente!");
                                 }}
-                                className="py-1 px-3 bg-[#0E5E6F] hover:bg-[#0a4754] text-white text-xs font-bold rounded-[4px] flex items-center gap-1 transition-all active:scale-95 cursor-pointer"
+                                className="flex-1 py-2 px-3 bg-[#0E5E6F] text-white text-xs font-bold rounded-[4px] flex items-center justify-center gap-1 transition-all active:scale-95 cursor-pointer"
                             >
                                 <Save size={13} /> Guardar cambios
                             </button>
@@ -2145,11 +2037,12 @@ export const AdminPricesView = () => {
                 </div>
             )}
 
-            {/* MODAL 1: EDITAR / CREAR PLAN */}
+            {/* MODAL 1: EDITAR / CREAR PLAN (bottom sheet) */}
             {isPlanModalOpen && editingPlan && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-                    <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xl w-full max-w-xl overflow-hidden text-left">
-                        <div className="flex justify-between items-center px-6 py-3.5 border-b-2 border-gray-100 bg-gray-50">
+                <div className="fixed inset-0 z-50 bg-black/40 flex items-end justify-center">
+                    <div className="bg-white border-t-2 border-gray-200 rounded-t-2xl shadow-xl w-full max-h-[88vh] flex flex-col overflow-hidden text-left animate-in slide-in-from-bottom duration-200">
+                        <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-1 shrink-0"></div>
+                        <div className="flex justify-between items-center px-4 py-3 border-b-2 border-gray-100 bg-gray-50 shrink-0">
                             <div className="flex items-center gap-2">
                                 <Layers className="text-[#0E5E6F]" size={18} />
                                 <h3 className="text-sm font-bold text-gray-900">
@@ -2160,7 +2053,7 @@ export const AdminPricesView = () => {
                             </div>
                             <button
                                 onClick={() => setIsPlanModalOpen(false)}
-                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                                className="p-1 text-gray-400 rounded-[4px] cursor-pointer"
                             >
                                 <X size={18} />
                             </button>
@@ -2171,9 +2064,9 @@ export const AdminPricesView = () => {
                                 e.preventDefault();
                                 handleSavePlan(editingPlan);
                             }}
-                            className="p-6 space-y-4"
+                            className="p-4 space-y-4 overflow-y-auto custom-scrollbar flex-1"
                         >
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 gap-4">
                                 <div>
                                     <label className="text-xs font-bold text-gray-700 block mb-1">
                                         Nombre del plan
@@ -2185,7 +2078,7 @@ export const AdminPricesView = () => {
                                         onChange={(e) =>
                                             setEditingPlan({ ...editingPlan, name: e.target.value })
                                         }
-                                        className="w-full px-3 py-1.5 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
                                     />
                                 </div>
 
@@ -2203,7 +2096,7 @@ export const AdminPricesView = () => {
                                                 price: Number(e.target.value),
                                             })
                                         }
-                                        className="w-full px-3 py-1.5 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs font-mono text-gray-800 font-bold"
+                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs font-mono text-gray-800 font-bold"
                                     />
                                 </div>
 
@@ -2219,7 +2112,7 @@ export const AdminPricesView = () => {
                                                 cycle: e.target.value as Plan["cycle"],
                                             })
                                         }
-                                        className="w-full px-3 py-1.5 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal bg-white"
+                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal bg-white"
                                     >
                                         <option value="Mensual">Mensual</option>
                                         <option value="Anual">Anual</option>
@@ -2241,11 +2134,11 @@ export const AdminPricesView = () => {
                                                 flights: e.target.value,
                                             })
                                         }
-                                        className="w-full px-3 py-1.5 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
                                     />
                                 </div>
 
-                                <div className="sm:col-span-2">
+                                <div>
                                     <label className="text-xs font-bold text-gray-700 block mb-1">
                                         Cobertura máxima (área)
                                     </label>
@@ -2256,12 +2149,12 @@ export const AdminPricesView = () => {
                                         onChange={(e) =>
                                             setEditingPlan({ ...editingPlan, area: e.target.value })
                                         }
-                                        className="w-full px-3 py-1.5 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
                                     />
                                 </div>
 
                                 {/* SWITCH DE ESTADO DENTRO DEL MODAL */}
-                                <div className="sm:col-span-2 pt-2">
+                                <div className="pt-2">
                                     <label className="flex items-center gap-2 cursor-pointer select-none">
                                         <input
                                             type="checkbox"
@@ -2281,17 +2174,17 @@ export const AdminPricesView = () => {
                                 </div>
                             </div>
 
-                            <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-100">
+                            <div className="flex items-center gap-2 pt-4 border-t border-gray-100">
                                 <button
                                     type="button"
                                     onClick={() => setIsPlanModalOpen(false)}
-                                    className="px-3 py-1.5 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-[4px] cursor-pointer"
+                                    className="flex-1 px-3 py-2.5 text-xs font-bold text-gray-600 border border-gray-200 rounded-[4px] cursor-pointer"
                                 >
                                     Cancelar
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-4 py-1.5 bg-[#0E5E6F] hover:bg-[#0a4754] text-white text-xs font-bold rounded-[4px] shadow-xs cursor-pointer"
+                                    className="flex-1 px-4 py-2.5 bg-[#0E5E6F] text-white text-xs font-bold rounded-[4px] shadow-xs cursor-pointer"
                                 >
                                     Guardar plan
                                 </button>
@@ -2301,11 +2194,12 @@ export const AdminPricesView = () => {
                 </div>
             )}
 
-            {/* MODAL 2: EDITAR / CREAR DRON */}
+            {/* MODAL 2: EDITAR / CREAR DRON (bottom sheet) */}
             {isDroneModalOpen && editingDrone && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-                    <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xl w-full max-w-xl overflow-hidden text-left">
-                        <div className="flex justify-between items-center px-6 py-3.5 border-b-2 border-gray-100 bg-gray-50">
+                <div className="fixed inset-0 z-50 bg-black/40 flex items-end justify-center">
+                    <div className="bg-white border-t-2 border-gray-200 rounded-t-2xl shadow-xl w-full max-h-[88vh] flex flex-col overflow-hidden text-left animate-in slide-in-from-bottom duration-200">
+                        <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-1 shrink-0"></div>
+                        <div className="flex justify-between items-center px-4 py-3 border-b-2 border-gray-100 bg-gray-50 shrink-0">
                             <div className="flex items-center gap-2">
                                 <Package className="text-[#0E5E6F]" size={18} />
                                 <h3 className="text-sm font-bold text-gray-900">
@@ -2316,7 +2210,7 @@ export const AdminPricesView = () => {
                             </div>
                             <button
                                 onClick={() => setIsDroneModalOpen(false)}
-                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                                className="p-1 text-gray-400 rounded-[4px] cursor-pointer"
                             >
                                 <X size={18} />
                             </button>
@@ -2327,9 +2221,9 @@ export const AdminPricesView = () => {
                                 e.preventDefault();
                                 handleSaveDrone(editingDrone);
                             }}
-                            className="p-6 space-y-4"
+                            className="p-4 space-y-4 overflow-y-auto custom-scrollbar flex-1"
                         >
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 gap-4">
                                 <div>
                                     <label className="text-xs font-bold text-gray-700 block mb-1">
                                         Nombre / Modelo
@@ -2341,7 +2235,7 @@ export const AdminPricesView = () => {
                                         onChange={(e) =>
                                             setEditingDrone({ ...editingDrone, name: e.target.value })
                                         }
-                                        className="w-full px-3 py-1.5 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
                                     />
                                 </div>
 
@@ -2356,7 +2250,7 @@ export const AdminPricesView = () => {
                                         onChange={(e) =>
                                             setEditingDrone({ ...editingDrone, model: e.target.value })
                                         }
-                                        className="w-full px-3 py-1.5 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
                                     />
                                 </div>
 
@@ -2374,7 +2268,7 @@ export const AdminPricesView = () => {
                                                 price: Number(e.target.value),
                                             })
                                         }
-                                        className="w-full px-3 py-1.5 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs font-mono text-gray-800 font-bold"
+                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs font-mono text-gray-800 font-bold"
                                     />
                                 </div>
 
@@ -2392,11 +2286,11 @@ export const AdminPricesView = () => {
                                                 stock: Number(e.target.value),
                                             })
                                         }
-                                        className="w-full px-3 py-1.5 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
                                     />
                                 </div>
 
-                                <div className="sm:col-span-2">
+                                <div>
                                     <label className="text-xs font-bold text-gray-700 block mb-1">
                                         Capacidad máxima de carga
                                     </label>
@@ -2410,16 +2304,16 @@ export const AdminPricesView = () => {
                                                 capacity: e.target.value,
                                             })
                                         }
-                                        className="w-full px-3 py-1.5 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
                                     />
                                 </div>
 
                                 {/* SECCIÓN SIMULADA PARA SUBIR IMAGEN */}
-                                <div className="sm:col-span-2">
+                                <div>
                                     <label className="text-xs font-bold text-gray-700 block mb-1">
                                         Imagen del dron
                                     </label>
-                                    <div className="border-2 border-dashed border-gray-300 hover:border-[#0E5E6F] rounded-[4px] p-4 text-center cursor-pointer transition-colors bg-gray-50 flex flex-col items-center gap-1.5">
+                                    <div className="border-2 border-dashed border-gray-300 rounded-[4px] p-4 text-center cursor-pointer transition-colors bg-gray-50 flex flex-col items-center gap-1.5">
                                         <UploadCloud size={24} className="text-gray-400" />
                                         <span className="text-xs font-bold text-[#0E5E6F]">
                                             Cargar imagen del dron
@@ -2431,17 +2325,17 @@ export const AdminPricesView = () => {
                                 </div>
                             </div>
 
-                            <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-100">
+                            <div className="flex items-center gap-2 pt-4 border-t border-gray-100">
                                 <button
                                     type="button"
                                     onClick={() => setIsDroneModalOpen(false)}
-                                    className="px-3 py-1.5 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-[4px] cursor-pointer"
+                                    className="flex-1 px-3 py-2.5 text-xs font-bold text-gray-600 border border-gray-200 rounded-[4px] cursor-pointer"
                                 >
                                     Cancelar
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-4 py-1.5 bg-[#0E5E6F] hover:bg-[#0a4754] text-white text-xs font-bold rounded-[4px] shadow-xs cursor-pointer"
+                                    className="flex-1 px-4 py-2.5 bg-[#0E5E6F] text-white text-xs font-bold rounded-[4px] shadow-xs cursor-pointer"
                                 >
                                     Guardar dron
                                 </button>
@@ -2451,10 +2345,11 @@ export const AdminPricesView = () => {
                 </div>
             )}
 
-            {/* MODAL 3: AGREGAR NUEVA ETIQUETA / TAG */}
+            {/* MODAL 3: AGREGAR NUEVA ETIQUETA / TAG (bottom sheet) */}
             {isTagModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-                    <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xl w-full max-w-sm overflow-hidden text-left">
+                <div className="fixed inset-0 z-50 bg-black/40 flex items-end justify-center">
+                    <div className="bg-white border-t-2 border-gray-200 rounded-t-2xl shadow-xl w-full overflow-hidden text-left animate-in slide-in-from-bottom duration-200">
+                        <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-1"></div>
                         <div className="flex justify-between items-center px-4 py-3 border-b-2 border-gray-100 bg-gray-50">
                             <div className="flex items-center gap-2">
                                 <TagIcon className="text-[#0E5E6F]" size={16} />
@@ -2464,7 +2359,7 @@ export const AdminPricesView = () => {
                             </div>
                             <button
                                 onClick={() => setIsTagModalOpen(false)}
-                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                                className="p-1 text-gray-400 rounded-[4px] cursor-pointer"
                             >
                                 <X size={16} />
                             </button>
@@ -2481,22 +2376,22 @@ export const AdminPricesView = () => {
                                     placeholder="Ej. Batería inteligente, IP67..."
                                     value={newTagInput}
                                     onChange={(e) => setNewTagInput(e.target.value)}
-                                    className="w-full px-3 py-1.5 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                    className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
                                     autoFocus
                                 />
                             </div>
 
-                            <div className="flex items-center justify-end gap-2 pt-2 border-t border-gray-100">
+                            <div className="flex items-center gap-2 pt-2 border-t border-gray-100">
                                 <button
                                     type="button"
                                     onClick={() => setIsTagModalOpen(false)}
-                                    className="px-3 py-1 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-[4px] cursor-pointer"
+                                    className="flex-1 px-3 py-2.5 text-xs font-bold text-gray-600 border border-gray-200 rounded-[4px] cursor-pointer"
                                 >
                                     Cancelar
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-3.5 py-1 bg-[#0E5E6F] hover:bg-[#0a4754] text-white text-xs font-bold rounded-[4px] shadow-xs cursor-pointer"
+                                    className="flex-1 px-3.5 py-2.5 bg-[#0E5E6F] text-white text-xs font-bold rounded-[4px] shadow-xs cursor-pointer"
                                 >
                                     Agregar etiqueta
                                 </button>
@@ -2628,6 +2523,10 @@ export const AdminHelpView = () => {
     const [inputText, setInputText] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
 
+    // Navegación móvil: en pantalla angosta solo se ve una vista a la vez
+    // 'lista' = listado de granjeros/pilotos, 'chat' = conversación activa
+    const [vistaMovil, setVistaMovil] = useState<'lista' | 'chat'>('lista');
+
     // Estados para el Modal de Ticket / Nota del Administrador
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
@@ -2691,25 +2590,26 @@ export const AdminHelpView = () => {
 
     return (
         <div className="w-full h-full min-h-0 flex flex-col bg-white overflow-hidden relative font-sans">
-            <div className="flex flex-col md:flex-row flex-1 h-full min-h-0 overflow-hidden">
+            <div className="flex flex-1 h-full min-h-0 overflow-hidden">
 
-                {/* ================= BARRA LATERAL (LISTA DE CLIENTES / GRANJEROS) ================= */}
-                <div className="w-full md:w-80 lg:w-96 flex flex-col border-r border-gray-200 bg-gray-50/60 h-full min-h-0 shrink-0">
+                {/* ================= BARRA LATERAL (LISTA DE CLIENTES / GRANJEROS) =================
+                     Vista completa en móvil; se oculta al entrar a una conversación */}
+                <div className={`w-full flex-col bg-gray-50/60 h-full min-h-0 shrink-0 ${vistaMovil === 'lista' ? 'flex' : 'hidden'}`}>
 
                     {/* TÍTULO Y BOTÓN DE REGISTRAR TICKET */}
-                    <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between shrink-0">
-                        <div>
-                            <h2 className="font-bold text-gray-900 text-lg leading-tight capitalize">Panel de Soporte</h2>
-                            <p className="text-xs text-gray-500">Atención a granjeros y pilotos</p>
+                    <div className="p-3 border-b border-gray-200 bg-white flex items-center justify-between gap-2 shrink-0">
+                        <div className="min-w-0">
+                            <h2 className="font-bold text-gray-900 text-base leading-tight capitalize truncate">Panel de Soporte</h2>
+                            <p className="text-[11px] text-gray-500 truncate">Atención a granjeros y pilotos</p>
                         </div>
 
                         {/* BOTÓN NUEVA NOTA / TICKET */}
                         <button
                             onClick={() => setIsModalOpen(true)}
-                            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white font-semibold text-xs rounded-md shadow-xs transition cursor-pointer"
+                            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white font-semibold text-xs rounded-md shadow-xs transition cursor-pointer shrink-0"
                         >
-                            <FileText size={15} />
-                            <span>Crear ticket</span>
+                            <FileText size={14} />
+                            <span>Ticket</span>
                         </button>
                     </div>
 
@@ -2741,6 +2641,7 @@ export const AdminHelpView = () => {
                                         setChats((prev) =>
                                             prev.map((c) => (c.id === chat.id ? { ...c, unreadCount: 0 } : c))
                                         );
+                                        setVistaMovil('chat');
                                     }}
                                     className={`w-full p-4 flex items-center gap-3 transition text-left cursor-pointer ${
                                         isSelected ? 'bg-white border-l-4 border-[#0E5E6F]' : 'hover:bg-gray-100/80'
@@ -2790,22 +2691,32 @@ export const AdminHelpView = () => {
                     </div>
                 </div>
 
-                {/* ================= ÁREA DE CONVERSACIÓN ================= */}
-                <div className="flex-1 flex flex-col h-full min-h-0 bg-[#f8fafc] overflow-hidden">
+                {/* ================= ÁREA DE CONVERSACIÓN =================
+                     Vista completa en móvil; solo visible al seleccionar un chat */}
+                <div className={`w-full flex-col h-full min-h-0 bg-[#f8fafc] overflow-hidden ${vistaMovil === 'chat' ? 'flex' : 'hidden'}`}>
 
                     {/* HEADER DEL CHAT */}
-                    <div className="p-3 sm:p-4 bg-white border-b border-gray-200 flex items-center justify-between gap-2 shrink-0 min-w-0">
-                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div className="p-3 bg-white border-b border-gray-200 flex items-center justify-between gap-2 shrink-0 min-w-0">
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                            {/* BOTÓN VOLVER A LA LISTA */}
+                            <button
+                                onClick={() => setVistaMovil('lista')}
+                                className="p-1.5 -ml-1 text-gray-500 hover:text-[#0E5E6F] hover:bg-gray-100 rounded-md transition shrink-0 cursor-pointer"
+                                aria-label="Volver a la lista"
+                            >
+                                <ChevronLeft size={22} />
+                            </button>
+
                             <div className="relative shrink-0">
                                 <img
                                     src={activeChat.avatar}
                                     alt={activeChat.name}
-                                    className="w-12 h-12 rounded-md object-cover"
+                                    className="w-10 h-10 rounded-md object-cover"
                                 />
                             </div>
 
                             <div className="min-w-0 flex-1 flex flex-col justify-center">
-                                <h2 className="font-bold text-gray-900 text-sm sm:text-base leading-tight truncate">
+                                <h2 className="font-bold text-gray-900 text-sm leading-tight truncate">
                                     {activeChat.name}
                                 </h2>
 
@@ -2832,19 +2743,12 @@ export const AdminHelpView = () => {
                         </div>
 
                         {/* BOTONES DE ACCIÓN */}
-                        <div className="flex items-center gap-1 text-gray-500 shrink-0">
+                        <div className="flex items-center gap-0.5 text-gray-500 shrink-0">
                             <button
                                 className="p-2 hover:bg-gray-100 text-gray-600 hover:text-[#0E5E6F] rounded-md transition"
                                 aria-label="Llamada de voz"
                             >
                                 <Phone size={18} />
-                            </button>
-
-                            <button
-                                className="p-2 hover:bg-gray-100 text-gray-600 hover:text-[#0E5E6F] rounded-md transition"
-                                aria-label="Videollamada"
-                            >
-                                <Video size={18} />
                             </button>
 
                             <button
@@ -2857,7 +2761,7 @@ export const AdminHelpView = () => {
                     </div>
 
                     {/* HISTORIAL DE MENSAJES */}
-                    <div className="flex-1 overflow-y-auto min-h-0 p-4 space-y-3 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px]">
+                    <div className="flex-1 overflow-y-auto min-h-0 p-3 space-y-3 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px]">
                         {activeChat.messages.map((msg) => {
                             const isAdminMsg = msg.sender === 'other';
 
@@ -2875,7 +2779,7 @@ export const AdminHelpView = () => {
                                     )}
 
                                     <div
-                                        className={`max-w-[75%] sm:max-w-[65%] px-4 py-2.5 rounded-md text-sm ${
+                                        className={`max-w-[80%] px-3.5 py-2.5 rounded-md text-sm ${
                                             isAdminMsg
                                                 ? 'bg-[#0E5E6F] text-white'
                                                 : 'bg-white text-gray-800 border border-gray-100 shadow-xs'
@@ -2942,30 +2846,35 @@ export const AdminHelpView = () => {
 
             {/* ================= MODAL DE REGISTRO DE TICKET ADMIN ================= */}
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in">
-                    <div className="bg-white w-full max-w-md rounded-md shadow-2xl overflow-hidden border border-gray-100 flex flex-col">
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-end justify-center z-50 animate-fade-in">
+                    <div className="bg-white w-full rounded-t-2xl shadow-2xl overflow-hidden border-t border-gray-100 flex flex-col max-h-[88%]">
+
+                        {/* Manija del bottom sheet */}
+                        <div className="flex justify-center pt-2.5 pb-1 shrink-0">
+                            <span className="w-10 h-1.5 bg-gray-300 rounded-full"></span>
+                        </div>
 
                         {/* Header del Modal */}
-                        <div className="p-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-md">
+                        <div className="p-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between shrink-0">
+                            <div className="flex items-center gap-2 min-w-0">
+                                <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-md shrink-0">
                                     <FileText size={20} />
                                 </div>
-                                <div>
-                                    <h3 className="font-bold text-gray-900 text-base">Registrar Ticket Interno</h3>
-                                    <p className="text-xs text-gray-500">Documentar caso de asistencia</p>
+                                <div className="min-w-0">
+                                    <h3 className="font-bold text-gray-900 text-base truncate">Registrar Ticket Interno</h3>
+                                    <p className="text-xs text-gray-500 truncate">Documentar caso de asistencia</p>
                                 </div>
                             </div>
                             <button
                                 onClick={closeModal}
-                                className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-md transition cursor-pointer"
+                                className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-md transition cursor-pointer shrink-0"
                             >
                                 <X size={20} />
                             </button>
                         </div>
 
                         {/* Contenido del Modal */}
-                        <div className="p-5">
+                        <div className="p-5 overflow-y-auto">
                             {!isSubmitted ? (
                                 <form onSubmit={handleTicketSubmit} className="space-y-4">
                                     <div>
@@ -3075,152 +2984,6 @@ export const AdminHelpView = () => {
     );
 };
 
-// 4. Editor de mapas del Admin
-export const AdminConfigMapView = ({ serviceType, onNext, onBack }: any) => (
-    <div className="p-10 max-w-6xl mx-auto">
-        <button
-            onClick={onBack}
-            className="flex items-center gap-2 text-gray-500 hover:text-gray-800 mb-8 font-bold uppercase text-sm tracking-wider transition-colors"
-            style={{ fontFamily: "'Instrument Sans', sans-serif" }}
-        >
-            <ChevronLeft size={16} /> Volver
-        </button>
-        <Title className="text-3xl mb-8 pb-4 border-b-2 border-gray-200">
-            Configuración: {serviceType}
-        </Title>
-        <div className="flex gap-8">
-            <div className="flex-1 flex flex-col gap-8">
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-                    <Title
-                        as="h3"
-                        className="text-lg mb-6 flex items-center gap-3 text-[#0E5E6F]"
-                    >
-                        <MapPin size={20} /> 1. Delimitación de Terreno
-                    </Title>
-                    <PlaceholderImage
-                        text="Mapa Interactivo - Dibujar Área (Ej: 12 Hectáreas)"
-                        className="h-72 w-full mb-4 rounded-lg"
-                    />
-                    <Text className="text-sm text-gray-500">
-                        Seleccionar el polígono en el mapa. Las zonas restringidas se
-                        evitarán automáticamente.
-                    </Text>
-                </div>
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-                    <Title
-                        as="h3"
-                        className="text-lg mb-6 flex items-center gap-3 text-[#0E5E6F]"
-                    >
-                        <Info size={20} /> 2. Detalles del Servicio
-                    </Title>
-                    {serviceType === "busqueda" ? (
-                        <div className="grid grid-cols-2 gap-6">
-                            <WireframeInput
-                                label="Tipo de Animal"
-                                placeholder="Ej: Ganado, Perro..."
-                            />
-                            <div
-                                className="flex flex-col mb-4 w-full"
-                                style={{ fontFamily: "'Instrument Sans', sans-serif" }}
-                            >
-                                <label className="mb-1 text-sm font-bold text-gray-600 uppercase tracking-tight">
-                                    Cámara Térmica
-                                </label>
-                                <select className="p-3 border-2 border-gray-300 bg-white text-gray-800 focus:border-[#0E5E6F] outline-none">
-                                    <option>Sí, requerida</option>
-                                    <option>No necesaria</option>
-                                </select>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-2 gap-6">
-                            <WireframeInput
-                                label="Tipo de Cultivo"
-                                placeholder="Ej: Maíz, Frijol..."
-                            />
-                            <WireframeInput
-                                label="Líquido (Agua/Pesticida)"
-                                placeholder="Especificar..."
-                            />
-                            <WireframeInput
-                                label="Densidad Requerida"
-                                placeholder="L/Hectárea"
-                            />
-                        </div>
-                    )}
-                </div>
-            </div>
-            <div className="w-[400px] flex flex-col gap-8">
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 flex-1">
-                    <Title
-                        as="h3"
-                        className="text-lg mb-6 flex items-center gap-3 text-[#0E5E6F]"
-                    >
-                        <Crosshair size={20} /> 3. Selección de Dron y Piloto
-                    </Title>
-                    <div className="border-2 border-[#0E5E6F] rounded-xl p-5 mb-4 relative overflow-hidden bg-gray-50">
-                        <div
-                            className="absolute top-0 right-0 bg-[#0E5E6F] text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest rounded-bl-lg"
-                            style={{ fontFamily: "'Instrument Sans', sans-serif" }}
-                        >
-                            Recomendado
-                        </div>
-                        <div className="flex items-center gap-4 mb-4">
-                            <div className="w-14 h-14 bg-gray-200 border-2 border-[#0E5E6F] rounded-full flex justify-center items-center">
-                                <User size={24} className="text-[#0E5E6F]" />
-                            </div>
-                            <div>
-                                <Text className="font-bold text-lg leading-tight">
-                                    Javier Reyes
-                                </Text>
-                                <Text className="text-sm text-gray-500">Piloto de Drones</Text>
-                            </div>
-                        </div>
-                        <div
-                            className="bg-white border border-gray-200 rounded-lg p-3 text-sm space-y-2"
-                            style={{ fontFamily: "'Instrument Sans', sans-serif" }}
-                        >
-                            <div className="flex justify-between">
-                                <span className="text-gray-500 font-bold">Dron:</span>
-                                <span>Agras T40</span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span className="text-gray-500 font-bold">Capacidad:</span>
-                                <span>40L / 50kg</span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span className="text-gray-500 font-bold">Batería:</span>
-                                <span className="text-green-600 font-bold">100%</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="border border-gray-200 rounded-xl p-5 opacity-60 grayscale cursor-not-allowed">
-                        <div className="flex items-center gap-4">
-                            <div className="w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center">
-                                <User size={24} className="text-gray-400" />
-                            </div>
-                            <div>
-                                <Text className="font-bold text-lg leading-tight text-gray-600">
-                                    Piloto Genérico
-                                </Text>
-                                <Text className="text-sm text-gray-500">
-                                    Ocupado en otro vuelo
-                                </Text>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <WireframeButton
-                    primary
-                    onClick={onNext}
-                    className="w-full text-lg rounded-xl shadow-md py-4"
-                >
-                    Revisar Cotización
-                </WireframeButton>
-            </div>
-        </div>
-    </div>
-);
 
 export const AdminConfigCargoView = ({ onNext, onBack }: any) => (
     <div className="p-10 max-w-6xl mx-auto">
@@ -3698,25 +3461,25 @@ export const AdminHistoryView = () => {
   };
 
   return (
-    <div className="w-full h-full bg-[#f8fafc] overflow-y-auto p-3 sm:p-5 space-y-4 font-['Roboto',sans-serif]">
+    <div className="w-full h-full bg-[#f8fafc] overflow-y-auto p-3 space-y-3 font-['Roboto',sans-serif]">
 
       {/* ================= ENCABEZADO Y RESUMEN ================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 sm:p-5 rounded-[4px] border border-gray-200 shadow-xs">
+      <div className="flex flex-col gap-3 bg-white p-4 rounded-[4px] border border-gray-200 shadow-xs">
         <div>
-          <h1 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
-            Panel de Control y Auditoría Administrativa
-            <span className="text-xs bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-[4px] border border-gray-200">
+          <h1 className="text-base font-bold text-gray-900 flex items-center gap-2 flex-wrap">
+            Panel de Auditoría
+            <span className="text-[11px] bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-[4px] border border-gray-200">
               {logs.length} registros
             </span>
           </h1>
-          <p className="text-xs text-gray-500 mt-0.5">
-            Registro detallado de cambios de configuración, gestión de accesos y auditorías de seguridad del sistema.
+          <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+            Cambios de configuración, gestión de accesos y auditorías de seguridad del sistema.
           </p>
         </div>
 
         <button
           onClick={() => { }}
-          className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-semibold rounded-[4px] transition cursor-pointer shadow-xs"
+          className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-semibold rounded-[4px] transition cursor-pointer shadow-xs"
         >
           <Download size={14} />
           <span>Exportar bitácora (CSV)</span>
@@ -3724,199 +3487,180 @@ export const AdminHistoryView = () => {
       </div>
 
       {/* ================= TARJETAS DE KPIS RÁPIDOS ================= */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
-        <div className="bg-white p-3.5 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
-          <div>
-            <p className="text-[11px] text-gray-500 font-medium">Acciones Exitosas</p>
-            <h3 className="text-xl font-bold text-gray-900 mt-0.5">{totalAffected} <span className="text-xs font-normal text-gray-500">acciones</span></h3>
+      <div className="grid grid-cols-2 gap-2.5">
+        <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
+          <div className="min-w-0">
+            <p className="text-[11px] text-gray-500 font-medium truncate">Acciones Exitosas</p>
+            <h3 className="text-lg font-bold text-gray-900 mt-0.5">{totalAffected} <span className="text-xs font-normal text-gray-500">acc.</span></h3>
           </div>
-          <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
-            <CheckCircle2 size={18} />
-          </div>
-        </div>
-
-        <div className="bg-white p-3.5 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
-          <div>
-            <p className="text-[11px] text-gray-500 font-medium">Tiempo de Operación</p>
-            <h3 className="text-xl font-bold text-gray-900 mt-0.5">{totalHours} <span className="text-xs font-normal text-gray-500">hrs</span></h3>
-          </div>
-          <div className="p-2.5 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0">
-            <Clock size={18} />
+          <div className="p-2 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
+            <CheckCircle2 size={16} />
           </div>
         </div>
 
-        <div className="bg-white p-3.5 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
-          <div>
-            <p className="text-[11px] text-gray-500 font-medium">Tasa de Efectividad</p>
-            <h3 className="text-xl font-bold text-emerald-700 mt-0.5">{successRate}%</h3>
+        <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
+          <div className="min-w-0">
+            <p className="text-[11px] text-gray-500 font-medium truncate">Tiempo Operado</p>
+            <h3 className="text-lg font-bold text-gray-900 mt-0.5">{totalHours} <span className="text-xs font-normal text-gray-500">hrs</span></h3>
           </div>
-          <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
-            <Compass size={18} />
+          <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0">
+            <Clock size={16} />
           </div>
         </div>
 
-        <div className="bg-white p-3.5 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
-          <div>
-            <p className="text-[11px] text-gray-500 font-medium">Nivel de Alerta Global</p>
-            <h3 className="text-xl font-bold text-amber-700 mt-0.5">Controlado</h3>
+        <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
+          <div className="min-w-0">
+            <p className="text-[11px] text-gray-500 font-medium truncate">Tasa de Efectividad</p>
+            <h3 className="text-lg font-bold text-emerald-700 mt-0.5">{successRate}%</h3>
           </div>
-          <div className="p-2.5 bg-amber-50 text-amber-600 rounded-[4px] shrink-0">
-            <ShieldAlert size={18} />
+          <div className="p-2 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
+            <Compass size={16} />
+          </div>
+        </div>
+
+        <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
+          <div className="min-w-0">
+            <p className="text-[11px] text-gray-500 font-medium truncate">Alerta Global</p>
+            <h3 className="text-lg font-bold text-amber-700 mt-0.5">Controlado</h3>
+          </div>
+          <div className="p-2 bg-amber-50 text-amber-600 rounded-[4px] shrink-0">
+            <ShieldAlert size={16} />
           </div>
         </div>
       </div>
 
       {/* ================= FILTROS Y BÚSQUEDA ================= */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs">
-        <div className="relative flex-1 max-w-xs">
+      <div className="flex flex-col gap-2.5 bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs">
+        <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={15} />
           <input
             type="text"
-            placeholder="Buscar por ID, acción, módulo o responsable..."
+            placeholder="Buscar por ID, acción, módulo..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
+            className="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
           />
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 text-xs">
+        <div className="grid grid-cols-2 gap-2 text-xs">
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-[4px] text-xs text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
+            className="w-full px-2.5 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
           >
             <option value="all">Todas las categorías</option>
             <option value="user_management">Gestión de usuarios</option>
-            <option value="system_config">Configuración del sistema</option>
+            <option value="system_config">Config. del sistema</option>
             <option value="audit_security">Auditoría de seguridad</option>
           </select>
 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-[4px] text-xs text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
+            className="w-full px-2.5 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
           >
             <option value="all">Todos los estados</option>
             <option value="completed">Completados</option>
-            <option value="interrupted">Pausados / incompletos</option>
+            <option value="interrupted">Pausados</option>
             <option value="failed">Abortados</option>
           </select>
         </div>
       </div>
 
-      {/* ================= TABLA DE DATOS ================= */}
-      <div className="bg-white rounded-[4px] border border-gray-200 shadow-xs overflow-hidden w-full">
-        <table className="w-full table-fixed text-left border-collapse">
-          <thead>
-            <tr className="bg-gray-50 border-b border-gray-200 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-              <th className="py-2.5 px-3 w-[20%] sm:w-[16%]">id / fecha</th>
-              <th className="py-2.5 px-2 w-[26%] sm:w-[22%]">módulo / tipo</th>
-              <th className="py-2.5 px-2 hidden sm:table-cell w-[18%]">ubicación / responsable</th>
-              <th className="py-2.5 px-2 w-[16%] sm:w-[12%] text-center">duración / impacto</th>
-              <th className="py-2.5 px-2 w-[16%] sm:w-[12%] text-center">estado</th>
-              <th className="py-2.5 px-2 w-[22%] sm:w-[20%] text-center">ver</th>
-            </tr>
-          </thead>
+      {/* ================= LISTA DE REGISTROS (tarjetas, reemplaza la tabla de escritorio) ================= */}
+      <div className="bg-white rounded-[4px] border border-gray-200 shadow-xs overflow-hidden w-full divide-y divide-gray-100">
+        {filteredLogs.length > 0 ? (
+          filteredLogs.map((log) => (
+            <div
+              key={log.id}
+              onClick={() => setSelectedLog(log)}
+              className="p-3.5 active:bg-gray-50 hover:bg-gray-50/70 transition cursor-pointer"
+            >
+              <div className="flex items-start justify-between gap-2 mb-2">
+                <div className="min-w-0">
+                  <div className="font-bold text-gray-900 text-xs">{log.id}</div>
+                  <div className="text-[10px] text-gray-400 font-medium flex items-center gap-1 mt-0.5">
+                    <Calendar size={10} />
+                    {log.date}
+                  </div>
+                </div>
+                {getStatusBadge(log.status)}
+              </div>
 
-          <tbody className="divide-y divide-gray-100 text-xs">
-            {filteredLogs.length > 0 ? (
-              filteredLogs.map((log) => (
-                <tr
-                  key={log.id}
-                  className="hover:bg-gray-50/70 transition cursor-pointer"
+              <div className="font-semibold text-gray-800 truncate text-xs">
+                {log.targetModule}
+              </div>
+              <div className="mt-1">{getTypeBadge(log.type)}</div>
+
+              <div className="flex items-center justify-between gap-2 pt-2 mt-2 border-t border-gray-100">
+                <div className="min-w-0 flex-1 space-y-0.5">
+                  <div className="text-[10px] text-gray-500 font-medium flex items-center gap-1 truncate">
+                    <MapPin size={10} className="text-gray-400 shrink-0" />
+                    <span className="truncate">{log.terminalIp}</span>
+                  </div>
+                  <div className="text-[10px] text-gray-400 flex items-center gap-1 truncate">
+                    <User size={10} className="shrink-0" />
+                    <span className="truncate">{log.responsible}</span>
+                  </div>
+                </div>
+
+                <div className="text-right shrink-0">
+                  <div className="font-bold text-gray-900 text-xs">{log.duration}</div>
+                  <div className="text-[10px] text-gray-400 font-medium">{log.affectedCount}</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1.5 mt-2.5" onClick={(e) => e.stopPropagation()}>
+                <button
                   onClick={() => setSelectedLog(log)}
+                  className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-medium rounded-[4px] transition cursor-pointer"
                 >
-                  <td className="py-2.5 px-3">
-                    <div className="font-bold text-gray-900 text-xs">{log.id}</div>
-                    <div className="text-[10px] text-gray-400 font-medium flex items-center gap-1 mt-0.5">
-                      <Calendar size={10} />
-                      {log.date}
-                    </div>
-                  </td>
+                  <Eye size={13} className="text-[#0E5E6F]" />
+                  <span>Ver detalles</span>
+                </button>
 
-                  <td className="py-2.5 px-2 truncate">
-                    <div className="font-semibold text-gray-800 truncate text-xs">
-                      {log.targetModule}
-                    </div>
-                    <div className="mt-0.5">{getTypeBadge(log.type)}</div>
-                  </td>
+                <button
+                  onClick={() => { }}
+                  className="flex items-center justify-center gap-1 px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-[11px] font-medium rounded-[4px] transition cursor-pointer shadow-xs shrink-0"
+                  title="Descargar reporte PDF"
+                >
+                  <Download size={13} />
+                  <span>PDF</span>
+                </button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="py-8 text-center text-gray-400 text-xs px-4">
+            No se encontraron registros administrativos con los filtros seleccionados.
+          </div>
+        )}
 
-                  <td className="py-2.5 px-2 hidden sm:table-cell truncate">
-                    <div className="text-gray-700 font-medium truncate flex items-center gap-1">
-                      <MapPin size={11} className="text-gray-400 shrink-0" />
-                      <span className="truncate">{log.terminalIp}</span>
-                    </div>
-                    <div className="text-[10px] text-gray-400 truncate flex items-center gap-1 mt-0.5">
-                      <User size={10} />
-                      <span className="truncate">{log.responsible}</span>
-                    </div>
-                  </td>
-
-                  <td className="py-2.5 px-2 text-center">
-                    <div className="font-bold text-gray-900 text-xs">{log.duration}</div>
-                    <div className="text-[10px] text-gray-400 font-medium flex items-center justify-center gap-0.5 mt-0.5">
-                      <Clock size={10} />
-                      {log.affectedCount}
-                    </div>
-                  </td>
-
-                  <td className="py-2.5 px-2 text-center">
-                    {getStatusBadge(log.status)}
-                  </td>
-
-                  <td className="py-2.5 px-2 text-center">
-                    <div className="flex items-center justify-center gap-1.5" onClick={(e) => e.stopPropagation()}>
-                      <button
-                        onClick={() => setSelectedLog(log)}
-                        className="flex items-center gap-1 px-2 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-medium rounded-[4px] transition cursor-pointer"
-                        title="Ver detalles"
-                      >
-                        <Eye size={13} className="text-[#0E5E6F]" />
-                        <span>Ver</span>
-                      </button>
-
-                      <button
-                        onClick={() => { }}
-                        className="flex items-center gap-1 px-2 py-1 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-[11px] font-medium rounded-[4px] transition cursor-pointer shadow-xs"
-                        title="Descargar reporte PDF"
-                      >
-                        <Download size={13} />
-                        <span>PDF</span>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={6} className="py-8 text-center text-gray-400 text-xs">
-                  No se encontraron registros administrativos con los filtros seleccionados.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-
-        <div className="p-3 px-4 bg-gray-50/80 border-t border-gray-200 text-[11px] text-gray-500 flex justify-between items-center">
-          <span>Mostrando {filteredLogs.length} de {logs.length} registros</span>
+        <div className="p-3 px-4 bg-gray-50/80 border-t border-gray-200 text-[11px] text-gray-500 text-center">
+          Mostrando {filteredLogs.length} de {logs.length} registros
         </div>
       </div>
 
-      {/* ================= MODAL DETALLADO DE ACCIÓN ================= */}
+      {/* ================= BOTTOM SHEET DETALLADO DE ACCIÓN ================= */}
       {selectedLog && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50 animate-fade-in">
-          <div className="bg-white w-full max-w-xl rounded-[4px] shadow-2xl overflow-hidden border border-gray-200 flex flex-col max-h-[90vh]">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-end justify-center z-50 animate-fade-in">
+          <div className="bg-white w-full rounded-t-2xl shadow-2xl overflow-hidden border-t border-gray-200 flex flex-col max-h-[88%]">
 
-            <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 bg-[#0E5E6F] text-white rounded-[4px] font-bold text-xs">
+            {/* Manija del bottom sheet */}
+            <div className="flex justify-center pt-2.5 pb-1 shrink-0">
+              <span className="w-10 h-1.5 bg-gray-300 rounded-full"></span>
+            </div>
+
+            <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between shrink-0 gap-2">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="p-2 bg-[#0E5E6F] text-white rounded-[4px] font-bold text-xs shrink-0">
                   {selectedLog.id}
                 </div>
-                <div>
-                  <h3 className="font-bold text-gray-900 text-sm leading-tight">
+                <div className="min-w-0">
+                  <h3 className="font-bold text-gray-900 text-sm leading-tight truncate">
                     {selectedLog.typeName}
                   </h3>
-                  <p className="text-[11px] text-gray-500">
+                  <p className="text-[11px] text-gray-500 truncate">
                     {selectedLog.targetModule} • {selectedLog.date}
                   </p>
                 </div>
@@ -3924,13 +3668,13 @@ export const AdminHistoryView = () => {
 
               <button
                 onClick={() => setSelectedLog(null)}
-                className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-[4px] transition cursor-pointer"
+                className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-[4px] transition cursor-pointer shrink-0"
               >
                 <X size={18} />
               </button>
             </div>
 
-            <div className="p-4 sm:p-5 overflow-y-auto space-y-4 text-xs">
+            <div className="p-4 overflow-y-auto space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-3 p-3 bg-gray-50 rounded-[4px] border border-gray-200">
                 <div>
                   <span className="text-gray-400 text-[10px] font-semibold uppercase block">Terminal IP</span>
@@ -3996,18 +3740,18 @@ export const AdminHistoryView = () => {
               </div>
             </div>
 
-            <div className="p-3 px-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between shrink-0">
+            <div className="p-3 px-4 bg-gray-50 border-t border-gray-200 flex flex-col gap-2 shrink-0">
               <button
                 onClick={() => { }}
-                className="flex items-center gap-1 text-[11px] font-bold text-[#0E5E6F] hover:underline cursor-pointer"
+                className="flex items-center justify-center gap-1 text-[11px] font-bold text-[#0E5E6F] hover:underline cursor-pointer"
               >
                 <FileText size={13} />
-                <span>Descargar reporte de auditoría JSON</span>
+                <span>Descargar reporte de auditoría (JSON)</span>
               </button>
 
               <button
                 onClick={() => setSelectedLog(null)}
-                className="px-3.5 py-1.5 bg-[#0E5E6F] text-white font-semibold text-xs rounded-[4px] hover:bg-[#0A4754] transition cursor-pointer"
+                className="w-full px-3.5 py-2 bg-[#0E5E6F] text-white font-semibold text-xs rounded-[4px] hover:bg-[#0A4754] transition cursor-pointer"
               >
                 Cerrar bitácora
               </button>
@@ -4034,9 +3778,9 @@ export const AdminMapsView = () => {
     const [showHeatmap, setShowHeatmap] = useState(false);
     const [showBoundaries, setShowBoundaries] = useState(true);
 
-    // Paneles colapsados por defecto
-    const [isLeftCollapsed, setIsLeftCollapsed] = useState(false);
-    const [isRightCollapsed, setIsRightCollapsed] = useState(false);
+    // Panel móvil activo: en vez de colapsar/expandir 2 columnas laterales,
+    // en móvil solo un panel se muestra a la vez como bottom sheet sobre el mapa
+    const [activePanel, setActivePanel] = useState<"capas" | "dron" | null>(null);
 
     // Parámetros de la Misión
     const [altitude, setAltitude] = useState(45);
@@ -4080,9 +3824,9 @@ export const AdminMapsView = () => {
       `}</style>
 
             {/* BARRA SUPERIOR DE COMANDO */}
-            <header className="bg-gray-50 border-b-2 border-gray-200 px-4 flex items-center justify-between shrink-0 h-12 z-30 w-full">
-                <div className="flex items-center gap-2">
-                    <div className="p-1 bg-[#0E5E6F] text-white rounded-[4px] shadow-xs">
+            <header className="bg-gray-50 border-b-2 border-gray-200 px-3 flex items-center justify-between shrink-0 h-12 z-30 w-full">
+                <div className="flex items-center gap-2 min-w-0">
+                    <div className="p-1 bg-[#0E5E6F] text-white rounded-[4px] shadow-xs shrink-0">
                         <svg
                             className="w-4 h-4"
                             fill="none"
@@ -4096,23 +3840,30 @@ export const AdminMapsView = () => {
                             />
                         </svg>
                     </div>
-                    <div className="text-left">
+                    <div className="text-left min-w-0">
                         <div className="flex items-center gap-1.5">
-                            <h1 className="text-xs sm:text-sm font-bold text-gray-900 tracking-tight">
-                                Edición y Aprobación de Mapas
+                            <h1 className="text-xs font-bold text-gray-900 tracking-tight truncate">
+                                Edición de Mapas
                             </h1>
-                            <span className="text-[8px] font-bold tracking-wider px-1.5 py-0.2 rounded-[4px] border border-[#0E5E6F]/30 bg-[#0E5E6F]/10 text-[#0E5E6F]">
+                            <span className="text-[8px] font-bold tracking-wider px-1.5 py-0.2 rounded-[4px] border border-[#0E5E6F]/30 bg-[#0E5E6F]/10 text-[#0E5E6F] shrink-0">
                                 Admin
                             </span>
                         </div>
-                        <p className="text-[10px] text-gray-500 font-medium leading-none">
-                            Zonas y parámetros de vuelo.
-                        </p>
+                        <button
+                            onClick={handleOpenIdModal}
+                            className="text-[10px] text-gray-500 font-medium leading-none truncate hover:text-[#0E5E6F] transition-colors cursor-pointer text-left"
+                            title="Cambiar ID de misión"
+                        >
+                            #{mappingId}
+                        </button>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-1.5">
-                    <button className="py-1 px-2.5 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] text-[11px] flex items-center gap-1 transition-colors active:scale-95 shadow-xs cursor-pointer">
+                <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                        className="p-1.5 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] flex items-center justify-center transition-colors active:scale-95 shadow-xs cursor-pointer"
+                        title="Borrar selección"
+                    >
                         <svg
                             className="w-3.5 h-3.5 text-rose-600"
                             fill="none"
@@ -4126,9 +3877,8 @@ export const AdminMapsView = () => {
                                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                             />
                         </svg>
-                        <span>Borrar selección</span>
                     </button>
-                    <button className="py-1 px-3 bg-[#0E5E6F] border-2 border-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold rounded-[4px] text-[11px] flex items-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer">
+                    <button className="py-1 px-2.5 bg-[#0E5E6F] border-2 border-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold rounded-[4px] text-[11px] flex items-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer">
                         <svg
                             className="w-3.5 h-3.5"
                             fill="none"
@@ -4142,284 +3892,17 @@ export const AdminMapsView = () => {
                                 d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
                             />
                         </svg>
-                        <span>Guardar mapa</span>
+                        <span>Guardar</span>
                     </button>
                 </div>
             </header>
 
-            {/* ÁREA PRINCIPAL DEL EDITOR */}
-            <main className="flex-1 flex overflow-hidden relative min-h-0 w-full">
-                {/* PANEL IZQUIERDO */}
-                <aside
-                    className={`bg-white border-r-2 border-gray-200 flex flex-col shrink-0 transition-all duration-300 relative z-20 h-full overflow-visible ${isLeftCollapsed ? "w-12" : "w-56"
-                        }`}
-                >
-                    {/* Botón Flotante para Abrir/Cerrar */}
-                    <button
-                        onClick={() => setIsLeftCollapsed(!isLeftCollapsed)}
-                        className="absolute -right-3.5 top-3 bg-white border-2 border-gray-300 hover:border-[#0E5E6F] text-gray-700 hover:text-[#0E5E6F] rounded-full p-1 z-40 shadow-lg active:scale-95 cursor-pointer transition-all"
-                        title={isLeftCollapsed ? "Expandir menú" : "Colapsar menú"}
-                    >
-                        <svg
-                            className={`w-3.5 h-3.5 transition-transform duration-300 ${isLeftCollapsed ? "rotate-180" : ""}`}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="3"
-                                d="M15 19l-7-7 7-7"
-                            />
-                        </svg>
-                    </button>
-
-                    {!isLeftCollapsed ? (
-                        <div className="p-2.5 flex flex-col gap-2.5 overflow-y-auto no-scrollbar text-left h-full max-h-full">
-                            {/* SECCIÓN EDICIÓN ACTIVA */}
-                            <div 
-                                onClick={handleOpenIdModal}
-                                className="p-2 bg-gray-50 hover:bg-[#0E5E6F]/5 border-2 border-gray-200 hover:border-[#0E5E6F] rounded-[4px] shrink-0 cursor-pointer transition-all flex items-center justify-between group"
-                                title="Hacer clic para cambiar ID de misión"
-                            >
-                                <div>
-                                    <span className="text-[9px] font-bold tracking-wider text-gray-400 block">
-                                        Edición activa
-                                    </span>
-                                    <span className="text-[11px] font-bold text-gray-800 block mt-0.5 group-hover:text-[#0E5E6F]">
-                                        ID: #{mappingId}
-                                    </span>
-                                </div>
-                                <svg
-                                    className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#0E5E6F] transition-colors shrink-0"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                                    />
-                                </svg>
-                            </div>
-
-                            <div className="shrink-0">
-                                <h2 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1 uppercase">
-                                    Herramientas De Dibujo
-                                </h2>
-                                <div className="space-y-1">
-                                    <button
-                                        onClick={() => setSelectedTool("polygon")}
-                                        className={`w-full flex items-center justify-between p-1.5 rounded-[4px] border-2 text-[11px] font-bold transition-all cursor-pointer ${selectedTool === "polygon"
-                                                ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
-                                                : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
-                                            }`}
-                                    >
-                                        <div className="flex items-center gap-1.5">
-                                            <div className="w-3 h-3 border-2 border-current rounded-xs" />
-                                            <span>Pentágono</span>
-                                        </div>
-                                        {selectedTool === "polygon" && (
-                                            <span className="text-[8px] font-bold tracking-wider bg-[#0E5E6F] text-white px-1.5 py-0.2 rounded-[4px]">
-                                                Activo
-                                            </span>
-                                        )}
-                                    </button>
-
-                                    <button
-                                        onClick={() => setSelectedTool("octagon")}
-                                        className={`w-full flex items-center justify-between p-1.5 rounded-[4px] border-2 text-[11px] font-bold transition-all cursor-pointer ${selectedTool === "octagon"
-                                                ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
-                                                : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
-                                            }`}
-                                    >
-                                        <div className="flex items-center gap-1.5">
-                                            <div className="w-3 h-3 border-2 border-current rounded-full" />
-                                            <span>Octágono</span>
-                                        </div>
-                                        {selectedTool === "octagon" && (
-                                            <span className="text-[8px] font-bold tracking-wider bg-[#0E5E6F] text-white px-1.5 py-0.2 rounded-[4px]">
-                                                Activo
-                                            </span>
-                                        )}
-                                    </button>
-
-                                    <button
-                                        onClick={() => setSelectedTool("delete")}
-                                        className={`w-full flex items-center gap-1.5 p-1.5 rounded-[4px] border-2 text-[11px] font-bold transition-all cursor-pointer ${selectedTool === "delete"
-                                                ? "border-rose-500 bg-rose-50 text-rose-700"
-                                                : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
-                                            }`}
-                                    >
-                                        <svg
-                                            className="w-3.5 h-3.5"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                            />
-                                        </svg>
-                                        <span>Eliminar</span>
-                                    </button>
-
-                                    <button
-                                        onClick={() => setSelectedTool("move")}
-                                        className={`w-full flex items-center gap-1.5 p-1.5 rounded-[4px] border-2 text-[11px] font-bold transition-all cursor-pointer ${selectedTool === "move"
-                                                ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
-                                                : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
-                                            }`}
-                                    >
-                                        <svg
-                                            className="w-3.5 h-3.5"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M4 8h16M4 16h16"
-                                            />
-                                        </svg>
-                                        <span>Mover nodos</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <hr className="border-gray-200 shrink-0" />
-
-                            <div className="shrink-0">
-                                <h2 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1 uppercase">
-                                    Capas Del Mapa
-                                </h2>
-                                <div className="space-y-0.5 mb-1.5">
-                                    {[
-                                        { id: "satellite", label: "Satélite" },
-                                        { id: "hybrid", label: "Híbrido" },
-                                        { id: "terrain", label: "Terreno" },
-                                    ].map((layer) => (
-                                        <label
-                                            key={layer.id}
-                                            className="flex items-center gap-1.5 text-[11px] font-bold text-gray-700 cursor-pointer p-0.5 hover:bg-gray-50 rounded-[4px]"
-                                        >
-                                            <input
-                                                type="radio"
-                                                name="mapLayer"
-                                                checked={mapLayer === layer.id}
-                                                onChange={() => setMapLayer(layer.id as any)}
-                                                className="accent-[#0E5E6F]"
-                                            />
-                                            <span>{layer.label}</span>
-                                        </label>
-                                    ))}
-                                </div>
-
-                                <div className="space-y-1 pt-1.5 border-t border-gray-100">
-                                    <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
-                                        <span>Zonas</span>
-                                        <input
-                                            type="checkbox"
-                                            checked={showZones}
-                                            onChange={(e) => setShowZones(e.target.checked)}
-                                            className="accent-[#0E5E6F] cursor-pointer"
-                                        />
-                                    </div>
-                                    <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
-                                        <span>Mapa NDVI</span>
-                                        <input
-                                            type="checkbox"
-                                            checked={showHeatmap}
-                                            onChange={(e) => setShowHeatmap(e.target.checked)}
-                                            className="accent-[#0E5E6F] cursor-pointer"
-                                        />
-                                    </div>
-                                    <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
-                                        <span>Límites</span>
-                                        <input
-                                            type="checkbox"
-                                            checked={showBoundaries}
-                                            onChange={(e) => setShowBoundaries(e.target.checked)}
-                                            className="accent-[#0E5E6F] cursor-pointer"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ) : (
-                        /* ACCESOS RÁPIDOS PANEL IZQUIERDO COLAPSADO */
-                        <div className="py-4 flex flex-col items-center gap-3">
-                            <button
-                                onClick={handleOpenIdModal}
-                                className="p-2 bg-gray-100 hover:bg-[#0E5E6F]/10 hover:text-[#0E5E6F] rounded-[4px] text-gray-600 transition-colors cursor-pointer"
-                                title={`Cambiar ID de misión (${mappingId})`}
-                            >
-                                <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
-                                    />
-                                </svg>
-                            </button>
-                            <button
-                                onClick={() => setIsLeftCollapsed(false)}
-                                className="p-2 bg-gray-100 hover:bg-[#0E5E6F]/10 hover:text-[#0E5E6F] rounded-[4px] text-gray-600 transition-colors cursor-pointer"
-                                title="Herramientas de dibujo"
-                            >
-                                <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                                    />
-                                </svg>
-                            </button>
-                            <button
-                                onClick={() => setIsLeftCollapsed(false)}
-                                className="p-2 bg-gray-100 hover:bg-[#0E5E6F]/10 hover:text-[#0E5E6F] rounded-[4px] text-gray-600 transition-colors cursor-pointer"
-                                title="Capas del mapa"
-                            >
-                                <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    )}
-                </aside>
-
-                {/* MAPA INTERACTIVO (ÁREA CENTRAL) */}
-                <div className="flex-1 bg-slate-900 relative overflow-hidden h-full min-w-0">
+            {/* ÁREA PRINCIPAL DEL EDITOR
+                 En móvil el mapa ocupa toda la pantalla; los paneles laterales de escritorio
+                 (herramientas/capas y control de dron) pasan a un dock flotante + bottom sheets */}
+            <main className="flex-1 relative overflow-hidden min-h-0 w-full">
+                {/* MAPA INTERACTIVO (ÁREA CENTRAL, ahora a pantalla completa) */}
+                <div className="absolute inset-0 bg-slate-900 overflow-hidden">
                     <div
                         className="absolute inset-0 bg-cover bg-center w-full h-full object-cover pointer-events-none rounded-[4px]"
                         style={{
@@ -4507,6 +3990,63 @@ export const AdminMapsView = () => {
                         </text>
                     </svg>
 
+                    {/* DOCK FLOTANTE: HERRAMIENTAS DE DIBUJO (antes en el panel izquierdo) */}
+                    <div className="absolute top-3 left-3 flex flex-col gap-1 z-10 bg-white/95 backdrop-blur-xs p-1 rounded-[4px] border-2 border-gray-200 shadow-md">
+                        <button
+                            onClick={() => setSelectedTool("polygon")}
+                            className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${selectedTool === "polygon"
+                                    ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
+                                    : "border-transparent text-gray-600 hover:bg-gray-50"
+                                }`}
+                            title="Pentágono"
+                        >
+                            <div className="w-3 h-3 border-2 border-current rounded-xs" />
+                        </button>
+
+                        <button
+                            onClick={() => setSelectedTool("octagon")}
+                            className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${selectedTool === "octagon"
+                                    ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
+                                    : "border-transparent text-gray-600 hover:bg-gray-50"
+                                }`}
+                            title="Octágono"
+                        >
+                            <div className="w-3 h-3 border-2 border-current rounded-full" />
+                        </button>
+
+                        <button
+                            onClick={() => setSelectedTool("move")}
+                            className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${selectedTool === "move"
+                                    ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
+                                    : "border-transparent text-gray-600 hover:bg-gray-50"
+                                }`}
+                            title="Mover nodos"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h16M4 16h16" />
+                            </svg>
+                        </button>
+
+                        <button
+                            onClick={() => setSelectedTool("delete")}
+                            className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${selectedTool === "delete"
+                                    ? "border-rose-500 bg-rose-50 text-rose-700"
+                                    : "border-transparent text-gray-600 hover:bg-gray-50"
+                                }`}
+                            title="Eliminar"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+
+                    {/* ZOOM */}
                     <div className="absolute top-3 right-3 flex flex-col gap-1 z-10">
                         <button className="w-7 h-7 bg-white border-2 border-gray-200 rounded-[4px] shadow-md hover:bg-gray-50 text-gray-700 font-bold flex items-center justify-center text-xs cursor-pointer">
                             +
@@ -4515,42 +4055,152 @@ export const AdminMapsView = () => {
                             -
                         </button>
                     </div>
-                </div>
 
-                {/* PANEL DERECHO */}
-                <aside
-                    className={`bg-white border-l-2 border-gray-200 flex flex-col shrink-0 transition-all duration-300 relative z-20 h-full overflow-visible ${isRightCollapsed ? "w-12" : "w-64"
-                        }`}
-                >
-                    {/* Botón Flotante para Abrir/Cerrar */}
-                    <button
-                        onClick={() => setIsRightCollapsed(!isRightCollapsed)}
-                        className="absolute -left-3.5 top-3 bg-white border-2 border-gray-300 hover:border-[#0E5E6F] text-gray-700 hover:text-[#0E5E6F] rounded-full p-1 z-40 shadow-lg active:scale-95 cursor-pointer transition-all"
-                        title={isRightCollapsed ? "Expandir menú" : "Colapsar menú"}
-                    >
-                        <svg
-                            className={`w-3.5 h-3.5 transition-transform duration-300 ${isRightCollapsed ? "" : "rotate-180"}`}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                    {/* FABs: abren los bottom sheets de Capas y Control de dron (antes paneles laterales) */}
+                    <div className="absolute bottom-3 right-3 flex flex-col gap-2 z-10">
+                        <button
+                            onClick={() => setActivePanel("capas")}
+                            className="w-11 h-11 bg-white border-2 border-gray-200 rounded-full shadow-lg hover:border-[#0E5E6F] hover:text-[#0E5E6F] text-gray-700 flex items-center justify-center cursor-pointer active:scale-95 transition-all"
+                            title="Capas y zonas"
                         >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="3"
-                                d="M15 19l-7-7 7-7"
-                            />
-                        </svg>
-                    </button>
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+                                />
+                            </svg>
+                        </button>
 
-                    {!isRightCollapsed ? (
-                        <div className="p-2.5 flex flex-col gap-2.5 overflow-y-auto no-scrollbar text-left h-full max-h-full">
-                            <div className="flex items-center justify-between pb-1 border-b-2 border-gray-100 shrink-0">
-                                <h2 className="text-[11px] font-bold tracking-wider text-gray-800">
-                                    Control Del Dron
-                                </h2>
+                        <button
+                            onClick={() => setActivePanel("dron")}
+                            className="w-11 h-11 bg-[#0E5E6F] border-2 border-[#0E5E6F] rounded-full shadow-lg text-white flex items-center justify-center cursor-pointer active:scale-95 transition-all relative"
+                            title="Control del dron"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                                />
+                            </svg>
+                            <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 border-2 border-white rounded-full" />
+                        </button>
+                    </div>
+                </div>
+            </main>
+
+            {/* ================= BOTTOM SHEET: CAPAS Y ZONAS (antes panel izquierdo) ================= */}
+            {activePanel === "capas" && (
+                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
+                    <div className="bg-white w-full rounded-t-2xl shadow-2xl border-t-2 border-gray-200 flex flex-col max-h-[75%] font-sans">
+                        <div className="flex justify-center pt-2.5 pb-1 shrink-0">
+                            <span className="w-10 h-1.5 bg-gray-300 rounded-full" />
+                        </div>
+
+                        <div className="px-4 pb-2 flex items-center justify-between border-b border-gray-100 shrink-0">
+                            <h2 className="text-xs font-bold tracking-wider text-gray-800">
+                                Capas Y Zonas Del Mapa
+                            </h2>
+                            <button
+                                onClick={() => setActivePanel(null)}
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="p-4 flex flex-col gap-3 overflow-y-auto no-scrollbar text-left">
+                            <div>
+                                <h3 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1 uppercase">
+                                    Capas Del Mapa
+                                </h3>
+                                <div className="space-y-0.5 mb-1.5">
+                                    {[
+                                        { id: "satellite", label: "Satélite" },
+                                        { id: "hybrid", label: "Híbrido" },
+                                        { id: "terrain", label: "Terreno" },
+                                    ].map((layer) => (
+                                        <label
+                                            key={layer.id}
+                                            className="flex items-center gap-1.5 text-[11px] font-bold text-gray-700 cursor-pointer p-1 hover:bg-gray-50 rounded-[4px]"
+                                        >
+                                            <input
+                                                type="radio"
+                                                name="mapLayer"
+                                                checked={mapLayer === layer.id}
+                                                onChange={() => setMapLayer(layer.id as any)}
+                                                className="accent-[#0E5E6F]"
+                                            />
+                                            <span>{layer.label}</span>
+                                        </label>
+                                    ))}
+                                </div>
                             </div>
 
+                            <hr className="border-gray-200" />
+
+                            <div className="space-y-1.5">
+                                <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                    <span>Zonas</span>
+                                    <input
+                                        type="checkbox"
+                                        checked={showZones}
+                                        onChange={(e) => setShowZones(e.target.checked)}
+                                        className="accent-[#0E5E6F] cursor-pointer"
+                                    />
+                                </div>
+                                <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                    <span>Mapa NDVI</span>
+                                    <input
+                                        type="checkbox"
+                                        checked={showHeatmap}
+                                        onChange={(e) => setShowHeatmap(e.target.checked)}
+                                        className="accent-[#0E5E6F] cursor-pointer"
+                                    />
+                                </div>
+                                <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                    <span>Límites</span>
+                                    <input
+                                        type="checkbox"
+                                        checked={showBoundaries}
+                                        onChange={(e) => setShowBoundaries(e.target.checked)}
+                                        className="accent-[#0E5E6F] cursor-pointer"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ================= BOTTOM SHEET: CONTROL DEL DRON (antes panel derecho) ================= */}
+            {activePanel === "dron" && (
+                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
+                    <div className="bg-white w-full rounded-t-2xl shadow-2xl border-t-2 border-gray-200 flex flex-col max-h-[88%] font-sans">
+                        <div className="flex justify-center pt-2.5 pb-1 shrink-0">
+                            <span className="w-10 h-1.5 bg-gray-300 rounded-full" />
+                        </div>
+
+                        <div className="px-4 pb-2 flex items-center justify-between border-b-2 border-gray-100 shrink-0">
+                            <h2 className="text-[11px] font-bold tracking-wider text-gray-800">
+                                Control Del Dron
+                            </h2>
+                            <button
+                                onClick={() => setActivePanel(null)}
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="p-4 flex flex-col gap-2.5 overflow-y-auto no-scrollbar text-left">
                             {/* CARD ESTADO DRON */}
                             <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px] space-y-1.5 shrink-0">
                                 <div className="flex justify-between items-center text-[11px]">
@@ -4575,9 +4225,9 @@ export const AdminMapsView = () => {
                             </div>
 
                             <div className="shrink-0">
-                                <h2 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1.5 uppercase">
+                                <h3 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1.5 uppercase">
                                     Parámetros De Vuelo
-                                </h2>
+                                </h3>
 
                                 <div className="space-y-3">
                                     {/* ALTITUD (#CA5116) */}
@@ -4684,164 +4334,132 @@ export const AdminMapsView = () => {
                                     </div>
                                 </div>
                             </div>
-
-                            <hr className="border-gray-200 mt-auto shrink-0" />
-
-                            {/* BOTONES INFERIORES COMPLETOS */}
-                            <div className="space-y-1.5 pt-0.5 shrink-0">
-                                <button 
-                                    onClick={handleApproveMapping}
-                                    className="w-full py-2 bg-[#0E5E6F] hover:bg-[#0a4754] border-2 border-[#0E5E6F] text-white font-bold text-[11px] rounded-[4px] flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer"
-                                >
-                                    <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                                        <polygon points="5 3 19 12 5 21 5 3" />
-                                    </svg>
-                                    <span>Aprobar mapeo</span>
-                                </button>
-
-                                <button className="w-full py-1.5 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
-                                    Auto-dibujar zona
-                                </button>
-
-                                <button className="w-full py-1.5 bg-white border-2 border-rose-200 hover:bg-rose-50 text-rose-600 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
-                                    Cancelar operación
-                                </button>
-                            </div>
-                        </div>
-                    ) : (
-                        /* ACCESOS RÁPIDOS PANEL DERECHO COLAPSADO */
-                        <div className="py-4 flex flex-col items-center gap-3">
-                            <button
-                                onClick={() => setIsRightCollapsed(false)}
-                                className="p-2 bg-gray-100 hover:bg-[#0E5E6F]/10 hover:text-[#0E5E6F] rounded-[4px] text-gray-600 transition-colors cursor-pointer"
-                                title="Control de misión dron"
-                            >
-                                <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                                    />
-                                </svg>
-                            </button>
-                            <button
-                                onClick={() => setIsRightCollapsed(false)}
-                                className="p-2 bg-gray-100 hover:bg-[#0E5E6F]/10 hover:text-[#0E5E6F] rounded-[4px] text-gray-600 transition-colors cursor-pointer"
-                                title="Parámetros de vuelo"
-                            >
-                                <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    )}
-                </aside>
-            </main>
-
-            {/* MODAL CAMBIO DE ID DE MAPEO */}
-            {isIdModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
-                    <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-2xl w-full max-w-sm overflow-hidden text-left p-4 space-y-3 animate-in fade-in zoom-in-95 duration-150 font-sans">
-                        <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                            <h3 className="text-xs font-bold text-gray-900 tracking-wide">
-                                Cambiar ID de misión para mapeo
-                            </h3>
-                            <button
-                                onClick={() => setIsIdModalOpen(false)}
-                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
                         </div>
 
-                        <form onSubmit={handleSaveId} className="space-y-3">
-                            <div>
-                                <label className="block text-[10px] font-bold text-gray-500 mb-1">
-                                    Código / ID de la Misión
-                                </label>
-                                <input
-                                    type="text"
-                                    value={tempMappingId}
-                                    onChange={(e) => setTempMappingId(e.target.value)}
-                                    placeholder="Ej. MIS-FUM-001"
-                                    className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-mono font-bold text-gray-800 focus:border-[#0E5E6F] outline-none"
-                                    autoFocus
-                                />
-                                <p className="text-[10px] text-gray-400 mt-1">
-                                    Ingresa el código único de la misión para cargar y editar su mapa correspondiente.
-                                </p>
-                            </div>
+                        {/* BOTONES INFERIORES */}
+                        <div className="p-3 space-y-1.5 border-t border-gray-100 shrink-0">
+                            <button
+                                onClick={handleApproveMapping}
+                                className="w-full py-2.5 bg-[#0E5E6F] hover:bg-[#0a4754] border-2 border-[#0E5E6F] text-white font-bold text-[11px] rounded-[4px] flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer"
+                            >
+                                <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                                    <polygon points="5 3 19 12 5 21 5 3" />
+                                </svg>
+                                <span>Aprobar mapeo</span>
+                            </button>
 
-                            <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsIdModalOpen(false)}
-                                    className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
-                                >
-                                    Cancelar
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
-                                >
-                                    Guardar ID
-                                </button>
-                            </div>
-                        </form>
+                            <button className="w-full py-2 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
+                                Auto-dibujar zona
+                            </button>
+
+                            <button className="w-full py-2 bg-white border-2 border-rose-200 hover:bg-rose-50 text-rose-600 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
+                                Cancelar operación
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
 
-            {/* MODAL CONFIRMACIÓN DE APROBACIÓN DE MAPEO */}
+            {/* BOTTOM SHEET CAMBIO DE ID DE MAPEO */}
+            {isIdModalOpen && (
+                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
+                    <div className="bg-white border-t-2 border-gray-200 rounded-t-2xl shadow-2xl w-full overflow-hidden text-left animate-in fade-in duration-150 font-sans">
+                        <div className="flex justify-center pt-2.5 pb-1">
+                            <span className="w-10 h-1.5 bg-gray-300 rounded-full" />
+                        </div>
+
+                        <div className="px-4 pb-3 space-y-3">
+                            <div className="flex justify-between items-center border-b border-gray-100 pb-2">
+                                <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                                    Cambiar ID de misión para mapeo
+                                </h3>
+                                <button
+                                    onClick={() => setIsIdModalOpen(false)}
+                                    className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleSaveId} className="space-y-3">
+                                <div>
+                                    <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                                        Código / ID de la Misión
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={tempMappingId}
+                                        onChange={(e) => setTempMappingId(e.target.value)}
+                                        placeholder="Ej. MIS-FUM-001"
+                                        className="w-full border-2 border-gray-200 rounded-[4px] p-2.5 text-xs font-mono font-bold text-gray-800 focus:border-[#0E5E6F] outline-none"
+                                        autoFocus
+                                    />
+                                    <p className="text-[10px] text-gray-400 mt-1">
+                                        Ingresa el código único de la misión para cargar y editar su mapa correspondiente.
+                                    </p>
+                                </div>
+
+                                <div className="flex gap-2 pt-2 border-t border-gray-100">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsIdModalOpen(false)}
+                                        className="flex-1 px-3 py-2 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="flex-1 px-4 py-2 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
+                                    >
+                                        Guardar ID
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* BOTTOM SHEET CONFIRMACIÓN DE APROBACIÓN DE MAPEO */}
             {isApprovalModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
-                    <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-2xl w-full max-w-sm overflow-hidden text-left p-4 space-y-3 animate-in fade-in zoom-in-95 duration-150 font-sans">
-                        <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
-                            <div className="p-1 bg-green-100 text-green-700 rounded-[4px]">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <h3 className="text-xs font-bold text-gray-900 tracking-wide">
-                                Mapeo aprobado
-                            </h3>
+                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
+                    <div className="bg-white border-t-2 border-gray-200 rounded-t-2xl shadow-2xl w-full overflow-hidden text-left animate-in fade-in duration-150 font-sans">
+                        <div className="flex justify-center pt-2.5 pb-1">
+                            <span className="w-10 h-1.5 bg-gray-300 rounded-full" />
                         </div>
 
-                        <div className="space-y-2 text-xs text-gray-600 font-medium">
-                            <p>
-                                La edición del mapa para la misión <span className="font-bold text-gray-800">#{mappingId}</span> ha sido aprobada.
-                            </p>
-                            <div className="p-2 bg-green-50 border border-green-200 rounded-[4px] text-[11px] text-green-800 font-semibold">
-                                Estado: Aprobada por el administrador.
+                        <div className="px-4 pb-4 space-y-3">
+                            <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
+                                <div className="p-1 bg-green-100 text-green-700 rounded-[4px]">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                                    Mapeo aprobado
+                                </h3>
                             </div>
-                        </div>
 
-                        <div className="flex justify-end pt-2 border-t border-gray-100">
-                            <button
-                                type="button"
-                                onClick={() => setIsApprovalModalOpen(false)}
-                                className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
-                            >
-                                Entendido
-                            </button>
+                            <div className="space-y-2 text-xs text-gray-600 font-medium">
+                                <p>
+                                    La edición del mapa para la misión <span className="font-bold text-gray-800">#{mappingId}</span> ha sido aprobada.
+                                </p>
+                                <div className="p-2 bg-green-50 border border-green-200 rounded-[4px] text-[11px] text-green-800 font-semibold">
+                                    Estado: Aprobada por el administrador.
+                                </div>
+                            </div>
+
+                            <div className="pt-2 border-t border-gray-100">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsApprovalModalOpen(false)}
+                                    className="w-full px-4 py-2.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
+                                >
+                                    Entendido
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -5113,128 +4731,126 @@ export const AdminDataView = () => {
 
     return (
         <div
-            className="p-4 sm:p-6 max-w-7xl mx-auto bg-white antialiased text-gray-800 select-none"
+            className="p-3 mx-auto bg-white antialiased text-gray-800 select-none"
             style={{ fontFamily: "'Roboto', sans-serif" }}
         >
             {/* HEADER (Title Case) */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 pb-4 border-b-2 border-gray-200 text-left gap-3">
-                <div className="space-y-1">
-                    <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
-                        Panel de Control e Inspección Operativa
-                    </h1>
-                    <p className="text-gray-500 text-xs font-normal">
-                        Valida cuentas de clientes, certificaciones de pilotos, técnicos de taller y aprueba reservas de servicio.
-                    </p>
-                </div>
+            <div className="flex flex-col mb-4 pb-3 border-b-2 border-gray-200 text-left gap-1">
+                <h1 className="text-base font-bold text-gray-900 leading-snug">
+                    Panel de Control e Inspección Operativa
+                </h1>
+                <p className="text-gray-500 text-[11px] font-normal leading-snug">
+                    Valida cuentas de clientes, certificaciones de pilotos, técnicos de taller y aprueba reservas de servicio.
+                </p>
             </div>
 
             {/* METRIC CARDS SUMMARY (Titles Title Case / labels Sentence Case) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 text-left">
-                <div className="bg-white border-2 border-gray-200 rounded-[4px] p-4 shadow-xs flex items-center justify-between">
+            <div className="grid grid-cols-2 gap-2 mb-4 text-left">
+                <div className="bg-white border-2 border-gray-200 rounded-[4px] p-2.5 shadow-xs flex items-center justify-between">
                     <div>
-                        <span className="text-[10px] font-bold text-gray-400 tracking-wider block">Clientes activos</span>
-                        <span className="text-2xl font-black text-gray-900">{clients.filter(c => c.status === "Activo").length}</span>
+                        <span className="text-[9px] font-bold text-gray-400 tracking-wider block">Clientes activos</span>
+                        <span className="text-lg font-black text-gray-900">{clients.filter(c => c.status === "Activo").length}</span>
                     </div>
-                    <div className="p-2.5 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px]">
-                        <Users size={22} />
+                    <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px]">
+                        <Users size={18} />
                     </div>
                 </div>
 
-                <div className="bg-white border-2 border-gray-200 rounded-[4px] p-4 shadow-xs flex items-center justify-between">
+                <div className="bg-white border-2 border-gray-200 rounded-[4px] p-2.5 shadow-xs flex items-center justify-between">
                     <div>
-                        <span className="text-[10px] font-bold text-gray-400 tracking-wider block">Pilotos certificados</span>
-                        <span className="text-2xl font-black text-gray-900">{pilots.filter(p => p.status === "Activo").length}</span>
+                        <span className="text-[9px] font-bold text-gray-400 tracking-wider block">Pilotos certificados</span>
+                        <span className="text-lg font-black text-gray-900">{pilots.filter(p => p.status === "Activo").length}</span>
                     </div>
-                    <div className="p-2.5 bg-blue-50 text-blue-700 rounded-[4px]">
-                        <ShieldCheck size={22} />
+                    <div className="p-2 bg-blue-50 text-blue-700 rounded-[4px]">
+                        <ShieldCheck size={18} />
                     </div>
                 </div>
 
-                <div className="bg-white border-2 border-gray-200 rounded-[4px] p-4 shadow-xs flex items-center justify-between">
+                <div className="bg-white border-2 border-gray-200 rounded-[4px] p-2.5 shadow-xs flex items-center justify-between">
                     <div>
-                        <span className="text-[10px] font-bold text-gray-400 tracking-wider block">Técnicos de taller</span>
-                        <span className="text-2xl font-black text-gray-900">{techs.filter(t => t.status === "Activo").length}</span>
+                        <span className="text-[9px] font-bold text-gray-400 tracking-wider block">Técnicos de taller</span>
+                        <span className="text-lg font-black text-gray-900">{techs.filter(t => t.status === "Activo").length}</span>
                     </div>
-                    <div className="p-2.5 bg-purple-50 text-purple-700 rounded-[4px]">
-                        <Wrench size={22} />
+                    <div className="p-2 bg-purple-50 text-purple-700 rounded-[4px]">
+                        <Wrench size={18} />
                     </div>
                 </div>
 
-                <div className="bg-white border-2 border-gray-200 rounded-[4px] p-4 shadow-xs flex items-center justify-between">
+                <div className="bg-white border-2 border-gray-200 rounded-[4px] p-2.5 shadow-xs flex items-center justify-between">
                     <div>
-                        <span className="text-[10px] font-bold text-gray-400 tracking-wider block">Solicitudes pendientes</span>
-                        <span className="text-2xl font-black text-amber-600">
+                        <span className="text-[9px] font-bold text-gray-400 tracking-wider block">Solicitudes pendientes</span>
+                        <span className="text-lg font-black text-amber-600">
                             {requests.filter(r => r.status === "Pendiente").length + clients.filter(c => c.status === "Pendiente").length}
                         </span>
                     </div>
-                    <div className="p-2.5 bg-amber-50 text-amber-700 rounded-[4px]">
-                        <FileText size={22} />
+                    <div className="p-2 bg-amber-50 text-amber-700 rounded-[4px]">
+                        <FileText size={18} />
                     </div>
                 </div>
             </div>
 
-            {/* TAB SELECTORS (Sentence case) */}
-            <div className="flex border-b-2 border-gray-200 mb-6 overflow-x-auto">
+            {/* TAB SELECTORS (Sentence case) — scroll horizontal táctil */}
+            <div className="flex border-b-2 border-gray-200 mb-4 overflow-x-auto -mx-3 px-3">
                 <button
                     onClick={() => { setActiveTab("client"); setStatusFilter("ALL"); }}
-                    className={`px-4 sm:px-5 py-2.5 font-bold text-xs transition-all border-b-2 -mb-px flex items-center gap-2 cursor-pointer whitespace-nowrap ${activeTab === "client"
+                    className={`px-3 py-2 font-bold text-[11px] transition-all border-b-2 -mb-px flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${activeTab === "client"
                             ? "border-[#0E5E6F] text-[#0E5E6F]"
                             : "border-transparent text-gray-500 hover:text-gray-700"
                         }`}
                 >
-                    <Users size={15} /> Clientes ({clients.length})
+                    <Users size={13} /> Clientes ({clients.length})
                 </button>
 
                 <button
                     onClick={() => { setActiveTab("pilot"); setStatusFilter("ALL"); }}
-                    className={`px-4 sm:px-5 py-2.5 font-bold text-xs transition-all border-b-2 -mb-px flex items-center gap-2 cursor-pointer whitespace-nowrap ${activeTab === "pilot"
+                    className={`px-3 py-2 font-bold text-[11px] transition-all border-b-2 -mb-px flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${activeTab === "pilot"
                             ? "border-[#0E5E6F] text-[#0E5E6F]"
                             : "border-transparent text-gray-500 hover:text-gray-700"
                         }`}
                 >
-                    <ShieldCheck size={15} /> Pilotos ({pilots.length})
+                    <ShieldCheck size={13} /> Pilotos ({pilots.length})
                 </button>
 
                 <button
                     onClick={() => { setActiveTab("tech"); setStatusFilter("ALL"); }}
-                    className={`px-4 sm:px-5 py-2.5 font-bold text-xs transition-all border-b-2 -mb-px flex items-center gap-2 cursor-pointer whitespace-nowrap ${activeTab === "tech"
+                    className={`px-3 py-2 font-bold text-[11px] transition-all border-b-2 -mb-px flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${activeTab === "tech"
                             ? "border-[#0E5E6F] text-[#0E5E6F]"
                             : "border-transparent text-gray-500 hover:text-gray-700"
                         }`}
                 >
-                    <Wrench size={15} /> Técnicos de taller ({techs.length})
+                    <Wrench size={13} /> Técnicos ({techs.length})
                 </button>
 
                 <button
                     onClick={() => { setActiveTab("requests"); setStatusFilter("ALL"); }}
-                    className={`px-4 sm:px-5 py-2.5 font-bold text-xs transition-all border-b-2 -mb-px flex items-center gap-2 cursor-pointer whitespace-nowrap ${activeTab === "requests"
+                    className={`px-3 py-2 font-bold text-[11px] transition-all border-b-2 -mb-px flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${activeTab === "requests"
                             ? "border-[#0E5E6F] text-[#0E5E6F]"
                             : "border-transparent text-gray-500 hover:text-gray-700"
                         }`}
                 >
-                    <FileText size={15} /> Solicitudes y reservas ({requests.length})
+                    <FileText size={13} /> Solicitudes ({requests.length})
                 </button>
             </div>
 
-            {/* CONTROLES DE BÚSQUEDA Y FILTRADO */}
-            <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 mb-4">
-                <div className="relative flex-1 max-w-md">
+            {/* CONTROLES DE BÚSQUEDA Y FILTRADO — apilados y a ancho completo */}
+            <div className="flex flex-col gap-2 mb-3">
+                <div className="relative w-full">
                     <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                         type="text"
                         placeholder="Buscar por nombre, ubicación o código..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-9 pr-3 py-1.5 border-2 border-gray-200 rounded-[4px] text-xs focus:border-[#0E5E6F] outline-none"
+                        className="w-full pl-9 pr-3 py-2 border-2 border-gray-200 rounded-[4px] text-xs focus:border-[#0E5E6F] outline-none"
                     />
                 </div>
 
-                <div className="flex items-center gap-2 self-end sm:self-auto">
-                    <Filter size={14} className="text-gray-400" />
+                <div className="flex items-center gap-2 w-full">
+                    <Filter size={14} className="text-gray-400 shrink-0" />
                     <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
-                        className="border-2 border-gray-200 rounded-[4px] px-2.5 py-1.5 text-xs bg-white text-gray-700 font-bold focus:border-[#0E5E6F] outline-none"
+                        className="w-full border-2 border-gray-200 rounded-[4px] px-2.5 py-2 text-xs bg-white text-gray-700 font-bold focus:border-[#0E5E6F] outline-none"
                     >
                         <option value="ALL">Todos los estados</option>
                         <option value="Activo">Activos</option>
@@ -5250,176 +4866,135 @@ export const AdminDataView = () => {
                 </div>
             </div>
 
-            {/* TABLA PRINCIPAL */}
+            {/* LISTA PRINCIPAL — tarjetas apiladas en vez de tabla (patrón táctil móvil) */}
             <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xs overflow-hidden flex flex-col text-left">
-                <div className="overflow-x-auto w-full">
-                    {/* TABLA: CLIENTES, PILOTOS Y TÉCNICOS (Encabezados en Sentence case) */}
-                    {activeTab !== "requests" && (
-                        <table className="w-full text-left border-collapse min-w-[700px]">
-                            <thead className="bg-gray-50 border-b-2 border-gray-200 text-xs font-semibold text-gray-600">
-                                <tr>
-                                    <th className="py-3 px-3">Usuario o empresa</th>
-                                    <th className="py-3 px-3">Especialidad o sector</th>
-                                    <th className="py-3 px-3">Ubicación</th>
-                                    <th className="py-3 px-3">Contacto</th>
-                                    <th className="py-3 px-3 text-center">Estado</th>
-                                    <th className="py-3 px-3 text-center">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-100 text-xs">
-                                {getFilteredData(
-                                    activeTab === "client" ? clients : activeTab === "pilot" ? pilots : techs
-                                ).map((item) => (
-                                    <tr key={item.id} className="hover:bg-gray-50/60 transition-colors">
-                                        <td className="py-3 px-3 font-bold text-gray-900">
-                                            <div className="flex items-center gap-2.5">
-                                                <div className="w-7 h-7 rounded-[4px] bg-[#0E5E6F]/10 text-[#0E5E6F] flex items-center justify-center font-black text-[10px] shrink-0 border border-[#0E5E6F]/20">
-                                                    {item.init}
-                                                </div>
-                                                <div>
-                                                    <span className="block font-bold text-gray-900">{item.name}</span>
-                                                    <span className="text-[10px] font-mono text-gray-400 font-normal">{item.id}</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="py-3 px-3 text-gray-700 font-medium">
-                                            {item.companyOrDept}
-                                        </td>
-                                        <td className="py-3 px-3 text-gray-600">
-                                            {item.loc}
-                                        </td>
-                                        <td className="py-3 px-3 font-mono text-[11px] text-gray-600">
-                                            <div>{item.email}</div>
-                                            <div className="text-[10px] text-gray-400">{item.phone}</div>
-                                        </td>
-                                        <td className="py-3 px-3 text-center">
-                                            {/* Badges sin íconos */}
-                                            <span
-                                                className={`inline-flex items-center text-[10px] font-bold px-2.5 py-0.5 rounded-[4px] border ${item.status === "Activo"
-                                                        ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                                                        : item.status === "Inactivo"
-                                                            ? "border-amber-300 bg-amber-100 text-amber-800"
-                                                            : "border-blue-200 bg-blue-50 text-blue-700"
-                                                    }`}
-                                            >
-                                                {item.status}
-                                            </span>
-                                        </td>
-                                        <td className="py-3 px-3 text-center">
-                                            <div className="flex items-center justify-center gap-2">
-                                                {/* Detalle */}
-                                                <button
-                                                    onClick={() => setSelectedUser(item)}
-                                                    className="px-2.5 py-1 hover:bg-gray-100 border border-gray-200 rounded-[4px] text-gray-600 hover:text-[#0E5E6F] flex items-center gap-1.5 transition-colors cursor-pointer"
-                                                    title="Ver detalle"
-                                                >
-                                                    <Eye size={14} /> Ver
-                                                </button>
+                {/* LISTA: CLIENTES, PILOTOS Y TÉCNICOS */}
+                {activeTab !== "requests" && (
+                    <div className="divide-y divide-gray-100">
+                        {getFilteredData(
+                            activeTab === "client" ? clients : activeTab === "pilot" ? pilots : techs
+                        ).map((item) => (
+                            <div key={item.id} className="p-3 flex flex-col gap-2.5 active:bg-gray-50/60">
+                                <div className="flex items-start justify-between gap-2">
+                                    <div className="flex items-center gap-2.5 min-w-0">
+                                        <div className="w-8 h-8 rounded-[4px] bg-[#0E5E6F]/10 text-[#0E5E6F] flex items-center justify-center font-black text-[10px] shrink-0 border border-[#0E5E6F]/20">
+                                            {item.init}
+                                        </div>
+                                        <div className="min-w-0">
+                                            <span className="block font-bold text-gray-900 text-xs truncate">{item.name}</span>
+                                            <span className="text-[10px] font-mono text-gray-400 font-normal">{item.id}</span>
+                                        </div>
+                                    </div>
+                                    <span
+                                        className={`shrink-0 inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-[4px] border ${item.status === "Activo"
+                                                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                                                : item.status === "Inactivo"
+                                                    ? "border-amber-300 bg-amber-100 text-amber-800"
+                                                    : "border-blue-200 bg-blue-50 text-blue-700"
+                                            }`}
+                                    >
+                                        {item.status}
+                                    </span>
+                                </div>
 
-                                                {/* Botón Editar Unificado */}
-                                                <button
-                                                    onClick={() => setEditingUser({ ...item })}
-                                                    className="px-2.5 py-1 bg-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold text-[11px] rounded-[4px] flex items-center gap-1.5 cursor-pointer transition-colors"
-                                                >
-                                                    <Edit3 size={13} /> Editar
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    )}
+                                <div className="text-[11px] text-gray-600 space-y-1 pl-[42px]">
+                                    <div className="text-gray-700 font-medium">{item.companyOrDept}</div>
+                                    <div className="text-gray-500">{item.loc}</div>
+                                    <div className="font-mono text-gray-500">
+                                        {item.email} · {item.phone}
+                                    </div>
+                                </div>
 
-                    {/* TABLA: SOLICITUDES Y RESERVAS DE SERVICIOS */}
-                    {activeTab === "requests" && (
-                        <table className="w-full text-left border-collapse table-auto">
-                            <thead className="bg-gray-50 border-b-2 border-gray-200 text-xs font-semibold text-gray-600">
-                                <tr>
-                                    <th className="py-3 px-3 w-44">Código o cliente</th>
-                                    <th className="py-3 px-3 w-40">Servicio solicitado</th>
-                                    <th className="py-3 px-3 w-36">Ubicación y cobertura</th>
-                                    <th className="py-3 px-3 w-36 whitespace-nowrap">Piloto asignado</th>
-                                    <th className="py-3 px-3 w-32">Fecha y tarifa</th>
-                                    <th className="py-3 px-3 text-center w-28">Estado</th>
-                                    <th className="py-3 px-3 text-center w-32">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-100 text-xs">
-                                {getFilteredData(requests).map((req) => (
-                                    <tr key={req.id} className="hover:bg-gray-50/60 transition-colors">
-                                        <td className="py-3 px-3 font-bold text-gray-900">
-                                            <span className="block font-mono text-[10px] text-gray-400">{req.id}</span>
-                                            <span className="truncate block max-w-[150px]">{req.clientName}</span>
-                                        </td>
-                                        <td className="py-3 px-3 font-medium text-gray-800">
-                                            {req.serviceType}
-                                        </td>
-                                        <td className="py-3 px-2 text-gray-600">
-                                            <div>{req.location}</div>
-                                            <div className="text-[10px] font-bold text-[#0E5E6F]">{req.areaOrUnits}</div>
-                                        </td>
-                                        <td className="py-3 px-3 text-gray-700 whitespace-nowrap">
-                                            <span className={`px-2 py-0.5 rounded-[4px] text-[10px] font-bold inline-block ${req.assignedPilot === "Sin asignar" ? "bg-red-50 text-red-700 border border-red-200" : "bg-gray-100 text-gray-800"}`}>
-                                                {req.assignedPilot}
-                                            </span>
-                                        </td>
-                                        <td className="py-3 px-2 whitespace-nowrap">
-                                            <div className="flex items-center gap-1 text-gray-500 text-[11px]">
-                                                <Calendar size={11} /> {req.date}
-                                            </div>
-                                            <div className="font-mono font-bold text-gray-900 text-xs">
-                                                L. {req.totalPrice.toLocaleString()}
-                                            </div>
-                                        </td>
-                                        <td className="py-3 px-3 text-center whitespace-nowrap">
-                                            {/* Badges sin íconos */}
-                                            <span
-                                                className={`inline-flex items-center text-[10px] font-bold px-2.5 py-0.5 rounded-[4px] border ${req.status === "Aprobada" || req.status === "Completada"
-                                                        ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                                                        : req.status === "Rechazada"
-                                                            ? "border-red-200 bg-red-50 text-red-700"
-                                                            : req.status === "Pendiente"
-                                                                ? "border-amber-300 bg-amber-100 text-amber-800"
-                                                                : "border-blue-200 bg-blue-50 text-blue-700"
-                                                    }`}
-                                            >
-                                                {req.status}
-                                            </span>
-                                        </td>
-                                        <td className="py-3 px-3 text-center whitespace-nowrap">
-                                            <div className="flex items-center justify-center gap-2">
-                                                {/* Detalle Reserva */}
-                                                <button
-                                                    onClick={() => setSelectedRequest(req)}
-                                                    className="px-2.5 py-1 hover:bg-gray-100 border border-gray-200 rounded-[4px] text-gray-600 hover:text-[#0E5E6F] flex items-center gap-1.5 transition-colors cursor-pointer"
-                                                    title="Ver detalle del servicio"
-                                                >
-                                                    <Eye size={14} /> Ver
-                                                </button>
+                                <div className="flex items-center gap-2 pl-[42px] pt-0.5">
+                                    <button
+                                        onClick={() => setSelectedUser(item)}
+                                        className="flex-1 justify-center px-2.5 py-1.5 hover:bg-gray-100 border border-gray-200 rounded-[4px] text-gray-600 hover:text-[#0E5E6F] flex items-center gap-1.5 transition-colors cursor-pointer text-[11px] font-bold"
+                                    >
+                                        <Eye size={13} /> Ver
+                                    </button>
 
-                                                {/* Botón Editar Unificado */}
-                                                <button
-                                                    onClick={() => setEditingRequest({ ...req })}
-                                                    className="px-2.5 py-1 bg-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold text-[11px] rounded-[4px] flex items-center gap-1.5 cursor-pointer transition-colors"
-                                                >
-                                                    <Edit3 size={13} /> Editar
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    )}
-                </div>
+                                    <button
+                                        onClick={() => setEditingUser({ ...item })}
+                                        className="flex-1 justify-center px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold text-[11px] rounded-[4px] flex items-center gap-1.5 cursor-pointer transition-colors"
+                                    >
+                                        <Edit3 size={13} /> Editar
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {/* LISTA: SOLICITUDES Y RESERVAS DE SERVICIOS */}
+                {activeTab === "requests" && (
+                    <div className="divide-y divide-gray-100">
+                        {getFilteredData(requests).map((req) => (
+                            <div key={req.id} className="p-3 flex flex-col gap-2.5 active:bg-gray-50/60">
+                                <div className="flex items-start justify-between gap-2">
+                                    <div className="min-w-0">
+                                        <span className="block font-mono text-[10px] text-gray-400">{req.id}</span>
+                                        <span className="block font-bold text-gray-900 text-xs truncate">{req.clientName}</span>
+                                    </div>
+                                    <span
+                                        className={`shrink-0 inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-[4px] border ${req.status === "Aprobada" || req.status === "Completada"
+                                                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                                                : req.status === "Rechazada"
+                                                    ? "border-red-200 bg-red-50 text-red-700"
+                                                    : req.status === "Pendiente"
+                                                        ? "border-amber-300 bg-amber-100 text-amber-800"
+                                                        : "border-blue-200 bg-blue-50 text-blue-700"
+                                            }`}
+                                    >
+                                        {req.status}
+                                    </span>
+                                </div>
+
+                                <div className="text-[11px] text-gray-600 space-y-1">
+                                    <div className="font-medium text-gray-800">{req.serviceType}</div>
+                                    <div className="text-gray-500">{req.location}</div>
+                                    <div className="font-bold text-[#0E5E6F]">{req.areaOrUnits}</div>
+                                    <div className="flex items-center gap-1 text-gray-500">
+                                        <Calendar size={11} /> {req.date}
+                                    </div>
+                                    <div className="flex items-center justify-between pt-1">
+                                        <span className={`px-2 py-0.5 rounded-[4px] text-[10px] font-bold inline-block ${req.assignedPilot === "Sin asignar" ? "bg-red-50 text-red-700 border border-red-200" : "bg-gray-100 text-gray-800"}`}>
+                                            {req.assignedPilot}
+                                        </span>
+                                        <span className="font-mono font-bold text-gray-900 text-xs">
+                                            L. {req.totalPrice.toLocaleString()}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-2 pt-0.5">
+                                    <button
+                                        onClick={() => setSelectedRequest(req)}
+                                        className="flex-1 justify-center px-2.5 py-1.5 hover:bg-gray-100 border border-gray-200 rounded-[4px] text-gray-600 hover:text-[#0E5E6F] flex items-center gap-1.5 transition-colors cursor-pointer text-[11px] font-bold"
+                                    >
+                                        <Eye size={13} /> Ver
+                                    </button>
+
+                                    <button
+                                        onClick={() => setEditingRequest({ ...req })}
+                                        className="flex-1 justify-center px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold text-[11px] rounded-[4px] flex items-center gap-1.5 cursor-pointer transition-colors"
+                                    >
+                                        <Edit3 size={13} /> Editar
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* MODAL 1: FICHA DE DETALLE DE USUARIO (Title Case en títulos / Sentence Case en cuerpo) */}
             {selectedUser && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-                    <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xl w-full max-w-lg overflow-hidden text-left">
-                        <div className="flex justify-between items-center px-5 py-3.5 border-b-2 border-gray-100 bg-gray-50">
+                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-end justify-center">
+                    <div className="bg-white border-t-2 border-gray-200 rounded-t-[16px] shadow-xl w-full max-h-[85vh] overflow-hidden text-left flex flex-col">
+                        <div className="flex justify-center pt-2 pb-1 shrink-0">
+                            <div className="w-10 h-1 rounded-full bg-gray-300" />
+                        </div>
+                        <div className="flex justify-between items-center px-5 py-3 border-b-2 border-gray-100 bg-gray-50 shrink-0">
                             <div className="flex items-center gap-2">
                                 <Users className="text-[#0E5E6F]" size={18} />
                                 <h3 className="text-sm font-bold text-gray-900">
@@ -5434,7 +5009,7 @@ export const AdminDataView = () => {
                             </button>
                         </div>
 
-                        <div className="p-5 space-y-4 text-xs">
+                        <div className="p-5 space-y-4 text-xs overflow-y-auto">
                             <div className="flex items-start justify-between border-b pb-3 border-gray-100">
                                 <div>
                                     <h4 className="text-base font-bold text-gray-900">{selectedUser.name}</h4>
@@ -5453,7 +5028,7 @@ export const AdminDataView = () => {
                                 </span>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-3 text-gray-700">
+                            <div className="grid grid-cols-1 gap-2.5 text-gray-700">
                                 <div className="flex items-center gap-2">
                                     <MapPin size={14} className="text-gray-400" />
                                     <span>{selectedUser.loc}</span>
@@ -5498,10 +5073,10 @@ export const AdminDataView = () => {
                                 </div>
                             )}
 
-                            <div className="flex justify-end pt-3 border-t border-gray-100">
+                            <div className="flex justify-end pt-3 pb-2 border-t border-gray-100">
                                 <button
                                     onClick={() => setSelectedUser(null)}
-                                    className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer"
+                                    className="w-full py-2.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer"
                                 >
                                     Cerrar ficha
                                 </button>
@@ -5513,9 +5088,12 @@ export const AdminDataView = () => {
 
             {/* MODAL 2: DETALLE DE SOLICITUD DE SERVICIO */}
             {selectedRequest && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-                    <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xl w-full max-w-md overflow-hidden text-left">
-                        <div className="flex justify-between items-center px-5 py-3.5 border-b-2 border-gray-100 bg-gray-50">
+                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-end justify-center">
+                    <div className="bg-white border-t-2 border-gray-200 rounded-t-[16px] shadow-xl w-full max-h-[85vh] overflow-hidden text-left flex flex-col">
+                        <div className="flex justify-center pt-2 pb-1 shrink-0">
+                            <div className="w-10 h-1 rounded-full bg-gray-300" />
+                        </div>
+                        <div className="flex justify-between items-center px-5 py-3 border-b-2 border-gray-100 bg-gray-50 shrink-0">
                             <div className="flex items-center gap-2">
                                 <FileText className="text-[#0E5E6F]" size={18} />
                                 <h3 className="text-sm font-bold text-gray-900">
@@ -5530,7 +5108,7 @@ export const AdminDataView = () => {
                             </button>
                         </div>
 
-                        <div className="p-5 space-y-3 text-xs">
+                        <div className="p-5 space-y-3 text-xs overflow-y-auto">
                             <div className="bg-gray-50 p-3 rounded-[4px] border border-gray-200 space-y-1">
                                 <div className="flex justify-between">
                                     <span className="text-gray-500 font-bold">Cliente:</span>
@@ -5557,10 +5135,10 @@ export const AdminDataView = () => {
                                 </span>
                             </div>
 
-                            <div className="flex justify-end pt-3 border-t border-gray-100">
+                            <div className="flex justify-end pt-3 pb-2 border-t border-gray-100">
                                 <button
                                     onClick={() => setSelectedRequest(null)}
-                                    className="px-4 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
+                                    className="w-full py-2.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
                                 >
                                     Cerrar
                                 </button>
@@ -5572,9 +5150,12 @@ export const AdminDataView = () => {
 
             {/* MODAL 3: EDITAR ESTADO DE USUARIO (CLIENTE / PILOTO / TÉCNICO) */}
             {editingUser && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-                    <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xl w-full max-w-sm overflow-hidden text-left">
-                        <div className="flex justify-between items-center px-5 py-3.5 border-b-2 border-gray-100 bg-gray-50">
+                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-end justify-center">
+                    <div className="bg-white border-t-2 border-gray-200 rounded-t-[16px] shadow-xl w-full max-h-[85vh] overflow-hidden text-left flex flex-col">
+                        <div className="flex justify-center pt-2 pb-1 shrink-0">
+                            <div className="w-10 h-1 rounded-full bg-gray-300" />
+                        </div>
+                        <div className="flex justify-between items-center px-5 py-3 border-b-2 border-gray-100 bg-gray-50 shrink-0">
                             <h3 className="text-sm font-bold text-gray-900">
                                 Gestor de Estado de Usuario
                             </h3>
@@ -5586,7 +5167,7 @@ export const AdminDataView = () => {
                             </button>
                         </div>
 
-                        <div className="p-5 space-y-4 text-xs">
+                        <div className="p-5 space-y-4 text-xs overflow-y-auto">
                             <div>
                                 <p className="font-bold text-gray-900 text-sm">{editingUser.name}</p>
                                 <p className="text-gray-500 text-[11px] font-mono">{editingUser.id}</p>
@@ -5612,16 +5193,16 @@ export const AdminDataView = () => {
                                 </select>
                             </div>
 
-                            <div className="flex justify-end gap-2 pt-3 border-t border-gray-100">
+                            <div className="flex gap-2 pt-3 pb-2 border-t border-gray-100">
                                 <button
                                     onClick={() => setEditingUser(null)}
-                                    className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
+                                    className="flex-1 py-2.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
                                 >
                                     Cancelar
                                 </button>
                                 <button
                                     onClick={handleSaveUserStatus}
-                                    className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer"
+                                    className="flex-1 py-2.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer"
                                 >
                                     Guardar cambios
                                 </button>
@@ -5633,9 +5214,12 @@ export const AdminDataView = () => {
 
             {/* MODAL 4: EDITAR ESTADO DE SOLICITUD DE SERVICIO */}
             {editingRequest && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-                    <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xl w-full max-w-sm overflow-hidden text-left">
-                        <div className="flex justify-between items-center px-5 py-3.5 border-b-2 border-gray-100 bg-gray-50">
+                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-end justify-center">
+                    <div className="bg-white border-t-2 border-gray-200 rounded-t-[16px] shadow-xl w-full max-h-[85vh] overflow-hidden text-left flex flex-col">
+                        <div className="flex justify-center pt-2 pb-1 shrink-0">
+                            <div className="w-10 h-1 rounded-full bg-gray-300" />
+                        </div>
+                        <div className="flex justify-between items-center px-5 py-3 border-b-2 border-gray-100 bg-gray-50 shrink-0">
                             <h3 className="text-sm font-bold text-gray-900">
                                 Gestor de Estado de Solicitud
                             </h3>
@@ -5647,7 +5231,7 @@ export const AdminDataView = () => {
                             </button>
                         </div>
 
-                        <div className="p-5 space-y-4 text-xs">
+                        <div className="p-5 space-y-4 text-xs overflow-y-auto">
                             <div>
                                 <p className="font-bold text-gray-900 text-sm">{editingRequest.serviceType}</p>
                                 <p className="text-gray-500 text-[11px] font-mono">{editingRequest.id} - {editingRequest.clientName}</p>
@@ -5675,16 +5259,16 @@ export const AdminDataView = () => {
                                 </select>
                             </div>
 
-                            <div className="flex justify-end gap-2 pt-3 border-t border-gray-100">
+                            <div className="flex gap-2 pt-3 pb-2 border-t border-gray-100">
                                 <button
                                     onClick={() => setEditingRequest(null)}
-                                    className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
+                                    className="flex-1 py-2.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
                                 >
                                     Cancelar
                                 </button>
                                 <button
                                     onClick={handleSaveRequestStatus}
-                                    className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer"
+                                    className="flex-1 py-2.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer"
                                 >
                                     Guardar cambios
                                 </button>
@@ -5768,14 +5352,14 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
     };
 
     return (
-        <div className="w-full h-full max-w-6xl mx-auto p-2 sm:p-3 bg-white antialiased select-none font-sans flex flex-col justify-center items-center relative">
+        <div className="w-full h-full mx-auto p-2 bg-white antialiased select-none font-sans flex flex-col justify-center items-center relative">
             <div className="w-full h-full flex-1 bg-white border-2 border-gray-200 rounded-[4px] overflow-hidden flex flex-col justify-between shadow-xs">
                 
                 {/* CABECERA */}
-                <div className="bg-gray-50 border-b-2 border-gray-200 px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
+                <div className="bg-gray-50 border-b-2 border-gray-200 px-4 py-4 flex flex-col items-start gap-3">
+                    <div className="flex items-center gap-3 w-full">
                         {/* AVATAR */}
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-[4px] bg-white border-2 border-gray-300 overflow-hidden shrink-0 shadow-xs relative group flex items-center justify-center">
+                        <div className="w-14 h-14 rounded-[4px] bg-white border-2 border-gray-300 overflow-hidden shrink-0 shadow-xs relative group flex items-center justify-center">
                             {!imgError ? (
                                 <img
                                     src={profileData.avatar}
@@ -5784,128 +5368,128 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                                     onError={() => setImgError(true)}
                                 />
                             ) : (
-                                <div className={`w-full h-full flex items-center justify-center font-black text-xl rounded-[4px] ${profileData.avatarBg}`}>
+                                <div className={`w-full h-full flex items-center justify-center font-black text-lg rounded-[4px] ${profileData.avatarBg}`}>
                                     {profileData.initials}
                                 </div>
                             )}
                             <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-[4px]">
-                                <Briefcase size={20} className="text-white drop-shadow" />
+                                <Briefcase size={18} className="text-white drop-shadow" />
                             </div>
                         </div>
 
-                        <div className="text-left">
-                            <h2 className="text-xl sm:text-2xl text-gray-900 font-black tracking-tight normal-case leading-tight">
+                        <div className="text-left min-w-0 flex-1">
+                            <h2 className="text-base text-gray-900 font-black tracking-tight normal-case leading-tight truncate">
                                 {profileData.name}
                             </h2>
-                            <p className="text-gray-500 font-semibold text-xs sm:text-sm mt-1">
+                            <p className="text-gray-500 font-semibold text-[11px] mt-0.5 truncate">
                                 {profileData.email}
                             </p>
                         </div>
                     </div>
 
-                    <div className="flex flex-col items-start sm:items-end gap-2 w-full sm:w-auto">
+                    <div className="flex flex-col items-start gap-2 w-full">
                         <span
-                            className={`text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-[4px] border-2 ${profileData.roleColor}`}
+                            className={`text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-[4px] border-2 ${profileData.roleColor}`}
                             style={{ fontFamily: "'Instrument Sans', sans-serif" }}
                         >
                             {profileData.roleLabel}
                         </span>
 
                         {saveSuccess && (
-                            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-[4px] flex items-center gap-1 animate-in fade-in duration-150">
-                                <Check size={13} /> Actualizado
+                            <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-[4px] flex items-center gap-1 animate-in fade-in duration-150">
+                                <Check size={12} /> Actualizado
                             </span>
                         )}
                     </div>
                 </div>
 
-                {/* MÉTRICAS PRINCIPALES */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x-2 divide-gray-100 bg-white border-b-2 border-gray-200 text-left flex-1 items-center">
+                {/* MÉTRICAS PRINCIPALES — grid 2x2 táctil */}
+                <div className="grid grid-cols-2 divide-x-2 divide-y-2 divide-gray-100 bg-white border-b-2 border-gray-200 text-left">
                     {/* Sede Principal */}
-                    <div className="p-3 sm:p-3.5 hover:bg-gray-50/50 transition-colors flex items-start gap-2.5 h-full justify-center flex-col">
-                        <div className="flex items-center gap-2">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1.5 border-2 border-gray-200 rounded-[4px]">
-                                <MapPin size={16} />
+                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col">
+                        <div className="flex items-center gap-1.5">
+                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                                <MapPin size={14} />
                             </div>
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
+                            <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest block">
                                 Sede Principal
                             </span>
                         </div>
-                        <span className="text-xs sm:text-sm text-gray-800 font-bold block break-words leading-tight mt-0.5">
+                        <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
                             {profileData.location}
                         </span>
                     </div>
 
                     {/* Cobertura Global */}
-                    <div className="p-3 sm:p-3.5 hover:bg-gray-50/50 transition-colors flex items-start gap-2.5 h-full justify-center flex-col">
-                        <div className="flex items-center gap-2">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1.5 border-2 border-gray-200 rounded-[4px]">
-                                <Layers size={16} />
+                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col">
+                        <div className="flex items-center gap-1.5">
+                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                                <Layers size={14} />
                             </div>
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
+                            <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest block">
                                 Cobertura Global
                             </span>
                         </div>
-                        <span className="text-xs sm:text-sm text-gray-800 font-bold block break-words leading-tight mt-0.5">
+                        <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
                             {profileData.area}
                         </span>
                     </div>
 
                     {/* Gestión Activa */}
-                    <div className="p-3 sm:p-3.5 hover:bg-gray-50/50 transition-colors flex items-start gap-2.5 h-full justify-center flex-col">
-                        <div className="flex items-center gap-2">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1.5 border-2 border-gray-200 rounded-[4px]">
-                                <BarChart2 size={16} />
+                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col">
+                        <div className="flex items-center gap-1.5">
+                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                                <BarChart2 size={14} />
                             </div>
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
+                            <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest block">
                                 Gestión Activa
                             </span>
                         </div>
-                        <span className="text-xs sm:text-sm text-gray-800 font-bold block truncate leading-tight mt-0.5">
+                        <span className="text-[11px] text-gray-800 font-bold block truncate leading-tight mt-0.5">
                             {profileData.services}
                         </span>
                     </div>
 
                     {/* Estado del Sistema */}
-                    <div className="p-3 sm:p-3.5 hover:bg-gray-50/50 transition-colors flex items-start gap-2.5 h-full justify-center flex-col">
-                        <div className="flex items-center gap-2">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1.5 border-2 border-gray-200 rounded-[4px]">
-                                <CheckCircle size={16} />
+                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col">
+                        <div className="flex items-center gap-1.5">
+                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                                <CheckCircle size={14} />
                             </div>
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
+                            <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest block">
                                 Estado
                             </span>
                         </div>
-                        <span className="text-xs font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-[4px] uppercase inline-block mt-0.5">
+                        <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] uppercase inline-block mt-0.5">
                             {profileData.standing}
                         </span>
                     </div>
                 </div>
 
                 {/* DATOS DE CONTACTO Y CREDENCIALES */}
-                <div className="p-3.5 sm:p-4 bg-white flex-1 flex flex-col justify-center">
-                    <div className="flex items-center justify-between mb-2.5 pb-2 border-b-2 border-gray-100">
+                <div className="p-3.5 bg-white flex-1 flex flex-col justify-center">
+                    <div className="flex flex-col gap-2 mb-2.5 pb-2 border-b-2 border-gray-100">
                         <div className="flex items-center gap-2">
-                            <Settings size={16} className="text-[#0E5E6F]" />
-                            <h3 className="text-xs sm:text-sm font-black text-gray-800 normal-case">
+                            <Settings size={15} className="text-[#0E5E6F]" />
+                            <h3 className="text-xs font-black text-gray-800 normal-case">
                                 Credenciales y Datos de Contacto
                             </h3>
                         </div>
 
                         <button
                             onClick={handleOpenModal}
-                            className="py-1 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] text-xs flex items-center gap-1.5 transition-colors active:scale-95 shadow-xs cursor-pointer"
+                            className="w-full py-2 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] text-xs flex items-center justify-center gap-1.5 transition-colors active:scale-95 shadow-xs cursor-pointer"
                         >
                             <Edit2 size={13} className="text-[#0E5E6F]" /> Editar Información
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-left">
+                    <div className="grid grid-cols-1 gap-2.5 text-left">
                         <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
                             <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider flex items-center gap-1">
                                 <Phone size={12} className="text-[#0E5E6F]" /> Teléfono
                             </span>
-                            <p className="font-bold text-xs sm:text-sm text-gray-800 mt-0.5">
+                            <p className="font-bold text-xs text-gray-800 mt-0.5">
                                 {profileData.phone}
                             </p>
                         </div>
@@ -5914,7 +5498,7 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                             <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider flex items-center gap-1">
                                 <Mail size={12} className="text-[#0E5E6F]" /> Correo
                             </span>
-                            <p className="font-bold text-xs sm:text-sm text-gray-800 mt-0.5 truncate">
+                            <p className="font-bold text-xs text-gray-800 mt-0.5 truncate">
                                 {profileData.email}
                             </p>
                         </div>
@@ -5923,7 +5507,7 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                             <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider flex items-center gap-1">
                                 <Lock size={12} className="text-[#0E5E6F]" /> Contraseña
                             </span>
-                            <p className="font-mono font-bold text-xs sm:text-sm text-gray-800 mt-0.5">
+                            <p className="font-mono font-bold text-xs text-gray-800 mt-0.5">
                                 ••••••••••••
                             </p>
                         </div>
@@ -5931,14 +5515,14 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                 </div>
 
                 {/* PIE DE PÁGINA */}
-                <div className="border-t-2 border-gray-200 px-6 py-2 bg-gray-50 flex items-center justify-between gap-2">
-                    <span className="text-xs text-gray-400 font-medium text-left truncate">
+                <div className="border-t-2 border-gray-200 px-4 py-2.5 bg-gray-50 flex flex-col items-stretch gap-2">
+                    <span className="text-[10px] text-gray-400 font-medium text-left truncate">
                         Sede Central Tegucigalpa, Francisco Morazán, HN
                     </span>
 
                     <button
                         onClick={onLogout}
-                        className="flex items-center gap-1.5 py-1 px-3 rounded-[4px] border-2 border-[#B8001F] bg-white hover:bg-[#B8001F]/10 text-[#B8001F] transition-all active:scale-95 shadow-xs cursor-pointer"
+                        className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-[4px] border-2 border-[#B8001F] bg-white hover:bg-[#B8001F]/10 text-[#B8001F] transition-all active:scale-95 shadow-xs cursor-pointer w-full"
                         style={{ fontFamily: "'Instrument Sans', sans-serif" }}
                     >
                         <LogOut size={13} className="shrink-0 text-[#B8001F]" />
@@ -5949,10 +5533,15 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                 </div>
             </div>
 
-            {/* MODAL VERTICAL FLOTANTE DE EDICIÓN */}
+            {/* BOTTOM SHEET DE EDICIÓN */}
             {isModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
-                    <div className="bg-white border-2 border-gray-300 rounded-[4px] p-5 w-full max-w-md shadow-xl space-y-4 text-left">
+                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-end justify-center animate-in fade-in duration-150">
+                    <div className="bg-white border-t-2 border-gray-300 rounded-t-[16px] w-full max-h-[85vh] shadow-xl flex flex-col text-left overflow-hidden">
+                        <div className="flex justify-center pt-2 pb-1 shrink-0">
+                            <div className="w-10 h-1 rounded-full bg-gray-300" />
+                        </div>
+
+                        <div className="px-5 pt-1 pb-3 space-y-4 overflow-y-auto">
                         {/* Encabezado del Modal */}
                         <div className="flex items-center justify-between pb-2.5 border-b-2 border-gray-100">
                             <div className="flex items-center gap-2">
@@ -6066,22 +5655,23 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                                 </div>
                             </div>
 
-                            <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                            <div className="flex gap-2 pt-2 border-t border-gray-100">
                                 <button
                                     type="button"
                                     onClick={() => setIsModalOpen(false)}
-                                    className="py-1.5 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-600 font-bold rounded-[4px] text-xs flex items-center gap-1 transition-colors active:scale-95 cursor-pointer"
+                                    className="flex-1 py-2.5 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-600 font-bold rounded-[4px] text-xs flex items-center justify-center gap-1 transition-colors active:scale-95 cursor-pointer"
                                 >
                                     <X size={13} /> Cancelar
                                 </button>
                                 <button
                                     type="submit"
-                                    className="py-1.5 px-4 bg-[#0E5E6F] border-2 border-[#0E5E6F] text-white font-bold rounded-[4px] text-xs flex items-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer"
+                                    className="flex-1 py-2.5 px-4 bg-[#0E5E6F] border-2 border-[#0E5E6F] text-white font-bold rounded-[4px] text-xs flex items-center justify-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer"
                                 >
                                     <Save size={13} /> Guardar
                                 </button>
                             </div>
                         </form>
+                        </div>
                     </div>
                 </div>
             )}

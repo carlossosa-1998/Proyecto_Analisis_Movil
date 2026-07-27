@@ -777,20 +777,20 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
   const unreadCount = notificaciones.filter((n) => n.unread).length;
 
   return (
-    <div style={{ fontFamily: "'Roboto', sans-serif" }} className="p-6 md:p-8 max-w-[1400px] mx-auto bg-white antialiased text-gray-800">
-      
+    <div style={{ fontFamily: "'Roboto', sans-serif" }} className="p-4 max-w-full mx-auto bg-white antialiased text-gray-800">
+
       {/* BARRA SUPERIOR */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b-2 border-gray-100 select-none">
+      <div className="flex flex-col gap-3 mb-4 pb-3 border-b-2 border-gray-100 select-none">
         <div className="text-left space-y-0.5">
-          <h1 className="text-2xl font-black text-gray-900 tracking-tight">
+          <h1 className="text-lg font-black text-gray-900 tracking-tight">
             Dashboard del piloto
           </h1>
-          <p className="text-gray-500 text-xs font-medium tracking-wide">
+          <p className="text-gray-500 text-[11px] font-medium tracking-wide">
             Centro de control de vuelo • Telemetría, hobby y operaciones comerciales
           </p>
         </div>
 
-        <div className="flex items-center gap-3 self-end sm:self-auto">
+        <div className="flex items-center justify-between gap-3 w-full">
           {/* Badge Piloto Verificado */}
           <div
             style={{
@@ -801,11 +801,11 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             className="px-2.5 py-1 border border-emerald-300 flex items-center gap-1.5 shadow-xs"
           >
             <span className="w-1.5 h-1.5 bg-[#065F46] rounded-full animate-pulse"></span>
-            <span className="text-[10px] font-bold tracking-wider">Piloto verificado</span>
+            <span className="text-[10px] font-bold tracking-wider whitespace-nowrap">Piloto verificado</span>
           </div>
 
           {/* CAMPANA Y DROPDOWN DE NOTIFICACIONES */}
-          <div className="relative">
+          <div className="relative shrink-0">
             <button
               onClick={() => setShowNotifications(!showNotifications)}
               style={{ borderRadius: "4px" }}
@@ -825,84 +825,92 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
               )}
             </button>
 
-            {/* PANEL DROPDOWN DE NOTIFICACIONES */}
+            {/* PANEL DE NOTIFICACIONES: bottom sheet en móvil */}
             {showNotifications && (
-              <div
-                style={{ borderRadius: "4px" }}
-                className="absolute right-0 mt-2 w-80 sm:w-96 bg-white border-2 border-gray-200 shadow-2xl z-50 p-4 text-left animate-in fade-in duration-150"
-              >
-                <div className="flex justify-between items-center pb-2.5 mb-2.5 border-b border-gray-100">
-                  <div className="flex items-center gap-2">
-                    <Bell size={15} className="text-gray-700" />
-                    <h3 className="text-xs font-black text-gray-900 tracking-wider">
-                      Centro de notificaciones
-                    </h3>
-                  </div>
-                  <button
-                    onClick={() => setShowNotifications(false)}
-                    className="text-gray-400 hover:text-gray-600 p-1"
-                  >
-                    <X size={14} />
-                  </button>
-                </div>
+              <>
+                <div
+                  onClick={() => setShowNotifications(false)}
+                  className="fixed inset-0 bg-black/40 z-40"
+                />
+                <div
+                  style={{ borderRadius: "16px 16px 0 0" }}
+                  className="fixed left-0 right-0 bottom-0 z-50 bg-white border-t-2 border-gray-300 max-h-[75vh] p-4 text-left shadow-xl overflow-y-auto animate-in fade-in duration-150"
+                >
+                  <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto -mt-1 mb-2" />
 
-                <div className="space-y-2 max-h-72 overflow-y-auto custom-scrollbar pr-1">
-                  {notificaciones.map((n) => (
-                    <div
-                      key={n.id}
-                      style={{ borderRadius: "4px" }}
-                      className={`p-2.5 border text-xs transition-colors ${
-                        n.unread ? "bg-gray-50 border-gray-200" : "bg-white border-gray-100"
-                      }`}
-                    >
-                      <div className="flex justify-between items-start gap-2 mb-1">
-                        <span
-                          style={{
-                            backgroundColor: n.colorBg,
-                            color: n.textColor,
-                            borderRadius: "4px",
-                          }}
-                          className="px-2 py-0.5 text-[9px] font-bold flex items-center gap-1"
-                        >
-                          {n.icono}
-                          {n.titulo}
-                        </span>
-                        <span className="text-[9px] font-mono text-gray-400">{n.tiempo}</span>
-                      </div>
-                      <p className="text-gray-700 font-medium text-[11px] leading-snug">
-                        {n.detalle}
-                      </p>
+                  <div className="flex justify-between items-center pb-2.5 mb-2.5 border-b border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <Bell size={15} className="text-gray-700" />
+                      <h3 className="text-xs font-black text-gray-900 tracking-wider">
+                        Centro de notificaciones
+                      </h3>
                     </div>
-                  ))}
-                </div>
+                    <button
+                      onClick={() => setShowNotifications(false)}
+                      className="text-gray-400 hover:text-gray-600 p-1"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
 
-                <div className="pt-2.5 mt-2.5 border-t border-gray-100 text-center">
-                  <button
-                    onClick={() => {
-                      setNotificaciones(notificaciones.map((n) => ({ ...n, unread: false })));
-                    }}
-                    className="text-[11px] font-bold text-[#0E5E6F] hover:underline"
-                  >
-                    Marcar todas como leídas
-                  </button>
+                  <div className="space-y-2 pr-1">
+                    {notificaciones.map((n) => (
+                      <div
+                        key={n.id}
+                        style={{ borderRadius: "4px" }}
+                        className={`p-2.5 border text-xs transition-colors ${
+                          n.unread ? "bg-gray-50 border-gray-200" : "bg-white border-gray-100"
+                        }`}
+                      >
+                        <div className="flex justify-between items-start gap-2 mb-1">
+                          <span
+                            style={{
+                              backgroundColor: n.colorBg,
+                              color: n.textColor,
+                              borderRadius: "4px",
+                            }}
+                            className="px-2 py-0.5 text-[9px] font-bold flex items-center gap-1"
+                          >
+                            {n.icono}
+                            {n.titulo}
+                          </span>
+                          <span className="text-[9px] font-mono text-gray-400">{n.tiempo}</span>
+                        </div>
+                        <p className="text-gray-700 font-medium text-[11px] leading-snug">
+                          {n.detalle}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="pt-2.5 mt-2.5 border-t border-gray-100 text-center pb-1">
+                    <button
+                      onClick={() => {
+                        setNotificaciones(notificaciones.map((n) => ({ ...n, unread: false })));
+                      }}
+                      className="text-[11px] font-bold text-[#0E5E6F] hover:underline"
+                    >
+                      Marcar todas como leídas
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </>
             )}
           </div>
         </div>
       </div>
 
       {/* DIVISIÓN PRINCIPAL EN PESTAÑAS: USO PERSONAL VS SERVICIOS A TERCEROS */}
-      <div className="mb-6 bg-gray-100 p-1.5 rounded flex items-center gap-2 border border-gray-200">
+      <div className="mb-4 bg-gray-100 p-1.5 rounded flex items-center gap-2 border border-gray-200">
         <button
           onClick={() => handleMainModeChange("personal")}
           style={{
             backgroundColor: mainMode === "personal" ? HEX_COLORS.brandGreen : "transparent",
             color: mainMode === "personal" ? "#FFFFFF" : "#4B5563",
           }}
-          className="flex-1 py-2.5 px-4 rounded text-xs font-bold tracking-wider flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer min-w-0"
+          className="flex-1 py-2.5 px-2 rounded text-[11px] font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer min-w-0"
         >
-          <User size={16} className="shrink-0" />
+          <User size={15} className="shrink-0" />
           <span className="truncate">Uso personal</span>
         </button>
 
@@ -912,112 +920,112 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             backgroundColor: mainMode === "trabajo" ? HEX_COLORS.brandGreen : "transparent",
             color: mainMode === "trabajo" ? "#FFFFFF" : "#4B5563",
           }}
-          className="flex-1 py-2.5 px-4 rounded text-xs font-bold tracking-wider flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer min-w-0"
+          className="flex-1 py-2.5 px-2 rounded text-[11px] font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer min-w-0"
         >
-          <Briefcase size={16} className="shrink-0" />
-          <span className="truncate">Servicios de terceros</span>
+          <Briefcase size={15} className="shrink-0" />
+          <span className="truncate">Terceros</span>
         </button>
       </div>
 
       {/* MÉTRICAS SUMMARY ADAPTADAS AL MODO SELECCIONADO */}
       {mainMode === "personal" ? (
         /* Métricas Uso Personal (Hobbies, FPV, Fotos, Hogar) */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 text-left">
-          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3.5 shadow-xs flex flex-col justify-between min-w-0">
+        <div className="grid grid-cols-2 gap-3 mb-4 text-left">
+          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
             <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[11px] font-bold text-gray-500 tracking-wider truncate">Horas de vuelo hobby</span>
+              <span className="text-[10px] font-bold text-gray-500 tracking-wider truncate">Horas de vuelo hobby</span>
               <div style={{ backgroundColor: HEX_COLORS.emerald100, color: "#065F46", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
-                <Clock size={15} />
+                <Clock size={14} />
               </div>
             </div>
-            <p className="text-xl font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">84.5 hrs</p>
-            <p className="text-[10px] text-gray-400 font-semibold truncate">Tiempo de vuelo personal acumulado</p>
+            <p className="text-lg font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">84.5 hrs</p>
+            <p className="text-[9px] text-gray-400 font-semibold truncate">Tiempo de vuelo acumulado</p>
           </div>
 
-          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3.5 shadow-xs flex flex-col justify-between min-w-0">
+          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
             <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[11px] font-bold text-gray-500 tracking-wider truncate">Metraje y fotos HD</span>
+              <span className="text-[10px] font-bold text-gray-500 tracking-wider truncate">Metraje y fotos HD</span>
               <div style={{ backgroundColor: HEX_COLORS.blue100, color: "#1E40AF", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
-                <Camera size={15} />
+                <Camera size={14} />
               </div>
             </div>
-            <p className="text-xl font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">1,240 items</p>
-            <p className="text-[10px] text-gray-400 font-semibold truncate">Capturas personales en la nube</p>
+            <p className="text-lg font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">1,240 items</p>
+            <p className="text-[9px] text-gray-400 font-semibold truncate">Capturas en la nube</p>
           </div>
 
-          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3.5 shadow-xs flex flex-col justify-between min-w-0">
+          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
             <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[11px] font-bold text-gray-500 tracking-wider truncate">Distancia explorada</span>
+              <span className="text-[10px] font-bold text-gray-500 tracking-wider truncate">Distancia explorada</span>
               <div style={{ backgroundColor: HEX_COLORS.purple100, color: "#6B21A8", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
-                <Compass size={15} />
+                <Compass size={14} />
               </div>
             </div>
-            <p className="text-xl font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">480 km</p>
-            <p className="text-[10px] text-gray-400 font-semibold truncate">Recorridos en rutas de ocio</p>
+            <p className="text-lg font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">480 km</p>
+            <p className="text-[9px] text-gray-400 font-semibold truncate">Rutas de ocio</p>
           </div>
 
-          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3.5 shadow-xs flex flex-col justify-between min-w-0">
+          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
             <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[11px] font-bold text-gray-500 tracking-wider truncate">Drones en hangar</span>
+              <span className="text-[10px] font-bold text-gray-500 tracking-wider truncate">Drones en hangar</span>
               <div style={{ backgroundColor: HEX_COLORS.amber100, color: "#92400E", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
-                <Radio size={15} />
+                <Radio size={14} />
               </div>
             </div>
-            <p className="text-xl font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">4 unidades</p>
-            <p className="text-[10px] text-gray-400 font-semibold truncate">Mavic 3, FPV Quad, Mini 4, Inspire</p>
+            <p className="text-lg font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">4 unidades</p>
+            <p className="text-[9px] text-gray-400 font-semibold truncate">Mavic 3, FPV, Mini 4, Inspire</p>
           </div>
         </div>
       ) : (
         /* Métricas Trabajo Comercial / Terceros */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 text-left">
-          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3.5 shadow-xs flex flex-col justify-between min-w-0">
+        <div className="grid grid-cols-2 gap-3 mb-4 text-left">
+          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
             <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[11px] font-bold text-gray-500 tracking-wider truncate">Facturación mensual</span>
+              <span className="text-[10px] font-bold text-gray-500 tracking-wider truncate">Facturación mensual</span>
               <div style={{ backgroundColor: HEX_COLORS.emerald100, color: "#065F46", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
-                <DollarSign size={15} />
+                <DollarSign size={14} />
               </div>
             </div>
-            <p className="text-xl font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">L551,250</p>
-            <p className="text-[10px] text-gray-400 font-semibold truncate">Ingresos generados este mes</p>
+            <p className="text-lg font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">L551,250</p>
+            <p className="text-[9px] text-gray-400 font-semibold truncate">Ingresos de este mes</p>
           </div>
 
-          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3.5 shadow-xs flex flex-col justify-between min-w-0">
+          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
             <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[11px] font-bold text-gray-500 tracking-wider truncate">Contratos activos</span>
+              <span className="text-[10px] font-bold text-gray-500 tracking-wider truncate">Contratos activos</span>
               <div style={{ backgroundColor: HEX_COLORS.blue100, color: "#1E40AF", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
-                <FileText size={15} />
+                <FileText size={14} />
               </div>
             </div>
-            <p className="text-xl font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">14 clientes</p>
-            <p className="text-[10px] text-gray-400 font-semibold truncate">Empresas y proyectos vigentes</p>
+            <p className="text-lg font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">14 clientes</p>
+            <p className="text-[9px] text-gray-400 font-semibold truncate">Empresas vigentes</p>
           </div>
 
-          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3.5 shadow-xs flex flex-col justify-between min-w-0">
+          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
             <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[11px] font-bold text-gray-500 tracking-wider truncate">Horas comerciales</span>
+              <span className="text-[10px] font-bold text-gray-500 tracking-wider truncate">Horas comerciales</span>
               <div style={{ backgroundColor: HEX_COLORS.purple100, color: "#6B21A8", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
-                <TrendingUp size={15} />
+                <TrendingUp size={14} />
               </div>
             </div>
-            <p className="text-xl font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">195 hrs</p>
-            <p className="text-[10px] text-gray-400 font-semibold truncate">Vuelo facturado este mes</p>
+            <p className="text-lg font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">195 hrs</p>
+            <p className="text-[9px] text-gray-400 font-semibold truncate">Vuelo facturado</p>
           </div>
 
-          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3.5 shadow-xs flex flex-col justify-between min-w-0">
+          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
             <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[11px] font-bold text-gray-500 tracking-wider truncate">Reputación del piloto</span>
+              <span className="text-[10px] font-bold text-gray-500 tracking-wider truncate">Reputación</span>
               <div style={{ backgroundColor: HEX_COLORS.amber100, color: "#92400E", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
-                <Award size={15} />
+                <Award size={14} />
               </div>
             </div>
-            <p className="text-xl font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">4.9 / 5.0</p>
-            <p className="text-[10px] text-gray-400 font-semibold truncate">Calificación de clientes</p>
+            <p className="text-lg font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">4.9 / 5.0</p>
+            <p className="text-[9px] text-gray-400 font-semibold truncate">Calificación de clientes</p>
           </div>
         </div>
       )}
 
-      {/* PESTAÑAS SECUNDARIAS ADAPTADAS SEGÚN EL MODO */}
-      <div className="border-b-2 border-gray-200 mb-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1 select-none">
+      {/* PESTAÑAS SECUNDARIAS: carrusel horizontal táctil */}
+      <div className="mb-4 flex gap-2 overflow-x-auto pb-1 select-none custom-scrollbar">
         {mainMode === "personal"
           ? [
               { id: "fotografia", label: "Fotografía", icon: <Camera size={13} /> },
@@ -1031,15 +1039,16 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  style={{ borderRadius: "4px 4px 0 0" }}
-                  className={`px-1.5 py-3 text-[11px] sm:text-xs font-bold flex items-center justify-center gap-1 border-t-2 border-x-2 -mb-[2px] transition-all text-center cursor-pointer min-w-0 ${
-                    isActive
-                      ? "border-t-[#0E5E6F] border-x-gray-200 border-b-white bg-white text-[#0E5E6F] shadow-xs"
-                      : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-                  }`}
+                  style={{
+                    borderRadius: "4px",
+                    backgroundColor: isActive ? HEX_COLORS.brandGreen : "#FFFFFF",
+                    color: isActive ? "#FFFFFF" : "#4B5563",
+                    borderColor: isActive ? HEX_COLORS.brandGreen : "#E5E7EB",
+                  }}
+                  className="shrink-0 px-3 py-2 text-[11px] font-bold flex items-center justify-center gap-1.5 border-2 transition-all cursor-pointer whitespace-nowrap"
                 >
-                  <span className={`shrink-0 ${isActive ? "text-[#0E5E6F]" : "text-gray-400"}`}>{tab.icon}</span>
-                  <span className="truncate">{tab.label}</span>
+                  <span className={isActive ? "text-white" : "text-gray-400"}>{tab.icon}</span>
+                  <span>{tab.label}</span>
                 </button>
               );
             })
@@ -1055,15 +1064,16 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  style={{ borderRadius: "4px 4px 0 0" }}
-                  className={`px-1.5 py-3 text-[11px] sm:text-xs font-bold flex items-center justify-center gap-1 border-t-2 border-x-2 -mb-[2px] transition-all text-center cursor-pointer min-w-0 ${
-                    isActive
-                      ? "border-t-[#0E5E6F] border-x-gray-200 border-b-white bg-white text-[#0E5E6F] shadow-xs"
-                      : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-                  }`}
+                  style={{
+                    borderRadius: "4px",
+                    backgroundColor: isActive ? HEX_COLORS.brandGreen : "#FFFFFF",
+                    color: isActive ? "#FFFFFF" : "#4B5563",
+                    borderColor: isActive ? HEX_COLORS.brandGreen : "#E5E7EB",
+                  }}
+                  className="shrink-0 px-3 py-2 text-[11px] font-bold flex items-center justify-center gap-1.5 border-2 transition-all cursor-pointer whitespace-nowrap"
                 >
-                  <span className={`shrink-0 ${isActive ? "text-[#0E5E6F]" : "text-gray-400"}`}>{tab.icon}</span>
-                  <span className="truncate">{tab.label}</span>
+                  <span className={isActive ? "text-white" : "text-gray-400"}>{tab.icon}</span>
+                  <span>{tab.label}</span>
                 </button>
               );
             })}
@@ -1072,13 +1082,13 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
       {/* GRÁFICO MEJORADO DE RENDIMIENTO */}
       <div
         style={{ borderRadius: "4px" }}
-        className="bg-white border-2 border-gray-200 p-5 shadow-xs mb-8 text-left"
+        className="bg-white border-2 border-gray-200 p-4 shadow-xs mb-6 text-left"
       >
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 pb-3 border-b border-gray-100">
+        <div className="flex flex-col gap-3 mb-4 pb-3 border-b border-gray-100">
           <div className="flex items-center gap-2">
-            <BarChart3 size={18} className="text-[#0E5E6F]" />
-            <div>
-              <h3 className="text-xs font-black text-gray-900 tracking-wider capitalize">
+            <BarChart3 size={18} className="text-[#0E5E6F] shrink-0" />
+            <div className="min-w-0">
+              <h3 className="text-xs font-black text-gray-900 tracking-wider capitalize truncate">
                 {mainMode === "personal" ? "Actividad personal" : "Telemetría comercial"} — {activeTab.replace("_", " ")}
               </h3>
               <p className="text-[11px] text-gray-500 font-medium">
@@ -1090,7 +1100,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
           {/* Selector de escala temporal */}
           <div
             style={{ borderRadius: "4px" }}
-            className="bg-gray-100 p-1 flex items-center gap-1 border border-gray-200"
+            className="bg-gray-100 p-1 flex items-center gap-1 border border-gray-200 w-full"
           >
             {[
               { id: "semana", label: "Semana" },
@@ -1101,7 +1111,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
                 key={p.id}
                 onClick={() => setChartPeriod(p.id as any)}
                 style={{ borderRadius: "4px" }}
-                className={`px-2.5 py-1 text-[11px] font-bold transition-all cursor-pointer ${
+                className={`flex-1 px-2.5 py-1.5 text-[11px] font-bold transition-all cursor-pointer ${
                   chartPeriod === p.id
                     ? "bg-[#0E5E6F] text-white shadow-xs"
                     : "text-gray-500 hover:text-gray-900"
@@ -1114,18 +1124,18 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
         </div>
 
         {/* CONTENEDOR DEL GRÁFICO */}
-        <div className="relative pt-4 pb-2 pr-2">
-          <div className="flex h-56">
+        <div className="relative pt-4 pb-2 pr-1">
+          <div className="flex h-44">
             {/* EJE Y */}
-            <div className="w-12 flex flex-col justify-between items-end pr-3 border-r-2 border-gray-300 text-[10px] font-mono font-bold text-gray-400 py-1 select-none">
+            <div className="w-9 flex flex-col justify-between items-end pr-2 border-r-2 border-gray-300 text-[9px] font-mono font-bold text-gray-400 py-1 select-none">
               {yAxisTicks.map((tick, i) => (
                 <span key={i}>{tick}</span>
               ))}
             </div>
 
             {/* BARRAS Y LÍNEAS DE FONDO */}
-            <div className="flex-1 relative flex items-end justify-between pl-4 pr-2 h-full">
-              <div className="absolute inset-x-0 top-0 bottom-0 flex flex-col justify-between pointer-events-none z-0 px-2">
+            <div className="flex-1 relative flex items-end justify-between pl-2 pr-1 h-full">
+              <div className="absolute inset-x-0 top-0 bottom-0 flex flex-col justify-between pointer-events-none z-0 px-1">
                 <div className="border-b border-gray-100 w-full h-0"></div>
                 <div className="border-b border-gray-100 w-full h-0"></div>
                 <div className="border-b border-gray-100 w-full h-0"></div>
@@ -1150,24 +1160,25 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
                   return (
                     <div
                       key={idx}
-                      className="flex-1 flex flex-col items-center justify-end h-full relative group cursor-pointer z-10 px-1"
+                      className="flex-1 flex flex-col items-center justify-end h-full relative group cursor-pointer z-10 px-0.5"
+                      onClick={() => setHoveredBar(hoveredBar === idx ? null : idx)}
                       onMouseEnter={() => setHoveredBar(idx)}
                       onMouseLeave={() => setHoveredBar(null)}
                     >
-                      {/* Tooltip Hover */}
+                      {/* Tooltip Hover/Tap */}
                       {hoveredBar === idx && (
                         <div
                           style={{ borderRadius: "4px" }}
-                          className="absolute -top-11 z-30 bg-gray-900 text-white px-2.5 py-1 text-[10px] font-mono shadow-xl whitespace-nowrap text-center animate-in fade-in duration-100"
+                          className="absolute -top-11 z-30 bg-gray-900 text-white px-2 py-1 text-[9px] font-mono shadow-xl whitespace-nowrap text-center animate-in fade-in duration-100"
                         >
                           <p className="font-bold">
                             {item.valor} {chartUnit}
                           </p>
-                          <p className="text-gray-300 text-[9px]">{item.detalle}</p>
+                          <p className="text-gray-300 text-[8px]">{item.detalle}</p>
                         </div>
                       )}
 
-                      <span className="text-[10px] font-black text-gray-700 mb-1 opacity-80 group-hover:opacity-100">
+                      <span className="text-[9px] font-black text-gray-700 mb-1 opacity-80 group-hover:opacity-100">
                         {item.valor}
                       </span>
 
@@ -1191,12 +1202,12 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
           </div>
 
           {/* EJE X */}
-          <div className="flex pl-12 pt-2 border-t-2 border-gray-300">
-            <div className="flex-1 flex justify-between px-4">
+          <div className="flex pl-9 pt-2 border-t-2 border-gray-300">
+            <div className="flex-1 flex justify-between px-1">
               {currentChartSet.map((item, idx) => (
                 <span
                   key={idx}
-                  className="flex-1 text-center text-[10px] font-bold text-gray-500 tracking-wider"
+                  className="flex-1 text-center text-[9px] font-bold text-gray-500 tracking-wider truncate px-0.5"
                 >
                   {item.label}
                 </span>
@@ -1206,12 +1217,12 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
         </div>
       </div>
 
-      {/* TABLA DE REGISTROS DE VUELO */}
+      {/* LISTADO DE REGISTROS DE VUELO (tarjetas en vez de tabla) */}
       <div
         style={{ borderRadius: "4px" }}
-        className="bg-white border-2 border-gray-200 shadow-xs text-left overflow-hidden mb-8"
+        className="bg-white border-2 border-gray-200 shadow-xs text-left overflow-hidden mb-6"
       >
-        <div className="p-4 border-b-2 border-gray-100 bg-gray-50/50 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3">
+        <div className="p-3 border-b-2 border-gray-100 bg-gray-50/50 flex flex-col gap-3">
           <div>
             <h3 className="text-xs font-black text-gray-900 tracking-wider capitalize">
               {mainMode === "personal" ? "Bitácora personal de vuelos" : "Registro de operaciones comerciales"} — {activeTab.replace("_", " ")}
@@ -1221,9 +1232,9 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full lg:w-auto">
+          <div className="flex flex-col gap-2 w-full">
             {/* Buscador */}
-            <div className="relative flex-1 sm:w-60">
+            <div className="relative w-full">
               <SearchIcon
                 size={13}
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
@@ -1234,7 +1245,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
                 onChange={(e) => setTableSearch(e.target.value)}
                 placeholder="Buscar por ID, lugar, dron..."
                 style={{ borderRadius: "4px" }}
-                className="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-gray-300 focus:outline-none focus:border-[#0E5E6F] font-medium"
+                className="w-full pl-8 pr-3 py-2 text-xs bg-white border border-gray-300 focus:outline-none focus:border-[#0E5E6F] font-medium"
               />
               {tableSearch && (
                 <button
@@ -1246,8 +1257,8 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
               )}
             </div>
 
-            {/* Chips Filtros Verde #0E5E6F */}
-            <div className="flex items-center gap-1">
+            {/* Chips Filtros: scroll horizontal táctil */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 custom-scrollbar">
               {[
                 { id: "todos", label: "Todos" },
                 { id: "completado", label: "Completados" },
@@ -1263,7 +1274,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
                     color: statusFilter === f.id ? "#FFFFFF" : "#0E5E6F",
                     borderColor: HEX_COLORS.brandGreen,
                   }}
-                  className="px-2.5 py-1 text-[11px] font-bold border transition-all hover:opacity-90 active:scale-95 whitespace-nowrap cursor-pointer"
+                  className="shrink-0 px-2.5 py-1.5 text-[11px] font-bold border transition-all hover:opacity-90 active:scale-95 whitespace-nowrap cursor-pointer"
                 >
                   {f.label}
                 </button>
@@ -1272,67 +1283,53 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
           </div>
         </div>
 
-        {/* Tabla */}
-        <div className="overflow-x-auto custom-scrollbar">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-white text-gray-400 font-bold border-b border-gray-200 text-[10px] tracking-wider">
-              <tr>
-                <th className="px-4 py-2.5 whitespace-nowrap">Código / Fecha</th>
-                <th className="px-4 py-2.5 whitespace-nowrap">Ubicación / Proyecto</th>
-                <th className="px-4 py-2.5">Objetivo / Detalle técnico</th>
-                <th className="px-4 py-2.5 whitespace-nowrap">Dron y métricas</th>
-                <th className="px-4 py-2.5 text-center whitespace-nowrap">Estado</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {registrosActuales.length > 0 ? (
-                registrosActuales.map((row) => (
-                  <tr key={row.id} className="hover:bg-gray-50/80 transition-colors">
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <p className="font-extrabold text-gray-900">{row.id}</p>
-                      <p className="text-[10px] text-gray-400 font-mono">{row.fecha}</p>
-                    </td>
-                    <td className="px-4 py-3 font-bold text-gray-700 whitespace-nowrap">
-                      <span className="flex items-center gap-1">
-                        <MapPin size={12} className="text-gray-400 shrink-0" />
-                        {row.ubicacion}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 font-medium text-gray-800 max-w-xs leading-snug">
-                      {row.objetivo}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <p className="font-bold text-[#0E5E6F]">{row.dron}</p>
-                      <p className="text-[10px] text-gray-400">
-                        {row.duracion} | {row.cobertura}
-                      </p>
-                    </td>
-                    <td className="px-4 py-3 text-center whitespace-nowrap">
-                      <span
-                        style={{
-                          backgroundColor: row.tagColorBg,
-                          color: row.tagTextColor,
-                          borderRadius: "4px",
-                        }}
-                        className="px-2 py-0.5 font-bold text-[10px] inline-block border border-black/5"
-                      >
-                        {row.estado}
-                      </span>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className="px-4 py-6 text-center text-gray-400 font-medium">
-                    No hay vuelos registrados para la categoría seleccionada.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+        {/* Tarjetas de registros (reemplaza la tabla en escritorio) */}
+        <div className="divide-y divide-gray-100">
+          {registrosActuales.length > 0 ? (
+            registrosActuales.map((row) => (
+              <div key={row.id} className="p-3 space-y-2 hover:bg-gray-50/80 transition-colors">
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <p className="font-extrabold text-gray-900 text-xs">{row.id}</p>
+                    <p className="text-[10px] text-gray-400 font-mono">{row.fecha}</p>
+                  </div>
+                  <span
+                    style={{
+                      backgroundColor: row.tagColorBg,
+                      color: row.tagTextColor,
+                      borderRadius: "4px",
+                    }}
+                    className="px-2 py-0.5 font-bold text-[10px] inline-block border border-black/5 shrink-0"
+                  >
+                    {row.estado}
+                  </span>
+                </div>
+
+                <span className="flex items-center gap-1 font-bold text-gray-700 text-xs">
+                  <MapPin size={12} className="text-gray-400 shrink-0" />
+                  {row.ubicacion}
+                </span>
+
+                <p className="font-medium text-gray-800 text-[11px] leading-snug">
+                  {row.objetivo}
+                </p>
+
+                <div className="flex items-center justify-between pt-1 border-t border-gray-100">
+                  <p className="font-bold text-[#0E5E6F] text-xs">{row.dron}</p>
+                  <p className="text-[10px] text-gray-400 text-right">
+                    {row.duracion} • {row.cobertura}
+                  </p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="px-4 py-6 text-center text-gray-400 font-medium text-xs">
+              No hay vuelos registrados para la categoría seleccionada.
+            </div>
+          )}
         </div>
 
-        <div className="p-3 border-t border-gray-100 bg-gray-50/40 flex justify-between items-center">
+        <div className="p-3 border-t border-gray-100 bg-gray-50/40 flex flex-col gap-2">
           <span className="text-[11px] font-bold text-gray-400">
             {registrosActuales.length} vuelos registrados
           </span>
@@ -1341,7 +1338,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
               borderRadius: "4px",
               backgroundColor: HEX_COLORS.brandGreen,
             }}
-            className="px-3 py-1.5 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-[#094350] transition-colors shadow-xs cursor-pointer"
+            className="px-3 py-2.5 text-white text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-[#094350] transition-colors shadow-xs cursor-pointer w-full"
           >
             <Download size={13} />
             Exportar bitácora PDF
@@ -1352,14 +1349,14 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
       {/* BANNER INFERIOR ACCIONABLE */}
       <div
         style={{ borderRadius: "4px" }}
-        className="border-2 border-gray-200 p-5 bg-gradient-to-r from-gray-50 via-white to-gray-50 flex flex-col sm:flex-row justify-between items-center gap-4 text-left shadow-xs"
+        className="border-2 border-gray-200 p-4 bg-gradient-to-r from-gray-50 via-white to-gray-50 flex flex-col justify-between items-start gap-3 text-left shadow-xs"
       >
-        <div className="flex items-center gap-3.5">
+        <div className="flex items-start gap-3">
           <div
             style={{ borderRadius: "4px", backgroundColor: HEX_COLORS.orange100 }}
-            className="p-3 text-orange-800 shrink-0 border border-orange-200"
+            className="p-2.5 text-orange-800 shrink-0 border border-orange-200"
           >
-            <Zap size={20} />
+            <Zap size={18} />
           </div>
           <div>
             <h4 className="text-sm font-black text-gray-900">
@@ -1382,7 +1379,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             borderRadius: "4px",
             backgroundColor: HEX_COLORS.brandGreen,
           }}
-          className="px-6 py-2.5 text-white text-xs font-bold tracking-wider hover:bg-[#094350] transition-all shadow-md active:scale-95 whitespace-nowrap shrink-0 flex items-center gap-2 cursor-pointer"
+          className="px-6 py-2.5 text-white text-xs font-bold tracking-wider hover:bg-[#094350] transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 cursor-pointer w-full"
         >
           <span>{mainMode === "personal" ? "Explorar catálogo o tienda" : "Publicar oferta comercial"}</span>
           <ChevronRight size={14} />
@@ -1695,18 +1692,18 @@ export const PilotoMisionesView = () => {
 
   return (
     <div className="h-full flex flex-col bg-gray-100 antialiased text-left font-sans" style={{ fontFamily: "'Roboto', sans-serif" }}>
-      
+
       {/* HEADER Y SELECTOR DE SECCIONES DE COLOR #0E5E6F SIN ÍCONOS */}
-      <div className="bg-white border-b-2 border-gray-200 px-4 py-3 shrink-0 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div className="bg-white border-b-2 border-gray-200 px-4 py-3 shrink-0 flex flex-col gap-3">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Panel de Control del Piloto</h1>
-          <p className="text-gray-500 text-xs">Administra asignaciones o visualiza la telemetría en tiempo real.</p>
+          <h1 className="text-base font-bold text-gray-900">Panel de Control del Piloto</h1>
+          <p className="text-gray-500 text-[11px]">Administra asignaciones o visualiza la telemetría en tiempo real.</p>
         </div>
-        
-        <div className="flex bg-gray-100 p-1 rounded-[4px] border border-gray-200 shadow-inner">
+
+        <div className="flex bg-gray-100 p-1 rounded-[4px] border border-gray-200 shadow-inner w-full">
           <button
             onClick={() => setMainSection("lista")}
-            className={`px-4 py-1.5 text-xs font-bold rounded-[4px] transition-all cursor-pointer ${
+            className={`flex-1 px-3 py-2 text-xs font-bold rounded-[4px] transition-all cursor-pointer ${
               mainSection === "lista" ? "bg-[#0E5E6F] text-white shadow-xs" : "text-gray-600 hover:text-gray-900"
             }`}
           >
@@ -1714,11 +1711,11 @@ export const PilotoMisionesView = () => {
           </button>
           <button
             onClick={() => setMainSection("en_curso")}
-            className={`px-4 py-1.5 text-xs font-bold rounded-[4px] transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`flex-1 px-3 py-2 text-xs font-bold rounded-[4px] transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
               mainSection === "en_curso" ? "bg-[#0E5E6F] text-white shadow-xs" : "text-gray-600 hover:text-gray-900"
             }`}
           >
-            Mision en curso
+            Misión en curso
             {activeMissions.length > 0 && (
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             )}
@@ -1730,57 +1727,57 @@ export const PilotoMisionesView = () => {
           SECCIÓN 1: LISTA DE MISIONES
           ========================================================= */}
       {mainSection === "lista" && (
-        <div className="p-4 overflow-y-auto flex-1 max-w-7xl mx-auto w-full">
+        <div className="p-3 overflow-y-auto flex-1 w-full">
           {/* Tarjetas de Resumen */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+          <div className="grid grid-cols-2 gap-2.5 mb-4">
             <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
-              <div>
-                <span className="text-[10px] font-bold text-gray-400 tracking-wider block">Fumigación</span>
-                <span className="text-xl font-black text-gray-900">{countByCategory("fumigacion")}</span>
+              <div className="min-w-0">
+                <span className="text-[9px] font-bold text-gray-400 tracking-wider block truncate">Fumigación</span>
+                <span className="text-lg font-black text-gray-900">{countByCategory("fumigacion")}</span>
               </div>
-              <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px]"><Compass size={18} /></div>
+              <div className="p-1.5 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0"><Compass size={16} /></div>
             </div>
             <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
-              <div>
-                <span className="text-[10px] font-bold text-gray-400 tracking-wider block">Monitoreo</span>
-                <span className="text-xl font-black text-gray-900">{countByCategory("monitoreo")}</span>
+              <div className="min-w-0">
+                <span className="text-[9px] font-bold text-gray-400 tracking-wider block truncate">Monitoreo</span>
+                <span className="text-lg font-black text-gray-900">{countByCategory("monitoreo")}</span>
               </div>
-              <div className="p-2 bg-blue-50 text-blue-700 rounded-[4px]"><Video size={18} /></div>
+              <div className="p-1.5 bg-blue-50 text-blue-700 rounded-[4px] shrink-0"><Video size={16} /></div>
             </div>
             <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
-              <div>
-                <span className="text-[10px] font-bold text-gray-400 tracking-wider block">Fotogrametría</span>
-                <span className="text-xl font-black text-purple-900">{countByCategory("fotogrametria")}</span>
+              <div className="min-w-0">
+                <span className="text-[9px] font-bold text-gray-400 tracking-wider block truncate">Fotogrametría</span>
+                <span className="text-lg font-black text-purple-900">{countByCategory("fotogrametria")}</span>
               </div>
-              <div className="p-2 bg-purple-50 text-purple-700 rounded-[4px]"><FileText size={18} /></div>
+              <div className="p-1.5 bg-purple-50 text-purple-700 rounded-[4px] shrink-0"><FileText size={16} /></div>
             </div>
             <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
-              <div>
-                <span className="text-[10px] font-bold text-gray-400 tracking-wider block">En Curso</span>
-                <span className="text-xl font-black text-emerald-700">{activeMissions.length}</span>
+              <div className="min-w-0">
+                <span className="text-[9px] font-bold text-gray-400 tracking-wider block truncate">En Curso</span>
+                <span className="text-lg font-black text-emerald-700">{activeMissions.length}</span>
               </div>
-              <div className="p-2 bg-emerald-50 text-emerald-700 rounded-[4px]"><Play size={18} /></div>
+              <div className="p-1.5 bg-emerald-50 text-emerald-700 rounded-[4px] shrink-0"><Play size={16} /></div>
             </div>
           </div>
 
           {/* Filtros */}
-          <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 mb-4 shadow-xs flex flex-col sm:flex-row justify-between items-center gap-3">
-            <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full">
-              <div className="relative flex-1 min-w-[200px]">
-                <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Buscar misión..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-8 pr-2 py-1.5 border-2 border-gray-200 rounded-[4px] text-xs focus:border-[#0E5E6F] outline-none"
-                />
-              </div>
+          <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 mb-3 shadow-xs flex flex-col gap-2">
+            <div className="relative w-full">
+              <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Buscar misión..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-8 pr-2 py-2 border-2 border-gray-200 rounded-[4px] text-xs focus:border-[#0E5E6F] outline-none"
+              />
+            </div>
 
+            <div className="flex gap-2">
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="border-2 border-gray-200 rounded-[4px] px-2.5 py-1.5 text-xs bg-white text-gray-800 font-bold focus:border-[#0E5E6F] outline-none cursor-pointer"
+                className="flex-1 min-w-0 border-2 border-gray-200 rounded-[4px] px-2 py-2 text-[11px] bg-white text-gray-800 font-bold focus:border-[#0E5E6F] outline-none cursor-pointer"
               >
                 <option value="ALL">Todas las Categorías</option>
                 <option value="fumigacion">Fumigación</option>
@@ -1791,7 +1788,7 @@ export const PilotoMisionesView = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="border-2 border-gray-200 rounded-[4px] px-2.5 py-1.5 text-xs bg-white text-gray-800 font-bold focus:border-[#0E5E6F] outline-none cursor-pointer"
+                className="flex-1 min-w-0 border-2 border-gray-200 rounded-[4px] px-2 py-2 text-[11px] bg-white text-gray-800 font-bold focus:border-[#0E5E6F] outline-none cursor-pointer"
               >
                 <option value="ALL">Todos los Estados</option>
                 <option value="Pendiente">Pendientes</option>
@@ -1802,87 +1799,73 @@ export const PilotoMisionesView = () => {
             </div>
           </div>
 
-          {/* Tabla */}
-          <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xs overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse table-fixed min-w-[700px]">
-                <thead className="bg-gray-50 border-b-2 border-gray-200 text-[11px] font-semibold text-gray-600">
-                  <tr>
-                    <th className="py-2 px-3 w-[15%]">Código / Fecha</th>
-                    <th className="py-2 px-3 w-[20%]">Cliente / Cultivo</th>
-                    <th className="py-2 px-3 w-[20%]">Dron / Ubicación</th>
-                    <th className="py-2 px-3 w-[20%]">Detalles</th>
-                    <th className="py-2 px-3 text-center w-[10%]">Estado</th>
-                    <th className="py-2 px-3 text-center w-[15%]">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100 text-xs">
-                  {filteredMissions.map((mision) => (
-                    <tr key={mision.id} className="hover:bg-gray-50/60 transition-colors">
-                      <td className="py-2 px-3 align-top">
-                        <span className="block font-mono text-[10px] font-bold text-gray-700">{mision.id}</span>
-                        <span className="text-[9px] text-gray-400 flex items-center gap-1 mt-0.5"><Calendar size={9} /> {mision.date}</span>
-                      </td>
-                      <td className="py-2 px-3 align-top">
-                        <span className="block font-bold text-gray-900 text-[11px]">{mision.clientName}</span>
-                        <span className="text-[10px] text-[#0E5E6F] font-semibold">{mision.cropType}</span>
-                      </td>
-                      <td className="py-2 px-3 align-top">
-                        <span className="text-[11px] font-semibold text-gray-800 block">{mision.droneAssigned}</span>
-                        <span className="text-[9px] text-gray-500 flex items-center gap-1 mt-0.5"><MapPin size={9} /> {mision.location}</span>
-                      </td>
-                      <td className="py-2 px-3 align-top">
-                        <span className="font-bold text-[10px] text-gray-800 block">Área: {mision.areaSize}</span>
-                        <p className="line-clamp-2 text-[9px] text-gray-500 leading-tight mt-0.5" title={mision.description}>{mision.description}</p>
-                      </td>
-                      <td className="py-2 px-2 text-center align-top">
-                        <span className={`inline-block text-[9px] font-bold px-1.5 py-0.5 rounded-[4px] border ${
-                          mision.status === "Aceptada" || mision.status === "Completada" ? "border-emerald-200 bg-emerald-50 text-emerald-700" :
-                          mision.status === "Rechazada" ? "border-red-200 bg-red-50 text-red-700" :
-                          mision.status === "Pendiente" ? "border-amber-300 bg-amber-100 text-amber-800" :
-                          "border-blue-200 bg-blue-50 text-blue-700 animate-pulse"
-                        }`}>
-                          {mision.status}
-                        </span>
-                      </td>
-                      <td className="py-2 px-2 align-top">
-                        <div className="flex flex-col gap-1 items-center justify-center">
-                          {mision.status === "En Curso" && (
-                            <button
-                              onClick={() => {
-                                setActiveMissionId(mision.id);
-                                setMainSection("en_curso");
-                              }}
-                              className="px-2 py-1 text-[10px] font-bold rounded-[4px] bg-blue-100 text-blue-700 hover:bg-blue-200 cursor-pointer shadow-xs flex items-center justify-center gap-1 w-full transition-colors"
-                            >
-                              <Video size={11} /> Ver Cámara
-                            </button>
-                          )}
-                          
-                          <div className="flex items-center gap-1 w-full">
-                            <button
-                              onClick={() => setEditingMission({ ...mision })}
-                              className="flex-1 py-1 bg-[#0E5E6F] text-white text-[10px] font-bold rounded-[4px] hover:bg-[#0a4754] transition-colors cursor-pointer flex items-center justify-center gap-1"
-                            >
-                              <Edit3 size={11} /> Editar
-                            </button>
-                            <button
-                              onClick={() => setDeletingMission(mision)}
-                              className="p-1 border border-transparent text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-[4px] transition-colors cursor-pointer"
-                            >
-                              <Trash2 size={12} />
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                  {filteredMissions.length === 0 && (
-                    <tr><td colSpan={6} className="py-8 text-center text-gray-500">No hay misiones registradas con estos filtros.</td></tr>
+          {/* Listado de misiones en tarjetas (reemplaza la tabla en escritorio) */}
+          <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xs overflow-hidden divide-y divide-gray-100">
+            {filteredMissions.map((mision) => (
+              <div key={mision.id} className="p-3 space-y-2 hover:bg-gray-50/60 transition-colors">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <span className="block font-mono text-[10px] font-bold text-gray-700">{mision.id}</span>
+                    <span className="text-[9px] text-gray-400 flex items-center gap-1 mt-0.5"><Calendar size={9} /> {mision.date}</span>
+                  </div>
+                  <span className={`shrink-0 inline-block text-[9px] font-bold px-1.5 py-0.5 rounded-[4px] border ${
+                    mision.status === "Aceptada" || mision.status === "Completada" ? "border-emerald-200 bg-emerald-50 text-emerald-700" :
+                    mision.status === "Rechazada" ? "border-red-200 bg-red-50 text-red-700" :
+                    mision.status === "Pendiente" ? "border-amber-300 bg-amber-100 text-amber-800" :
+                    "border-blue-200 bg-blue-50 text-blue-700 animate-pulse"
+                  }`}>
+                    {mision.status}
+                  </span>
+                </div>
+
+                <div>
+                  <span className="block font-bold text-gray-900 text-[11px]">{mision.clientName}</span>
+                  <span className="text-[10px] text-[#0E5E6F] font-semibold">{mision.cropType}</span>
+                </div>
+
+                <div>
+                  <span className="text-[11px] font-semibold text-gray-800 block">{mision.droneAssigned}</span>
+                  <span className="text-[9px] text-gray-500 flex items-center gap-1 mt-0.5"><MapPin size={9} /> {mision.location}</span>
+                </div>
+
+                <div>
+                  <span className="font-bold text-[10px] text-gray-800 block">Área: {mision.areaSize}</span>
+                  <p className="line-clamp-2 text-[9px] text-gray-500 leading-tight mt-0.5">{mision.description}</p>
+                </div>
+
+                <div className="flex flex-col gap-1.5 pt-1 border-t border-gray-100">
+                  {mision.status === "En Curso" && (
+                    <button
+                      onClick={() => {
+                        setActiveMissionId(mision.id);
+                        setMainSection("en_curso");
+                      }}
+                      className="px-2 py-1.5 text-[11px] font-bold rounded-[4px] bg-blue-100 text-blue-700 hover:bg-blue-200 cursor-pointer shadow-xs flex items-center justify-center gap-1 w-full transition-colors"
+                    >
+                      <Video size={12} /> Ver Cámara
+                    </button>
                   )}
-                </tbody>
-              </table>
-            </div>
+
+                  <div className="flex items-center gap-1.5 w-full">
+                    <button
+                      onClick={() => setEditingMission({ ...mision })}
+                      className="flex-1 py-1.5 bg-[#0E5E6F] text-white text-[11px] font-bold rounded-[4px] hover:bg-[#0a4754] transition-colors cursor-pointer flex items-center justify-center gap-1"
+                    >
+                      <Edit3 size={12} /> Editar
+                    </button>
+                    <button
+                      onClick={() => setDeletingMission(mision)}
+                      className="p-1.5 border border-gray-200 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-[4px] transition-colors cursor-pointer"
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+            {filteredMissions.length === 0 && (
+              <div className="py-8 text-center text-gray-500 text-xs px-4">No hay misiones registradas con estos filtros.</div>
+            )}
           </div>
         </div>
       )}
@@ -1893,63 +1876,63 @@ export const PilotoMisionesView = () => {
       {mainSection === "en_curso" && (
         <div className="flex-1 flex flex-col overflow-hidden bg-gray-100">
           {activeMissions.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center text-gray-400 gap-3">
-              <Video size={48} className="opacity-20" />
+            <div className="flex-1 flex flex-col items-center justify-center text-gray-400 gap-3 px-6 text-center">
+              <Video size={40} className="opacity-20" />
               <p className="text-sm font-medium">No hay misiones "En Curso" actualmente para transmitir.</p>
             </div>
           ) : (
             <>
               {/* BARRA SUPERIOR DE TELEMETRÍA */}
-              <div className="bg-gray-900 px-4 py-2 flex flex-wrap items-center justify-between gap-3 shrink-0 shadow z-10">
-                <div className="flex flex-wrap items-center gap-4 text-xs font-mono">
+              <div className="bg-gray-900 px-3 py-2 flex flex-wrap items-center justify-between gap-2 shrink-0 shadow z-10">
+                <div className="flex flex-wrap items-center gap-3 text-xs font-mono">
                   <div className="flex items-center gap-1">
                     <Battery size={13} className="text-green-400 shrink-0" />
-                    <span className="text-gray-400 text-[10px] uppercase">Bat:</span>
-                    <span className="font-bold text-green-400">{telemetry.battery}%</span>
+                    <span className="text-gray-400 text-[9px] uppercase">Bat:</span>
+                    <span className="font-bold text-green-400 text-[11px]">{telemetry.battery}%</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Signal size={13} className="text-green-400 shrink-0" />
-                    <span className="text-gray-400 text-[10px] uppercase">GPS:</span>
-                    <span className="font-bold text-green-400">{telemetry.satellites}sats</span>
+                    <span className="text-gray-400 text-[9px] uppercase">GPS:</span>
+                    <span className="font-bold text-green-400 text-[11px]">{telemetry.satellites}sats</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Wifi size={13} className="text-green-400 shrink-0" />
-                    <span className="text-gray-400 text-[10px] uppercase">Link:</span>
-                    <span className="font-bold text-green-400">99%</span>
+                    <span className="text-gray-400 text-[9px] uppercase">Link:</span>
+                    <span className="font-bold text-green-400 text-[11px]">99%</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Wind size={13} className="text-yellow-400 shrink-0" />
-                    <span className="text-gray-400 text-[10px] uppercase">Viento:</span>
-                    <span className="font-bold text-yellow-400">{telemetry.wind}km/h</span>
+                    <span className="text-gray-400 text-[9px] uppercase">Viento:</span>
+                    <span className="font-bold text-yellow-400 text-[11px]">{telemetry.wind}km/h</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-[4px] shrink-0 aspect-square ${isRthActive ? "bg-red-500 animate-ping" : "bg-green-400 animate-pulse"}`}></span>
-                  <span className="text-green-400 text-xs font-bold uppercase tracking-wider font-mono">
+                  <span className="text-green-400 text-[10px] font-bold uppercase tracking-wider font-mono">
                     {isRthActive ? "RTH ACTIVO" : `${currentActiveMission?.droneAssigned || "Dron"} Conectado`}
                   </span>
                 </div>
               </div>
 
-              {/* CONTENIDO PRINCIPAL */}
-              <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-                <div className="w-full md:w-[320px] border-r border-gray-200 bg-white flex flex-col overflow-hidden shrink-0">
-                  <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between bg-gray-50">
+              {/* CONTENIDO PRINCIPAL: lista de misiones en carrusel horizontal + cámara debajo */}
+              <div className="flex-1 flex flex-col overflow-hidden">
+                <div className="w-full border-b border-gray-200 bg-white flex flex-col overflow-hidden shrink-0">
+                  <div className="px-3 py-2 border-b border-gray-100 flex items-center justify-between bg-gray-50">
                     <h3 className="text-xs font-black text-gray-800">Misiones Activas</h3>
                     <span className="bg-[#0E5E6F] text-white text-[9px] font-bold px-2 py-0.5 rounded-[4px]">
                       {activeMissions.length} en vuelo
                     </span>
                   </div>
 
-                  <div className="overflow-y-auto flex-1 p-2.5 flex flex-col gap-2">
+                  <div className="overflow-x-auto flex gap-2 p-2.5 custom-scrollbar">
                     {activeMissions.map((m) => {
                       const isCurrent = currentActiveMission?.id === m.id;
                       return (
                         <div
                           key={m.id}
                           onClick={() => handleSelectMissionForCamera(m.id)}
-                          className={`border rounded-[4px] p-3 cursor-pointer transition-all ${
+                          className={`shrink-0 w-56 border rounded-[4px] p-2.5 cursor-pointer transition-all ${
                             isCurrent ? "border-[#0E5E6F] bg-[#0E5E6F]/5" : "border-gray-200 hover:border-gray-300 bg-white"
                           }`}
                         >
@@ -1965,10 +1948,10 @@ export const PilotoMisionesView = () => {
                             <MapPin size={10} className="shrink-0" /> {m.location}
                           </div>
                           <div className="flex items-center justify-between pt-1 border-t border-gray-100">
-                            <span className="text-[10px] text-gray-500 font-medium truncate w-[70%]">{m.clientName}</span>
+                            <span className="text-[10px] text-gray-500 font-medium truncate w-[65%]">{m.clientName}</span>
                             <button
                               onClick={(e) => { e.stopPropagation(); handleSelectMissionForCamera(m.id); }}
-                              className={`text-[9px] font-bold px-2 py-0.5 rounded-[4px] ${isCurrent ? "bg-[#0E5E6F] text-white" : "bg-gray-100 text-gray-600"}`}
+                              className={`text-[9px] font-bold px-2 py-0.5 rounded-[4px] shrink-0 ${isCurrent ? "bg-[#0E5E6F] text-white" : "bg-gray-100 text-gray-600"}`}
                             >
                               {isCurrent ? "Activa" : "Cargar"}
                             </button>
@@ -1979,9 +1962,9 @@ export const PilotoMisionesView = () => {
                   </div>
                 </div>
 
-                <div className="flex-1 p-3 sm:p-4 flex flex-col gap-3 overflow-y-auto bg-gray-50">
+                <div className="flex-1 p-3 flex flex-col gap-3 overflow-y-auto bg-gray-50">
                   {currentActiveMission && (
-                    <div className="flex-1 min-h-[380px] bg-gray-950 rounded-[4px] overflow-hidden relative border border-gray-800 shadow-md">
+                    <div className="flex-1 min-h-[260px] bg-gray-950 rounded-[4px] overflow-hidden relative border border-gray-800 shadow-md">
                       <img
                         src="src/img/vista_aerea.png"
                         alt="Vista Aérea"
@@ -1992,11 +1975,11 @@ export const PilotoMisionesView = () => {
                         }}
                       />
 
-                      <div className="absolute inset-0 pointer-events-none p-3 flex flex-col justify-between z-10">
+                      <div className="absolute inset-0 pointer-events-none p-2.5 flex flex-col justify-between z-10">
                         <div className="flex justify-between items-start gap-2">
-                          <div className="bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-[4px] border border-white/10 flex items-center gap-2">
+                          <div className="bg-black/60 backdrop-blur-sm px-2 py-1 rounded-[4px] border border-white/10 flex items-center gap-1.5">
                             <span className={`w-2 h-2 rounded-[4px] shrink-0 aspect-square ${isPlayingFeed ? "bg-red-500 animate-ping" : "bg-yellow-500"}`}></span>
-                            <span className="text-white text-[10px] font-mono font-bold tracking-wide">{currentActiveMission.id}</span>
+                            <span className="text-white text-[9px] font-mono font-bold tracking-wide">{currentActiveMission.id}</span>
                           </div>
 
                           <div className="pointer-events-auto flex items-center gap-1.5 bg-black/60 backdrop-blur-sm p-1 rounded-[4px] border border-white/10">
@@ -2010,34 +1993,34 @@ export const PilotoMisionesView = () => {
                             )}
                             <button
                               onClick={handleExecuteRTH}
-                              className={`px-3 py-1 rounded-[4px] flex items-center gap-1.5 text-white font-bold text-[10px] uppercase transition-all shadow cursor-pointer ${
+                              className={`px-2.5 py-1 rounded-[4px] flex items-center gap-1.5 text-white font-bold text-[9px] uppercase transition-all shadow cursor-pointer ${
                                 isRthActive ? "bg-orange-600 animate-pulse" : rthArmed ? "bg-red-600 animate-bounce" : "bg-red-600/80 hover:bg-red-600"
                               }`}
                             >
-                              <AlertOctagon size={13} className="shrink-0" />
+                              <AlertOctagon size={12} className="shrink-0" />
                               <span>{isRthActive ? "RTH Activo" : rthArmed ? "Confirmar" : "RTH"}</span>
                             </button>
                           </div>
                         </div>
 
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-                          <div className="w-16 h-16 border border-white rounded-[4px] shrink-0 aspect-square flex items-center justify-center">
+                          <div className="w-14 h-14 border border-white rounded-[4px] shrink-0 aspect-square flex items-center justify-center">
                             <div className="w-1 h-1 bg-white rounded-[4px] shrink-0 aspect-square"></div>
                           </div>
                         </div>
 
-                        <div className="flex flex-wrap justify-between items-end gap-2">
-                          <div className="bg-black/60 backdrop-blur-sm px-3 py-1 rounded-[4px] border border-white/10 flex items-center gap-3 font-mono text-[10px] text-white">
+                        <div className="flex flex-col gap-1.5 items-stretch">
+                          <div className="bg-black/60 backdrop-blur-sm px-2.5 py-1.5 rounded-[4px] border border-white/10 flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[9px] text-white">
                             <div>ALT: <strong className="text-amber-300">{telemetry.alt}m</strong></div>
-                            <div className="border-l border-white/20 pl-3">VEL: <strong className="text-amber-300">{telemetry.speed}m/s</strong></div>
-                            <div className="border-l border-white/20 pl-3">DIST: <strong className="text-amber-300">{telemetry.dist}m</strong></div>
-                            <div className="border-l border-white/20 pl-3">HDG: <strong className="text-amber-300">{telemetry.heading}°</strong></div>
+                            <div className="border-l border-white/20 pl-2.5">VEL: <strong className="text-amber-300">{telemetry.speed}m/s</strong></div>
+                            <div className="border-l border-white/20 pl-2.5">DIST: <strong className="text-amber-300">{telemetry.dist}m</strong></div>
+                            <div className="border-l border-white/20 pl-2.5">HDG: <strong className="text-amber-300">{telemetry.heading}°</strong></div>
                           </div>
 
                           <div className="pointer-events-auto flex items-center gap-1.5">
                             <button
                               onClick={() => addLog(`Captura guardada en ${currentActiveMission.location}`, "green")}
-                              className="bg-black/60 hover:bg-black text-white px-2.5 py-1 rounded-[4px] border border-white/20 backdrop-blur-sm text-[10px] font-bold flex items-center gap-1 cursor-pointer"
+                              className="flex-1 bg-black/60 hover:bg-black text-white px-2.5 py-1.5 rounded-[4px] border border-white/20 backdrop-blur-sm text-[10px] font-bold flex items-center justify-center gap-1 cursor-pointer"
                             >
                               <Camera size={12} className="shrink-0" /> Captura
                             </button>
@@ -2046,7 +2029,7 @@ export const PilotoMisionesView = () => {
                                 setIsPlayingFeed(!isPlayingFeed);
                                 addLog(isPlayingFeed ? "Transmisión pausada" : "Transmisión reanudada", "yellow");
                               }}
-                              className="bg-black/60 hover:bg-black text-white px-2.5 py-1 rounded-[4px] border border-white/20 backdrop-blur-sm text-[10px] font-bold flex items-center gap-1 cursor-pointer"
+                              className="flex-1 bg-black/60 hover:bg-black text-white px-2.5 py-1.5 rounded-[4px] border border-white/20 backdrop-blur-sm text-[10px] font-bold flex items-center justify-center gap-1 cursor-pointer"
                             >
                               {isPlayingFeed ? <Pause size={12} className="shrink-0" /> : <Play size={12} className="shrink-0" />}
                               {isPlayingFeed ? "Pausar" : "Reanudar"}
@@ -2057,11 +2040,11 @@ export const PilotoMisionesView = () => {
                     </div>
                   )}
 
-                  <div className="h-32 bg-gray-950 border border-gray-800 rounded-[4px] overflow-hidden flex flex-col shadow shrink-0">
+                  <div className="h-28 bg-gray-950 border border-gray-800 rounded-[4px] overflow-hidden flex flex-col shadow shrink-0">
                     <div className="px-3 py-1.5 bg-gray-900 border-b border-gray-800 flex items-center justify-between shrink-0">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5">
                         <RefreshCw size={11} className="text-green-400 animate-spin shrink-0" />
-                        <span className="text-[11px] font-mono font-bold text-gray-300 uppercase">Log de Telemetría</span>
+                        <span className="text-[10px] font-mono font-bold text-gray-300 uppercase">Log de Telemetría</span>
                       </div>
                       <button
                         onClick={() => addLog("Sistemas verificados OK", "green")}
@@ -2091,14 +2074,16 @@ export const PilotoMisionesView = () => {
       )}
 
       {/* =========================================================
-          MODALES CON INFORMACIÓN DETALLADA DE LA MISIÓN
+          BOTTOM SHEETS CON INFORMACIÓN DETALLADA DE LA MISIÓN
           ========================================================= */}
-      
-      {/* MODAL DETALLES Y EDICIÓN DE ESTADO */}
+
+      {/* BOTTOM SHEET DETALLES Y EDICIÓN DE ESTADO */}
       {editingMission && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
-          <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-2xl w-full max-w-md overflow-hidden text-left animate-in fade-in zoom-in-95 duration-150">
-            {/* Header del Modal */}
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
+          <div className="bg-white border-t-2 border-gray-200 rounded-[16px_16px_0_0] shadow-2xl w-full max-h-[85vh] overflow-y-auto text-left animate-in fade-in duration-150">
+            <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto mt-2 mb-1" />
+
+            {/* Header del Sheet */}
             <div className="flex justify-between items-center px-4 py-3 border-b-2 border-gray-100 bg-gray-50">
               <div className="flex items-center gap-2">
                 <Info size={16} className="text-[#0E5E6F]" />
@@ -2111,7 +2096,7 @@ export const PilotoMisionesView = () => {
 
             {/* Cuerpo con Información Completa */}
             <div className="p-4 space-y-3.5 text-xs">
-              
+
               {/* Código y Categoría */}
               <div className="flex items-center justify-between bg-gray-50 p-2.5 border border-gray-200 rounded-[4px]">
                 <div>
@@ -2193,11 +2178,11 @@ export const PilotoMisionesView = () => {
               </div>
 
               {/* Botones */}
-              <div className="flex justify-end gap-2 pt-3 border-t border-gray-100">
-                <button onClick={() => setEditingMission(null)} className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer">
+              <div className="flex gap-2 pt-3 border-t border-gray-100 pb-1">
+                <button onClick={() => setEditingMission(null)} className="flex-1 px-3 py-2.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer">
                   Cancelar
                 </button>
-                <button onClick={handleSaveEditedMission} className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs">
+                <button onClick={handleSaveEditedMission} className="flex-1 px-4 py-2.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs">
                   Guardar Cambios
                 </button>
               </div>
@@ -2206,10 +2191,12 @@ export const PilotoMisionesView = () => {
         </div>
       )}
 
-      {/* MODAL ELIMINAR CON INFORMACIÓN RESUMIDA DE LA MISIÓN */}
+      {/* BOTTOM SHEET ELIMINAR CON INFORMACIÓN RESUMIDA DE LA MISIÓN */}
       {deletingMission && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
-          <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-2xl w-full max-w-sm overflow-hidden text-left p-4 space-y-3">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
+          <div className="bg-white border-t-2 border-gray-200 rounded-[16px_16px_0_0] shadow-2xl w-full overflow-hidden text-left p-4 space-y-3">
+            <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto -mt-1 mb-1" />
+
             <div className="flex items-center gap-2 text-red-600 font-bold text-xs">
               <AlertTriangle size={16} /> <span>¿Confirmar eliminación?</span>
             </div>
@@ -2221,12 +2208,12 @@ export const PilotoMisionesView = () => {
             </div>
 
             <p className="text-[11px] text-gray-600">Esta acción no se puede deshacer y borrará la misión del sistema.</p>
-            
-            <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
-              <button onClick={() => setDeletingMission(null)} className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer">
+
+            <div className="flex gap-2 pt-2 border-t border-gray-100 pb-1">
+              <button onClick={() => setDeletingMission(null)} className="flex-1 px-3 py-2.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer">
                 Cancelar
               </button>
-              <button onClick={() => handleDeleteMission(deletingMission.id)} className="px-3 py-1.5 bg-red-600 text-white font-bold text-xs rounded-[4px] hover:bg-red-700 cursor-pointer shadow-xs">
+              <button onClick={() => handleDeleteMission(deletingMission.id)} className="flex-1 px-3 py-2.5 bg-red-600 text-white font-bold text-xs rounded-[4px] hover:bg-red-700 cursor-pointer shadow-xs">
                 Eliminar Misión
               </button>
             </div>
@@ -2236,6 +2223,7 @@ export const PilotoMisionesView = () => {
     </div>
   );
 };
+
 
 // 3. Estado de Drones
 export const PilotoDronView = () => {
@@ -5399,15 +5387,15 @@ export const PilotoHistoryView = () => {
   };
 
   return (
-    <div className="w-full h-full bg-[#f8fafc] overflow-y-auto p-3 sm:p-5 space-y-4 font-['Roboto',sans-serif]">
+    <div className="w-full h-full bg-[#f8fafc] overflow-y-auto p-3 space-y-4 font-['Roboto',sans-serif]">
 
       {/* ================= ENCABEZADO Y RESUMEN ================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 sm:p-5 rounded-[4px] border border-gray-200 shadow-xs">
+      <div className="flex flex-col gap-3 bg-white p-4 rounded-[4px] border border-gray-200 shadow-xs">
         <div>
           {/* Title Case */}
-          <h1 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-base font-bold text-gray-900 flex items-center gap-2 flex-wrap">
             Historial de Bitácora y Vuelos
-            <span className="text-xs bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-[4px] border border-gray-200">
+            <span className="text-[10px] bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-[4px] border border-gray-200">
               {flights.length} registros
             </span>
           </h1>
@@ -5420,7 +5408,7 @@ export const PilotoHistoryView = () => {
         {/* Botón: Sentence Case */}
         <button
           onClick={() => { }}
-          className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-semibold rounded-[4px] transition cursor-pointer shadow-xs"
+          className="flex items-center justify-center gap-1.5 px-3 py-2.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-semibold rounded-[4px] transition cursor-pointer shadow-xs w-full"
         >
           <Download size={14} />
           <span>Exportar bitácora (CSV)</span>
@@ -5428,71 +5416,71 @@ export const PilotoHistoryView = () => {
       </div>
 
       {/* ================= TARJETAS DE KPIS RÁPIDOS ================= */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
-        <div className="bg-white p-3.5 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
-          <div>
+      <div className="grid grid-cols-2 gap-2.5">
+        <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between min-w-0">
+          <div className="min-w-0">
             {/* Subtítulo: Title Case */}
-            <p className="text-[11px] text-gray-500 font-medium">Área Cubierta Total</p>
-            <h3 className="text-xl font-bold text-gray-900 mt-0.5">{totalArea} <span className="text-xs font-normal text-gray-500">ha</span></h3>
+            <p className="text-[10px] text-gray-500 font-medium truncate">Área Cubierta Total</p>
+            <h3 className="text-lg font-bold text-gray-900 mt-0.5">{totalArea} <span className="text-xs font-normal text-gray-500">ha</span></h3>
           </div>
-          <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
-            <Compass size={18} />
+          <div className="p-2 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
+            <Compass size={16} />
           </div>
         </div>
 
-        <div className="bg-white p-3.5 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
-          <div>
+        <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between min-w-0">
+          <div className="min-w-0">
             {/* Subtítulo: Title Case */}
-            <p className="text-[11px] text-gray-500 font-medium">Tiempo Acumulado</p>
-            <h3 className="text-xl font-bold text-gray-900 mt-0.5">{totalHours} <span className="text-xs font-normal text-gray-500">hrs</span></h3>
+            <p className="text-[10px] text-gray-500 font-medium truncate">Tiempo Acumulado</p>
+            <h3 className="text-lg font-bold text-gray-900 mt-0.5">{totalHours} <span className="text-xs font-normal text-gray-500">hrs</span></h3>
           </div>
-          <div className="p-2.5 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0">
-            <Clock size={18} />
+          <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0">
+            <Clock size={16} />
           </div>
         </div>
 
-        <div className="bg-white p-3.5 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
-          <div>
+        <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between min-w-0">
+          <div className="min-w-0">
             {/* Subtítulo: Title Case */}
-            <p className="text-[11px] text-gray-500 font-medium">Tasa de Éxito</p>
-            <h3 className="text-xl font-bold text-emerald-700 mt-0.5">{successRate}%</h3>
+            <p className="text-[10px] text-gray-500 font-medium truncate">Tasa de Éxito</p>
+            <h3 className="text-lg font-bold text-emerald-700 mt-0.5">{successRate}%</h3>
           </div>
-          <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
-            <Clock size={18} />
+          <div className="p-2 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
+            <Clock size={16} />
           </div>
         </div>
 
-        <div className="bg-white p-3.5 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
-          <div>
+        <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between min-w-0">
+          <div className="min-w-0">
             {/* Subtítulo: Title Case */}
-            <p className="text-[11px] text-gray-500 font-medium">Volumen Aplicado</p>
-            <h3 className="text-xl font-bold text-gray-900 mt-0.5">1,400 <span className="text-xs font-normal text-gray-500">L</span></h3>
+            <p className="text-[10px] text-gray-500 font-medium truncate">Volumen Aplicado</p>
+            <h3 className="text-lg font-bold text-gray-900 mt-0.5">1,400 <span className="text-xs font-normal text-gray-500">L</span></h3>
           </div>
-          <div className="p-2.5 bg-cyan-50 text-cyan-600 rounded-[4px] shrink-0">
-            <Droplets size={18} />
+          <div className="p-2 bg-cyan-50 text-cyan-600 rounded-[4px] shrink-0">
+            <Droplets size={16} />
           </div>
         </div>
       </div>
 
       {/* ================= FILTROS Y BÚSQUEDA ================= */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs">
-        <div className="relative flex-1 max-w-xs">
+      <div className="flex flex-col gap-2.5 bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs">
+        <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={15} />
           <input
             type="text"
             placeholder="Buscar por ID, dron, ubicación o piloto..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
+            className="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
           />
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 text-xs">
+        <div className="flex items-center gap-2 text-xs">
           {/* Selects: Sentence Case */}
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-[4px] text-xs text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
+            className="flex-1 min-w-0 px-2 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
           >
             <option value="all">Todas las misiones</option>
             <option value="fumigation">Fumigación</option>
@@ -5503,7 +5491,7 @@ export const PilotoHistoryView = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-[4px] text-xs text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
+            className="flex-1 min-w-0 px-2 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
           >
             <option value="all">Todos los estados</option>
             <option value="completed">Completados</option>
@@ -5513,129 +5501,101 @@ export const PilotoHistoryView = () => {
         </div>
       </div>
 
-      {/* ================= TABLA DE DATOS ================= */}
+      {/* ================= LISTADO DE VUELOS (tarjetas en vez de tabla) ================= */}
       <div className="bg-white rounded-[4px] border border-gray-200 shadow-xs overflow-hidden w-full">
-        <table className="w-full table-fixed text-left border-collapse">
-          <thead>
-            {/* Encabezados de Tabla: Sentence Case */}
-            <tr className="bg-gray-50 border-b border-gray-200 text-[11px] font-bold text-gray-500 tracking-wider">
-              <th className="py-2.5 px-3 w-[20%] sm:w-[16%]">ID / fecha</th>
-              <th className="py-2.5 px-2 w-[26%] sm:w-[22%]">Dron / misión</th>
-              <th className="py-2.5 px-2 hidden sm:table-cell w-[18%]">Ubicación / piloto</th>
-              <th className="py-2.5 px-2 w-[16%] sm:w-[12%] text-center">Duración / área</th>
-              <th className="py-2.5 px-2 w-[16%] sm:w-[12%] text-center">Estado</th>
-              <th className="py-2.5 px-2 w-[22%] sm:w-[20%] text-center">Acciones</th>
-            </tr>
-          </thead>
-
-          <tbody className="divide-y divide-gray-100 text-xs">
-            {filteredFlights.length > 0 ? (
-              filteredFlights.map((flight) => (
-                <tr
-                  key={flight.id}
-                  className="hover:bg-gray-50/70 transition cursor-pointer"
-                  onClick={() => setSelectedFlight(flight)}
-                >
-                  {/* ID y Fecha */}
-                  <td className="py-2.5 px-3">
+        <div className="divide-y divide-gray-100">
+          {filteredFlights.length > 0 ? (
+            filteredFlights.map((flight) => (
+              <div
+                key={flight.id}
+                className="p-3 space-y-2 hover:bg-gray-50/70 transition cursor-pointer"
+                onClick={() => setSelectedFlight(flight)}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div>
                     <div className="font-bold text-gray-900 text-xs">{flight.id}</div>
                     <div className="text-[10px] text-gray-400 font-medium flex items-center gap-1 mt-0.5">
                       <Calendar size={10} />
                       {flight.date}
                     </div>
-                  </td>
+                  </div>
+                  {getStatusBadge(flight.status)}
+                </div>
 
-                  {/* Dron y Tipo */}
-                  <td className="py-2.5 px-2 truncate">
-                    <div className="font-semibold text-gray-800 truncate text-xs">
-                      {flight.droneName}
-                    </div>
-                    <div className="mt-0.5">{getTypeBadge(flight.type)}</div>
-                  </td>
+                <div>
+                  <div className="font-semibold text-gray-800 text-xs">
+                    {flight.droneName}
+                  </div>
+                  <div className="mt-1">{getTypeBadge(flight.type)}</div>
+                </div>
 
-                  {/* Ubicación y Piloto */}
-                  <td className="py-2.5 px-2 hidden sm:table-cell truncate">
-                    <div className="text-gray-700 font-medium truncate flex items-center gap-1">
-                      <MapPin size={11} className="text-gray-400 shrink-0" />
-                      <span className="truncate">{flight.location}</span>
-                    </div>
-                    <div className="text-[10px] text-gray-400 truncate flex items-center gap-1 mt-0.5">
-                      <User size={10} />
-                      <span className="truncate">{flight.pilot}</span>
-                    </div>
-                  </td>
+                <div className="text-gray-700 font-medium flex items-center gap-1 text-[11px]">
+                  <MapPin size={11} className="text-gray-400 shrink-0" />
+                  <span className="truncate">{flight.location}</span>
+                </div>
+                <div className="text-[10px] text-gray-400 flex items-center gap-1">
+                  <User size={10} />
+                  <span className="truncate">{flight.pilot}</span>
+                </div>
 
-                  {/* Área y Duración */}
-                  <td className="py-2.5 px-2 text-center">
-                    <div className="font-bold text-gray-900 text-xs">{flight.areaCovered}</div>
-                    <div className="text-[10px] text-gray-400 font-medium flex items-center justify-center gap-0.5 mt-0.5">
-                      <Clock size={10} />
-                      {flight.duration}
-                    </div>
-                  </td>
+                <div className="flex items-center justify-between pt-1 border-t border-gray-100">
+                  <div className="font-bold text-gray-900 text-xs">{flight.areaCovered}</div>
+                  <div className="text-[10px] text-gray-400 font-medium flex items-center gap-0.5">
+                    <Clock size={10} />
+                    {flight.duration}
+                  </div>
+                </div>
 
-                  {/* Estado */}
-                  <td className="py-2.5 px-2 text-center">
-                    {getStatusBadge(flight.status)}
-                  </td>
+                <div className="flex items-center gap-1.5 pt-1" onClick={(e) => e.stopPropagation()}>
+                  <button
+                    onClick={() => setSelectedFlight(flight)}
+                    className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-medium rounded-[4px] transition cursor-pointer"
+                  >
+                    <Eye size={13} className="text-[#0E5E6F]" />
+                    <span>Ver</span>
+                  </button>
 
-                  {/* Acciones: Botón Ver + Botón Descarga PDF fijo en #0E5E6F */}
-                  <td className="py-2.5 px-2 text-center">
-                    <div className="flex items-center justify-center gap-1.5" onClick={(e) => e.stopPropagation()}>
-                      <button
-                        onClick={() => setSelectedFlight(flight)}
-                        className="flex items-center gap-1 px-2 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-medium rounded-[4px] transition cursor-pointer"
-                        title="Ver detalles"
-                      >
-                        <Eye size={13} className="text-[#0E5E6F]" />
-                        <span>Ver</span>
-                      </button>
-
-                      <button
-                        onClick={() => { }}
-                        className="flex items-center gap-1 px-2 py-1 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-[11px] font-medium rounded-[4px] transition cursor-pointer shadow-xs"
-                        title="Descargar reporte PDF"
-                      >
-                        <Download size={13} />
-                        <span>PDF</span>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                {/* Sentence Case */}
-                <td colSpan={6} className="py-8 text-center text-gray-400 text-xs">
-                  No se encontraron registros de vuelo con los filtros seleccionados.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+                  <button
+                    onClick={() => { }}
+                    className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-[11px] font-medium rounded-[4px] transition cursor-pointer shadow-xs"
+                  >
+                    <Download size={13} />
+                    <span>PDF</span>
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="py-8 text-center text-gray-400 text-xs px-4">
+              No se encontraron registros de vuelo con los filtros seleccionados.
+            </div>
+          )}
+        </div>
 
         {/* Footer estático: Sentence Case */}
-        <div className="p-3 px-4 bg-gray-50/80 border-t border-gray-200 text-[11px] text-gray-500 flex justify-between items-center">
+        <div className="p-3 bg-gray-50/80 border-t border-gray-200 text-[11px] text-gray-500 text-center">
           <span>Mostrando {filteredFlights.length} de {flights.length} registros</span>
         </div>
       </div>
 
-      {/* ================= MODAL DETALLADO DE MISIÓN ================= */}
+      {/* ================= BOTTOM SHEET DETALLADO DE MISIÓN ================= */}
       {selectedFlight && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50 animate-fade-in">
-          <div className="bg-white w-full max-w-xl rounded-[4px] shadow-2xl overflow-hidden border border-gray-200 flex flex-col max-h-[90vh]">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-end justify-center z-50 animate-fade-in">
+          <div className="bg-white w-full rounded-[16px_16px_0_0] shadow-2xl overflow-hidden border-t-2 border-gray-200 flex flex-col max-h-[85vh]">
 
-            {/* Modal Header: Title Case */}
-            <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 bg-[#0E5E6F] text-white rounded-[4px] font-bold text-xs">
+            <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto mt-2 mb-1 shrink-0" />
+
+            {/* Header del Sheet: Title Case */}
+            <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between shrink-0 gap-2">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="p-2 bg-[#0E5E6F] text-white rounded-[4px] font-bold text-xs shrink-0">
                   {selectedFlight.id}
                 </div>
-                <div>
-                  <h3 className="font-bold text-gray-900 text-sm leading-tight">
+                <div className="min-w-0">
+                  <h3 className="font-bold text-gray-900 text-sm leading-tight truncate">
                     {selectedFlight.typeName}
                   </h3>
-                  <p className="text-[11px] text-gray-500">
+                  <p className="text-[11px] text-gray-500 truncate">
                     {selectedFlight.droneName} • {selectedFlight.date}
                   </p>
                 </div>
@@ -5643,50 +5603,50 @@ export const PilotoHistoryView = () => {
 
               <button
                 onClick={() => setSelectedFlight(null)}
-                className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-[4px] transition cursor-pointer"
+                className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-[4px] transition cursor-pointer shrink-0"
               >
                 <X size={18} />
               </button>
             </div>
 
-            {/* Modal Content */}
-            <div className="p-4 sm:p-5 overflow-y-auto space-y-4 text-xs">
+            {/* Contenido del Sheet */}
+            <div className="p-4 overflow-y-auto space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-3 p-3 bg-gray-50 rounded-[4px] border border-gray-200">
                 <div>
                   {/* Etiqueta: Sentence Case */}
                   <span className="text-gray-400 text-[10px] font-semibold uppercase block">Ubicación</span>
                   <span className="font-bold text-gray-800 flex items-center gap-1 mt-0.5">
-                    <MapPin size={12} className="text-[#0E5E6F]" />
-                    {selectedFlight.location}
+                    <MapPin size={12} className="text-[#0E5E6F] shrink-0" />
+                    <span className="truncate">{selectedFlight.location}</span>
                   </span>
                 </div>
                 <div>
                   {/* Etiqueta: Sentence Case */}
                   <span className="text-gray-400 text-[10px] font-semibold uppercase block">Piloto a cargo</span>
                   <span className="font-semibold text-gray-800 flex items-center gap-1 mt-0.5">
-                    <User size={12} className="text-[#0E5E6F]" />
-                    {selectedFlight.pilot}
+                    <User size={12} className="text-[#0E5E6F] shrink-0" />
+                    <span className="truncate">{selectedFlight.pilot}</span>
                   </span>
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-2">
-                <div className="p-2.5 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
-                  <span className="text-gray-400 text-[10px] uppercase font-semibold block">Duración</span>
-                  <span className="font-bold text-gray-900 text-sm">{selectedFlight.duration}</span>
-                  <span className="text-[9px] text-gray-400 block">{selectedFlight.startTime} - {selectedFlight.endTime}</span>
+                <div className="p-2 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
+                  <span className="text-gray-400 text-[9px] uppercase font-semibold block">Duración</span>
+                  <span className="font-bold text-gray-900 text-xs">{selectedFlight.duration}</span>
+                  <span className="text-[8px] text-gray-400 block">{selectedFlight.startTime} - {selectedFlight.endTime}</span>
                 </div>
 
-                <div className="p-2.5 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
-                  <span className="text-gray-400 text-[10px] uppercase font-semibold block">Área cubierta</span>
-                  <span className="font-bold text-emerald-700 text-sm">{selectedFlight.areaCovered}</span>
-                  <span className="text-[9px] text-gray-400 block">Vel. Media: {selectedFlight.avgSpeed}</span>
+                <div className="p-2 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
+                  <span className="text-gray-400 text-[9px] uppercase font-semibold block">Área cubierta</span>
+                  <span className="font-bold text-emerald-700 text-xs">{selectedFlight.areaCovered}</span>
+                  <span className="text-[8px] text-gray-400 block">Vel: {selectedFlight.avgSpeed}</span>
                 </div>
 
-                <div className="p-2.5 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
-                  <span className="text-gray-400 text-[10px] uppercase font-semibold block">Batería usada</span>
-                  <span className="font-bold text-gray-900 text-sm">{selectedFlight.batteryUsed}%</span>
-                  <span className="text-[9px] text-gray-400 block">Alt. Máx: {selectedFlight.maxAltitude}</span>
+                <div className="p-2 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
+                  <span className="text-gray-400 text-[9px] uppercase font-semibold block">Batería usada</span>
+                  <span className="font-bold text-gray-900 text-xs">{selectedFlight.batteryUsed}%</span>
+                  <span className="text-[8px] text-gray-400 block">Alt: {selectedFlight.maxAltitude}</span>
                 </div>
               </div>
 
@@ -5722,12 +5682,12 @@ export const PilotoHistoryView = () => {
               </div>
             </div>
 
-            {/* Modal Footer */}
-            <div className="p-3 px-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between shrink-0">
+            {/* Footer del Sheet */}
+            <div className="p-3 bg-gray-50 border-t border-gray-200 flex flex-col gap-2 shrink-0">
               {/* Botón Acción: Sentence Case */}
               <button
                 onClick={() => { }}
-                className="flex items-center gap-1 text-[11px] font-bold text-[#0E5E6F] hover:underline cursor-pointer"
+                className="flex items-center justify-center gap-1 text-[11px] font-bold text-[#0E5E6F] hover:underline cursor-pointer py-1"
               >
                 <FileText size={13} />
                 <span>Descargar telemetría KML</span>
@@ -5736,7 +5696,7 @@ export const PilotoHistoryView = () => {
               {/* Botón Cierre: Sentence Case */}
               <button
                 onClick={() => setSelectedFlight(null)}
-                className="px-3.5 py-1.5 bg-[#0E5E6F] text-white font-semibold text-xs rounded-[4px] hover:bg-[#0A4754] transition cursor-pointer"
+                className="px-3.5 py-2.5 bg-[#0E5E6F] text-white font-semibold text-xs rounded-[4px] hover:bg-[#0A4754] transition cursor-pointer w-full"
               >
                 Cerrar bitácora
               </button>
