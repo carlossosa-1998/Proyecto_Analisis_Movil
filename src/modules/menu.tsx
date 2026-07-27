@@ -62,6 +62,18 @@ const Text = ({ children, className = "", as: C = "p" }: any) => (
     </C>
 );
 
+// Barra de gesto inferior que aparece dentro de cada "app" abierta y regresa al home screen al tocarla
+const HomeIndicator = ({ onGoHome }: { onGoHome: () => void }) => (
+  <button
+    onClick={onGoHome}
+    style={{ fontFamily: "'Roboto', sans-serif" }}
+    className="shrink-0 w-full py-2.5 flex justify-center bg-white/95 backdrop-blur border-t border-gray-100 active:bg-gray-50 transition-colors cursor-pointer"
+    title="Volver al inicio"
+  >
+    <div className="w-32 h-1 bg-gray-900 rounded-full"></div>
+  </button>
+);
+
 type AppScreen = "home" | "landing" | "kit-ui";
 
 interface AppDef {
@@ -256,18 +268,6 @@ export const MenuView = () => {
       </div>
   );
 };
-
-// Barra de gesto inferior que aparece dentro de cada "app" abierta y regresa al home screen al tocarla
-const HomeIndicator = ({ onGoHome }: { onGoHome: () => void }) => (
-  <button
-    onClick={onGoHome}
-    style={{ fontFamily: "'Roboto', sans-serif" }}
-    className="shrink-0 w-full py-2.5 flex justify-center bg-white/95 backdrop-blur border-t border-gray-100 active:bg-gray-50 transition-colors cursor-pointer"
-    title="Volver al inicio"
-  >
-    <div className="w-32 h-1 bg-gray-900 rounded-full"></div>
-  </button>
-);
 
 // Kit UI Móvil Optimizado
 export const KitUiView = () => {

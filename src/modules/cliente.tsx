@@ -1,5 +1,5 @@
-import { Activity, AlertCircle, ArrowLeft, ArrowRight, ArrowUpRight, Award, BarChart2, Briefcase, Map, Lock, Building2, Calendar, Check, CheckCheck, CheckCircle, CheckCircle2, CreditCard, Download, Edit2, Eye, EyeOff, FileText, HelpCircle, Info, Layers, LogOut, MapPin, MoreVertical, Paperclip, Phone, Plane, Plus, Save, Search, Send, Settings, ShieldAlert, ShieldCheck, ShoppingBag, Sparkles, Sprout, Upload, Video, Wallet, X, XCircle, Zap, Droplet, Wind, Package, Bell, TrendingUp, Filter, BarChart3, Clock, Droplets, Mail, Radio, SearchIcon, Truck, ChevronRight, Camera, Loader2, Tag, UserCheck, Wrench, QrCode, Battery, Headphones, ClipboardCopy, Share2, Trash2, Pencil } from 'lucide-react';
-import React, { useState } from 'react';
+import { Activity, AlertCircle, ArrowLeft, ArrowRight, ArrowUpRight, Award, BarChart2, Briefcase, Map, Lock, Building2, Calendar, Check, CheckCheck, CheckCircle, CheckCircle2, CreditCard, Download, Edit2, Eye, EyeOff, FileText, HelpCircle, Info, Layers, LogOut, MapPin, MoreVertical, Paperclip, Phone, Plane, Plus, Save, Search, Send, Settings, ShieldAlert, ShieldCheck, ShoppingBag, Sparkles, Sprout, Upload, Video, Wallet, X, XCircle, Zap, Droplet, Wind, Package, Bell, TrendingUp, Filter, BarChart3, Clock, Droplets, Mail, Radio, SearchIcon, Truck, ChevronRight, Camera, Loader2, Tag, UserCheck, Wrench, QrCode, Battery, Headphones, ClipboardCopy, Share2, Trash2, Pencil, ChevronLeft, ChevronDown } from 'lucide-react';
+import React, { useState, useRef, useCallback } from 'react';
 
 const WireframeButton = ({
     children,
@@ -42,6 +42,47 @@ const WireframeInput = ({
         />
     </div>
 );
+
+const useDragScroll = () => {
+    const ref = useRef<HTMLDivElement | null>(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startY, setStartY] = useState(0);
+    const [scrollTop, setScrollTop] = useState(0);
+
+    const onMouseDown = useCallback((e: React.MouseEvent) => {
+        if (!ref.current) return;
+        setIsDragging(true);
+        setStartY(e.pageY - ref.current.offsetTop);
+        setScrollTop(ref.current.scrollTop);
+    }, []);
+
+    const onMouseLeave = useCallback(() => {
+        setIsDragging(false);
+    }, []);
+
+    const onMouseUp = useCallback(() => {
+        setIsDragging(false);
+    }, []);
+
+    const onMouseMove = useCallback((e: React.MouseEvent) => {
+        if (!isDragging || !ref.current) return;
+        e.preventDefault();
+        const y = e.pageY - ref.current.offsetTop;
+        const walk = (y - startY) * 1.5; // Factor de velocidad de arrastre
+        ref.current.scrollTop = scrollTop - walk;
+    }, [isDragging, startY, scrollTop]);
+
+    return {
+        ref,
+        events: {
+            onMouseDown,
+            onMouseLeave,
+            onMouseUp,
+            onMouseMove
+        },
+        isDragging
+    };
+};
 
 const Title = ({ children, className = "", as: C = "h2" }: any) => (
     <C
@@ -273,7 +314,65 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
   const [statusFilter, setStatusFilter] = useState<string>("todos");
   const [hoveredBar, setHoveredBar] = useState<number | null>(null);
 
-  // Paleta de colores Hexadecimales requerida
+  // Estados para simular el gesto táctil de deslizar (swipe down) en el modal
+  const [dragY, setDragY] = useState<number>(0);
+  const touchStartY = useRef<number>(0);
+  const isDraggingModal = useRef<boolean>(false);
+
+  // Refs y estados para el desplazamientoo/arrastre con Mouse (Mouse Drag / Swipe)
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isMouseDown = useRef<boolean>(false);
+  const startX = useRef<number>(0);
+  const startY = useRef<number>(0);
+  const scrollLeft = useRef<number>(0);
+  const scrollTop = useRef<number>(0);
+
+  // Manejadores para scroll con mouse (drag tracking)
+  const handleMouseDown = (e: React.MouseEvent) => {
+    // Si se hace click en select, input u otros controles, no interferir con el drag
+    const target = e.target as HTMLElement;
+    if (["INPUT", "SELECT", "BUTTON", "OPTION", "A"].includes(target.tagName)) return;
+
+    isMouseDown.current = true;
+    if (containerRef.current) {
+      startX.current = e.pageX - containerRef.current.offsetLeft;
+      startY.current = e.pageY - containerRef.current.offsetTop;
+      scrollLeft.current = containerRef.current.scrollLeft;
+      scrollTop.current = containerRef.current.scrollTop;
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isMouseDown.current || !containerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - containerRef.current.offsetLeft;
+    const y = e.pageY - containerRef.current.offsetTop;
+    const walkX = x - startX.current;
+    const walkY = y - startY.current;
+    containerRef.current.scrollLeft = scrollLeft.current - walkX;
+    containerRef.current.scrollTop = scrollTop.current - walkY;
+  };
+
+  const handleMouseUpOrLeave = () => {
+    isMouseDown.current = false;
+  };
+
+  // Manejador para el desplazamiento por teclado (flechas direccionales)
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!containerRef.current) return;
+    const scrollAmount = 40;
+    if (e.key === "ArrowUp") {
+      containerRef.current.scrollTop -= scrollAmount;
+    } else if (e.key === "ArrowDown") {
+      containerRef.current.scrollTop += scrollAmount;
+    } else if (e.key === "ArrowLeft") {
+      containerRef.current.scrollLeft -= scrollAmount;
+    } else if (e.key === "ArrowRight") {
+      containerRef.current.scrollLeft += scrollAmount;
+    }
+  };
+
+  // Paleta de colores Hexadecimales
   const HEX_COLORS = {
     brandGreen: "#0E5E6F",
     emerald100: "#D1FAE5",
@@ -284,12 +383,12 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
     purple100: "#F3E8FF",
   };
 
-  // Notificaciones ampliadas
+  // Notificaciones
   const [notificaciones, setNotificaciones] = useState([
     {
       id: 1,
       tipo: "aprobacion",
-      titulo: "Servicio aprobado",
+      titulo: "Servicio Aprobado",
       detalle: "Solicitud #SOL-904 (Fumigación Sector Norte) fue validada y programada.",
       tiempo: "Hace 10 min",
       colorBg: HEX_COLORS.emerald100,
@@ -300,8 +399,8 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
     {
       id: 2,
       tipo: "suscripcion",
-      titulo: "Estado de suscripción",
-      detalle: "Tu plan VIP de cobertura aérea se renueva automáticamente el 01 de Agosto.",
+      titulo: "Estado De Suscripción",
+      detalle: "Tu plan VIP de cobertura aérea se renueva automáticamente el 01 de agosto.",
       tiempo: "Hace 2 horas",
       colorBg: HEX_COLORS.blue100,
       textColor: "#1E40AF",
@@ -311,8 +410,8 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
     {
       id: 3,
       tipo: "soporte",
-      titulo: "Mensaje de asistencia",
-      detalle: "Soporte Técnico respondió a tu ticket #TK-302: 'Calibración de cámara NDVI'.",
+      titulo: "Mensaje De Asistencia",
+      detalle: "Soporte técnico respondió a tu ticket #TK-302: 'Calibración de cámara NDVI'.",
       tiempo: "Hace 5 horas",
       colorBg: HEX_COLORS.purple100,
       textColor: "#6B21A8",
@@ -322,7 +421,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
     {
       id: 4,
       tipo: "alerta",
-      titulo: "Mantenimiento técnico",
+      titulo: "Mantenimiento Técnico",
       detalle: "El dron Agras T40 asignado a tu zona completó su chequeo de rutina.",
       tiempo: "Ayer, 03:20 PM",
       colorBg: HEX_COLORS.amber100,
@@ -332,14 +431,35 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
     },
   ]);
 
-  // Manejo de navegación sin alert
+  // Manejadores para el gesto táctil de cierre rápido del modal
+  const handleTouchStartModal = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+    isDraggingModal.current = true;
+  };
+
+  const handleTouchMoveModal = (e: React.TouchEvent) => {
+    if (!isDraggingModal.current) return;
+    const currentY = e.touches[0].clientY;
+    const deltaY = currentY - touchStartY.current;
+    if (deltaY > 0) {
+      setDragY(deltaY);
+    }
+  };
+
+  const handleTouchEndModal = () => {
+    isDraggingModal.current = false;
+    if (dragY > 50) {
+      setShowNotifications(false);
+    }
+    setDragY(0);
+  };
+
   const handleRequestNewService = () => {
     if (typeof onNavigate === "function") {
       onNavigate("ClienteServiciosView");
     }
   };
 
-  // Datos para los gráficos
   const chartData: Record<
     string,
     Record<string, { label: string; valor: number; detalle: string; unidad: string }[]>
@@ -471,7 +591,6 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
     },
   };
 
-  // Registros de la tabla
   const datosRegistros: Record<string, any[]> = {
     riego: [
       {
@@ -524,18 +643,6 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
         tagColorBg: HEX_COLORS.emerald100,
         tagTextColor: "#065F46",
       },
-      {
-        id: "MIS-760",
-        fecha: "2026-07-18",
-        ubicacion: "Perímetro Industrial",
-        objetivo: "Inspección nocturna de cerco perimetral",
-        dron: "DJI FlyCart 30",
-        duracion: "40 min",
-        cobertura: "15 Ha",
-        estado: "Completado",
-        tagColorBg: HEX_COLORS.emerald100,
-        tagTextColor: "#065F46",
-      },
     ],
     fumigacion: [
       {
@@ -581,7 +688,6 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
     ],
   };
 
-  // Filtrado de la tabla
   const registrosActuales = (datosRegistros[activeTab] || []).filter((item) => {
     const matchesSearch =
       item.id.toLowerCase().includes(tableSearch.toLowerCase()) ||
@@ -601,7 +707,6 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
   const maxChartValue = Math.max(...currentChartSet.map((d) => d.valor), 1);
   const chartUnit = currentChartSet[0]?.unidad || "Cantidad";
 
-  // Eje Y en 5 niveles de división
   const yAxisTicks = [
     Math.round(maxChartValue),
     Math.round(maxChartValue * 0.75),
@@ -613,135 +718,181 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
   const unreadCount = notificaciones.filter((n) => n.unread).length;
 
   return (
-    <div style={{ fontFamily: "'Roboto', sans-serif" }} className="p-3 mx-auto bg-white antialiased text-gray-800">
-      {/* BARRA SUPERIOR */}
-      <div className="flex flex-col gap-3 mb-4 pb-3 border-b-2 border-gray-100 select-none">
-        <div className="text-left space-y-0.5">
-          <h1 className="text-lg font-black text-gray-900 tracking-tight leading-snug">
-            Dashboard de Servicios y Beneficios
+    <div
+      ref={containerRef}
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUpOrLeave}
+      onMouseLeave={handleMouseUpOrLeave}
+      style={{
+        fontFamily: "'Roboto', sans-serif",
+        WebkitOverflowScrolling: "touch",
+      }}
+      className="p-3 mx-auto bg-white antialiased text-gray-800 select-none max-w-md min-h-screen relative overflow-y-auto outline-none cursor-grab active:cursor-grabbing"
+    >
+      {/* ESTILOS CSS: OCULTAN BARRAS DE SCROLL MANTENIENDO EL SCROLL NATIVO TÁCTIL Y EL SCROLL POR MOUSE/TECLADO */}
+      <style>{`
+        * {
+          -ms-overflow-style: none !important;
+          scrollbar-width: none !important;
+          -webkit-tap-highlight-color: transparent;
+        }
+        *::-webkit-scrollbar {
+          display: none !important;
+          width: 0 !important;
+          height: 0 !important;
+        }
+      `}</style>
+
+      {/* BARRA SUPERIOR CON NOTIFICACIONES */}
+      <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-gray-100 relative">
+        <div className="text-left space-y-0.5 min-w-0">
+          <h1 className="text-base font-black text-gray-900 tracking-tight leading-snug">
+            Servicios Y Beneficios
           </h1>
-          <p className="text-gray-500 text-[11px] font-medium tracking-wide leading-snug">
-            Consola del Cliente • Monitoreo Operacional y Análisis de Rendimiento
+          <p className="text-gray-500 text-[10px] font-medium tracking-wide leading-snug truncate">
+            Consola del cliente • Monitoreo operacional
           </p>
+          <div className="pt-1">
+            <div
+              style={{
+                backgroundColor: HEX_COLORS.emerald100,
+                color: "#065F46",
+                borderRadius: "4px",
+              }}
+              className="px-2.5 py-0.5 border border-emerald-300 flex items-center gap-1.5 shadow-xs w-fit"
+            >
+              <span className="w-1.5 h-1.5 bg-[#065F46] rounded-full animate-pulse"></span>
+              <span className="text-[9px] font-bold tracking-wider uppercase">Suscripción VIP</span>
+            </div>
+          </div>
         </div>
 
-        <div className="flex items-center justify-between gap-2">
-          {/* Badge Suscripción */}
-          <div
-            style={{
-              backgroundColor: HEX_COLORS.emerald100,
-              color: "#065F46",
-              borderRadius: "4px",
-            }}
-            className="px-2.5 py-1 border border-emerald-300 flex items-center gap-1.5 shadow-xs"
+        {/* BOTÓN DE NOTIFICACIONES */}
+        <div className="relative shrink-0 mt-0.5">
+          <button
+            type="button"
+            onClick={() => setShowNotifications(!showNotifications)}
+            style={{ borderRadius: "4px" }}
+            className="relative p-2.5 bg-white border border-gray-200 hover:border-gray-300 active:scale-95 transition-all shadow-md flex items-center justify-center cursor-pointer touch-manipulation"
           >
-            <span className="w-1.5 h-1.5 bg-[#065F46] rounded-full animate-pulse"></span>
-            <span className="text-[10px] font-bold tracking-wider">Suscripción vip</span>
-          </div>
+            <Bell size={18} className="text-gray-700" />
+            {unreadCount > 0 && (
+              <span
+                style={{ backgroundColor: HEX_COLORS.red, borderRadius: "4px" }}
+                className="absolute -top-1 -right-1 px-1.5 py-0.5 text-[9px] text-white font-black shadow-xs"
+              >
+                {unreadCount}
+              </span>
+            )}
+          </button>
 
-          {/* CAMPANA Y BOTTOM SHEET DE NOTIFICACIONES */}
-          <div className="relative">
-            <button
-              onClick={() => setShowNotifications(!showNotifications)}
-              style={{ borderRadius: "4px" }}
-              className="relative p-2 bg-white border-2 border-gray-200 hover:border-gray-300 transition-colors shadow-xs active:scale-95 flex items-center justify-center"
-            >
-              <Bell size={18} className="text-gray-600" />
-              {unreadCount > 0 && (
-                <span
-                  style={{
-                    backgroundColor: HEX_COLORS.red,
-                    borderRadius: "4px",
-                  }}
-                  className="absolute -top-1 -right-1 px-1 py-0.2 text-[9px] text-white font-black shadow-xs"
-                >
-                  {unreadCount}
-                </span>
-              )}
-            </button>
+          {/* POPUP MODAL QUE NACE DIRECTAMENTE DEL BOTÓN DE NOTIFICACIONES */}
+          {showNotifications && (
+            <>
+              {/* BACKDROP TRANSPARENTE QUE CIERRA AL TOCAR AFUERA */}
+              <div
+                className="fixed inset-0 z-40 bg-black/20"
+                onClick={() => setShowNotifications(false)}
+              />
 
-            {/* PANEL DE NOTIFICACIONES — bottom sheet en móvil */}
-            {showNotifications && (
-              <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-end justify-center">
-                <div
-                  style={{ borderRadius: "16px 16px 0 0" }}
-                  className="bg-white border-t-2 border-gray-200 shadow-2xl w-full max-h-[80vh] flex flex-col text-left animate-in fade-in duration-150"
-                >
-                  <div className="flex justify-center pt-2 pb-1 shrink-0">
-                    <div className="w-10 h-1 rounded-full bg-gray-300" />
-                  </div>
+              {/* CARD COMPACTO: w-65 Y max-w-[calc(100vw-2rem)] EVITA SALIRSE POR LA IZQUIERDA */}
+              <div
+                onTouchStart={handleTouchStartModal}
+                onTouchMove={handleTouchMoveModal}
+                onTouchEnd={handleTouchEndModal}
+                style={{
+                  transform: `translateY(${dragY}px)`,
+                  transition: isDraggingModal.current ? "none" : "transform 0.2s cubic-bezier(0,0,0.2,1)",
+                }}
+                className="absolute top-12 right-0 z-50 bg-white border-2 border-gray-300 rounded-[4px] w-66 max-w-[calc(100vw-2rem)] shadow-2xl flex flex-col text-left origin-top-right animate-in zoom-in-95 duration-150"
+              >
+                {/* Píldora táctil indicadora */}
+                <div className="flex justify-center pt-2 pb-1 cursor-grab active:cursor-grabbing">
+                  <div className="w-8 h-1 bg-gray-300 rounded-full" />
+                </div>
 
-                  <div className="flex justify-between items-center px-4 pb-2.5 mb-1 border-b border-gray-100 shrink-0">
-                    <div className="flex items-center gap-2">
-                      <Bell size={15} className="text-gray-700" />
-                      <h3 className="text-xs font-black text-gray-900 tracking-wider">
-                        Centro de Notificaciones
+                <div className="p-2.5 space-y-2">
+                  {/* Encabezado */}
+                  <div className="flex items-center justify-between pb-1.5 border-b-2 border-gray-100">
+                    <div className="flex items-center gap-1.5">
+                      <div className="p-1 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
+                        <Bell size={12} />
+                      </div>
+                      <h3 className="text-xs font-black text-gray-800 normal-case">
+                        Notificaciones
                       </h3>
                     </div>
                     <button
+                      type="button"
                       onClick={() => setShowNotifications(false)}
-                      className="text-gray-400 hover:text-gray-600 p-1"
+                      className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer touch-manipulation"
                     >
-                      <X size={14} />
+                      <X size={13} />
                     </button>
                   </div>
 
-                  <div className="space-y-2 px-4 pb-2 overflow-y-auto custom-scrollbar">
+                  {/* Lista de Notificaciones compacta sin barras de scroll */}
+                  <div className="space-y-1.5 max-h-60 overflow-hidden">
                     {notificaciones.map((n) => (
                       <div
                         key={n.id}
-                        style={{ borderRadius: "4px" }}
-                        className={`p-2.5 border text-xs transition-colors ${
-                          n.unread ? "bg-gray-50 border-gray-200" : "bg-white border-gray-100"
+                        className={`p-2 border rounded-[4px] text-xs transition-colors ${
+                          n.unread ? "bg-gray-50/90 border-gray-200" : "bg-white border-gray-100"
                         }`}
                       >
-                        <div className="flex justify-between items-start gap-2 mb-1">
+                        <div className="flex justify-between items-start gap-1 mb-1">
                           <span
                             style={{
                               backgroundColor: n.colorBg,
                               color: n.textColor,
-                              borderRadius: "4px",
                             }}
-                            className="px-2 py-0.5 text-[9px] font-bold flex items-center gap-1"
+                            className="px-1.5 py-0.5 text-[8px] font-extrabold flex items-center gap-1 uppercase tracking-wider rounded-[4px] truncate"
                           >
                             {n.icono}
-                            {n.titulo}
+                            <span className="truncate">{n.titulo}</span>
                           </span>
-                          <span className="text-[9px] font-mono text-gray-400">{n.tiempo}</span>
+                          <span className="text-[8px] font-mono font-medium text-gray-400 shrink-0">
+                            {n.tiempo}
+                          </span>
                         </div>
-                        <p className="text-gray-700 font-medium text-[11px] leading-snug">
+                        <p className="text-gray-700 font-medium text-[10px] leading-snug">
                           {n.detalle}
                         </p>
                       </div>
                     ))}
                   </div>
 
-                  <div className="p-3 pt-2.5 border-t border-gray-100 text-center shrink-0">
+                  {/* Pie del modal */}
+                  <div className="pt-1.5 border-t border-gray-100 text-center">
                     <button
+                      type="button"
                       onClick={() => {
                         setNotificaciones(notificaciones.map((n) => ({ ...n, unread: false })));
                       }}
-                      className="text-[11px] font-bold text-[#0E5E6F] hover:underline"
+                      className="w-full py-1 px-2 bg-white border border-gray-200 hover:border-gray-300 text-[#0E5E6F] font-bold rounded-[4px] text-[10px] transition-colors active:scale-95 shadow-xs cursor-pointer touch-manipulation"
                     >
                       Marcar todas como leídas
                     </button>
                   </div>
                 </div>
               </div>
-            )}
-          </div>
+            </>
+          )}
         </div>
       </div>
 
       {/* MÉTRICAS SUMMARY */}
-      <div className="grid grid-cols-2 gap-2.5 mb-5 text-left">
+      <div className="grid grid-cols-2 gap-2 mb-4 text-left">
         <div
           style={{ borderRadius: "4px" }}
-          className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between"
+          className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
         >
-          <div className="flex justify-between items-center mb-1.5">
-            <span className="text-[10px] font-black text-gray-500 tracking-wider">
-              Ahorro Insumos
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-[9px] font-black text-gray-500 tracking-wider">
+              Ahorro De Insumos
             </span>
             <div
               style={{
@@ -749,21 +900,21 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
                 color: "#065F46",
                 borderRadius: "4px",
               }}
-              className="p-1.5 flex items-center justify-center"
+              className="p-1 flex items-center justify-center"
             >
-              <Droplets size={14} />
+              <Droplets size={13} />
             </div>
           </div>
-          <p className="text-xl font-black text-gray-900 mb-0.5">35%</p>
-          <p className="text-[9px] text-gray-400 font-semibold leading-snug">Reducción de recursos aplicados</p>
+          <p className="text-lg font-black text-gray-900 mb-0.5">35%</p>
+          <p className="text-[8px] text-gray-400 font-semibold leading-snug">Reducción de recursos</p>
         </div>
 
         <div
           style={{ borderRadius: "4px" }}
-          className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between"
+          className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
         >
-          <div className="flex justify-between items-center mb-1.5">
-            <span className="text-[10px] font-black text-gray-500 tracking-wider">
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-[9px] font-black text-gray-500 tracking-wider">
               Horas Ahorradas
             </span>
             <div
@@ -772,21 +923,21 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
                 color: "#1E40AF",
                 borderRadius: "4px",
               }}
-              className="p-1.5 flex items-center justify-center"
+              className="p-1 flex items-center justify-center"
             >
-              <Clock size={14} />
+              <Clock size={13} />
             </div>
           </div>
-          <p className="text-xl font-black text-gray-900 mb-0.5">148 hrs</p>
-          <p className="text-[9px] text-gray-400 font-semibold leading-snug">Tiempo hombre optimizado</p>
+          <p className="text-lg font-black text-gray-900 mb-0.5">148 hrs</p>
+          <p className="text-[8px] text-gray-400 font-semibold leading-snug">Tiempo optimizado</p>
         </div>
 
         <div
           style={{ borderRadius: "4px" }}
-          className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between"
+          className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
         >
-          <div className="flex justify-between items-center mb-1.5">
-            <span className="text-[10px] font-black text-gray-500 tracking-wider">
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-[9px] font-black text-gray-500 tracking-wider">
               Área Atendida
             </span>
             <div
@@ -795,21 +946,21 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
                 color: "#6B21A8",
                 borderRadius: "4px",
               }}
-              className="p-1.5 flex items-center justify-center"
+              className="p-1 flex items-center justify-center"
             >
-              <Radio size={14} />
+              <Radio size={13} />
             </div>
           </div>
-          <p className="text-xl font-black text-gray-900 mb-0.5">320 Ha</p>
-          <p className="text-[9px] text-gray-400 font-semibold leading-snug">Cobertura total escaneada</p>
+          <p className="text-lg font-black text-gray-900 mb-0.5">320 Ha</p>
+          <p className="text-[8px] text-gray-400 font-semibold leading-snug">Cobertura total</p>
         </div>
 
         <div
           style={{ borderRadius: "4px" }}
-          className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between"
+          className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
         >
-          <div className="flex justify-between items-center mb-1.5">
-            <span className="text-[10px] font-black text-gray-500 tracking-wider">
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-[9px] font-black text-gray-500 tracking-wider">
               Casos Resueltos
             </span>
             <div
@@ -818,63 +969,59 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
                 color: "#92400E",
                 borderRadius: "4px",
               }}
-              className="p-1.5 flex items-center justify-center"
+              className="p-1 flex items-center justify-center"
             >
-              <CheckCircle2 size={14} />
+              <CheckCircle2 size={13} />
             </div>
           </div>
-          <p className="text-xl font-black text-gray-900 mb-0.5">12 Casos</p>
-          <p className="text-[9px] text-gray-400 font-semibold leading-snug">Alertas solucionadas a tiempo</p>
+          <p className="text-lg font-black text-gray-900 mb-0.5">12 casos</p>
+          <p className="text-[8px] text-gray-400 font-semibold leading-snug">Alertas a tiempo</p>
         </div>
       </div>
 
-      {/* PESTAÑAS — scroll horizontal táctil en vez de grid */}
-      <div className="border-b-2 border-gray-200 mb-5 flex overflow-x-auto -mx-3 px-3 select-none">
-        {[
-          { id: "riego", label: "Riego de precisión", icon: <Droplet size={13} /> },
-          { id: "busqueda", label: "Búsqueda y rescate", icon: <Search size={13} /> },
-          { id: "fumigacion", label: "Fumigación y control", icon: <Wind size={13} /> },
-          { id: "transporte", label: "Transporte y entrega", icon: <Truck size={13} /> },
-          { id: "otros", label: "Otros servicios", icon: <Layers size={13} /> },
-        ].map((tab) => {
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              style={{ borderRadius: "4px 4px 0 0" }}
-              className={`px-3 py-2.5 text-[11px] font-bold flex items-center justify-center gap-1.5 border-t-2 border-x-2 -mb-[2px] transition-all text-center whitespace-nowrap shrink-0 ${
-                isActive
-                  ? "border-t-[#0E5E6F] border-x-gray-200 border-b-white bg-white text-[#0E5E6F] shadow-xs"
-                  : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-              }`}
-            >
-              <span className={isActive ? "text-[#0E5E6F]" : "text-gray-400"}>{tab.icon}</span>
-              <span>{tab.label}</span>
-            </button>
-          );
-        })}
+      {/* SELECCIÓN DE SERVICIO */}
+      <div className="mb-4">
+        <label className="block text-[10px] font-bold text-gray-500 mb-1 text-left">
+          Seleccionar categoría de servicio
+        </label>
+        <div className="relative">
+          <select
+            value={activeTab}
+            onChange={(e) => setActiveTab(e.target.value)}
+            style={{ borderRadius: "4px" }}
+            className="w-full pl-3 pr-8 py-2.5 text-xs font-bold text-gray-800 bg-gray-50 border border-gray-300 appearance-none focus:outline-none focus:border-[#0E5E6F] touch-manipulation cursor-pointer"
+          >
+            <option value="riego">Riego de precisión</option>
+            <option value="busqueda">Búsqueda y rescate</option>
+            <option value="fumigacion">Fumigación y control</option>
+            <option value="transporte">Transporte y entrega</option>
+            <option value="otros">Otros servicios</option>
+          </select>
+          <ChevronDown
+            size={16}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+          />
+        </div>
       </div>
 
       {/* GRÁFICO SUPERIOR */}
       <div
         style={{ borderRadius: "4px" }}
-        className="bg-white border-2 border-gray-200 p-3.5 shadow-xs mb-6 text-left"
+        className="bg-white border border-gray-200 p-3 shadow-xs mb-5 text-left"
       >
-        <div className="flex flex-col gap-3 mb-3 pb-2.5 border-b border-gray-100">
+        <div className="flex flex-col gap-2.5 mb-3 pb-2 border-b border-gray-100">
           <div className="flex items-center gap-2">
             <BarChart3 size={16} className="text-[#0E5E6F] shrink-0" />
             <div className="min-w-0">
               <h3 className="text-[11px] font-black text-gray-900 tracking-wider truncate">
-                Rendimiento y Estadística — {activeTab}
+                Rendimiento — {activeTab}
               </h3>
-              <p className="text-[10px] text-gray-500 font-medium">
-                Escala Eje Y: <strong className="text-gray-700">{chartUnit}</strong>
+              <p className="text-[9px] text-gray-500 font-medium">
+                Eje Y: <strong className="text-gray-700">{chartUnit}</strong>
               </p>
             </div>
           </div>
 
-          {/* Selector de escala temporal — ancho completo */}
           <div
             style={{ borderRadius: "4px" }}
             className="bg-gray-100 p-1 flex items-center gap-1 border border-gray-200 w-full"
@@ -886,12 +1033,13 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
             ].map((p) => (
               <button
                 key={p.id}
+                type="button"
                 onClick={() => setChartPeriod(p.id as any)}
                 style={{ borderRadius: "4px" }}
-                className={`flex-1 px-2.5 py-1.5 text-[11px] font-bold transition-all ${
+                className={`flex-1 py-1 text-[10px] font-bold transition-all cursor-pointer touch-manipulation ${
                   chartPeriod === p.id
                     ? "bg-[#0E5E6F] text-white shadow-xs"
-                    : "text-gray-500 hover:text-gray-900"
+                    : "text-gray-500 active:text-gray-900"
                 }`}
               >
                 {p.label}
@@ -900,24 +1048,21 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
           </div>
         </div>
 
-        {/* CONTENEDOR DEL GRÁFICO */}
-        <div className="relative pt-3 pb-2 pr-1 overflow-x-auto">
-          <div className="flex h-40 min-w-[420px]">
-            {/* EJE Y */}
-            <div className="w-9 flex flex-col justify-between items-end pr-2 border-r-2 border-gray-300 text-[9px] font-mono font-bold text-gray-400 py-1 select-none shrink-0">
+        <div className="relative pt-2 pb-1">
+          <div className="flex h-36 w-full">
+            <div className="w-6 flex flex-col justify-between items-end pr-1 border-r border-gray-300 text-[8px] font-mono font-bold text-gray-400 py-1 select-none shrink-0">
               {yAxisTicks.map((tick, i) => (
                 <span key={i}>{tick}</span>
               ))}
             </div>
 
-            {/* BARRAS Y LÍNEAS DE FONDO */}
-            <div className="flex-1 relative flex items-end justify-between pl-3 pr-1 h-full">
-              <div className="absolute inset-x-0 top-0 bottom-0 flex flex-col justify-between pointer-events-none z-0 px-1">
+            <div className="flex-1 relative flex items-end justify-between pl-1 pr-1 h-full">
+              <div className="absolute inset-x-0 top-0 bottom-0 flex flex-col justify-between pointer-events-none z-0">
                 <div className="border-b border-gray-100 w-full h-0"></div>
                 <div className="border-b border-gray-100 w-full h-0"></div>
                 <div className="border-b border-gray-100 w-full h-0"></div>
                 <div className="border-b border-gray-100 w-full h-0"></div>
-                <div className="border-b-2 border-gray-300 w-full h-0"></div>
+                <div className="border-b border-gray-300 w-full h-0"></div>
               </div>
 
               {currentChartSet.map((item, idx) => {
@@ -936,25 +1081,23 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
                 return (
                   <div
                     key={idx}
-                    className="flex-1 flex flex-col items-center justify-end h-full relative group cursor-pointer z-10 px-0.5"
-                    onMouseEnter={() => setHoveredBar(idx)}
-                    onMouseLeave={() => setHoveredBar(null)}
+                    className="flex-1 flex flex-col items-center justify-end h-full relative z-10 px-0.5 touch-manipulation cursor-pointer"
                     onTouchStart={() => setHoveredBar(idx)}
+                    onClick={() => setHoveredBar(hoveredBar === idx ? null : idx)}
                   >
-                    {/* Tooltip Hover */}
                     {hoveredBar === idx && (
                       <div
                         style={{ borderRadius: "4px" }}
-                        className="absolute -top-11 z-30 bg-gray-900 text-white px-2.5 py-1 text-[10px] font-mono shadow-xl whitespace-nowrap text-center animate-in fade-in duration-100"
+                        className="absolute -top-10 z-30 bg-gray-900 text-white px-2 py-0.5 text-[9px] font-mono shadow-xl whitespace-nowrap text-center animate-in fade-in duration-100"
                       >
                         <p className="font-bold">
                           {item.valor} {chartUnit}
                         </p>
-                        <p className="text-gray-300 text-[9px]">{item.detalle}</p>
+                        <p className="text-gray-300 text-[8px]">{item.detalle}</p>
                       </div>
                     )}
 
-                    <span className="text-[9px] font-black text-gray-700 mb-1 opacity-80 group-hover:opacity-100">
+                    <span className="text-[8px] font-black text-gray-700 mb-0.5">
                       {item.valor}
                     </span>
 
@@ -964,7 +1107,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
                         backgroundColor: currentColor,
                         borderRadius: "4px 4px 0 0",
                       }}
-                      className="w-full transition-all duration-300 hover:brightness-90 border-t border-x border-black/10"
+                      className="w-full max-w-[12px] sm:max-w-[18px] transition-all duration-300 border-t border-x border-black/10"
                     ></div>
                   </div>
                 );
@@ -972,13 +1115,12 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
             </div>
           </div>
 
-          {/* EJE X */}
-          <div className="flex pl-9 pt-2 border-t-2 border-gray-300 min-w-[420px]">
-            <div className="flex-1 flex justify-between px-3">
+          <div className="flex pl-6 pt-1 border-t border-gray-300">
+            <div className="flex-1 flex justify-between px-1">
               {currentChartSet.map((item, idx) => (
                 <span
                   key={idx}
-                  className="flex-1 text-center text-[9px] font-bold text-gray-500 tracking-wider"
+                  className="flex-1 text-center text-[8px] font-bold text-gray-500 tracking-tight"
                 >
                   {item.label}
                 </span>
@@ -991,78 +1133,76 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
       {/* TABLA DE MISIONES */}
       <div
         style={{ borderRadius: "4px" }}
-        className="bg-white border-2 border-gray-200 shadow-xs text-left overflow-hidden mb-6"
+        className="bg-white border border-gray-200 shadow-xs text-left overflow-hidden mb-5"
       >
-        <div className="p-3.5 border-b-2 border-gray-100 bg-gray-50/50 flex flex-col gap-3">
+        <div className="p-3 border-b border-gray-100 bg-gray-50/50 flex flex-col gap-2.5">
           <div>
             <h3 className="text-[11px] font-black text-gray-900 tracking-wider">
-              Historial Operacional — {activeTab}
+              Historial Operacional
             </h3>
-            <p className="text-[10px] text-gray-500 font-medium">
-              Listado Detallado de Ejecuciones de Vuelos
+            <p className="text-[9px] text-gray-500 font-medium">
+              Listado detallado de ejecuciones de vuelos
             </p>
           </div>
 
           <div className="flex flex-col gap-2 w-full">
-            {/* Buscador */}
             <div className="relative w-full">
               <SearchIcon
                 size={13}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
               />
               <input
                 type="text"
                 value={tableSearch}
                 onChange={(e) => setTableSearch(e.target.value)}
-                placeholder="Buscar por id, sector, dron..."
+                placeholder="Buscar ID, sector, dron..."
                 style={{ borderRadius: "4px" }}
-                className="w-full pl-8 pr-3 py-2 text-xs bg-white border border-gray-300 focus:outline-none focus:border-[#0E5E6F] font-medium"
+                className="w-full pl-7 pr-7 py-2 text-xs bg-white border border-gray-300 focus:outline-none focus:border-[#0E5E6F] font-medium touch-manipulation"
               />
               {tableSearch && (
                 <button
+                  type="button"
                   onClick={() => setTableSearch("")}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  style={{ borderRadius: "4px" }}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 p-0.5 cursor-pointer touch-manipulation"
                 >
                   <X size={12} />
                 </button>
               )}
             </div>
 
-            {/* Chips Filtros Verde #0E5E6F — scroll horizontal táctil */}
-            <div className="flex items-center gap-1.5 overflow-x-auto -mx-3.5 px-3.5">
-              {[
-                { id: "todos", label: "Todos" },
-                { id: "completado", label: "Completados" },
-                { id: "proceso", label: "En proceso" },
-                { id: "alerta", label: "Alertas" },
-              ].map((f) => (
-                <button
-                  key={f.id}
-                  onClick={() => setStatusFilter(f.id)}
-                  style={{
-                    borderRadius: "4px",
-                    backgroundColor: statusFilter === f.id ? HEX_COLORS.brandGreen : "#FFFFFF",
-                    color: statusFilter === f.id ? "#FFFFFF" : "#0E5E6F",
-                    borderColor: HEX_COLORS.brandGreen,
-                  }}
-                  className="px-2.5 py-1.5 text-[11px] font-bold border transition-all hover:opacity-90 active:scale-95 whitespace-nowrap shrink-0"
-                >
-                  {f.label}
-                </button>
-              ))}
+            <div className="relative w-full">
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                style={{ borderRadius: "4px" }}
+                className="w-full pl-3 pr-8 py-2 text-xs font-bold text-gray-700 bg-white border border-gray-300 appearance-none focus:outline-none focus:border-[#0E5E6F] touch-manipulation cursor-pointer"
+              >
+                <option value="todos">Todos los estados</option>
+                <option value="completado">Completados</option>
+                <option value="proceso">En proceso</option>
+                <option value="alerta">Alertas</option>
+              </select>
+              <ChevronDown
+                size={14}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+              />
             </div>
           </div>
         </div>
 
-        {/* Lista de tarjetas — reemplaza tabla para móvil */}
-        <div className="divide-y divide-gray-100">
+        {/* Lista adaptada sin barras de scroll */}
+        <div className="divide-y divide-gray-100 max-h-80 overflow-hidden">
           {registrosActuales.length > 0 ? (
             registrosActuales.map((row) => (
-              <div key={row.id} className="p-3.5 flex flex-col gap-2 active:bg-gray-50/60">
+              <div
+                key={row.id}
+                className="p-3 flex flex-col gap-1.5 active:bg-gray-100 transition-colors touch-manipulation"
+              >
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <p className="font-extrabold text-gray-900 text-xs">{row.id}</p>
-                    <p className="text-[10px] text-gray-400 font-mono">{row.fecha}</p>
+                    <p className="text-[9px] text-gray-400 font-mono">{row.fecha}</p>
                   </div>
                   <span
                     style={{
@@ -1070,24 +1210,24 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
                       color: row.tagTextColor,
                       borderRadius: "4px",
                     }}
-                    className="px-2 py-0.5 font-bold text-[10px] inline-block border border-black/5 shrink-0"
+                    className="px-2 py-0.5 font-bold text-[9px] inline-block border border-black/5 shrink-0"
                   >
                     {row.estado}
                   </span>
                 </div>
 
-                <p className="text-[11px] font-medium text-gray-800 leading-snug">
+                <p className="text-[10px] font-medium text-gray-800 leading-snug">
                   {row.objetivo}
                 </p>
 
-                <div className="flex items-center gap-1 text-[11px] font-bold text-gray-700">
-                  <MapPin size={12} className="text-gray-400 shrink-0" />
-                  {row.ubicacion}
+                <div className="flex items-center gap-1 text-[10px] font-bold text-gray-700">
+                  <MapPin size={11} className="text-gray-400 shrink-0" />
+                  <span className="truncate">{row.ubicacion}</span>
                 </div>
 
                 <div className="flex items-center justify-between pt-1 border-t border-gray-50">
-                  <p className="font-bold text-[#0E5E6F] text-[11px]">{row.dron}</p>
-                  <p className="text-[10px] text-gray-400">
+                  <p className="font-bold text-[#0E5E6F] text-[10px]">{row.dron}</p>
+                  <p className="text-[9px] text-gray-400">
                     {row.duracion} · {row.cobertura}
                   </p>
                 </div>
@@ -1100,16 +1240,17 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
           )}
         </div>
 
-        <div className="p-3 border-t border-gray-100 bg-gray-50/40 flex flex-col gap-2.5">
-          <span className="text-[11px] font-bold text-gray-400">
+        <div className="p-3 border-t border-gray-100 bg-gray-50/40 flex flex-col gap-2">
+          <span className="text-[10px] font-bold text-gray-400 text-center">
             {registrosActuales.length} misiones encontradas
           </span>
           <button
+            type="button"
             style={{
               borderRadius: "4px",
               backgroundColor: HEX_COLORS.brandGreen,
             }}
-            className="w-full py-2.5 text-white text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-[#094350] transition-colors shadow-xs"
+            className="w-full py-2.5 text-white text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-transform shadow-xs cursor-pointer touch-manipulation"
           >
             <Download size={13} />
             Exportar informe PDF
@@ -1120,21 +1261,21 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
       {/* BANNER INFERIOR */}
       <div
         style={{ borderRadius: "4px" }}
-        className="border-2 border-gray-200 p-4 bg-gradient-to-r from-gray-50 via-white to-gray-50 flex flex-col items-stretch gap-3.5 text-left shadow-xs"
+        className="border border-gray-200 p-3.5 bg-gradient-to-r from-gray-50 via-white to-gray-50 flex flex-col items-stretch gap-3 text-left shadow-xs mb-4"
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <div
             style={{ borderRadius: "4px", backgroundColor: HEX_COLORS.orange100 }}
-            className="p-2.5 text-orange-800 shrink-0 border border-orange-200"
+            className="p-2 text-orange-800 shrink-0 border border-orange-200"
           >
-            <Zap size={18} />
+            <Zap size={16} />
           </div>
           <div>
-            <h4 className="text-xs font-black text-gray-900 leading-snug">
-              ¿Deseas Contratar una Nueva Operación con Drones BIODRON?
+            <h4 className="text-[11px] font-black text-gray-900 leading-snug">
+              ¿Deseas Contratar Una Nueva Operación?
             </h4>
-            <p className="text-[11px] text-gray-500 font-medium leading-snug">
-              Accede al Catálogo de Servicios para Configurar y Solicitar tu Próxima Misión
+            <p className="text-[9px] text-gray-500 font-medium leading-snug">
+              Accede al catálogo para solicitar tu próxima misión
             </p>
           </div>
         </div>
@@ -1146,7 +1287,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
             borderRadius: "4px",
             backgroundColor: HEX_COLORS.brandGreen,
           }}
-          className="w-full py-2.5 text-white text-xs font-bold tracking-wider hover:bg-[#094350] transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full py-2.5 text-white text-xs font-bold tracking-wider active:scale-95 transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation"
         >
           <span>Solicitar servicio nuevo</span>
           <ChevronRight size={14} />
@@ -1158,14 +1299,13 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
 
 // 2. Servicios
 export const ClienteServiciosView = () => {
-    // -----------------------------------------------------------
-    // ESTADOS GENERALES Y NAVEGACIÓN
-    // -----------------------------------------------------------
     const [activeTab, setActiveTab] = useState<"servicios" | "mapas">("servicios");
 
-    // -----------------------------------------------------------
-    // ESTADOS: PESTAÑA SERVICIOS
-    // -----------------------------------------------------------
+    const serviciosScroll = useDragScroll();
+    const formScroll = useDragScroll();
+    const leftSheetScroll = useDragScroll();
+    const rightSheetScroll = useDragScroll();
+
     const [step, setStep] = useState<number>(1);
     const [requestSuccess, setRequestSuccess] = useState<boolean>(false);
 
@@ -1243,17 +1383,11 @@ export const ClienteServiciosView = () => {
         setIsCopySuccessModalOpen(true);
     };
 
-    // -----------------------------------------------------------
-    // ESTADOS: PESTAÑA EDITOR DE MAPAS
-    // -----------------------------------------------------------
     const [selectedTool, setSelectedTool] = useState<"polygon" | "octagon" | "delete" | "move" | "measure">("polygon");
     const [mapLayer, setMapLayer] = useState<"satellite" | "hybrid" | "terrain">("satellite");
     const [showZones, setShowZones] = useState(true);
     const [showHeatmap, setShowHeatmap] = useState(false);
     const [showBoundaries, setShowBoundaries] = useState(true);
-    // En móvil, estos dos ya no colapsan/expanden columnas laterales: controlan
-    // la visibilidad de los bottom sheets "Herramientas y capas" y "Control del dron".
-    // Empiezan cerrados (true) para dejar el mapa a pantalla completa por defecto.
     const [isLeftCollapsed, setIsLeftCollapsed] = useState(true);
     const [isRightCollapsed, setIsRightCollapsed] = useState(true);
     const [altitude, setAltitude] = useState(45);
@@ -1299,10 +1433,27 @@ export const ClienteServiciosView = () => {
     );
 
     return (
-        <div className="w-full h-screen bg-gray-50 flex flex-col font-sans overflow-hidden" style={{ fontFamily: "'Roboto', sans-serif" }}>
-            {/* ------------------------------------------------------- */}
-            {/* HEADER CON PESTAÑAS - ancho completo, ambas mitades táctiles */}
-            {/* ------------------------------------------------------- */}
+        <div className="w-full h-full bg-gray-50 flex flex-col font-sans overflow-hidden relative select-none" style={{ fontFamily: "'Roboto', sans-serif" }}>
+            <style>{`
+                * {
+                    -ms-overflow-style: none !important;
+                    scrollbar-width: none !important;
+                }
+                *::-webkit-scrollbar {
+                    display: none !important;
+                    width: 0 !important;
+                    height: 0 !important;
+                }
+                .touch-drag {
+                    cursor: grab;
+                    -webkit-overflow-scrolling: touch;
+                }
+                .touch-drag:active {
+                    cursor: grabbing;
+                }
+            `}</style>
+
+            {/* HEADER CON PESTAÑAS */}
             <div className="bg-white border-b border-gray-200 shrink-0 px-2 pt-2 flex gap-1 z-10">
                 <button
                     onClick={() => setActiveTab("servicios")}
@@ -1326,17 +1477,16 @@ export const ClienteServiciosView = () => {
                 </button>
             </div>
 
-            {/* ------------------------------------------------------- */}
-            {/* ÁREA DE CONTENIDO DINÁMICO */}
-            {/* ------------------------------------------------------- */}
+            {/* ÁREA DE CONTENIDO */}
             <div className="flex-1 overflow-hidden relative">
 
-                {/*========================================================
-                    VISTA 1: MIS SERVICIOS (columna única, scroll natural de página
-                    en vez de columnas con scroll interno independiente)
-                =========================================================*/}
+                {/* VISTA 1: MIS SERVICIOS */}
                 {activeTab === "servicios" && (
-                    <div className="h-full overflow-y-auto p-3 flex flex-col gap-3">
+                    <div
+                        ref={serviciosScroll.ref}
+                        {...serviciosScroll.events}
+                        className="h-full overflow-y-auto touch-drag p-3 flex flex-col gap-3"
+                    >
                         <div className="border-b border-gray-200 bg-white p-3 rounded-[4px] shadow-xs shrink-0">
                             <h1 className="text-base font-black text-gray-900 tracking-tight">
                                 Mis Servicios
@@ -1346,7 +1496,7 @@ export const ClienteServiciosView = () => {
                             </p>
                         </div>
 
-                        {/* LISTA DE FICHAS - una sola columna en móvil */}
+                        {/* LISTA DE FICHAS */}
                         <div className="grid grid-cols-1 gap-3">
                             {servicios.map((srv) => (
                                 <div
@@ -1357,7 +1507,7 @@ export const ClienteServiciosView = () => {
                                         <img
                                             src={srv.image}
                                             alt={srv.title}
-                                            className="w-full h-full object-cover rounded-[4px]"
+                                            className="w-full h-full object-cover rounded-[4px] pointer-events-none"
                                             onError={(e) => {
                                                 e.currentTarget.onerror = null;
                                                 e.currentTarget.src = `https://via.placeholder.com/800x400?text=${encodeURIComponent(srv.title)}`;
@@ -1421,7 +1571,7 @@ export const ClienteServiciosView = () => {
                             ))}
                         </div>
 
-                        {/* FORMULARIO DE SOLICITUD - ancho completo, ya no fijo a 320px */}
+                        {/* FORMULARIO */}
                         <div className="w-full flex flex-col shrink-0">
                             <div className="w-full min-h-[340px] bg-white border border-gray-200 rounded-[4px] shadow-xs overflow-hidden flex flex-col">
                                 <div className="px-4 py-3 border-b border-gray-100 bg-gray-50 shrink-0">
@@ -1471,7 +1621,11 @@ export const ClienteServiciosView = () => {
                                     </div>
                                 </div>
 
-                                <div className="p-3.5 flex-1 flex flex-col justify-between overflow-y-auto min-h-0">
+                                <div
+                                    ref={formScroll.ref}
+                                    {...formScroll.events}
+                                    className="p-3.5 flex-1 flex flex-col justify-between overflow-y-auto touch-drag min-h-0"
+                                >
                                     {requestSuccess ? (
                                         <div className="py-2 text-center flex flex-col items-center justify-center gap-2.5">
                                             <CheckCircle2 size={32} className="text-emerald-500" />
@@ -1494,7 +1648,6 @@ export const ClienteServiciosView = () => {
                                         </div>
                                     ) : (
                                         <>
-                                            {/* PASO 1: DETALLES */}
                                             {step === 1 && (
                                                 <div className="flex flex-col gap-3">
                                                     <div className="space-y-2">
@@ -1532,7 +1685,6 @@ export const ClienteServiciosView = () => {
                                                 </div>
                                             )}
 
-                                            {/* PASO 2: MAPEO E ID */}
                                             {step === 2 && (
                                                 <div className="flex flex-col gap-3">
                                                     <div className="space-y-2">
@@ -1593,7 +1745,6 @@ export const ClienteServiciosView = () => {
                                                 </div>
                                             )}
 
-                                            {/* PASO 3: REVISIÓN */}
                                             {step === 3 && (
                                                 <div className="flex flex-col gap-3">
                                                     <div>
@@ -1649,22 +1800,9 @@ export const ClienteServiciosView = () => {
                     </div>
                 )}
 
-
-                {/*========================================================
-                    VISTA 2: EDITOR DE MAPAS
-                    El mapa ahora ocupa toda la pantalla y los paneles
-                    izquierdo/derecho se convirtieron en bottom sheets
-                    abiertos con botones flotantes (FAB), mismo patrón
-                    usado para el modal de detalle en el LandingView.
-                =========================================================*/}
+                {/* VISTA 2: EDITOR DE MAPAS */}
                 {activeTab === "mapas" && (
                     <div className="w-full h-full min-h-0 bg-white antialiased select-none flex flex-col text-gray-800 overflow-hidden relative font-sans">
-                        <style>{`
-                            .no-scrollbar::-webkit-scrollbar { display: none; }
-                            .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-                        `}</style>
-
-                        {/* BARRA SUPERIOR DE COMANDO - solo iconos para caber en el ancho móvil */}
                         <header className="bg-gray-50 border-b-2 border-gray-200 px-3 flex items-center justify-between shrink-0 h-12 z-30 w-full">
                             <div className="flex items-center gap-2 min-w-0">
                                 <div className="p-1 bg-[#0E5E6F] text-white rounded-[4px] shadow-xs shrink-0">
@@ -1676,16 +1814,13 @@ export const ClienteServiciosView = () => {
                                 <div className="text-left min-w-0">
                                     <div className="flex items-center gap-1">
                                         <h1 className="text-xs font-bold text-gray-900 tracking-tight truncate">
-                                            Edición de Mapas
+                                            Editor de mapas
                                         </h1>
-                                        <span className="text-[8px] font-bold px-1.5 py-0.2 rounded-[4px] border border-[#0E5E6F]/30 bg-[#0E5E6F]/10 text-[#0E5E6F] shrink-0">
-                                            Admin
-                                        </span>
+
                                     </div>
                                 </div>
                             </div>
 
-                            {/* BOTONES DEL HEADER - iconos sin texto en móvil */}
                             <div className="flex items-center gap-1 shrink-0">
                                 <button className="p-2 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 rounded-[4px] transition-colors active:scale-95 shadow-xs cursor-pointer" title="Exportar">
                                     <Download size={14} />
@@ -1702,7 +1837,6 @@ export const ClienteServiciosView = () => {
                             </div>
                         </header>
 
-                        {/* ÁREA PRINCIPAL DEL EDITOR - mapa a pantalla completa */}
                         <main className="flex-1 flex overflow-hidden relative min-h-0 w-full">
                             <div className="flex-1 bg-slate-900 relative overflow-hidden h-full w-full">
                                 <div
@@ -1728,24 +1862,23 @@ export const ClienteServiciosView = () => {
                                     <button className="w-8 h-8 bg-white border-2 border-gray-200 rounded-[4px] shadow-md hover:bg-gray-50 text-gray-700 font-bold flex items-center justify-center text-sm cursor-pointer">-</button>
                                 </div>
 
-                                {/* BADGE DE MISIÓN ACTIVA - reemplaza la visibilidad permanente del panel izquierdo */}
                                 <div className="absolute top-3 left-3 z-10 bg-white/95 backdrop-blur-xs border-2 border-gray-200 rounded-[4px] px-2 py-1 shadow-md">
                                     <p className="text-[7px] text-gray-400 font-bold uppercase tracking-wider leading-none">Misión activa</p>
                                     <p className="text-[11px] font-bold text-gray-800 leading-tight">#{mappingId}</p>
                                 </div>
 
-                                {/* FABs: abren los paneles como bottom sheets */}
-                                <div className="absolute bottom-4 right-3 z-20 flex flex-col gap-2.5">
+                                {/* BOTONES FLOTANTES SOBRE EL MAPA */}
+                                <div className="absolute bottom-5 right-3 z-20 flex flex-col gap-2.5">
                                     <button
                                         onClick={() => setIsRightCollapsed(false)}
-                                        className="w-12 h-12 rounded-full bg-[#0E5E6F] shadow-lg flex items-center justify-center text-white active:scale-95 transition-transform cursor-pointer"
+                                        className="w-11 h-11 rounded-[4px] bg-[#0E5E6F] shadow-lg flex items-center justify-center text-white active:scale-95 transition-transform cursor-pointer border border-[#0E5E6F]"
                                         title="Control del dron"
                                     >
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
                                     </button>
                                     <button
                                         onClick={() => setIsLeftCollapsed(false)}
-                                        className="w-12 h-12 rounded-full bg-white border-2 border-gray-200 shadow-lg flex items-center justify-center text-gray-700 active:scale-95 transition-transform cursor-pointer"
+                                        className="w-11 h-11 rounded-[4px] bg-white border-2 border-gray-200 shadow-lg flex items-center justify-center text-gray-700 active:scale-95 transition-transform cursor-pointer"
                                         title="Herramientas y capas"
                                     >
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg>
@@ -1754,11 +1887,15 @@ export const ClienteServiciosView = () => {
                             </div>
                         </main>
 
-                        {/* BOTTOM SHEET: HERRAMIENTAS Y CAPAS (antes panel izquierdo) */}
+                        {/* BOTTOM SHEET 1 */}
                         {!isLeftCollapsed && (
                             <>
-                                <div onClick={() => setIsLeftCollapsed(true)} className="fixed inset-0 z-40 bg-black/50 backdrop-blur-xs" />
-                                <div className="fixed inset-x-0 bottom-0 z-50 bg-white rounded-t-2xl shadow-2xl max-h-[75vh] overflow-y-auto no-scrollbar">
+                                <div onClick={() => setIsLeftCollapsed(true)} className="absolute inset-0 z-40 bg-black/50 backdrop-blur-xs" />
+                                <div
+                                    ref={leftSheetScroll.ref}
+                                    {...leftSheetScroll.events}
+                                    className="absolute inset-x-0 bottom-0 z-50 bg-white rounded-t-[4px] border-t-2 border-gray-200 shadow-2xl max-h-[75vh] overflow-y-auto touch-drag"
+                                >
                                     <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mt-2.5" />
                                     <div className="flex items-center justify-between px-3.5 pt-2 pb-2 border-b border-gray-100 sticky top-0 bg-white">
                                         <h2 className="text-xs font-bold text-gray-800">Herramientas y Capas</h2>
@@ -1802,7 +1939,7 @@ export const ClienteServiciosView = () => {
 
                                                 <button onClick={() => setSelectedTool("octagon")} className={`flex items-center justify-between p-2 rounded-[4px] border-2 text-[11px] font-bold transition-all cursor-pointer ${selectedTool === "octagon" ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]" : "border-gray-200 bg-white text-gray-700"}`}>
                                                     <div className="flex items-center gap-1.5">
-                                                        <div className="w-3 h-3 border-2 border-current rounded-full" />
+                                                        <div className="w-3 h-3 border-2 border-current rounded-[2px]" />
                                                         <span>Octágono</span>
                                                     </div>
                                                 </button>
@@ -1852,13 +1989,17 @@ export const ClienteServiciosView = () => {
                             </>
                         )}
 
-                        {/* BOTTOM SHEET: CONTROL DEL DRON (antes panel derecho) */}
+                        {/* BOTTOM SHEET 2 */}
                         {!isRightCollapsed && (
                             <>
-                                <div onClick={() => setIsRightCollapsed(true)} className="fixed inset-0 z-40 bg-black/50 backdrop-blur-xs" />
-                                <div className="fixed inset-x-0 bottom-0 z-50 bg-white rounded-t-2xl shadow-2xl max-h-[80vh] overflow-y-auto no-scrollbar flex flex-col">
+                                <div onClick={() => setIsRightCollapsed(true)} className="absolute inset-0 z-40 bg-black/50 backdrop-blur-xs" />
+                                <div
+                                    ref={rightSheetScroll.ref}
+                                    {...rightSheetScroll.events}
+                                    className="absolute inset-x-0 bottom-0 z-50 bg-white rounded-t-[4px] border-t-2 border-gray-200 shadow-2xl max-h-[80vh] overflow-y-auto touch-drag flex flex-col"
+                                >
                                     <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mt-2.5 shrink-0" />
-                                    <div className="flex items-center justify-between px-3.5 pt-2 pb-2 border-b border-gray-100 sticky top-0 bg-white shrink-0">
+                                    <div className="flex items-center justify-between px-3.5 pt-0 pb-0 border-b border-gray-100 sticky top-0 bg-white shrink-0">
                                         <h2 className="text-xs font-bold text-gray-800">Control del Dron</h2>
                                         <button onClick={() => setIsRightCollapsed(true)} className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"><X size={16} /></button>
                                     </div>
@@ -1875,7 +2016,7 @@ export const ClienteServiciosView = () => {
                                                 <div>Velocidad: {speed} km/h</div>
                                                 <div>Altitud: {altitude} m</div>
                                             </div>
-                                            <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden mt-1">
+                                            <div className="w-full bg-gray-200 h-1.5 rounded-[4px] overflow-hidden mt-1">
                                                 <div className="bg-[#0E5E6F] h-full w-[88%] transition-all duration-300" />
                                             </div>
                                         </div>
@@ -1888,9 +2029,9 @@ export const ClienteServiciosView = () => {
                                                         <span>Altitud</span>
                                                         <span className="font-bold" style={{ color: "#CA5116" }}>{altitude} m</span>
                                                     </div>
-                                                    <div className="relative w-full h-2 bg-gray-200 rounded-full flex items-center">
-                                                        <div className="h-full rounded-full transition-all" style={{ width: `${((altitude - 10) / 90) * 100}%`, backgroundColor: "#CA5116" }} />
-                                                        <div className="absolute w-3.5 h-3.5 rounded-full shadow-md -translate-x-1/2 transition-all cursor-pointer" style={{ left: `${((altitude - 10) / 90) * 100}%`, backgroundColor: "#CA5116" }} />
+                                                    <div className="relative w-full h-2 bg-gray-200 rounded-[4px] flex items-center">
+                                                        <div className="h-full rounded-[4px] transition-all" style={{ width: `${((altitude - 10) / 90) * 100}%`, backgroundColor: "#CA5116" }} />
+                                                        <div className="absolute w-3.5 h-3.5 rounded-[4px] shadow-md -translate-x-1/2 transition-all cursor-pointer" style={{ left: `${((altitude - 10) / 90) * 100}%`, backgroundColor: "#CA5116" }} />
                                                         <input type="range" min="10" max="100" value={altitude} onChange={(e) => setAltitude(Number(e.target.value))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
                                                     </div>
                                                 </div>
@@ -1900,9 +2041,9 @@ export const ClienteServiciosView = () => {
                                                         <span>Velocidad</span>
                                                         <span className="font-bold" style={{ color: "#2994B2" }}>{speed} km/h</span>
                                                     </div>
-                                                    <div className="relative w-full h-2 bg-gray-200 rounded-full flex items-center">
-                                                        <div className="h-full rounded-full transition-all" style={{ width: `${((speed - 5) / 35) * 100}%`, backgroundColor: "#2994B2" }} />
-                                                        <div className="absolute w-3.5 h-3.5 rounded-full shadow-md -translate-x-1/2 transition-all cursor-pointer" style={{ left: `${((speed - 5) / 35) * 100}%`, backgroundColor: "#2994B2" }} />
+                                                    <div className="relative w-full h-2 bg-gray-200 rounded-[4px] flex items-center">
+                                                        <div className="h-full rounded-[4px] transition-all" style={{ width: `${((speed - 5) / 35) * 100}%`, backgroundColor: "#2994B2" }} />
+                                                        <div className="absolute w-3.5 h-3.5 rounded-[4px] shadow-md -translate-x-1/2 transition-all cursor-pointer" style={{ left: `${((speed - 5) / 35) * 100}%`, backgroundColor: "#2994B2" }} />
                                                         <input type="range" min="5" max="40" value={speed} onChange={(e) => setSpeed(Number(e.target.value))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
                                                     </div>
                                                 </div>
@@ -1912,9 +2053,9 @@ export const ClienteServiciosView = () => {
                                                         <span>Dosis química</span>
                                                         <span className="font-bold" style={{ color: "#B165E0" }}>{rate} L/ha</span>
                                                     </div>
-                                                    <div className="relative w-full h-2 bg-gray-200 rounded-full flex items-center">
-                                                        <div className="h-full rounded-full transition-all" style={{ width: `${((rate - 0.5) / 9.5) * 100}%`, backgroundColor: "#B165E0" }} />
-                                                        <div className="absolute w-3.5 h-3.5 rounded-full shadow-md -translate-x-1/2 transition-all cursor-pointer" style={{ left: `${((rate - 0.5) / 9.5) * 100}%`, backgroundColor: "#B165E0" }} />
+                                                    <div className="relative w-full h-2 bg-gray-200 rounded-[4px] flex items-center">
+                                                        <div className="h-full rounded-[4px] transition-all" style={{ width: `${((rate - 0.5) / 9.5) * 100}%`, backgroundColor: "#B165E0" }} />
+                                                        <div className="absolute w-3.5 h-3.5 rounded-[4px] shadow-md -translate-x-1/2 transition-all cursor-pointer" style={{ left: `${((rate - 0.5) / 9.5) * 100}%`, backgroundColor: "#B165E0" }} />
                                                         <input type="range" min="0.5" max="10" step="0.5" value={rate} onChange={(e) => setRate(Number(e.target.value))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
                                                     </div>
                                                 </div>
@@ -1939,18 +2080,13 @@ export const ClienteServiciosView = () => {
                 )}
             </div>
 
-            {/*========================================================
-                MODALES DEL SISTEMA - convertidos a bottom sheet (ancho
-                completo, aparecen desde abajo) en lugar del modal
-                centrado de escritorio
-            =========================================================*/}
+            {/* MODALES DEL SISTEMA (ABSOLUTOS AL CONTENEDOR) */}
 
-            {/* Modal Éxito de Copia */}
+            {/* Modal Éxito Copia */}
             {isCopySuccessModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/50 flex items-end justify-center backdrop-blur-xs">
-                    <div className="bg-white rounded-t-2xl p-5 shadow-2xl w-full text-center flex flex-col items-center border-t border-gray-100">
-                        <div className="w-10 h-1 bg-gray-300 rounded-full mb-3" />
-                        <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mb-3">
+                <div className="absolute inset-0 z-50 bg-black/50 flex items-center justify-center p-4 backdrop-blur-xs">
+                    <div className="bg-white rounded-[4px] border border-gray-200 p-5 shadow-2xl max-w-xs w-full text-center flex flex-col items-center">
+                        <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-[4px] flex items-center justify-center mb-3">
                             <Check size={20} strokeWidth={3} />
                         </div>
                         <h3 className="text-sm font-bold text-gray-900 mb-1">¡ID Copiado!</h3>
@@ -1967,11 +2103,10 @@ export const ClienteServiciosView = () => {
                 </div>
             )}
 
-            {/* MODAL CAMBIO DE ID */}
+            {/* Modal Cambio de ID */}
             {isIdModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
-                    <div className="bg-white border-t-2 border-gray-200 rounded-t-2xl shadow-2xl w-full overflow-hidden text-left p-4 space-y-3 font-sans">
-                        <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-1" />
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
                         <div className="flex justify-between items-center border-b border-gray-100 pb-2">
                             <h3 className="text-xs font-bold text-gray-900">Cambiar ID de Misión para Mapeo</h3>
                             <button onClick={() => setIsIdModalOpen(false)} className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"><X size={16} /></button>
@@ -1990,11 +2125,10 @@ export const ClienteServiciosView = () => {
                 </div>
             )}
 
-            {/* MODAL APROBACIÓN */}
+            {/* Modal Aprobación */}
             {isApprovalModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
-                    <div className="bg-white border-t-2 border-gray-200 rounded-t-2xl shadow-2xl w-full overflow-hidden text-left p-4 space-y-3 font-sans">
-                        <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-1" />
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
                         <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
                             <div className="p-1 bg-amber-100 text-amber-700 rounded-[4px]"><Check size={16} /></div>
                             <h3 className="text-xs font-bold text-gray-900">Mapeo Enviado a Revisión</h3>
@@ -2015,14 +2149,12 @@ export const ClienteServiciosView = () => {
     );
 };
 
-
-// 3. Mis Suscripciones (subscriptions)
+// 3. Mis Suscripciones
 export const ClienteSuscripcionesView = () => {
     const [activeTab, setActiveTab] = useState<TabType>("generales");
     const [activePlanId, setActivePlanId] = useState<string>("plan-profesional");
     const [selectedPlanForCheckout, setSelectedPlanForCheckout] = useState<any | null>(null);
 
-    // Estado del modal de cancelación
     const [showCancelModal, setShowCancelModal] = useState<boolean>(false);
 
     const [paymentMethod, setPaymentMethod] = useState<"card" | "transfer" | "wallet" | "qr">("card");
@@ -2041,7 +2173,6 @@ export const ClienteSuscripcionesView = () => {
 
     const userWalletBalance = 3200;
 
-    // BASE DE DATOS DE PLANES POR CATEGORÍA
     const catalogos = {
         generales: [
             {
@@ -2257,735 +2388,739 @@ export const ClienteSuscripcionesView = () => {
 
     const handleConfirmCancel = () => {
         setShowCancelModal(false);
-        // Lógica adicional de cancelación
     };
 
     return (
-        <div
-            className="p-3 max-w-md mx-auto flex flex-col gap-4 text-left antialiased text-gray-800"
+        /* El contenedor principal actúa como Marco Relativo para el Modal Sticky */
+        <div 
+            className="relative w-full h-full max-w-md mx-auto text-left antialiased text-gray-800 select-none touch-manipulation overflow-hidden"
             style={{ fontFamily: "'Roboto', sans-serif" }}
         >
-            {/* CABECERA PRINCIPAL */}
-            <div className="border-b border-gray-200 pb-2.5 flex flex-col gap-1">
-                <Title className="text-lg font-extrabold text-gray-900 tracking-tight flex flex-col items-start gap-1.5">
-                    <span>Gestión de Suscripciones y Servicios</span>
-                    <span className="whitespace-nowrap bg-[#0E5E6F]/10 text-[#0E5E6F] text-[10px] font-bold px-2 py-0.5 rounded-[4px] tracking-wider border border-[#0E5E6F]/20">
-                        Planes BIODRON
-                    </span>
-                </Title>
-                <Text className="text-[11px] text-gray-500 block mt-0.5">
-                    Administra tu plan de monitoreo aéreo, descuentos en equipos, asistencia técnica y contratación de pilotos.
-                </Text>
-            </div>
+            <style>{`
+                html, body, div, select, textarea {
+                    -ms-overflow-style: none !important;
+                    scrollbar-width: none !important;
+                }
+                ::-webkit-scrollbar {
+                    display: none !important;
+                    width: 0px !important;
+                    height: 0px !important;
+                    background: transparent !important;
+                }
+                .no-scrollbar::-webkit-scrollbar {
+                    display: none !important;
+                    width: 0px !important;
+                }
+                .no-scrollbar {
+                    -ms-overflow-style: none !important;
+                    scrollbar-width: none !important;
+                }
+            `}</style>
 
-            {/* PROCESO DE PAGO */}
-            {selectedPlanForCheckout ? (
-                <div className="flex flex-col gap-3 animate-in fade-in duration-200">
-                    <button
-                        onClick={() => setSelectedPlanForCheckout(null)}
-                        className="flex items-center gap-1.5 text-xs text-gray-700 hover:text-gray-900 w-fit cursor-pointer bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-[4px] border border-gray-200 transition"
-                    >
-                        <ArrowLeft size={14} /> Volver a selección de opciones
-                    </button>
-
-                    {paymentSuccess ? (
-                        <div className="bg-emerald-50 border border-emerald-300 rounded-[4px] p-5 text-center flex flex-col items-center justify-center gap-2 my-2">
-                            <div className="p-2.5 bg-emerald-500 text-white rounded-[4px]">
-                                <Check size={24} />
-                            </div>
-                            <Title as="h2" className="text-lg font-black text-emerald-950">
-                                ¡Solicitud Procesada con Éxito!
-                            </Title>
-                            <Text className="text-xs text-emerald-800 font-medium max-w-md block">
-                                Tu solicitud ha sido registrada correctamente para <strong>{selectedPlanForCheckout.nombre}</strong>.
-                            </Text>
-                        </div>
-                    ) : (
-        <div className="grid grid-cols-1 gap-3 items-stretch">
-                            {/* RESUMEN DEL PLAN */}
-                            <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
-                                <div>
-                                    <Title
-                                        as="h3"
-                                        className="text-xs font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
-                                    >
-                                        Resumen de la Orden
-                                    </Title>
-
-                                    <div className="bg-gray-50 p-2.5 rounded-[4px] border border-gray-200 flex flex-col gap-1 mb-2">
-                                        <span className="text-[9px] text-[#0E5E6F] bg-[#0E5E6F]/10 px-2 py-0.5 rounded-[4px] border border-[#0E5E6F]/20 w-fit">
-                                            {selectedPlanForCheckout.etiqueta}
-                                        </span>
-                                        <Title
-                                            as="h2"
-                                            className="text-base font-black text-gray-900"
-                                        >
-                                            {selectedPlanForCheckout.nombre}
-                                        </Title>
-                                        <Text className="text-[11px] text-gray-600 block leading-tight">
-                                            {selectedPlanForCheckout.descripcion}
-                                        </Text>
-                                        <div className="mt-1.5 pt-1.5 border-t border-gray-200 flex justify-between items-baseline">
-                                            <span className="text-[11px] text-gray-500">
-                                                Total a pagar:
-                                            </span>
-                                            <span className="text-lg font-black text-[#0E5E6F]">
-                                                {selectedPlanForCheckout.precio}{" "}
-                                                <span className="text-[9px] text-gray-500 font-normal">
-                                                    {selectedPlanForCheckout.periodo}
-                                                </span>
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <Text className="text-[10px] text-gray-700 block mb-1">
-                                        Detalles incluidos:
-                                    </Text>
-                                    <ul className="flex flex-col gap-1 text-[11px] text-gray-600">
-                                        {selectedPlanForCheckout.caracteristicas.map(
-                                            (item: string, idx: number) => (
-                                                <li key={idx} className="flex items-center gap-1.5">
-                                                    <CheckCircle2
-                                                        size={12}
-                                                        className="text-[#0E5E6F] shrink-0"
-                                                    />
-                                                    <span>{item}</span>
-                                                </li>
-                                            ),
-                                        )}
-                                    </ul>
-                                </div>
-
-                                <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-900 text-[10px]">
-                                    <ShieldCheck size={14} className="text-amber-600 shrink-0" />
-                                    <span>Garantía de servicio y soporte de la red BIODRON.</span>
-                                </div>
-                            </div>
-
-                            {/* FORMULARIO DE PAGO */}
-                            <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
-                                <div>
-                                    {/* Selector de Método de Pago */}
-                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 p-1 bg-gray-100 rounded-[4px] border border-gray-200 mb-2.5">
-                                        <button
-                                            onClick={() => setPaymentMethod("card")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "card"
-                                                    ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
-                                                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
-                                                }`}
-                                        >
-                                            <CreditCard size={13} />
-                                            <span>Tarjeta</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => setPaymentMethod("transfer")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "transfer"
-                                                    ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
-                                                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
-                                                }`}
-                                        >
-                                            <Building2 size={13} />
-                                            <span>Bancos</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => setPaymentMethod("qr")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "qr"
-                                                    ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
-                                                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
-                                                }`}
-                                        >
-                                            <QrCode size={13} />
-                                            <span>Código QR</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => setPaymentMethod("wallet")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "wallet"
-                                                    ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
-                                                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
-                                                }`}
-                                        >
-                                            <Wallet size={13} />
-                                            <span>Saldo BIODRON</span>
-                                        </button>
-                                    </div>
-
-                                    {/* TARJETA DE CRÉDITO Y PASARELAS */}
-                                    {paymentMethod === "card" && (
-                                        <div className="flex flex-col gap-3">
-                                            {/* Selector de pasarelas */}
-                                            <div>
-                                                <span className="text-gray-700 text-[10px] block mb-1.5">Pasarela de pago:</span>
-                                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
-                                                    {["PixelPay", "ClinPays", "Recurrente", "Pagadito"].map((gateway) => (
-                                                        <button
-                                                            key={gateway}
-                                                            onClick={() => setSelectedGateway(gateway)}
-                                                            className={`py-1 px-2 rounded-[4px] text-[10px] font-bold border transition cursor-pointer ${selectedGateway === gateway
-                                                                    ? "bg-[#0E5E6F] text-white border-[#0E5E6F]"
-                                                                    : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
-                                                                }`}
-                                                        >
-                                                            {gateway}
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
-                                                <div className="sm:col-span-5 flex justify-center">
-                                                    <div className="w-full max-w-[190px] aspect-[1.58/1] bg-gradient-to-tr from-slate-900 via-slate-800 to-[#0E5E6F] text-white p-2.5 rounded-[4px] shadow-sm border border-slate-700 flex flex-col justify-between">
-                                                        <div className="flex justify-between items-center">
-                                                            <span className="text-[8px] font-extrabold uppercase tracking-wider text-slate-300">
-                                                                BIODRON
-                                                            </span>
-                                                            <CreditCard size={15} className="text-amber-400" />
-                                                        </div>
-                                                        <div>
-                                                            <span className="text-[11px] font-mono tracking-wider block font-bold text-slate-100">
-                                                                {cardData.number
-                                                                    ? cardData.number
-                                                                        .replace(/(.{4})/g, "$1 ")
-                                                                        .trim()
-                                                                    : "•••• •••• •••• ••••"}
-                                                            </span>
-                                                        </div>
-                                                        <div className="flex justify-between items-end text-[9px]">
-                                                            <div className="truncate max-w-[90px]">
-                                                                <span className="text-[7px] text-slate-400 uppercase block leading-none">
-                                                                    Titular
-                                                                </span>
-                                                                <span className="font-bold tracking-wide uppercase truncate block mt-0.5">
-                                                                    {cardData.name || "Nombre titular"}
-                                                                </span>
-                                                            </div>
-                                                            <div className="text-right">
-                                                                <span className="text-[7px] text-slate-400 uppercase block leading-none">
-                                                                    Vence
-                                                                </span>
-                                                                <span className="font-bold tracking-wider block mt-0.5">
-                                                                    {cardData.expiry || "MM/AA"}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="sm:col-span-7 grid grid-cols-2 gap-1.5 text-[11px]">
-                                                    <div className="col-span-2 flex flex-col gap-0.5">
-                                                        <label className="text-gray-700 text-[10px]">
-                                                            Número de tarjeta
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            maxLength={16}
-                                                            placeholder="4000 0000 0000 0000"
-                                                            value={cardData.number}
-                                                            onChange={(e) =>
-                                                                setCardData({
-                                                                    ...cardData,
-                                                                    number: e.target.value,
-                                                                })
-                                                            }
-                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
-                                                        />
-                                                    </div>
-
-                                                    <div className="col-span-2 flex flex-col gap-0.5">
-                                                        <label className="text-gray-700 text-[10px]">
-                                                            Titular de la tarjeta
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder="Nombre impreso"
-                                                            value={cardData.name}
-                                                            onChange={(e) =>
-                                                                setCardData({ ...cardData, name: e.target.value })
-                                                            }
-                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
-                                                        />
-                                                    </div>
-
-                                                    <div className="flex flex-col gap-0.5">
-                                                        <label className="text-gray-700 text-[10px]">
-                                                            Vencimiento
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            maxLength={5}
-                                                            placeholder="MM/AA"
-                                                            value={cardData.expiry}
-                                                            onChange={(e) =>
-                                                                setCardData({
-                                                                    ...cardData,
-                                                                    expiry: e.target.value,
-                                                                })
-                                                            }
-                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
-                                                        />
-                                                    </div>
-
-                                                    <div className="flex flex-col gap-0.5">
-                                                        <label className="text-gray-700 text-[10px]">
-                                                            CVV
-                                                        </label>
-                                                        <input
-                                                            type="password"
-                                                            maxLength={4}
-                                                            placeholder="123"
-                                                            value={cardData.cvv}
-                                                            onChange={(e) =>
-                                                                setCardData({ ...cardData, cvv: e.target.value })
-                                                            }
-                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* TRANSFERENCIA */}
-                                    {paymentMethod === "transfer" && (
-                                        <div className="flex flex-col gap-2 text-xs">
-                                            <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5">
-                                                <span className="text-gray-800 text-[11px] block mb-1">
-                                                    Cuentas oficiales BIODRON
-                                                </span>
-                                                <div className="grid grid-cols-1 gap-2 text-[10px]">
-                                                    <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
-                                                        <span className="font-bold text-[#0E5E6F] block">BAC Credomatic</span>
-                                                        <span className="text-gray-600 block">Cuenta: 11-401-009823-1</span>
-                                                    </div>
-                                                    <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
-                                                        <span className="font-bold text-[#0E5E6F] block">Banco Atlántida</span>
-                                                        <span className="text-gray-600 block">Cuenta: 20000-847291</span>
-                                                    </div>
-                                                    <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
-                                                        <span className="font-bold text-[#0E5E6F] block">Ficohsa</span>
-                                                        <span className="text-gray-600 block">Cuenta: 21-102-393284</span>
-                                                    </div>
-                                                    <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
-                                                        <span className="font-bold text-[#0E5E6F] block">Banpaís</span>
-                                                        <span className="text-gray-600 block">Cuenta: 01-293-10293</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="border border-dashed border-gray-300 rounded-[4px] p-2.5 text-center flex items-center justify-center gap-2 hover:border-[#0E5E6F] transition cursor-pointer bg-gray-50/50">
-                                                <Upload size={16} className="text-[#0E5E6F]" />
-                                                <span className="text-gray-700 text-[11px]">
-                                                    Subir comprobante de pago
-                                                </span>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* PAGO CON QR REDISEÑADO PARA EVITAR SCROLL */}
-                                    {paymentMethod === "qr" && (
-                                        <div className="flex flex-col items-center gap-3 bg-gray-50 border border-gray-200 rounded-[4px] p-3">
-                                            <div className="flex-1 w-full">
-                                                <span className="text-gray-700 text-[10px] block mb-1.5">Generar código mediante:</span>
-                                                <div className="flex flex-wrap gap-1 mb-2">
-                                                    {["PixelPay", "Banrural", "Atlántida"].map((wallet) => (
-                                                        <button
-                                                            key={wallet}
-                                                            onClick={() => setSelectedQrWallet(wallet)}
-                                                            className={`py-1 px-2 rounded-[4px] text-[10px] font-bold border transition cursor-pointer ${selectedQrWallet === wallet
-                                                                    ? "bg-[#0E5E6F] text-white border-[#0E5E6F]"
-                                                                    : "bg-white text-gray-600 border-gray-200 hover:bg-gray-100"
-                                                                }`}
-                                                        >
-                                                            {wallet}
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                                <span className="text-[10px] text-gray-500 leading-tight block">
-                                                    Escanea este código desde la app de <strong>{selectedQrWallet}</strong> para pagar el total de {selectedPlanForCheckout.precio}.
-                                                </span>
-                                            </div>
-                                            <div className="shrink-0 p-2 bg-white border border-gray-200 rounded-lg shadow-sm flex items-center justify-center">
-                                                <QrCode size={64} className="text-gray-800" />
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* SALDO WALLET */}
-                                    {paymentMethod === "wallet" && (
-                                        <div className="flex flex-col gap-2 text-xs">
-                                            <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5 flex justify-between items-center">
-                                                <div>
-                                                    <span className="text-gray-500 font-medium block text-[10px]">
-                                                        Saldo disponible BIODRON
-                                                    </span>
-                                                    <span className="text-lg font-black text-gray-900">
-                                                        L{" "}
-                                                        {userWalletBalance.toLocaleString("es-HN", {
-                                                            minimumFractionDigits: 2,
-                                                        })}
-                                                    </span>
-                                                </div>
-                                                <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px]">
-                                                    <Wallet size={18} />
-                                                </div>
-                                            </div>
-
-                                            {userWalletBalance < selectedPlanForCheckout.precioNum ? (
-                                                <div className="p-1.5 bg-red-50 border border-red-200 rounded-[4px] flex items-center gap-1.5 text-red-800 text-[11px]">
-                                                    <AlertCircle
-                                                        size={14}
-                                                        className="shrink-0 text-red-600"
-                                                    />
-                                                    <span>
-                                                        Saldo insuficiente. Faltan L{" "}
-                                                        {(
-                                                            selectedPlanForCheckout.precioNum -
-                                                            userWalletBalance
-                                                        ).toLocaleString("es-HN")}
-                                                        .
-                                                    </span>
-                                                </div>
-                                            ) : (
-                                                <div className="p-1.5 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-1.5 text-emerald-800 text-[11px]">
-                                                    <CheckCircle2
-                                                        size={14}
-                                                        className="shrink-0 text-emerald-600"
-                                                    />
-                                                    <span>
-                                                        Saldo suficiente para procesar la transacción.
-                                                    </span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <button
-                                    disabled={
-                                        isProcessing ||
-                                        (paymentMethod === "wallet" &&
-                                            userWalletBalance < selectedPlanForCheckout.precioNum)
-                                    }
-                                    onClick={handleConfirmSubscription}
-                                    className="w-full py-2 px-3 bg-[#0E5E6F] hover:bg-[#0A4552] disabled:bg-gray-300 text-white text-xs rounded-[4px] shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer mt-2"
-                                >
-                                    {isProcessing ? (
-                                        <span>Procesando...</span>
-                                    ) : (
-                                        <>
-                                            <ShieldCheck size={15} />
-                                            <span>
-                                                Confirmar y adquirir por {selectedPlanForCheckout.precio}
-                                            </span>
-                                        </>
-                                    )}
-                                </button>
-                            </div>
-                        </div>
-                    )}
+            {/* CONTENIDO SCROLLEABLE SEPARADO DEL MODAL */}
+            <div className="w-full h-full p-3 flex flex-col gap-4 overflow-y-auto no-scrollbar">
+                {/* CABECERA PRINCIPAL */}
+                <div className="border-b border-gray-200 pb-2.5 flex flex-col gap-1 shrink-0">
+                    <Title className="text-lg font-extrabold text-gray-900 tracking-tight flex flex-col items-start gap-1.5">
+                        <span>Gestión de Suscripciones y Servicios</span>
+                        <span className="whitespace-nowrap bg-[#0E5E6F]/10 text-[#0E5E6F] text-[10px] font-bold px-2 py-0.5 rounded-[4px] tracking-wider border border-[#0E5E6F]/20">
+                            Planes BIODRON
+                        </span>
+                    </Title>
+                    <Text className="text-[11px] text-gray-500 block mt-0.5">
+                        Administra tu plan de monitoreo aéreo, descuentos en equipos, asistencia técnica y contratación de pilotos.
+                    </Text>
                 </div>
-            ) : (
-                /* VISTA PRINCIPAL CON PESTAÑAS Y PLAN ACTIVO */
-                <div className="flex flex-col gap-5">
-                    {/* PLAN ACTIVO ACTUAL */}
-                    {planActual && (
-                        <div className="bg-white border-2 border-[#0E5E6F] rounded-[4px] shadow-sm overflow-hidden">
-                            {/* FRANJA SUPERIOR DE ESTADO */}
-                            <div className="bg-[#0E5E6F] px-4 py-2 flex items-center gap-2">
-                                <CheckCircle2 size={15} className="text-white shrink-0" />
-                                <span className="text-white text-[11px] font-bold tracking-wide">
-                                    Plan Activo
-                                </span>
-                                <span className="ml-auto text-[10px] text-white/90 bg-white/15 px-2 py-0.5 rounded-[4px] border border-white/20">
-                                    Renovación automática
-                                </span>
-                            </div>
 
-                            <div className="p-4 flex flex-col gap-3.5">
-                                {/* NOMBRE Y DESCRIPCIÓN */}
-                                <div>
-                                    <Title as="h2" className="text-lg font-black text-gray-900 leading-tight">
-                                        {planActual.nombre}
-                                    </Title>
-                                    <Text className="text-xs text-gray-600 block mt-1">
-                                        {planActual.descripcion}
-                                    </Text>
-                                </div>
-
-                                {/* BLOQUE DE PRECIO DESTACADO */}
-                                <div className="bg-[#0E5E6F]/5 border border-[#0E5E6F]/20 rounded-[4px] px-3.5 py-3 flex items-baseline justify-between">
-                                    <span className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">
-                                        Costo actual
-                                    </span>
-                                    <span className="text-2xl font-black text-[#0E5E6F]">
-                                        {planActual.precio}{" "}
-                                        <span className="text-xs font-normal text-gray-500">
-                                            {planActual.periodo}
-                                        </span>
-                                    </span>
-                                </div>
-
-                                {/* DETALLE DE LA SUSCRIPCIÓN COMO LISTA VERTICAL */}
-                                <div className="flex flex-col divide-y divide-gray-100 bg-gray-50/80 rounded-[4px] border border-gray-200/80 overflow-hidden">
-                                    <div className="flex items-center gap-2.5 px-3 py-2.5">
-                                        <div className="p-1.5 bg-white rounded-[4px] border border-gray-200 shrink-0">
-                                            <Calendar size={14} className="text-[#0E5E6F]" />
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <span className="text-[9px] uppercase text-gray-400 leading-none">
-                                                Próximo vencimiento
-                                            </span>
-                                            <span className="text-xs font-bold text-gray-800 mt-1">
-                                                15 de agosto, 2026
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex items-center gap-2.5 px-3 py-2.5">
-                                        <div className="p-1.5 bg-white rounded-[4px] border border-gray-200 shrink-0">
-                                            <CreditCard size={14} className="text-[#0E5E6F]" />
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <span className="text-[9px] uppercase text-gray-400 leading-none">
-                                                Método registrado
-                                            </span>
-                                            <span className="text-xs font-bold text-gray-800 mt-1">
-                                                Visa terminada en •••• 4021
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex items-center gap-2.5 px-3 py-2.5">
-                                        <div className="p-1.5 bg-white rounded-[4px] border border-gray-200 shrink-0">
-                                            <Zap size={14} className="text-[#0E5E6F]" />
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <span className="text-[9px] uppercase text-gray-400 leading-none">
-                                                Estado operativo
-                                            </span>
-                                            <span className="text-xs font-bold text-gray-800 mt-1">
-                                                Servicio activo BIODRON
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* BOTÓN CANCELAR SUSCRIPCIÓN (DISPARA EL MODAL), ANCHO COMPLETO PARA TÁCTIL */}
-                                <button
-                                    type="button"
-                                    onClick={() => setShowCancelModal(true)}
-                                    style={{
-                                        borderColor: "#B8001F",
-                                        color: "#B8001F",
-                                        borderRadius: "4px",
-                                    }}
-                                    className="w-full px-3 py-2.5 border-2 text-xs font-bold bg-white hover:bg-red-50 transition-colors active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer"
-                                >
-                                    <XCircle size={14} />
-                                    <span>Cancelar suscripción</span>
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* NAVEGACIÓN POR PESTAÑAS (MÓVIL: CARRUSEL HORIZONTAL TÁCTIL) */}
-                    <div>
-                        <div className="border-b-2 border-gray-200 mb-6 flex gap-1.5 overflow-x-auto pb-0 select-none snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-                            {[
-                                { id: "generales", label: "Planes generales", icon: <Zap size={13} /> },
-                                { id: "descuentos-drones", label: "Descuentos en drones por plan", icon: <Tag size={13} /> },
-                                { id: "asistencia-tecnica", label: "Asistencia técnica y taller", icon: <Wrench size={13} /> },
-                                { id: "contratacion-piloto", label: "Contratación de piloto", icon: <UserCheck size={13} /> },
-                            ].map((tab) => {
-                                const isActive = activeTab === tab.id;
-                                return (
-                                    <button
-                                        key={tab.id}
-                                        onClick={() => setActiveTab(tab.id as TabType)}
-                                        style={{ borderRadius: "4px 4px 0 0" }}
-                                        className={`shrink-0 snap-start w-[150px] px-2 py-3 text-[11px] font-bold flex flex-col items-center justify-center gap-1 border-t-2 border-x-2 -mb-[2px] transition-all text-center cursor-pointer ${
-                                            isActive
-                                                ? "border-t-[#0E5E6F] border-x-gray-200 border-b-white bg-white text-[#0E5E6F] shadow-xs"
-                                                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-                                        }`}
-                                    >
-                                        <span className={isActive ? "text-[#0E5E6F]" : "text-gray-400"}>
-                                            {tab.icon}
-                                        </span>
-                                        <span className="leading-tight">{tab.label}</span>
-                                    </button>
-                                );
-                            })}
-                        </div>
-
-                        {/* DESCRIPCIÓN DE LA CATEGORÍA */}
-                        <div className="mb-4">
-                            {activeTab === "generales" && (
-                                <Text className="text-xs text-gray-500 block">
-                                    Suscripciones periódicas para servicios integrales de monitoreo aéreo, aspersión y análisis con la platforma BIODRON.
-                                </Text>
-                            )}
-                            {activeTab === "descuentos-drones" && (
-                                <Text className="text-xs text-gray-500 block">
-                                    Obtén un porcentaje de descuento especial en la adquisición de tu dron al suscribir cualquiera de estos planes BIODRON.
-                                </Text>
-                            )}
-                            {activeTab === "asistencia-tecnica" && (
-                                <Text className="text-xs text-gray-500 block">
-                                    Planes dedicados de mantenimiento preventivo, reparaciones en campo y respaldo técnico integral BIODRON.
-                                </Text>
-                            )}
-                            {activeTab === "contratacion-piloto" && (
-                                <Text className="text-xs text-gray-500 block">
-                                    Servicio de personal de vuelo certificado para la ejecución de operaciones agrícolas según las necesidades de tu finca.
-                                </Text>
-                            )}
-                        </div>
-
-                        {/* REJILLA CON TRES PLANES POR PESTAÑA */}
-                        <div className="grid grid-cols-1 gap-4">
-                            {catalogos[activeTab].map((plan) => {
-                                const esPlanActual = plan.id === activePlanId;
-
-                                return (
-                                    <div
-                                        key={plan.id}
-                                        className={`relative bg-white rounded-[4px] border transition-all flex flex-col overflow-hidden shadow-xs ${plan.destacado
-                                                ? "border-[#0E5E6F] ring-2 ring-[#0E5E6F]/15"
-                                                : "border-gray-200"
-                                            }`}
-                                    >
-                                        {/* CINTA DE DESTACADO INTEGRADA (SIN OVERFLOW) */}
-                                        {plan.destacado && (
-                                            <div className="bg-[#0E5E6F] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 flex items-center gap-1.5">
-                                                <Zap size={12} /> Plan Destacado
-                                            </div>
-                                        )}
-
-                                        <div className="p-4 flex flex-col gap-3">
-                                            <div className="flex justify-between items-start gap-2">
-                                                <span className="bg-gray-100 text-gray-800 border border-gray-200 text-[10px] px-2 py-0.5 rounded-[4px] tracking-wider">
-                                                    {plan.etiqueta}
-                                                </span>
-                                                {esPlanActual && (
-                                                    <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded-[4px] font-bold flex items-center gap-1 shrink-0">
-                                                        <CheckCircle2 size={11} /> Contratado
-                                                    </span>
-                                                )}
-                                            </div>
-
-                                            {/* TÍTULO DEL PLAN */}
-                                            <div>
-                                                <Title
-                                                    as="h3"
-                                                    className="text-base font-extrabold text-gray-900 leading-tight"
-                                                >
-                                                    {plan.nombre}
-                                                </Title>
-                                                <Text className="text-xs text-gray-600 font-medium leading-relaxed block mt-1">
-                                                    {plan.descripcion}
-                                                </Text>
-                                            </div>
-
-                                            {/* BLOQUE DE PRECIO DESTACADO */}
-                                            <div
-                                                className={`rounded-[4px] px-3.5 py-3 flex items-baseline justify-between border ${plan.destacado
-                                                        ? "bg-[#0E5E6F]/5 border-[#0E5E6F]/20"
-                                                        : "bg-gray-50 border-gray-200"
-                                                    }`}
-                                            >
-                                                <span className="text-2xl font-black text-[#0E5E6F]">
-                                                    {plan.precio}
-                                                </span>
-                                                <span className="text-xs text-gray-500 font-medium">
-                                                    {plan.periodo}
-                                                </span>
-                                            </div>
-
-                                            {/* CARACTERÍSTICAS INCLUIDAS */}
-                                            <div>
-                                                <Text className="text-[10px] uppercase text-gray-400 tracking-wider block mb-1.5">
-                                                    Incluye:
-                                                </Text>
-                                                <ul className="flex flex-col gap-1.5">
-                                                    {plan.caracteristicas.map((item, idx) => (
-                                                        <li
-                                                            key={idx}
-                                                            className="flex items-start gap-2 text-xs text-gray-700 bg-gray-50/70 rounded-[4px] px-2 py-1.5"
-                                                        >
-                                                            <CheckCircle2
-                                                                size={13}
-                                                                className="text-[#0E5E6F] shrink-0 mt-0.5"
-                                                            />
-                                                            <span>{item}</span>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-
-                                            <button
-                                                disabled={esPlanActual}
-                                                onClick={() => setSelectedPlanForCheckout(plan)}
-                                                className={`w-full py-2.5 px-3 rounded-[4px] text-xs transition flex items-center justify-center gap-1.5 cursor-pointer mt-1 ${esPlanActual
-                                                        ? "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
-                                                        : plan.destacado
-                                                            ? "bg-[#0E5E6F] hover:bg-[#0A4552] text-white shadow-xs font-bold"
-                                                            : "bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-200"
-                                                    }`}
-                                            >
-                                                {esPlanActual ? "Opción actual" : "Seleccionar plan"}
-                                            </button>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* BOTTOM SHEET DE CONFIRMACIÓN DE CANCELACIÓN DE SUSCRIPCIÓN */}
-            {showCancelModal && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-end justify-center">
-                    <div
-                        style={{ borderRadius: "16px 16px 0 0" }}
-                        className="bg-white border-t-2 border-gray-200 w-full max-h-[85vh] overflow-y-auto p-5 pb-6 shadow-2xl animate-in fade-in slide-in-from-bottom duration-200 relative"
-                    >
-                        {/* ASA DE ARRASTRE */}
-                        <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
-
+                {/* PROCESO DE PAGO */}
+                {selectedPlanForCheckout ? (
+                    <div className="flex flex-col gap-3 animate-in fade-in duration-200">
                         <button
-                            onClick={() => setShowCancelModal(false)}
-                            className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 cursor-pointer p-1"
+                            onClick={() => setSelectedPlanForCheckout(null)}
+                            className="flex items-center gap-1.5 text-xs text-gray-700 hover:text-gray-900 w-fit cursor-pointer bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-[4px] border border-gray-200 transition active:scale-95"
                         >
-                            <X size={16} />
+                            <ArrowLeft size={14} /> Volver a selección de opciones
                         </button>
 
-                        <div className="flex items-center gap-2.5 text-[#B8001F] mb-3">
-                            <AlertCircle size={22} />
-                            <Title as="h3" className="text-base font-extrabold text-gray-900">
-                                ¿Cancelar Suscripción Actual?
-                            </Title>
+                        {paymentSuccess ? (
+                            <div className="bg-emerald-50 border border-emerald-300 rounded-[4px] p-5 text-center flex flex-col items-center justify-center gap-2 my-2">
+                                <div className="p-2.5 bg-emerald-500 text-white rounded-[4px]">
+                                    <Check size={24} />
+                                </div>
+                                <Title as="h2" className="text-lg font-black text-emerald-950">
+                                    ¡Solicitud Procesada con Éxito!
+                                </Title>
+                                <Text className="text-xs text-emerald-800 font-medium max-w-md block">
+                                    Tu solicitud ha sido registrada correctamente para <strong>{selectedPlanForCheckout.nombre}</strong>.
+                                </Text>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 gap-3 items-stretch">
+                                {/* RESUMEN DEL PLAN */}
+                                <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
+                                    <div>
+                                        <Title
+                                            as="h3"
+                                            className="text-xs font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
+                                        >
+                                            Resumen de la Orden
+                                        </Title>
+
+                                        <div className="bg-gray-50 p-2.5 rounded-[4px] border border-gray-200 flex flex-col gap-1 mb-2">
+                                            <span className="text-[9px] text-[#0E5E6F] bg-[#0E5E6F]/10 px-2 py-0.5 rounded-[4px] border border-[#0E5E6F]/20 w-fit">
+                                                {selectedPlanForCheckout.etiqueta}
+                                            </span>
+                                            <Title
+                                                as="h2"
+                                                className="text-base font-black text-gray-900"
+                                            >
+                                                {selectedPlanForCheckout.nombre}
+                                            </Title>
+                                            <Text className="text-[11px] text-gray-600 block leading-tight">
+                                                {selectedPlanForCheckout.descripcion}
+                                            </Text>
+                                            <div className="mt-1.5 pt-1.5 border-t border-gray-200 flex justify-between items-baseline">
+                                                <span className="text-[11px] text-gray-500">
+                                                    Total a pagar:
+                                                </span>
+                                                <span className="text-lg font-black text-[#0E5E6F]">
+                                                    {selectedPlanForCheckout.precio}{" "}
+                                                    <span className="text-[9px] text-gray-500 font-normal">
+                                                        {selectedPlanForCheckout.periodo}
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <Text className="text-[10px] text-gray-700 block mb-1">
+                                            Detalles incluidos:
+                                        </Text>
+                                        <ul className="flex flex-col gap-1 text-[11px] text-gray-600">
+                                            {selectedPlanForCheckout.caracteristicas.map(
+                                                (item: string, idx: number) => (
+                                                    <li key={idx} className="flex items-center gap-1.5">
+                                                        <CheckCircle2
+                                                            size={12}
+                                                            className="text-[#0E5E6F] shrink-0"
+                                                        />
+                                                        <span>{item}</span>
+                                                    </li>
+                                                ),
+                                            )}
+                                        </ul>
+                                    </div>
+
+                                    <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-900 text-[10px]">
+                                        <ShieldCheck size={14} className="text-amber-600 shrink-0" />
+                                        <span>Garantía de servicio y soporte de la red BIODRON.</span>
+                                    </div>
+                                </div>
+
+                                {/* FORMULARIO DE PAGO */}
+                                <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
+                                    <div>
+                                        <div className="grid grid-cols-2 gap-1 p-1 bg-gray-100 rounded-[4px] border border-gray-200 mb-2.5">
+                                            <button
+                                                onClick={() => setPaymentMethod("card")}
+                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "card"
+                                                        ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
+                                                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
+                                                    }`}
+                                            >
+                                                <CreditCard size={13} />
+                                                <span>Tarjeta</span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => setPaymentMethod("transfer")}
+                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "transfer"
+                                                        ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
+                                                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
+                                                    }`}
+                                            >
+                                                <Building2 size={13} />
+                                                <span>Bancos</span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => setPaymentMethod("qr")}
+                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "qr"
+                                                        ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
+                                                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
+                                                    }`}
+                                            >
+                                                <QrCode size={13} />
+                                                <span>Código QR</span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => setPaymentMethod("wallet")}
+                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "wallet"
+                                                        ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
+                                                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
+                                                    }`}
+                                            >
+                                                <Wallet size={13} />
+                                                <span>Saldo BIODRON</span>
+                                            </button>
+                                        </div>
+
+                                        {paymentMethod === "card" && (
+                                            <div className="flex flex-col gap-3">
+                                                <div>
+                                                    <span className="text-gray-700 text-[10px] block mb-1.5">Pasarela de pago:</span>
+                                                    <div className="grid grid-cols-2 gap-1.5">
+                                                        {["PixelPay", "ClinPays", "Recurrente", "Pagadito"].map((gateway) => (
+                                                            <button
+                                                                key={gateway}
+                                                                onClick={() => setSelectedGateway(gateway)}
+                                                                className={`py-1 px-2 rounded-[4px] text-[10px] font-bold border transition cursor-pointer active:scale-95 ${selectedGateway === gateway
+                                                                        ? "bg-[#0E5E6F] text-white border-[#0E5E6F]"
+                                                                        : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
+                                                                    }`}
+                                                            >
+                                                                {gateway}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                <div className="grid grid-cols-1 gap-3 items-center">
+                                                    <div className="flex justify-center">
+                                                        <div className="w-full max-w-[190px] aspect-[1.58/1] bg-gradient-to-tr from-slate-900 via-slate-800 to-[#0E5E6F] text-white p-2.5 rounded-[4px] shadow-sm border border-slate-700 flex flex-col justify-between">
+                                                            <div className="flex justify-between items-center">
+                                                                <span className="text-[8px] font-extrabold uppercase tracking-wider text-slate-300">
+                                                                    BIODRON
+                                                                </span>
+                                                                <CreditCard size={15} className="text-amber-400" />
+                                                            </div>
+                                                            <div>
+                                                                <span className="text-[11px] font-mono tracking-wider block font-bold text-slate-100">
+                                                                    {cardData.number
+                                                                        ? cardData.number
+                                                                            .replace(/(.{4})/g, "$1 ")
+                                                                            .trim()
+                                                                        : "•••• •••• •••• ••••"}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex justify-between items-end text-[9px]">
+                                                                <div className="truncate max-w-[90px]">
+                                                                    <span className="text-[7px] text-slate-400 uppercase block leading-none">
+                                                                        Titular
+                                                                    </span>
+                                                                    <span className="font-bold tracking-wide uppercase truncate block mt-0.5">
+                                                                        {cardData.name || "Nombre titular"}
+                                                                    </span>
+                                                                </div>
+                                                                <div className="text-right">
+                                                                    <span className="text-[7px] text-slate-400 uppercase block leading-none">
+                                                                        Vence
+                                                                    </span>
+                                                                    <span className="font-bold tracking-wider block mt-0.5">
+                                                                        {cardData.expiry || "MM/AA"}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+                                                        <div className="col-span-2 flex flex-col gap-0.5">
+                                                            <label className="text-gray-700 text-[10px]">
+                                                                Número de tarjeta
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                maxLength={16}
+                                                                placeholder="4000 0000 0000 0000"
+                                                                value={cardData.number}
+                                                                onChange={(e) =>
+                                                                    setCardData({
+                                                                        ...cardData,
+                                                                        number: e.target.value,
+                                                                    })
+                                                                }
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                            />
+                                                        </div>
+
+                                                        <div className="col-span-2 flex flex-col gap-0.5">
+                                                            <label className="text-gray-700 text-[10px]">
+                                                                Titular de la tarjeta
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                placeholder="Nombre impreso"
+                                                                value={cardData.name}
+                                                                onChange={(e) =>
+                                                                    setCardData({ ...cardData, name: e.target.value })
+                                                                }
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                            />
+                                                        </div>
+
+                                                        <div className="flex flex-col gap-0.5">
+                                                            <label className="text-gray-700 text-[10px]">
+                                                                Vencimiento
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                maxLength={5}
+                                                                placeholder="MM/AA"
+                                                                value={cardData.expiry}
+                                                                onChange={(e) =>
+                                                                    setCardData({
+                                                                        ...cardData,
+                                                                        expiry: e.target.value,
+                                                                    })
+                                                                }
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                            />
+                                                        </div>
+
+                                                        <div className="flex flex-col gap-0.5">
+                                                            <label className="text-gray-700 text-[10px]">
+                                                                CVV
+                                                            </label>
+                                                            <input
+                                                                type="password"
+                                                                maxLength={4}
+                                                                placeholder="123"
+                                                                value={cardData.cvv}
+                                                                onChange={(e) =>
+                                                                    setCardData({ ...cardData, cvv: e.target.value })
+                                                                }
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {paymentMethod === "transfer" && (
+                                            <div className="flex flex-col gap-2 text-xs">
+                                                <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5">
+                                                    <span className="text-gray-800 text-[11px] block mb-1">
+                                                        Cuentas oficiales BIODRON
+                                                    </span>
+                                                    <div className="grid grid-cols-1 gap-2 text-[10px]">
+                                                        <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
+                                                            <span className="font-bold text-[#0E5E6F] block">BAC Credomatic</span>
+                                                            <span className="text-gray-600 block">Cuenta: 11-401-009823-1</span>
+                                                        </div>
+                                                        <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
+                                                            <span className="font-bold text-[#0E5E6F] block">Banco Atlántida</span>
+                                                            <span className="text-gray-600 block">Cuenta: 20000-847291</span>
+                                                        </div>
+                                                        <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
+                                                            <span className="font-bold text-[#0E5E6F] block">Ficohsa</span>
+                                                            <span className="text-gray-600 block">Cuenta: 21-102-393284</span>
+                                                        </div>
+                                                        <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
+                                                            <span className="font-bold text-[#0E5E6F] block">Banpaís</span>
+                                                            <span className="text-gray-600 block">Cuenta: 01-293-10293</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="border border-dashed border-gray-300 rounded-[4px] p-2.5 text-center flex items-center justify-center gap-2 hover:border-[#0E5E6F] transition cursor-pointer active:scale-95 bg-gray-50/50">
+                                                    <Upload size={16} className="text-[#0E5E6F]" />
+                                                    <span className="text-gray-700 text-[11px]">
+                                                        Subir comprobante de pago
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {paymentMethod === "qr" && (
+                                            <div className="flex flex-col items-center gap-3 bg-gray-50 border border-gray-200 rounded-[4px] p-3">
+                                                <div className="flex-1 w-full">
+                                                    <span className="text-gray-700 text-[10px] block mb-1.5">Generar código mediante:</span>
+                                                    <div className="flex flex-wrap gap-1 mb-2">
+                                                        {["PixelPay", "Banrural", "Atlántida"].map((wallet) => (
+                                                            <button
+                                                                key={wallet}
+                                                                onClick={() => setSelectedQrWallet(wallet)}
+                                                                className={`py-1 px-2 rounded-[4px] text-[10px] font-bold border transition cursor-pointer active:scale-95 ${selectedQrWallet === wallet
+                                                                        ? "bg-[#0E5E6F] text-white border-[#0E5E6F]"
+                                                                        : "bg-white text-gray-600 border-gray-200 hover:bg-gray-100"
+                                                                    }`}
+                                                            >
+                                                                {wallet}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                    <span className="text-[10px] text-gray-500 leading-tight block">
+                                                        Escanea este código desde la app de <strong>{selectedQrWallet}</strong> para pagar el total de {selectedPlanForCheckout.precio}.
+                                                    </span>
+                                                </div>
+                                                <div className="shrink-0 p-2 bg-white border border-gray-200 rounded-[4px] shadow-sm flex items-center justify-center">
+                                                    <QrCode size={64} className="text-gray-800" />
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {paymentMethod === "wallet" && (
+                                            <div className="flex flex-col gap-2 text-xs">
+                                                <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5 flex justify-between items-center">
+                                                    <div>
+                                                        <span className="text-gray-500 font-medium block text-[10px]">
+                                                            Saldo disponible BIODRON
+                                                        </span>
+                                                        <span className="text-lg font-black text-gray-900">
+                                                            L{" "}
+                                                            {userWalletBalance.toLocaleString("es-HN", {
+                                                                minimumFractionDigits: 2,
+                                                            })}
+                                                        </span>
+                                                    </div>
+                                                    <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px]">
+                                                        <Wallet size={18} />
+                                                    </div>
+                                                </div>
+
+                                                {userWalletBalance < selectedPlanForCheckout.precioNum ? (
+                                                    <div className="p-1.5 bg-red-50 border border-red-200 rounded-[4px] flex items-center gap-1.5 text-red-800 text-[11px]">
+                                                        <AlertCircle
+                                                            size={14}
+                                                            className="shrink-0 text-red-600"
+                                                        />
+                                                        <span>
+                                                            Saldo insuficiente. Faltan L{" "}
+                                                            {(
+                                                                selectedPlanForCheckout.precioNum -
+                                                                userWalletBalance
+                                                            ).toLocaleString("es-HN")}
+                                                            .
+                                                        </span>
+                                                    </div>
+                                                ) : (
+                                                    <div className="p-1.5 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-1.5 text-emerald-800 text-[11px]">
+                                                        <CheckCircle2
+                                                            size={14}
+                                                            className="shrink-0 text-emerald-600"
+                                                        />
+                                                        <span>
+                                                            Saldo suficiente para procesar la transacción.
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <button
+                                        disabled={
+                                            isProcessing ||
+                                            (paymentMethod === "wallet" &&
+                                                userWalletBalance < selectedPlanForCheckout.precioNum)
+                                        }
+                                        onClick={handleConfirmSubscription}
+                                        className="w-full py-2.5 px-3 bg-[#0E5E6F] hover:bg-[#0A4552] disabled:bg-gray-300 text-white text-xs rounded-[4px] shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer mt-2 active:scale-95"
+                                    >
+                                        {isProcessing ? (
+                                            <span>Procesando...</span>
+                                        ) : (
+                                            <>
+                                                <ShieldCheck size={15} />
+                                                <span>
+                                                    Confirmar y adquirir por {selectedPlanForCheckout.precio}
+                                                </span>
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    <div className="flex flex-col gap-5">
+                        {/* PLAN ACTIVO ACTUAL */}
+                        {planActual && (
+                            <div className="bg-white border-2 border-[#0E5E6F] rounded-[4px] shadow-sm overflow-hidden">
+                                <div className="bg-[#0E5E6F] px-4 py-2 flex items-center gap-2">
+                                    <CheckCircle2 size={15} className="text-white shrink-0" />
+                                    <span className="text-white text-[11px] font-bold tracking-wide">
+                                        Plan Activo
+                                    </span>
+                                    <span className="ml-auto text-[10px] text-white/90 bg-white/15 px-2 py-0.5 rounded-[4px] border border-white/20">
+                                        Renovación automática
+                                    </span>
+                                </div>
+
+                                <div className="p-4 flex flex-col gap-3.5">
+                                    <div>
+                                        <Title as="h2" className="text-lg font-black text-gray-900 leading-tight">
+                                            {planActual.nombre}
+                                        </Title>
+                                        <Text className="text-xs text-[#555555] block mt-1">
+                                            {planActual.descripcion}
+                                        </Text>
+                                    </div>
+
+                                    <div className="bg-[#0E5E6F]/5 border border-[#0E5E6F]/20 rounded-[4px] px-3.5 py-3 flex items-baseline justify-between">
+                                        <span className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">
+                                            Costo actual
+                                        </span>
+                                        <span className="text-2xl font-black text-[#0E5E6F]">
+                                            {planActual.precio}{" "}
+                                            <span className="text-xs font-normal text-gray-500">
+                                                {planActual.periodo}
+                                            </span>
+                                        </span>
+                                    </div>
+
+                                    <div className="flex flex-col divide-y divide-gray-100 bg-gray-50/80 rounded-[4px] border border-gray-200/80 overflow-hidden">
+                                        <div className="flex items-center gap-2.5 px-3 py-2.5">
+                                            <div className="p-1.5 bg-white rounded-[4px] border border-gray-200 shrink-0">
+                                                <Calendar size={14} className="text-[#0E5E6F]" />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-[9px] uppercase text-gray-400 leading-none">
+                                                    Próximo vencimiento
+                                                </span>
+                                                <span className="text-xs font-bold text-gray-800 mt-1">
+                                                    15 de agosto, 2026
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-2.5 px-3 py-2.5">
+                                            <div className="p-1.5 bg-white rounded-[4px] border border-gray-200 shrink-0">
+                                                <CreditCard size={14} className="text-[#0E5E6F]" />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-[9px] uppercase text-gray-400 leading-none">
+                                                    Método registrado
+                                                </span>
+                                                <span className="text-xs font-bold text-gray-800 mt-1">
+                                                    Visa terminada en •••• 4021
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-2.5 px-3 py-2.5">
+                                            <div className="p-1.5 bg-white rounded-[4px] border border-gray-200 shrink-0">
+                                                <Zap size={14} className="text-[#0E5E6F]" />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-[9px] uppercase text-gray-400 leading-none">
+                                                    Estado operativo
+                                                </span>
+                                                <span className="text-xs font-bold text-gray-800 mt-1">
+                                                    Servicio activo BIODRON
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowCancelModal(true)}
+                                        style={{
+                                            borderColor: "#B8001F",
+                                            color: "#B8001F",
+                                            borderRadius: "4px",
+                                        }}
+                                        className="w-full px-3 py-2.5 border-2 text-xs font-bold bg-white hover:bg-red-50 transition-colors active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer"
+                                    >
+                                        <XCircle size={14} />
+                                        <span>Cancelar suscripción</span>
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        <div>
+                            <div className="mb-4">
+                                <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1.5">
+                                    Categoría de servicios
+                                </label>
+                                <select
+                                    value={activeTab}
+                                    onChange={(e) => setActiveTab(e.target.value as TabType)}
+                                    className="w-full text-xs font-bold bg-white border-2 border-gray-200 text-gray-800 rounded-[4px] p-2.5 focus:border-[#0E5E6F] focus:outline-none shadow-xs cursor-pointer"
+                                >
+                                    <option value="generales">Planes generales</option>
+                                    <option value="descuentos-drones">Descuentos en drones por plan</option>
+                                    <option value="asistencia-tecnica">Asistencia técnica y taller</option>
+                                    <option value="contratacion-piloto">Contratación de piloto</option>
+                                </select>
+                            </div>
+
+                            <div className="mb-4">
+                                {activeTab === "generales" && (
+                                    <Text className="text-xs text-gray-500 block">
+                                        Suscripciones periódicas para servicios integrales de monitoreo aéreo, aspersión y análisis con la plataforma BIODRON.
+                                    </Text>
+                                )}
+                                {activeTab === "descuentos-drones" && (
+                                    <Text className="text-xs text-gray-500 block">
+                                        Obtén un porcentaje de descuento especial en la adquisición de tu dron al suscribir cualquiera de estos planes BIODRON.
+                                    </Text>
+                                )}
+                                {activeTab === "asistencia-tecnica" && (
+                                    <Text className="text-xs text-gray-500 block">
+                                        Planes dedicados de mantenimiento preventivo, reparaciones en campo y respaldo técnico integral BIODRON.
+                                    </Text>
+                                )}
+                                {activeTab === "contratacion-piloto" && (
+                                    <Text className="text-xs text-gray-500 block">
+                                        Servicio de personal de vuelo certificado para la ejecución de operaciones agrícolas según las necesidades de tu finca.
+                                    </Text>
+                                )}
+                            </div>
+
+                            <div className="grid grid-cols-1 gap-4">
+                                {catalogos[activeTab].map((plan) => {
+                                    const esPlanActual = plan.id === activePlanId;
+
+                                    return (
+                                        <div
+                                            key={plan.id}
+                                            className={`relative bg-white rounded-[4px] border transition-all flex flex-col overflow-hidden shadow-xs ${plan.destacado
+                                                    ? "border-[#0E5E6F] ring-2 ring-[#0E5E6F]/15"
+                                                    : "border-gray-200"
+                                                }`}
+                                        >
+                                            {plan.destacado && (
+                                                <div className="bg-[#0E5E6F] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 flex items-center gap-1.5">
+                                                    <Zap size={12} /> Plan Destacado
+                                                </div>
+                                            )}
+
+                                            <div className="p-4 flex flex-col gap-3">
+                                                <div className="flex justify-between items-start gap-2">
+                                                    <span className="bg-gray-100 text-gray-800 border border-gray-200 text-[10px] px-2 py-0.5 rounded-[4px] tracking-wider">
+                                                        {plan.etiqueta}
+                                                    </span>
+                                                    {esPlanActual && (
+                                                        <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded-[4px] font-bold flex items-center gap-1 shrink-0">
+                                                            <CheckCircle2 size={11} /> Contratado
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                <div>
+                                                    <Title
+                                                        as="h3"
+                                                        className="text-base font-extrabold text-gray-900 leading-tight"
+                                                    >
+                                                        {plan.nombre}
+                                                    </Title>
+                                                    <Text className="text-xs text-gray-600 font-medium leading-relaxed block mt-1">
+                                                        {plan.descripcion}
+                                                    </Text>
+                                                </div>
+
+                                                <div
+                                                    className={`rounded-[4px] px-3.5 py-3 flex items-baseline justify-between border ${plan.destacado
+                                                            ? "bg-[#0E5E6F]/5 border-[#0E5E6F]/20"
+                                                            : "bg-gray-50 border-gray-200"
+                                                        }`}
+                                                >
+                                                    <span className="text-2xl font-black text-[#0E5E6F]">
+                                                        {plan.precio}
+                                                    </span>
+                                                    <span className="text-xs text-gray-500 font-medium">
+                                                        {plan.periodo}
+                                                    </span>
+                                                </div>
+
+                                                <div>
+                                                    <Text className="text-[10px] uppercase text-gray-400 tracking-wider block mb-1.5">
+                                                        Incluye:
+                                                    </Text>
+                                                    <ul className="flex flex-col gap-1.5">
+                                                        {plan.caracteristicas.map((item, idx) => (
+                                                            <li
+                                                                key={idx}
+                                                                className="flex items-start gap-2 text-xs text-gray-700 bg-gray-50/70 rounded-[4px] px-2 py-1.5"
+                                                            >
+                                                                <CheckCircle2
+                                                                    size={13}
+                                                                    className="text-[#0E5E6F] shrink-0 mt-0.5"
+                                                                />
+                                                                <span>{item}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+
+                                                <button
+                                                    disabled={esPlanActual}
+                                                    onClick={() => setSelectedPlanForCheckout(plan)}
+                                                    className={`w-full py-2.5 px-3 rounded-[4px] text-xs transition flex items-center justify-center gap-1.5 cursor-pointer mt-1 active:scale-95 ${esPlanActual
+                                                            ? "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
+                                                            : plan.destacado
+                                                                ? "bg-[#0E5E6F] hover:bg-[#0A4552] text-white shadow-xs font-bold"
+                                                                : "bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-200"
+                                                        }`}
+                                                >
+                                                    {esPlanActual ? "Opción actual" : "Seleccionar plan"}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* MODAL CON POSICIÓN ABSOLUTA DENTRO DEL CONTENEDOR RAIZ FUERA DEL DIV SCROLLEABLE */}
+            {showCancelModal && (
+                <div 
+                    style={{ borderRadius: "4px" }}
+                    className="absolute inset-0 z-50 flex items-center justify-center p-3 bg-black/60 backdrop-blur-xs overflow-hidden"
+                    onClick={() => setShowCancelModal(false)}
+                >
+                    <div
+                        style={{
+                            borderRadius: "4px",
+                            border: "1px solid #E5E7EB",
+                            scrollbarWidth: "none",
+                            msOverflowStyle: "none"
+                        }}
+                        className="bg-white w-[92%] max-h-[85%] p-4 shadow-2xl relative flex flex-col justify-between overflow-y-auto no-scrollbar animate-in fade-in zoom-in-95 duration-150"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div>
+                            <button
+                                onClick={() => setShowCancelModal(false)}
+                                style={{ borderRadius: "4px" }}
+                                className="absolute top-2.5 right-2.5 text-gray-400 hover:text-gray-700 cursor-pointer p-1 active:scale-95"
+                            >
+                                <X size={16} />
+                            </button>
+
+                            <div className="flex items-center gap-2 text-[#B8001F] mb-2 pr-6">
+                                <AlertCircle size={18} className="shrink-0" />
+                                <Title as="h3" className="text-xs font-extrabold text-gray-900 leading-tight">
+                                    ¿Cancelar Suscripción Actual?
+                                </Title>
+                            </div>
+
+                            <Text className="text-[11px] text-[#555555] leading-normal mb-3 block">
+                                Al cancelar tu suscripción, perderás la prioridad en el despacho de drones, asistencia técnica acelerada y los beneficios de análisis de datos a partir de la próxima fecha de corte.
+                            </Text>
                         </div>
 
-                        <Text className="text-xs text-gray-600 leading-relaxed mb-5">
-                            Al cancelar tu suscripción, perderás la prioridad en el despacho de drones, asistencia técnica acelerada y los beneficios de análisis de datos a partir de la próxima fecha de corte.
-                        </Text>
-
-                        <div className="flex flex-col gap-2.5 pt-2 border-t border-gray-100">
+                        <div className="flex flex-col gap-2 pt-2 border-t border-gray-100 shrink-0">
                             <button
                                 onClick={handleConfirmCancel}
-                                style={{ backgroundColor: "#B8001F" }}
-                                className="w-full px-3.5 py-2.5 text-xs font-bold text-white rounded-[4px] hover:opacity-90 transition cursor-pointer shadow-xs"
+                                style={{ backgroundColor: "#B8001F", borderRadius: "4px" }}
+                                className="w-full px-3 py-2 text-xs font-bold text-white hover:opacity-90 transition cursor-pointer shadow-xs active:scale-95"
                             >
                                 Confirmar cancelación
                             </button>
 
                             <button
                                 onClick={() => setShowCancelModal(false)}
-                                className="w-full px-3.5 py-2.5 border border-gray-300 text-xs font-bold text-gray-700 rounded-[4px] hover:bg-gray-100 transition cursor-pointer"
+                                style={{ borderRadius: "4px" }}
+                                className="w-full px-3 py-2 border border-gray-300 text-xs font-bold text-gray-700 hover:bg-gray-100 transition cursor-pointer active:scale-95"
                             >
                                 Conservar suscripción
                             </button>
@@ -3267,6 +3402,19 @@ export const ClienteDronView = ({
 
     return (
         <div style={{ fontFamily: "'Roboto', sans-serif" }} className="p-3 max-w-md mx-auto flex flex-col gap-4 text-left min-h-screen">
+            {/* Estilos para ocultar barras de scroll */}
+            <style>{`
+                .scrollbar-hidden {
+                    scrollbar-width: none !important;
+                    -ms-overflow-style: none !important;
+                }
+                .scrollbar-hidden::-webkit-scrollbar {
+                    display: none !important;
+                    width: 0 !important;
+                    height: 0 !important;
+                }
+            `}</style>
+
             {/* CABECERA PRINCIPAL Y PESTAÑAS */}
             <div className="border-b border-gray-200 pb-4">
                 <div className="flex flex-col gap-3 mb-4">
@@ -3819,32 +3967,38 @@ export const ClienteDronView = ({
                     /* COMPRAR DRONES */
                     <div className="space-y-6">
                         <div>
-                            <div className="border-b-2 border-gray-200 mb-6 flex gap-1.5 overflow-x-auto pb-0 select-none snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-                                {[
-                                    { id: "micro", label: "Micro drones", icon: <Zap size={13} /> },
-                                    { id: "mini", label: "Mini drones", icon: <Tag size={13} /> },
-                                    { id: "pequeno", label: "Drones pequeños", icon: <Wrench size={13} /> },
-                                    { id: "grande", label: "Drones grandes", icon: <UserCheck size={13} /> },
-                                ].map((tab) => {
-                                    const isActive = selectedCategory === tab.id;
-                                    return (
-                                        <button
-                                            key={tab.id}
-                                            onClick={() => setSelectedCategory(tab.id as any)}
-                                            style={{ borderRadius: "4px 4px 0 0", fontFamily: "'Roboto', sans-serif" }}
-                                            className={`shrink-0 snap-start w-[130px] px-2 py-3 text-[11px] font-bold flex flex-col items-center justify-center gap-1 border-t-2 border-x-2 -mb-[2px] transition-all text-center cursor-pointer ${
-                                                isActive
-                                                    ? "border-t-[#0E5E6F] border-x-gray-200 border-b-white bg-white text-[#0E5E6F] shadow-xs"
-                                                    : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-                                            }`}
+                            <div className="mb-6">
+                                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-1.5">
+                                    Categoría de dron
+                                </label>
+                                <div className="relative flex items-center gap-2">
+                                    <div
+                                        style={{ borderRadius: "4px" }}
+                                        className="shrink-0 w-10 h-10 flex items-center justify-center bg-[#0E5E6F]/10 border border-[#0E5E6F]/20 text-[#0E5E6F]"
+                                    >
+                                        {selectedCategory === "micro" && <Zap size={16} />}
+                                        {selectedCategory === "mini" && <Tag size={16} />}
+                                        {selectedCategory === "pequeno" && <Wrench size={16} />}
+                                        {selectedCategory === "grande" && <UserCheck size={16} />}
+                                    </div>
+                                    <div className="relative flex-1">
+                                        <select
+                                            value={selectedCategory}
+                                            onChange={(e) => setSelectedCategory(e.target.value as any)}
+                                            style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
+                                            className="w-full appearance-none bg-white border-2 border-gray-200 text-gray-900 font-bold text-[12px] py-2.5 pl-3 pr-9 cursor-pointer outline-none focus:border-[#0E5E6F] transition-all"
                                         >
-                                            <span className={isActive ? "text-[#0E5E6F]" : "text-gray-400"}>
-                                                {tab.icon}
-                                            </span>
-                                            <span className="leading-tight">{tab.label}</span>
-                                        </button>
-                                    );
-                                })}
+                                            <option value="micro">Micro drones</option>
+                                            <option value="mini">Mini drones</option>
+                                            <option value="pequeno">Drones pequeños</option>
+                                            <option value="grande">Drones grandes</option>
+                                        </select>
+                                        <ChevronDown
+                                            size={15}
+                                            className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                                        />
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="mb-4">
@@ -4042,12 +4196,13 @@ export const ClienteDronView = ({
                 )
             )}
 
-            {/* BOTTOM SHEET DE SOLICITUD DE AYUDA TÉCNICA (CON CONFIRMACIÓN INTERNA) */}
+            {/* ============================================================ */}
+            {/* MODAL DE SOLICITUD DE AYUDA TÉCNICA (CORREGIDO) */}
+            {/* ============================================================ */}
             {supportDrone && (
-                <div style={{ fontFamily: "'Roboto', sans-serif" }} className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-end justify-center text-left">
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-end justify-center overscroll-none">
                     <div 
-                        style={{ borderRadius: "16px 16px 0 0" }}
-                        className="bg-white w-full max-h-[88vh] overflow-y-auto border-t border-gray-200 shadow-2xl p-5 pb-6 space-y-4 animate-in fade-in slide-in-from-bottom duration-200 relative"
+                        className="scrollbar-hidden bg-white w-full max-w-md mx-auto max-h-[90dvh] overflow-y-auto overflow-x-hidden rounded-t-2xl p-5 pb-6 space-y-4 animate-in fade-in slide-in-from-bottom duration-200"
                     >
                         <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto -mt-1 mb-1" />
 
@@ -4067,7 +4222,6 @@ export const ClienteDronView = ({
 
                         {!supportSubmitted ? (
                             <form onSubmit={handleSendSupportRequest} className="space-y-4">
-                                {/* INFORMACIÓN RESUMIDA DEL DRON */}
                                 <div className="bg-gray-50 p-3 rounded-[4px] border border-gray-200 flex items-center gap-3">
                                     <div className="w-16 h-16 bg-gray-200 rounded shrink-0 border border-gray-300 overflow-hidden">
                                         <img src={supportDrone.imagen} alt={supportDrone.nombre} className="w-full h-full object-cover" />
@@ -4082,7 +4236,6 @@ export const ClienteDronView = ({
                                     </div>
                                 </div>
 
-                                {/* CAMPO DE LA RAZÓN DE LA PETICIÓN */}
                                 <div>
                                     <label className="block text-xs font-bold text-gray-700 mb-1">
                                         Razón de la petición
@@ -4117,7 +4270,6 @@ export const ClienteDronView = ({
                                 </div>
                             </form>
                         ) : (
-                            /* VISTA DE CONFIRMACIÓN DENTRO DEL MISMO MODAL */
                             <div className="py-4 text-center space-y-3 animate-in fade-in duration-200">
                                 <div 
                                     style={{ borderRadius: "9999px" }}
@@ -4142,16 +4294,16 @@ export const ClienteDronView = ({
                 </div>
             )}
 
-            {/* BOTTOM SHEET DE FICHA TÉCNICA */}
+            {/* ============================================================ */}
+            {/* MODAL DE FICHA TÉCNICA (CORREGIDO) */}
+            {/* ============================================================ */}
             {selectedDrone && (
-                <div style={{ fontFamily: "'Roboto', sans-serif" }} className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-end justify-center animate-in fade-in duration-200 text-left">
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-end justify-center overscroll-none">
                     <div 
-                        style={{ borderRadius: "16px 16px 0 0" }}
-                        className="bg-white w-full max-h-[90vh] border-t border-gray-200 shadow-2xl overflow-hidden flex flex-col animate-in fade-in slide-in-from-bottom duration-200"
+                        className="scrollbar-hidden bg-white w-full max-w-md mx-auto max-h-[90dvh] overflow-y-auto overflow-x-hidden rounded-t-2xl p-5 space-y-4 animate-in fade-in slide-in-from-bottom duration-200"
                     >
-                        <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mt-2 mb-1 shrink-0" />
-
-                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-gray-50 shrink-0">
+                        {/* Cabecera */}
+                        <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                             <div className="flex items-center gap-2 min-w-0">
                                 <Title as="h2" className="text-base font-black text-gray-900 truncate">
                                     {selectedDrone.nombre}
@@ -4172,69 +4324,69 @@ export const ClienteDronView = ({
                             </button>
                         </div>
 
-                        <div className="overflow-y-auto flex-1">
-                            <div className="p-4 flex flex-col gap-4">
+                        {/* Contenido */}
+                        <div className="flex flex-col gap-4">
+                            <div 
+                                style={{ borderRadius: "4px" }}
+                                className="flex flex-col bg-gray-50 border border-gray-200 overflow-hidden"
+                            >
+                                <div className="relative w-full h-48 bg-gray-100">
+                                    <img
+                                        src={selectedDrone.imagen}
+                                        alt={selectedDrone.nombre}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                                <div className="p-3.5 bg-white border-t border-gray-200">
+                                    <Text className="text-[10px] text-gray-400 font-extrabold block">
+                                        Precio Comercial
+                                    </Text>
+                                    <Text className="text-xl font-black text-[#0E5E6F] block mb-1">
+                                        {selectedDrone.precio}
+                                    </Text>
+                                    <Text className="text-xs text-gray-600 font-medium leading-relaxed block">
+                                        {selectedDrone.descripcion}
+                                    </Text>
+                                </div>
+                            </div>
+
+                            <div>
+                                <Text className="text-[11px] font-bold text-gray-400 tracking-wider mb-2 block">
+                                    Especificaciones Técnicas
+                                </Text>
+                                <div className="grid grid-cols-2 gap-2">
+                                    {Object.entries(selectedDrone.especificaciones).map(
+                                        ([clave, valor]: any) => (
+                                            <div
+                                                key={clave}
+                                                style={{ borderRadius: "4px" }}
+                                                className="p-2.5 bg-gray-50 border border-gray-200 flex flex-col justify-center"
+                                            >
+                                                <span className="text-[9px] text-gray-400 font-bold truncate">
+                                                    {clave}
+                                                </span>
+                                                <span className="text-xs font-bold text-gray-800 truncate">
+                                                    {valor}
+                                                </span>
+                                            </div>
+                                        ),
+                                    )}
+                                </div>
+                            </div>
+
+                            {selectedCategory !== "micro" && (
                                 <div 
                                     style={{ borderRadius: "4px" }}
-                                    className="flex flex-col bg-gray-50 border border-gray-200 overflow-hidden"
+                                    className="p-2.5 bg-amber-50 border border-amber-200 flex items-center gap-2.5 text-amber-900 text-[11px] font-medium"
                                 >
-                                    <div className="relative w-full h-48 bg-gray-100">
-                                        <img
-                                            src={selectedDrone.imagen}
-                                            alt={selectedDrone.nombre}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-                                    <div className="p-3.5 bg-white border-t border-gray-200">
-                                        <Text className="text-[10px] text-gray-400 font-extrabold block">
-                                            Precio Comercial
-                                        </Text>
-                                        <Text className="text-xl font-black text-[#0E5E6F] block mb-1">
-                                            {selectedDrone.precio}
-                                        </Text>
-                                        <Text className="text-xs text-gray-600 font-medium leading-relaxed block">
-                                            {selectedDrone.descripcion}
-                                        </Text>
-                                    </div>
+                                    <ShieldAlert size={16} className="shrink-0 text-amber-600" />
+                                    <span>Requiere Cuenta de Piloto verificada para la compra.</span>
                                 </div>
-
-                                <div>
-                                    <Text className="text-[11px] font-bold text-gray-400 tracking-wider mb-2 block">
-                                        Especificaciones Técnicas
-                                    </Text>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        {Object.entries(selectedDrone.especificaciones).map(
-                                            ([clave, valor]: any) => (
-                                                <div
-                                                    key={clave}
-                                                    style={{ borderRadius: "4px" }}
-                                                    className="p-2.5 bg-gray-50 border border-gray-200 flex flex-col justify-center"
-                                                >
-                                                    <span className="text-[9px] text-gray-400 font-bold truncate">
-                                                        {clave}
-                                                    </span>
-                                                    <span className="text-xs font-bold text-gray-800 truncate">
-                                                        {valor}
-                                                    </span>
-                                                </div>
-                                            ),
-                                        )}
-                                    </div>
-                                </div>
-
-                                {selectedCategory !== "micro" && (
-                                    <div 
-                                        style={{ borderRadius: "4px" }}
-                                        className="p-2.5 bg-amber-50 border border-amber-200 flex items-center gap-2.5 text-amber-900 text-[11px] font-medium"
-                                    >
-                                        <ShieldAlert size={16} className="shrink-0 text-amber-600" />
-                                        <span>Requiere Cuenta de Piloto verificada para la compra.</span>
-                                    </div>
-                                )}
-                            </div>
+                            )}
                         </div>
 
-                        <div className="px-4 py-3 border-t border-gray-200 bg-gray-50 flex flex-col gap-2 shrink-0">
+                        {/* Botones */}
+                        <div className="pt-3 border-t border-gray-200 flex flex-col gap-2">
                             {selectedCategory === "micro" ? (
                                 <button
                                     onClick={() => iniciarCompra(selectedDrone)}
@@ -4269,12 +4421,13 @@ export const ClienteDronView = ({
                 </div>
             )}
 
-            {/* BOTTOM SHEET DE CAMBIO A CUENTA PILOTO */}
+            {/* ============================================================ */}
+            {/* MODAL DE CAMBIO A CUENTA PILOTO (CORREGIDO) */}
+            {/* ============================================================ */}
             {isPilotModalOpen && (
-                <div style={{ fontFamily: "'Roboto', sans-serif" }} className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-end justify-center">
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-end justify-center overscroll-none">
                     <div 
-                        style={{ borderRadius: "16px 16px 0 0" }}
-                        className="bg-white w-full max-h-[88vh] overflow-y-auto border-t border-gray-200 shadow-2xl p-5 pb-6 space-y-4 animate-in fade-in slide-in-from-bottom duration-200"
+                        className="scrollbar-hidden bg-white w-full max-w-md mx-auto max-h-[90dvh] overflow-y-auto overflow-x-hidden rounded-t-2xl p-5 pb-6 space-y-4 animate-in fade-in slide-in-from-bottom duration-200"
                     >
                         <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto -mt-1 mb-1" />
 
@@ -4986,10 +5139,10 @@ export const ClienteHistoryView = () => {
 
       {/* BOTTOM SHEET: DETALLES DEL VUELO */}
       {selectedVuelo && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center overscroll-none">
           <div
-            style={{ borderRadius: "16px 16px 0 0" }}
-            className="bg-white border-t-2 border-gray-300 w-full max-h-[85vh] p-5 text-left space-y-4 shadow-xl overflow-y-auto"
+            style={{ borderRadius: "16px 16px 0 0", scrollbarWidth: "none", msOverflowStyle: "none" }}
+            className="bg-white border-t-2 border-gray-300 w-full max-h-[85%] p-5 text-left space-y-4 shadow-xl overflow-y-auto overscroll-contain [&::-webkit-scrollbar]:hidden"
           >
             <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto -mt-1 mb-1" />
 
@@ -5041,10 +5194,10 @@ export const ClienteHistoryView = () => {
 
       {/* BOTTOM SHEET: RECIBO DE FACTURA */}
       {selectedFactura && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center overscroll-none">
           <div
-            style={{ borderRadius: "16px 16px 0 0" }}
-            className="bg-white border-t-2 border-gray-300 w-full max-h-[85vh] p-5 text-left space-y-4 shadow-xl overflow-y-auto"
+            style={{ borderRadius: "16px 16px 0 0", scrollbarWidth: "none", msOverflowStyle: "none" }}
+            className="bg-white border-t-2 border-gray-300 w-full max-h-[85%] p-5 text-left space-y-4 shadow-xl overflow-y-auto overscroll-contain [&::-webkit-scrollbar]:hidden"
           >
             <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto -mt-1 mb-1" />
 
@@ -5096,622 +5249,785 @@ export const ClienteHistoryView = () => {
   );
 };
 
-
 // 5. Ayuda y Asistencia Granjeros (help)
 export const ClienteHelpView = () => {
-    const userAvatar = "src/img/granjero_perfil.png";
+  const userAvatar = 'src/img/granjero_perfil.png';
 
-    const [chats, setChats] = useState<Chat[]>([
+  const [chats, setChats] = useState<Chat[]>([
+    {
+      id: 'admin_central',
+      name: 'Soporte Central',
+      role: 'Administrador del sistema',
+      roleType: 'admin',
+      avatar: 'src/img/admin_perfil.png',
+      online: true,
+      unreadCount: 1,
+      messages: [
         {
-            id: 'admin_central',
-            name: 'Soporte Central',
-            role: 'Administrador del sistema',
-            roleType: 'admin',
-            avatar: 'src/img/admin_perfil.png',
-            online: true,
-            unreadCount: 1,
-            messages: [
-                {
-                    id: 1,
-                    sender: 'other',
-                    text: '¡Hola Carlos! Bienvenido al centro de asistencia. ¿Tienes alguna duda con los parámetros de escaneo de tus manzanas?',
-                    time: '08:30 AM'
-                },
-                {
-                    id: 2,
-                    sender: 'granjero',
-                    text: 'Hola, sí. Quería confirmar si la batería del dron #2 alcanza para cubrir las 187 manzanas en un solo vuelo.',
-                    time: '08:32 AM'
-                },
-                {
-                    id: 3,
-                    sender: 'other',
-                    text: 'Para esa extensión recomendamos dividir la misión en 2 fases de vuelo para no forzar el retorno de emergencia.',
-                    time: '08:35 AM'
-                }
-            ]
+          id: 1,
+          sender: 'other',
+          text: '¡Hola Carlos! Bienvenido al centro de asistencia. ¿Dudas con los parámetros de escaneo?',
+          time: '08:30 AM',
         },
         {
-            id: 'piloto_mateo',
-            name: 'Ing. Mateo Rivas',
-            role: 'Piloto de dron de campo',
-            roleType: 'piloto',
-            avatar: 'src/img/piloto_perfil.png',
-            online: false,
-            lastSeen: 'hoy a las 11:20 AM',
-            unreadCount: 0,
-            messages: [
-                {
-                    id: 1,
-                    sender: 'other',
-                    text: 'Buenas tardes Carlos. Ya completamos el análisis multiespectral del sector norte.',
-                    time: 'Ayer'
-                },
-                {
-                    id: 2,
-                    sender: 'granjero',
-                    text: 'Excelente Mateo, ¿cuándo estarán cargados los archivos PDF en mi panel?',
-                    time: 'Ayer'
-                },
-                {
-                    id: 3,
-                    sender: 'other',
-                    text: 'Ya están procesados y subidos en la sección de reportes.',
-                    time: 'Ayer'
-                }
-            ]
+          id: 2,
+          sender: 'granjero',
+          text: 'Hola. ¿La batería del dron #2 alcanza para cubrir las 187 manzanas en un vuelo?',
+          time: '08:32 AM',
         },
         {
-            id: 'admin_sofia',
-            name: 'Lic. Sofía Mendoza',
-            role: 'Admin - facturación y licencias',
-            roleType: 'admin',
-            avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80',
-            online: true,
-            unreadCount: 2,
-            messages: [
-                {
-                    id: 1,
-                    sender: 'other',
-                    text: 'Hola Carlos, te confirmamos que la renovación del plan profesional fue procesada correctamente.',
-                    time: '09:15 AM'
-                },
-                {
-                    id: 2,
-                    sender: 'other',
-                    text: 'Te adjuntamos la factura en PDF por correo electrónico.',
-                    time: '09:16 AM'
-                }
-            ]
+          id: 3,
+          sender: 'other',
+          text: 'Recomendamos dividir la misión en 2 fases para no forzar el retorno de emergencia.',
+          time: '08:35 AM',
+        },
+      ],
+    },
+    {
+      id: 'piloto_mateo',
+      name: 'Ing. Mateo Rivas',
+      role: 'Piloto de dron de campo',
+      roleType: 'piloto',
+      avatar: 'src/img/piloto_perfil.png',
+      online: false,
+      lastSeen: '11:20 AM',
+      unreadCount: 0,
+      messages: [
+        {
+          id: 1,
+          sender: 'other',
+          text: 'Buenas tardes Carlos. Completamos el análisis multiespectral del sector norte.',
+          time: 'Ayer',
         },
         {
-            id: 'piloto_diego',
-            name: 'Cap. Diego Torres',
-            role: 'Piloto dron - sector sur',
-            roleType: 'piloto',
-            avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
-            online: false,
-            lastSeen: 'ayer a las 05:40 PM',
-            unreadCount: 0,
-            messages: [
-                {
-                    id: 1,
-                    sender: 'granjero',
-                    text: 'Hola Diego, ¿cómo estuvo la velocidad del viento durante el mapeo de la tarde?',
-                    time: 'Ayer'
-                },
-                {
-                    id: 2,
-                    sender: 'other',
-                    text: 'Todo en orden Carlos. Vientos estables de 12 km/h. La ortofoto quedó sin distorsiones.',
-                    time: 'Ayer'
-                }
-            ]
+          id: 2,
+          sender: 'granjero',
+          text: 'Excelente Mateo, ¿cuándo estarán cargados los PDF en mi panel?',
+          time: 'Ayer',
         },
         {
-            id: 'admin_alejandro',
-            name: 'Ing. Alejandro Silva',
-            role: 'Admin - soporte técnico IoT',
-            roleType: 'admin',
-            avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80',
-            online: true,
-            unreadCount: 0,
-            messages: [
-                {
-                    id: 1,
-                    sender: 'other',
-                    text: 'Detectamos una breve desconexión en el sensor de humedad de la parcela 3, ya restablecimos el enlace.',
-                    time: '10:05 AM'
-                },
-                {
-                    id: 2,
-                    sender: 'granjero',
-                    text: 'Gracias Alejandro, ya veo la telemetría en tiempo real de nuevo.',
-                    time: '10:10 AM'
-                }
-            ]
+          id: 3,
+          sender: 'other',
+          text: 'Ya están procesados y subidos en la sección de reportes.',
+          time: 'Ayer',
+        },
+      ],
+    },
+    {
+      id: 'admin_sofia',
+      name: 'Lic. Sofía Mendoza',
+      role: 'Admin - Facturación',
+      roleType: 'admin',
+      avatar:
+        'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80',
+      online: true,
+      unreadCount: 2,
+      messages: [
+        {
+          id: 1,
+          sender: 'other',
+          text: 'Hola Carlos, la renovación del plan profesional fue procesada correctamente.',
+          time: '09:15 AM',
         },
         {
-            id: 'piloto_valeria',
-            name: 'Dra. Valeria Gómez',
-            role: 'Piloto - fitozoosanitario',
-            roleType: 'piloto',
-            avatar: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&auto=format&fit=crop&q=80',
-            online: false,
-            lastSeen: 'hace 2 horas',
-            unreadCount: 2,
-            messages: [
-                {
-                    id: 1,
-                    sender: 'other',
-                    text: 'Carlos, revisamos el índice NDVI del lote 5 y detectamos estrés hídrico temprano.',
-                    time: '11:00 AM'
-                },
-                {
-                    id: 2,
-                    sender: 'other',
-                    text: 'Te sugerimos ajustar el riego por goteo en esa zona durante 48 horas.',
-                    time: '11:02 AM'
-                }
-            ]
+          id: 2,
+          sender: 'other',
+          text: 'Te adjuntamos la factura en PDF por correo electrónico.',
+          time: '09:16 AM',
+        },
+      ],
+    },
+    {
+      id: 'piloto_diego',
+      name: 'Cap. Diego Torres',
+      role: 'Piloto - Sector Sur',
+      roleType: 'piloto',
+      avatar:
+        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
+      online: false,
+      lastSeen: '05:40 PM',
+      unreadCount: 0,
+      messages: [
+        {
+          id: 1,
+          sender: 'granjero',
+          text: 'Hola Diego, ¿cómo estuvo el viento durante el mapeo de la tarde?',
+          time: 'Ayer',
+        },
+        {
+          id: 2,
+          sender: 'other',
+          text: 'Todo en orden Carlos. Vientos estables de 12 km/h. La ortofoto quedó impecable.',
+          time: 'Ayer',
+        },
+      ],
+    },
+  ]);
+
+  const [activeChatId, setActiveChatId] = useState<string>('admin_central');
+  const [inputText, setInputText] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  // Navegación móvil
+  const [vistaMovil, setVistaMovil] = useState<'lista' | 'chat'>('lista');
+
+  // Menú desplegable Header (3 puntos)
+  const [isHeaderMenuOpen, setIsHeaderMenuOpen] = useState<boolean>(false);
+
+  // Estados para Modal de Solicitud de Soporte (Multi-paso)
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState<boolean>(false);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [modalStep, setModalStep] = useState<1 | 2>(1);
+  const [helpForm, setHelpForm] = useState({
+    categoria: 'Incidencia técnica',
+    prioridad: 'Media',
+    mensaje: '',
+  });
+
+  const activeChat = chats.find((c) => c.id === activeChatId) || chats[0];
+
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputText.trim()) return;
+
+    const newMsg: Message = {
+      id: Date.now(),
+      sender: 'granjero',
+      text: inputText,
+      time: new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+    };
+
+    setChats((prevChats) =>
+      prevChats.map((chat) => {
+        if (chat.id === activeChatId) {
+          return {
+            ...chat,
+            messages: [...chat.messages, newMsg],
+          };
         }
-    ]);
-
-    const [activeChatId, setActiveChatId] = useState<string>('admin_central');
-    const [inputText, setInputText] = useState<string>('');
-    const [searchQuery, setSearchQuery] = useState<string>('');
-
-    // Estados para el modal de solicitud de ayuda
-    const [isHelpModalOpen, setIsHelpModalOpen] = useState<boolean>(false);
-    const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-    const [helpForm, setHelpForm] = useState({
-        nombre: 'Carlos Sosa',
-        correo: 'carlos.sosa@ejemplo.com',
-        asunto: 'Incidencia técnica',
-        mensaje: ''
-    });
-
-    const activeChat = chats.find((c) => c.id === activeChatId) || chats[0];
-
-    const handleSendMessage = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!inputText.trim()) return;
-
-        const newMsg: Message = {
-            id: Date.now(),
-            sender: 'granjero',
-            text: inputText,
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
-
-        setChats((prevChats) =>
-            prevChats.map((chat) => {
-                if (chat.id === activeChatId) {
-                    return {
-                        ...chat,
-                        messages: [...chat.messages, newMsg]
-                    };
-                }
-                return chat;
-            })
-        );
-
-        setInputText('');
-    };
-
-    const handleHelpSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!helpForm.mensaje.trim()) return;
-        setIsSubmitted(true);
-    };
-
-    const closeHelpModal = () => {
-        setIsHelpModalOpen(false);
-        setIsSubmitted(false);
-        setHelpForm({
-            nombre: 'Carlos Sosa',
-            correo: 'carlos.sosa@ejemplo.com',
-            asunto: 'Incidencia técnica',
-            mensaje: ''
-        });
-    };
-
-    const filteredChats = chats.filter((c) =>
-        c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.role.toLowerCase().includes(searchQuery.toLowerCase())
+        return chat;
+      })
     );
 
-    return (
-        <div className="w-full h-full min-h-0 flex flex-col bg-white overflow-hidden relative font-roboto">
-            <div className="flex flex-col md:flex-row flex-1 h-full min-h-0 overflow-hidden">
+    setInputText('');
+  };
 
-                {/* ================= BARRA LATERAL (LISTA DE CHATS) ================= */}
-                <div className="w-full md:w-80 lg:w-96 flex flex-col border-r border-gray-200 bg-gray-50/60 h-full min-h-0 shrink-0">
+  const handleHelpNext = (e: React.FormEvent) => {
+    e.preventDefault();
+    setModalStep(2);
+  };
 
-                    {/* TÍTULO Y BOTÓN DE PEDIR AYUDA (ARRIBA DEL BUSCADOR) */}
-                    <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between shrink-0">
-                        <div>
-                            <h2 className="font-bold text-gray-900 text-lg leading-tight">Soporte y Ayuda</h2>
-                            <p className="text-xs text-gray-500">Canal directo de asistencia</p>
-                        </div>
+  const handleHelpBack = () => {
+    setModalStep(1);
+  };
 
-                        {/* BOTÓN PEDIR AYUDA */}
-                        <button
-                            onClick={() => setIsHelpModalOpen(true)}
-                            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white font-semibold text-xs rounded-[4px] shadow-xs transition cursor-pointer"
-                        >
-                            <HelpCircle size={15} />
-                            <span>Pedir ayuda</span>
-                        </button>
-                    </div>
+  const handleHelpSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!helpForm.mensaje.trim()) return;
+    setIsSubmitted(true);
+  };
 
-                    {/* BARRA DE BÚSQUEDA */}
-                    <div className="p-3 border-b border-gray-200 bg-gray-50/80 shrink-0">
-                        <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                            <input
-                                type="text"
-                                placeholder="Buscar conversación..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:border-[#0E5E6F] transition"
-                            />
-                        </div>
-                    </div>
+  const closeHelpModal = () => {
+    setIsHelpModalOpen(false);
+    setIsSubmitted(false);
+    setModalStep(1);
+    setHelpForm({
+      categoria: 'Incidencia técnica',
+      prioridad: 'Media',
+      mensaje: '',
+    });
+  };
 
-                    {/* LISTA DE CHATS */}
-                    <div className="flex-1 overflow-y-auto min-h-0 divide-y divide-gray-100">
-                        {filteredChats.map((chat) => {
-                            const lastMsg = chat.messages[chat.messages.length - 1];
-                            const isSelected = chat.id === activeChatId;
+  const filteredChats = chats.filter(
+    (c) =>
+      c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      c.role.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-                            return (
-                                <button
-                                    key={chat.id}
-                                    onClick={() => {
-                                        setActiveChatId(chat.id);
-                                        setChats((prev) =>
-                                            prev.map((c) => (c.id === chat.id ? { ...c, unreadCount: 0 } : c))
-                                        );
-                                    }}
-                                    className={`w-full p-4 flex items-center gap-3 transition text-left cursor-pointer ${isSelected ? 'bg-white border-l-4 border-[#0E5E6F]' : 'hover:bg-gray-100/80'
-                                        }`}
-                                >
-                                    <div className="relative shrink-0">
-                                        <img
-                                            src={chat.avatar}
-                                            alt={chat.name}
-                                            className="w-12 h-12 rounded-[4px] object-cover shadow-xs"
-                                        />
-                                        <span
-                                            className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 border-2 border-white rounded-full ${chat.online ? 'bg-emerald-500' : 'bg-gray-400'
-                                                }`}
-                                        ></span>
-                                    </div>
+  // Simulación de arrastre táctil (drag-to-scroll)
+  const DRAG_THRESHOLD = 6;
+  const dragState = useRef({
+    tracking: false,
+    dragging: false,
+    startY: 0,
+    scrollTop: 0,
+    pointerId: 0,
+  });
 
-                                    <div className="min-w-0 flex-1">
-                                        <div className="flex items-center justify-between mb-0.5">
-                                            <h3 className="font-bold text-gray-900 text-sm truncate">{chat.name}</h3>
-                                            {lastMsg && (
-                                                <span className="text-[11px] text-gray-400 font-medium shrink-0 ml-1">
-                                                    {lastMsg.time}
-                                                </span>
-                                            )}
-                                        </div>
-                                        <p className="text-xs text-[#0E5E6F] font-semibold mb-1 truncate">{chat.role}</p>
-                                        {lastMsg && (
-                                            <p className="text-xs text-gray-500 truncate">
-                                                {lastMsg.sender === 'granjero' && 'Tú: '}
-                                                {lastMsg.text}
-                                            </p>
-                                        )}
-                                    </div>
+  const isInteractiveTarget = (target: EventTarget | null) => {
+    const el = target as HTMLElement | null;
+    return !!el?.closest('input, textarea, select, button, a, option, label');
+  };
 
-                                    {chat.unreadCount > 0 && (
-                                        <div className="shrink-0">
-                                            <span className="bg-[#0E5E6F] text-white text-[10px] font-bold px-2 py-0.5 rounded-[4px] block">
-                                                {chat.unreadCount}
-                                            </span>
-                                        </div>
-                                    )}
-                                </button>
-                            );
-                        })}
-                    </div>
-                </div>
+  const handleDragStart = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (isInteractiveTarget(e.target)) return;
+    const el = e.currentTarget;
+    dragState.current = {
+      tracking: true,
+      dragging: false,
+      startY: e.clientY,
+      scrollTop: el.scrollTop,
+      pointerId: e.pointerId,
+    };
+  };
 
-                {/* ================= ÁREA DE CONVERSACIÓN ================= */}
-                <div className="flex-1 flex flex-col h-full min-h-0 bg-[#f8fafc] overflow-hidden">
+  const handleDragMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const state = dragState.current;
+    if (!state.tracking) return;
+    const el = e.currentTarget;
+    const deltaY = e.clientY - state.startY;
 
-                    {/* HEADER DEL CHAT (DATOS DEL USUARIO EN VERTICAL) */}
-                    <div className="p-3 sm:p-4 bg-white border-b border-gray-200 flex items-center justify-between gap-2 shrink-0 min-w-0">
+    if (!state.dragging) {
+      if (Math.abs(deltaY) < DRAG_THRESHOLD) return;
+      state.dragging = true;
+      el.setPointerCapture(state.pointerId);
+    }
 
-                        {/* Info del contacto activo */}
-                        <div className="flex items-center gap-3 min-w-0 flex-1">
-                            <div className="relative shrink-0">
-                                <img
-                                    src={activeChat.avatar}
-                                    alt={activeChat.name}
-                                    className="w-12 h-12 rounded-[4px] object-cover"
-                                />
-                            </div>
+    el.scrollTop = state.scrollTop - deltaY;
+  };
 
-                            {/* DATOS EN FORMATO VERTICAL */}
-                            <div className="min-w-0 flex-1 flex flex-col justify-center">
+  const handleDragEnd = (e: React.PointerEvent<HTMLDivElement>) => {
+    const state = dragState.current;
+    if (state.dragging) {
+      try {
+        e.currentTarget.releasePointerCapture(state.pointerId);
+      } catch {
+        // El puntero ya pudo haber sido liberado
+      }
+    }
+    dragState.current = {
+      tracking: false,
+      dragging: false,
+      startY: 0,
+      scrollTop: 0,
+      pointerId: 0,
+    };
+  };
 
-                                {/* 1. Nombre */}
-                                <h2 className="font-bold text-gray-900 text-sm sm:text-base leading-tight truncate">
-                                    {activeChat.name}
-                                </h2>
+  const dragScrollProps = {
+    onPointerDown: handleDragStart,
+    onPointerMove: handleDragMove,
+    onPointerUp: handleDragEnd,
+    onPointerLeave: handleDragEnd,
+    onPointerCancel: handleDragEnd,
+  };
 
-                                {/* 2. Tipo de Usuario / Rol */}
-                                <span className="text-xs text-[#0E5E6F] font-medium truncate mt-0.5">
-                                    {activeChat.role}
-                                </span>
-
-                                {/* 3. Estado de Conexión */}
-                                <div className="text-xs text-gray-500 mt-0.5">
-                                    {activeChat.online ? (
-                                        <span className="text-emerald-600 font-medium flex items-center gap-1">
-                                            <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-                                            En línea
-                                        </span>
-                                    ) : (
-                                        <span className="text-gray-400 font-medium flex items-center gap-1">
-                                            <span className="w-2 h-2 rounded-full bg-gray-400 inline-block shrink-0"></span>
-                                            <span className="truncate">
-                                                Desconectado {activeChat.lastSeen ? `(${activeChat.lastSeen})` : ''}
-                                            </span>
-                                        </span>
-                                    )}
-                                </div>
-
-                            </div>
-                        </div>
-
-                        {/* BOTONES DE ACCIÓN */}
-                        <div className="flex items-center gap-1 text-gray-500 shrink-0">
-                            <button
-                                className="p-2 hover:bg-gray-100 text-gray-600 hover:text-[#0E5E6F] rounded-[4px] transition"
-                                aria-label="Llamada de voz"
-                            >
-                                <Phone size={18} />
-                            </button>
-
-                            <button
-                                className="p-2 hover:bg-gray-100 text-gray-600 hover:text-[#0E5E6F] rounded-[4px] transition"
-                                aria-label="Videollamada"
-                            >
-                                <Video size={18} />
-                            </button>
-
-                            <button
-                                className="p-2 hover:bg-gray-100 text-gray-600 hover:text-[#0E5E6F] rounded-[4px] transition"
-                                aria-label="Opciones adicionales"
-                            >
-                                <MoreVertical size={18} />
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Historial de Mensajes */}
-                    <div className="flex-1 overflow-y-auto min-h-0 p-4 space-y-3 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px]">
-                        {activeChat.messages.map((msg) => {
-                            const isGranjero = msg.sender === 'granjero';
-
-                            return (
-                                <div
-                                    key={msg.id}
-                                    className={`flex items-end gap-2 ${isGranjero ? 'justify-end' : 'justify-start'}`}
-                                >
-                                    {!isGranjero && (
-                                        <img
-                                            src={activeChat.avatar}
-                                            alt={activeChat.name}
-                                            className="w-7 h-7 rounded-[4px] object-cover mb-1 shrink-0"
-                                        />
-                                    )}
-
-                                    <div
-                                        className={`max-w-[75%] sm:max-w-[65%] px-4 py-2.5 rounded-[4px] text-sm ${isGranjero
-                                                ? 'bg-[#0E5E6F] text-white'
-                                                : 'bg-white text-gray-800 border border-gray-100 shadow-xs'
-                                            }`}
-                                    >
-                                        <p className="leading-relaxed whitespace-pre-wrap">{msg.text}</p>
-
-                                        <div
-                                            className={`flex items-center justify-end gap-1 mt-1 text-[10px] ${isGranjero ? 'text-cyan-100' : 'text-gray-400'
-                                                }`}
-                                        >
-                                            <span>{msg.time}</span>
-
-                                            {isGranjero && (
-                                                <CheckCheck size={14} className="text-cyan-200" />
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {isGranjero && (
-                                        <img
-                                            src={userAvatar}
-                                            alt="Carlos Sosa"
-                                            className="w-7 h-7 rounded-[4px] object-cover mb-1 shrink-0 border border-gray-200"
-                                        />
-                                    )}
-                                </div>
-                            );
-                        })}
-                    </div>
-
-                    {/* Formulario de Entrada del Chat */}
-                    <form
-                        onSubmit={handleSendMessage}
-                        className="p-3 bg-white border-t border-gray-200 flex items-center gap-2 shrink-0"
-                    >
-                        <button
-                            type="button"
-                            className="p-2 text-gray-400 hover:text-[#0E5E6F] hover:bg-gray-100 rounded-[4px] transition shrink-0"
-                        >
-                            <Paperclip size={20} />
-                        </button>
-
-                        <input
-                            type="text"
-                            placeholder="Escribe un mensaje..."
-                            value={inputText}
-                            onChange={(e) => setInputText(e.target.value)}
-                            className="flex-1 bg-gray-50 border border-gray-200 rounded-[4px] px-4 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition min-w-0"
-                        />
-
-                        <button
-                            type="submit"
-                            disabled={!inputText.trim()}
-                            className="p-2.5 bg-[#0E5E6F] text-white rounded-[4px] hover:bg-[#0A4754] disabled:opacity-40 disabled:hover:bg-[#0E5E6F] transition cursor-pointer shrink-0"
-                        >
-                            <Send size={18} />
-                        </button>
-                    </form>
-
-                </div>
+  return (
+    <div className="w-full h-full min-h-0 flex flex-col bg-white overflow-hidden relative font-sans">
+      <style>{`
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior: contain;
+        }
+      `}</style>
+      <div className="flex flex-1 h-full min-h-0 overflow-hidden">
+        {/* ================= BARRA LATERAL (LISTA DE CHATS) ================= */}
+        <div
+          className={`w-full flex-col bg-gray-50/60 h-full min-h-0 shrink-0 ${
+            vistaMovil === 'lista' ? 'flex' : 'hidden'
+          }`}
+        >
+          {/* TÍTULO Y BOTÓN DE PEDIR AYUDA */}
+          <div className="p-3 border-b border-gray-200 bg-white flex items-center justify-between gap-2 shrink-0">
+            <div className="min-w-0">
+              <h2 className="font-bold text-gray-900 text-base leading-tight truncate">
+                Soporte y Ayuda
+              </h2>
+              <p className="text-[11px] text-gray-500 truncate">
+                Canal directo de asistencia
+              </p>
             </div>
 
-            {/* ================= MODAL SOLICITAR AYUDA / SOPORTE ================= */}
-            {isHelpModalOpen && (
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in">
-                    <div className="bg-white w-full max-w-md rounded-[4px] shadow-2xl overflow-hidden border border-gray-100 flex flex-col">
+            {/* BOTÓN PEDIR AYUDA */}
+            <button
+              onClick={() => setIsHelpModalOpen(true)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white font-semibold text-xs rounded-[4px] shadow-xs transition cursor-pointer shrink-0"
+            >
+              <HelpCircle size={14} />
+              <span>Pedir ayuda</span>
+            </button>
+          </div>
 
-                        {/* Header del Modal */}
-                        <div className="p-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px]">
-                                    <HelpCircle size={20} />
-                                </div>
-                                <div>
-                                    <h3 className="font-bold text-gray-900 text-base">Solicitar Asistencia</h3>
-                                    <p className="text-xs text-gray-500">Envía un ticket directo al equipo técnico</p>
-                                </div>
-                            </div>
-                            <button
-                                onClick={closeHelpModal}
-                                className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-[4px] transition cursor-pointer"
-                            >
-                                <X size={20} />
-                            </button>
-                        </div>
+          {/* BARRA DE BÚSQUEDA */}
+          <div className="p-3 border-b border-gray-200 bg-gray-50/80 shrink-0">
+            <div className="relative">
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                size={18}
+              />
+              <input
+                type="text"
+                placeholder="Buscar conversación..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:border-[#0E5E6F] transition"
+              />
+            </div>
+          </div>
 
-                        {/* Contenido del Modal (Formulario o Mensaje de Éxito) */}
-                        <div className="p-5">
-                            {!isSubmitted ? (
-                                <form onSubmit={handleHelpSubmit} className="space-y-4">
-                                    <div>
-                                        <label className="block text-xs font-semibold text-gray-700 mb-1">
-                                            Nombre completo
-                                        </label>
-                                        <input
-                                            type="text"
-                                            required
-                                            value={helpForm.nombre}
-                                            onChange={(e) => setHelpForm({ ...helpForm, nombre: e.target.value })}
-                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
-                                        />
-                                    </div>
+          {/* LISTA DE CHATS */}
+          <div
+            className="flex-1 overflow-y-auto min-h-0 divide-y divide-gray-100 scrollbar-hide touch-pan-y select-none cursor-grab active:cursor-grabbing"
+            {...dragScrollProps}
+          >
+            {filteredChats.map((chat) => {
+              const lastMsg = chat.messages[chat.messages.length - 1];
+              const isSelected = chat.id === activeChatId;
 
-                                    <div>
-                                        <label className="block text-xs font-semibold text-gray-700 mb-1">
-                                            Correo electrónico de contacto
-                                        </label>
-                                        <input
-                                            type="email"
-                                            required
-                                            value={helpForm.correo}
-                                            onChange={(e) => setHelpForm({ ...helpForm, correo: e.target.value })}
-                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
-                                        />
-                                    </div>
+              return (
+                <button
+                  key={chat.id}
+                  onClick={() => {
+                    setActiveChatId(chat.id);
+                    setChats((prev) =>
+                      prev.map((c) =>
+                        c.id === chat.id ? { ...c, unreadCount: 0 } : c
+                      )
+                    );
+                    setVistaMovil('chat');
+                  }}
+                  className={`w-full p-4 flex items-center gap-3 transition text-left cursor-pointer ${
+                    isSelected
+                      ? 'bg-white border-l-4 border-[#0E5E6F]'
+                      : 'hover:bg-gray-100/80'
+                  }`}
+                >
+                  <div className="relative shrink-0">
+                    <img
+                      src={chat.avatar}
+                      alt={chat.name}
+                      className="w-12 h-12 rounded-[4px] object-cover shadow-xs"
+                    />
+                    <span
+                      className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 border-2 border-white rounded-full ${
+                        chat.online ? 'bg-emerald-500' : 'bg-gray-400'
+                      }`}
+                    ></span>
+                  </div>
 
-                                    <div>
-                                        <label className="block text-xs font-semibold text-gray-700 mb-1">
-                                            Categoría de la consulta
-                                        </label>
-                                        <select
-                                            value={helpForm.asunto}
-                                            onChange={(e) => setHelpForm({ ...helpForm, asunto: e.target.value })}
-                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
-                                        >
-                                            <option value="Incidencia técnica">Incidencia técnica / falla en dron</option>
-                                            <option value="Error en telemetría">Error en telemetría o sensores</option>
-                                            <option value="Facturación">Facturación y planes</option>
-                                            <option value="Otro">Otro asunto</option>
-                                        </select>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-xs font-semibold text-gray-700 mb-1">
-                                            Describe tu problema o requerimiento
-                                        </label>
-                                        <textarea
-                                            required
-                                            rows={4}
-                                            placeholder="Ej. El dron #2 presenta problemas de conexión GPS durante el vuelo..."
-                                            value={helpForm.mensaje}
-                                            onChange={(e) => setHelpForm({ ...helpForm, mensaje: e.target.value })}
-                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition resize-none"
-                                        ></textarea>
-                                    </div>
-
-                                    <div className="flex items-center justify-end gap-2 pt-2">
-                                        <button
-                                            type="button"
-                                            onClick={closeHelpModal}
-                                            className="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-[4px] transition cursor-pointer"
-                                        >
-                                            Cancelar
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            className="px-4 py-2 text-xs font-semibold text-white bg-[#0E5E6F] hover:bg-[#0A4754] rounded-[4px] shadow-xs transition cursor-pointer"
-                                        >
-                                            Enviar solicitud
-                                        </button>
-                                    </div>
-                                </form>
-                            ) : (
-                                /* Pantalla de Confirmación */
-                                <div className="py-6 text-center space-y-4">
-                                    <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
-                                        <CheckCircle2 size={32} />
-                                    </div>
-                                    <div className="space-y-1">
-                                        <h4 className="text-lg font-bold text-gray-900">¡Solicitud Recibida!</h4>
-                                        <p className="text-xs text-gray-600 max-w-xs mx-auto leading-relaxed">
-                                            Hemos registrado tu reporte correctamente. Un especialista técnico revisará tu caso y se comunicará contigo a la brevedad.
-                                        </p>
-                                    </div>
-                                    <div className="pt-2">
-                                        <button
-                                            onClick={closeHelpModal}
-                                            className="w-full py-2.5 px-4 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-semibold rounded-[4px] transition cursor-pointer"
-                                        >
-                                            Entendido
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between mb-0.5">
+                      <h3 className="font-bold text-gray-900 text-sm truncate">
+                        {chat.name}
+                      </h3>
+                      {lastMsg && (
+                        <span className="text-[11px] text-gray-400 font-medium shrink-0 ml-1">
+                          {lastMsg.time}
+                        </span>
+                      )}
                     </div>
+                    <p className="text-xs text-[#0E5E6F] font-semibold mb-1 truncate">
+                      {chat.role}
+                    </p>
+                    {lastMsg && (
+                      <p className="text-xs text-gray-500 truncate">
+                        {lastMsg.sender === 'granjero' ? 'Tú: ' : ''}
+                        {lastMsg.text}
+                      </p>
+                    )}
+                  </div>
+
+                  {chat.unreadCount > 0 && (
+                    <div className="shrink-0">
+                      <span className="bg-[#0E5E6F] text-white text-[10px] font-bold px-2 py-0.5 rounded-full block">
+                        {chat.unreadCount}
+                      </span>
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ================= ÁREA DE CONVERSACIÓN ================= */}
+        <div
+          className={`w-full flex-col h-full min-h-0 bg-[#f8fafc] overflow-hidden ${
+            vistaMovil === 'chat' ? 'flex' : 'hidden'
+          }`}
+        >
+          {/* HEADER DEL CHAT */}
+          <div className="p-2.5 bg-white border-b border-gray-200 flex items-center justify-between gap-1.5 shrink-0 min-w-0 relative">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <button
+                onClick={() => setVistaMovil('lista')}
+                className="p-1 -ml-1 text-gray-500 hover:text-[#0E5E6F] hover:bg-gray-100 rounded-[4px] transition shrink-0 cursor-pointer"
+                aria-label="Volver a la lista"
+              >
+                <ChevronLeft size={22} />
+              </button>
+
+              <div className="relative shrink-0">
+                <img
+                  src={activeChat.avatar}
+                  alt={activeChat.name}
+                  className="w-9 h-9 rounded-[4px] object-cover"
+                />
+              </div>
+
+              <div className="min-w-0 flex-1 flex flex-col justify-center">
+                <h2 className="font-bold text-gray-900 text-sm leading-tight truncate">
+                  {activeChat.name}
+                </h2>
+
+                <span className="text-[11px] text-[#0E5E6F] font-medium truncate">
+                  {activeChat.role}
+                </span>
+
+                <div className="text-[11px] text-gray-500 leading-none">
+                  {activeChat.online ? (
+                    <span className="text-emerald-600 font-medium flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+                      En línea
+                    </span>
+                  ) : (
+                    <span className="text-gray-400 font-medium flex items-center gap-1 truncate">
+                      <span className="w-1.5 h-1.5 rounded-full bg-gray-400 inline-block shrink-0"></span>
+                      <span className="truncate">
+                        Desconectado {activeChat.lastSeen ? `(${activeChat.lastSeen})` : ''}
+                      </span>
+                    </span>
+                  )}
                 </div>
+              </div>
+            </div>
+
+            {/* MENÚ DESPLEGABLE TRES PUNTOS */}
+            <div className="relative shrink-0">
+              <button
+                onClick={() => setIsHeaderMenuOpen(!isHeaderMenuOpen)}
+                className="p-2 hover:bg-gray-100 text-gray-600 hover:text-[#0E5E6F] rounded-[4px] transition cursor-pointer"
+                aria-label="Opciones de soporte"
+              >
+                <MoreVertical size={20} />
+              </button>
+
+              {isHeaderMenuOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setIsHeaderMenuOpen(false)}
+                  />
+                  <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-[4px] shadow-lg py-1 z-20 animate-fade-in">
+                    <button
+                      onClick={() => setIsHeaderMenuOpen(false)}
+                      className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
+                    >
+                      <Phone size={15} className="text-[#0E5E6F]" />
+                      <span>Llamar a soporte</span>
+                    </button>
+                    <button
+                      onClick={() => setIsHeaderMenuOpen(false)}
+                      className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
+                    >
+                      <Video size={15} className="text-[#0E5E6F]" />
+                      <span>Videollamada</span>
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* HISTORIAL DE MENSAJES */}
+          <div
+            className="flex-1 overflow-y-auto min-h-0 p-3 space-y-3 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] scrollbar-hide touch-pan-y select-none cursor-grab active:cursor-grabbing"
+            {...dragScrollProps}
+          >
+            {activeChat.messages.map((msg) => {
+              const isGranjeroMsg = msg.sender === 'granjero';
+
+              return (
+                <div
+                  key={msg.id}
+                  className={`flex items-end gap-2 ${
+                    isGranjeroMsg ? 'justify-end' : 'justify-start'
+                  }`}
+                >
+                  {!isGranjeroMsg && (
+                    <img
+                      src={activeChat.avatar}
+                      alt={activeChat.name}
+                      className="w-7 h-7 rounded-[4px] object-cover mb-1 shrink-0"
+                    />
+                  )}
+
+                  <div
+                    className={`max-w-[80%] px-3.5 py-2.5 rounded-[4px] text-sm ${
+                      isGranjeroMsg
+                        ? 'bg-[#0E5E6F] text-white'
+                        : 'bg-white text-gray-800 border border-gray-100 shadow-xs'
+                    }`}
+                  >
+                    <p className="leading-relaxed whitespace-pre-wrap">
+                      {msg.text}
+                    </p>
+
+                    <div
+                      className={`flex items-center justify-end gap-1 mt-1 text-[10px] ${
+                        isGranjeroMsg ? 'text-cyan-100' : 'text-gray-400'
+                      }`}
+                    >
+                      <span>{msg.time}</span>
+
+                      {isGranjeroMsg && (
+                        <CheckCheck size={14} className="text-cyan-200" />
+                      )}
+                    </div>
+                  </div>
+
+                  {isGranjeroMsg && (
+                    <img
+                      src={userAvatar}
+                      alt="Carlos Sosa"
+                      className="w-7 h-7 rounded-[4px] object-cover mb-1 shrink-0 border border-gray-200"
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* FORMULARIO DE ENTRADA */}
+          <form
+            onSubmit={handleSendMessage}
+            className="p-3 bg-white border-t border-gray-200 flex items-center gap-2 shrink-0"
+          >
+            <button
+              type="button"
+              className="p-2 text-gray-400 hover:text-[#0E5E6F] hover:bg-gray-100 rounded-[4px] transition shrink-0"
+              title="Adjuntar archivo o imagen"
+            >
+              <Paperclip size={20} />
+            </button>
+
+            <input
+              type="text"
+              placeholder="Escribe tu mensaje..."
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              className="flex-1 bg-gray-50 border border-gray-200 rounded-[4px] px-4 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition min-w-0"
+            />
+
+            <button
+              type="submit"
+              disabled={!inputText.trim()}
+              className="p-2.5 bg-[#0E5E6F] text-white rounded-[4px] hover:bg-[#0A4754] disabled:opacity-40 disabled:hover:bg-[#0E5E6F] transition cursor-pointer shrink-0"
+            >
+              <Send size={18} />
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* ================= MODAL SOLICITAR AYUDA (MULTI-PASO) ================= */}
+      {isHelpModalOpen && (
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fade-in">
+          <div className="bg-white w-[92%] max-w-[360px] rounded-[4px] shadow-2xl overflow-hidden border border-gray-100 flex flex-col max-h-[92%]">
+            {/* Header del Modal */}
+            <div className="p-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between gap-2 shrink-0">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="p-1.5 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0">
+                  <HelpCircle size={16} />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-bold text-gray-900 text-sm truncate leading-tight">
+                    Solicitar Asistencia
+                  </h3>
+                  {!isSubmitted && (
+                    <p className="text-[10px] text-gray-500 truncate">
+                      Paso {modalStep} de 2
+                    </p>
+                  )}
+                </div>
+              </div>
+              <button
+                onClick={closeHelpModal}
+                className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-[4px] transition cursor-pointer shrink-0"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Indicador de progreso por pasos */}
+            {!isSubmitted && (
+              <div className="flex gap-1.5 px-3.5 pt-2.5 shrink-0">
+                <span
+                  className={`h-1 flex-1 rounded-full ${
+                    modalStep >= 1 ? 'bg-[#0E5E6F]' : 'bg-gray-200'
+                  }`}
+                />
+                <span
+                  className={`h-1 flex-1 rounded-full ${
+                    modalStep >= 2 ? 'bg-[#0E5E6F]' : 'bg-gray-200'
+                  }`}
+                />
+              </div>
             )}
 
+            {/* Contenido del Modal */}
+            <div
+              className="p-3.5 overflow-y-auto scrollbar-hide touch-pan-y"
+              {...dragScrollProps}
+            >
+              {!isSubmitted ? (
+                modalStep === 1 ? (
+                  <form onSubmit={handleHelpNext} className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1">
+                        Categoría de consulta
+                      </label>
+                      <select
+                        value={helpForm.categoria}
+                        onChange={(e) =>
+                          setHelpForm({
+                            ...helpForm,
+                            categoria: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
+                      >
+                        <option value="Incidencia técnica">Falla en dron</option>
+                        <option value="Error en telemetría">
+                          Error de telemetría
+                        </option>
+                        <option value="Facturación">Facturación y planes</option>
+                        <option value="Otro">Otro asunto</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1">
+                        Prioridad
+                      </label>
+                      <select
+                        value={helpForm.prioridad}
+                        onChange={(e) =>
+                          setHelpForm({
+                            ...helpForm,
+                            prioridad: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
+                      >
+                        <option value="Baja">Baja</option>
+                        <option value="Media">Media</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Urgente">Urgente</option>
+                      </select>
+                    </div>
+
+                    <div className="flex items-center justify-end gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={closeHelpModal}
+                        className="px-3.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-[4px] transition cursor-pointer"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-3.5 py-1.5 text-xs font-semibold text-white bg-[#0E5E6F] hover:bg-[#0A4754] rounded-[4px] shadow-xs transition cursor-pointer"
+                      >
+                        Siguiente
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <form onSubmit={handleHelpSubmit} className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1">
+                        Descripción del problema
+                      </label>
+                      <textarea
+                        required
+                        rows={4}
+                        placeholder="Detalla el problema o requerimiento..."
+                        value={helpForm.mensaje}
+                        onChange={(e) =>
+                          setHelpForm({
+                            ...helpForm,
+                            mensaje: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition resize-none"
+                      ></textarea>
+                    </div>
+
+                    <div className="p-2 bg-gray-50 border border-gray-100 rounded-[4px] text-[11px] text-gray-500 space-y-0.5">
+                      <p className="truncate">
+                        <span className="font-semibold text-gray-600">
+                          Categoría:
+                        </span>{' '}
+                        {helpForm.categoria}
+                      </p>
+                      <p className="truncate">
+                        <span className="font-semibold text-gray-600">
+                          Prioridad:
+                        </span>{' '}
+                        {helpForm.prioridad}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={handleHelpBack}
+                        className="px-3.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-[4px] transition cursor-pointer"
+                      >
+                        Atrás
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-3.5 py-1.5 text-xs font-semibold text-white bg-[#0E5E6F] hover:bg-[#0A4754] rounded-[4px] shadow-xs transition cursor-pointer"
+                      >
+                        Enviar ticket
+                      </button>
+                    </div>
+                  </form>
+                )
+              ) : (
+                /* Confirmación */
+                <div className="py-3 text-center space-y-2.5">
+                  <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                    <CheckCircle2 size={22} />
+                  </div>
+                  <div className="space-y-0.5">
+                    <h4 className="text-sm font-bold text-gray-900">
+                      ¡Solicitud enviada!
+                    </h4>
+                    <p className="text-xs text-gray-600 max-w-xs mx-auto leading-relaxed">
+                      El equipo de soporte ha sido notificado correctamente.
+                    </p>
+                  </div>
+                  <div className="pt-1">
+                    <button
+                      onClick={closeHelpModal}
+                      className="w-full py-1.5 px-4 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-semibold rounded-[4px] transition cursor-pointer"
+                    >
+                      Entendido
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 // Perfil de cliente
 export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
   // Datos de prueba iniciales
-  const [profileData] = useState({
+  const [profileData, setProfileData] = useState({
     initials: "MA",
     name: "Mario Alberto Ica",
     email: "mario.ica@agroaguante.hn",
@@ -5723,49 +6039,91 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
     area: "1,150 ha",
     services: "24 misiones contratadas",
     standing: "Activo",
-    roleColor: "text-[#0E5E6F] bg-[#0E5E6F]/10 border-[#0E5E6F]/30 hover:bg-[#0E5E6F]/20",
+    roleColor: "text-[#0E5E6F] bg-[#0E5E6F]/10 border-[#0E5E6F]/30",
   });
 
   // Modales y Estados UI
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPilotModalOpen, setIsPilotModalOpen] = useState(false);
-  const [isPilotSubmitted, setIsPilotSubmitted] = useState(false); // <--- Controla el mensaje de éxito
+  const [isPilotSubmitted, setIsPilotSubmitted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showPilotPassword, setShowPilotPassword] = useState(false);
   const [imgError, setImgError] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
-  // Datos dummy para el modal de edición normal
+  // Estados cosméticos para simular la subida de foto
+  const [isUploading, setIsUploading] = useState(false);
+  const [simulatedFile, setSimulatedFile] = useState<string>("");
+
+  // Datos para el modal de edición normal
   const [editForm, setEditForm] = useState({
-    phone: "+504 9788-4411",
-    email: "mario.ica@agroaguante.hn",
+    phone: profileData.phone,
+    email: profileData.email,
     password: "password123",
   });
 
-  // Datos dummy para el modal de Piloto AHAC
+  // Datos para el modal de Piloto AHAC
   const [pilotForm, setPilotForm] = useState({
     email: "piloto.mario@agroaguante.hn",
     password: "password123",
     ahacCode: "AHAC-2026-8891",
   });
 
+  const handleOpenModal = () => {
+    setEditForm({
+      phone: profileData.phone,
+      email: profileData.email,
+      password: "password123",
+    });
+    setSimulatedFile("");
+    setIsUploading(false);
+    setIsModalOpen(true);
+  };
+
   const handleOpenPilotModal = () => {
-    setIsPilotSubmitted(false); // Resetear estado de envío al abrir
+    setIsPilotSubmitted(false);
     setIsPilotModalOpen(true);
   };
 
-  const handleSendPilotData = () => {
-    setIsPilotSubmitted(true); // Cambia la vista interna del modal al mensaje
+  // Simula procesamiento de imagen
+  const handleFakeUpload = () => {
+    if (isUploading) return;
+    setIsUploading(true);
+    setTimeout(() => {
+      setIsUploading(false);
+      setSimulatedFile("foto_perfil.jpg");
+    }, 600);
+  };
+
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    setProfileData((prev) => ({
+      ...prev,
+      phone: editForm.phone,
+      email: editForm.email,
+    }));
+    setIsModalOpen(false);
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 2500);
+  };
+
+  const handleSendPilotData = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsPilotSubmitted(true);
   };
 
   return (
-    <div className="w-full h-full max-w-6xl mx-auto p-2 sm:p-3 bg-white antialiased select-none font-sans flex flex-col justify-center items-center relative">
+    <div
+      className="w-full h-full mx-auto p-2 bg-white antialiased select-none flex flex-col justify-center items-center relative"
+      style={{ fontFamily: "'Roboto', sans-serif" }}
+    >
       <div className="w-full h-full flex-1 bg-white border-2 border-gray-200 rounded-[4px] overflow-hidden flex flex-col justify-between shadow-xs">
         
         {/* CABECERA */}
-        <div className="bg-gray-50 border-b-2 border-gray-200 px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
+        <div className="bg-gray-50 border-b-2 border-gray-200 px-4 py-4 flex flex-col items-start gap-3">
+          <div className="flex items-center gap-3 w-full">
             {/* AVATAR */}
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-[4px] bg-white border-2 border-gray-300 overflow-hidden shrink-0 shadow-xs relative group flex items-center justify-center">
+            <div className="w-14 h-14 rounded-[4px] bg-white border-2 border-gray-300 overflow-hidden shrink-0 shadow-xs relative group flex items-center justify-center">
               {!imgError ? (
                 <img
                   src={profileData.avatar}
@@ -5774,142 +6132,151 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
                   onError={() => setImgError(true)}
                 />
               ) : (
-                <div className={`w-full h-full flex items-center justify-center font-black text-xl rounded-[4px] ${profileData.avatarBg}`}>
+                <div className={`w-full h-full flex items-center justify-center font-black text-lg rounded-[4px] ${profileData.avatarBg}`}>
                   {profileData.initials}
                 </div>
               )}
               <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-[4px]">
-                <Briefcase size={20} className="text-white drop-shadow" />
+                <Briefcase size={18} className="text-white drop-shadow" />
               </div>
             </div>
 
-            <div className="text-left">
-              <h2 className="text-xl sm:text-2xl text-gray-900 font-black tracking-tight normal-case leading-tight">
+            <div className="text-left min-w-0 flex-1">
+              <h2 className="text-base text-gray-900 font-black tracking-tight normal-case leading-tight truncate">
                 {profileData.name}
               </h2>
-              <p className="text-gray-500 font-semibold text-xs sm:text-sm mt-1">
+              <p className="text-gray-500 font-semibold text-[11px] mt-0.5 truncate">
                 {profileData.email}
               </p>
             </div>
           </div>
 
-          <div className="flex flex-col items-start sm:items-end gap-2 w-full sm:w-auto">
+          <div className="flex flex-col items-center gap-2 w-full">
             {/* BOTÓN CLIENTE / CAMBIO A PILOTO */}
             <button
               type="button"
               onClick={handleOpenPilotModal}
-              className={`text-xs font-black tracking-wider px-3.5 py-1.5 rounded-[4px] border-2 flex items-center gap-2 cursor-pointer transition-all active:scale-95 shadow-xs ${profileData.roleColor}`}
-              style={{ fontFamily: "'Roboto', sans-serif" }}
+              className={`w-full text-center text-[10px] font-black tracking-wider px-3 py-1 rounded-[4px] border-2 break-words whitespace-normal flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 ${profileData.roleColor}`}
             >
               <span>{profileData.roleLabel}</span>
-              <span className="text-[10px] bg-[#0E5E6F] text-white px-1.5 py-0.5 rounded-[2px] font-bold">
+              <span className="text-[9px] bg-[#0E5E6F] text-white px-1.5 py-0.5 rounded-[2px] font-bold shrink-0">
                 Cambiar
               </span>
             </button>
+
+            {saveSuccess && (
+              <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-[4px] flex items-center gap-1 animate-in fade-in duration-150">
+                <CheckCircle size={12} /> Actualizado
+              </span>
+            )}
           </div>
         </div>
 
-        {/* MÉTRICAS PRINCIPALES */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x-2 divide-gray-100 bg-white border-b-2 border-gray-200 text-left flex-1 items-center">
-          <div className="p-3 sm:p-3.5 hover:bg-gray-50/50 transition-colors flex items-start gap-2.5 h-full justify-center flex-col">
-            <div className="flex items-center gap-2">
-              <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1.5 border-2 border-gray-200 rounded-[4px]">
-                <MapPin size={16} />
+        {/* MÉTRICAS PRINCIPALES — grid 2x2 táctil */}
+        <div className="grid grid-cols-2 divide-x-2 divide-y-2 divide-gray-100 bg-white border-b-2 border-gray-200 text-left">
+          {/* Base Regional */}
+          <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+            <div className="flex items-center gap-1.5">
+              <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                <MapPin size={14} />
               </div>
-              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
-                Base Regional
+              <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                Base regional
               </span>
             </div>
-            <span className="text-xs sm:text-sm text-gray-800 font-bold block break-words leading-tight mt-0.5">
+            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
               {profileData.location}
             </span>
           </div>
 
-          <div className="p-3 sm:p-3.5 hover:bg-gray-50/50 transition-colors flex items-start gap-2.5 h-full justify-center flex-col">
-            <div className="flex items-center gap-2">
-              <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1.5 border-2 border-gray-200 rounded-[4px]">
-                <Layers size={16} />
+          {/* Extensión */}
+          <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+            <div className="flex items-center gap-1.5">
+              <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                <Layers size={14} />
               </div>
-              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
+              <span className="text-[9px] font-black text-gray-400 tracking-widest block">
                 Extensión
               </span>
             </div>
-            <span className="text-xs sm:text-sm text-gray-800 font-bold block break-words leading-tight mt-0.5">
+            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
               {profileData.area}
             </span>
           </div>
 
-          <div className="p-3 sm:p-3.5 hover:bg-gray-50/50 transition-colors flex items-start gap-2.5 h-full justify-center flex-col">
-            <div className="flex items-center gap-2">
-              <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1.5 border-2 border-gray-200 rounded-[4px]">
-                <BarChart2 size={16} />
+          {/* Actividad */}
+          <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+            <div className="flex items-center gap-1.5">
+              <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                <BarChart2 size={14} />
               </div>
-              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
+              <span className="text-[9px] font-black text-gray-400 tracking-widest block">
                 Actividad
               </span>
             </div>
-            <span className="text-xs sm:text-sm text-gray-800 font-bold block truncate leading-tight mt-0.5">
+            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5 w-full">
               {profileData.services}
             </span>
           </div>
 
-          <div className="p-3 sm:p-3.5 hover:bg-gray-50/50 transition-colors flex items-start gap-2.5 h-full justify-center flex-col">
-            <div className="flex items-center gap-2">
-              <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1.5 border-2 border-gray-200 rounded-[4px]">
-                <CheckCircle size={16} />
+          {/* Estado */}
+          <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+            <div className="flex items-center gap-1.5">
+              <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                <CheckCircle size={14} />
               </div>
-              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
+              <span className="text-[9px] font-black text-gray-400 tracking-widest block">
                 Estado
               </span>
             </div>
-            <span className="text-xs font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-[4px] uppercase inline-block mt-0.5">
+            <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] inline-block mt-0.5">
               {profileData.standing}
             </span>
           </div>
         </div>
 
         {/* DATOS DE CONTACTO Y CREDENCIALES */}
-        <div className="p-3.5 sm:p-4 bg-white flex-1 flex flex-col justify-center">
-          <div className="flex items-center justify-between mb-2.5 pb-2 border-b-2 border-gray-100">
+        <div className="p-3.5 bg-white flex-1 flex flex-col justify-center">
+          <div className="flex flex-col gap-2 mb-2.5 pb-2 border-b-2 border-gray-100">
             <div className="flex items-center gap-2">
-              <Settings size={16} className="text-[#0E5E6F]" />
-              <h3 className="text-xs sm:text-sm font-black text-gray-800 normal-case">
+              <Settings size={15} className="text-[#0E5E6F]" />
+              <h3 className="text-xs font-black text-gray-800 normal-case">
                 Credenciales y Datos de Contacto
               </h3>
             </div>
 
             <button
-              onClick={() => setIsModalOpen(true)}
-              className="py-1 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] text-xs flex items-center gap-1.5 transition-colors active:scale-95 shadow-xs cursor-pointer"
+              onClick={handleOpenModal}
+              className="w-full py-2 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] text-xs flex items-center justify-center gap-1.5 transition-colors active:scale-95 shadow-xs cursor-pointer"
             >
-              <Edit2 size={13} className="text-[#0E5E6F]" /> Editar Información
+              <Edit2 size={13} className="text-[#0E5E6F]" /> Editar información
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-left">
+          <div className="grid grid-cols-1 gap-2.5 text-left">
             <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-              <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider flex items-center gap-1">
+              <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
                 <Phone size={12} className="text-[#0E5E6F]" /> Teléfono
               </span>
-              <p className="font-bold text-xs sm:text-sm text-gray-800 mt-0.5">
+              <p className="font-bold text-xs text-gray-800 mt-0.5">
                 {profileData.phone}
               </p>
             </div>
 
             <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-              <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider flex items-center gap-1">
+              <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
                 <Mail size={12} className="text-[#0E5E6F]" /> Correo
               </span>
-              <p className="font-bold text-xs sm:text-sm text-gray-800 mt-0.5 truncate">
+              <p className="font-bold text-xs text-gray-800 mt-0.5 truncate">
                 {profileData.email}
               </p>
             </div>
 
             <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-              <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider flex items-center gap-1">
+              <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
                 <Lock size={12} className="text-[#0E5E6F]" /> Contraseña
               </span>
-              <p className="font-mono font-bold text-xs sm:text-sm text-gray-800 mt-0.5">
+              <p className="font-mono font-bold text-xs text-gray-800 mt-0.5">
                 ••••••••••••
               </p>
             </div>
@@ -5917,283 +6284,300 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
         </div>
 
         {/* PIE DE PÁGINA */}
-        <div className="border-t-2 border-gray-200 px-6 py-2 bg-gray-50 flex items-center justify-between gap-2">
-          <span className="text-xs text-gray-400 font-medium text-left truncate">
+        <div className="border-t-2 border-gray-200 px-4 py-2.5 bg-gray-50 flex flex-col items-stretch gap-2">
+          <span className="text-[10px] text-gray-400 font-medium text-left truncate">
             Base Olanchito, Yoro
           </span>
 
           <button
             onClick={onLogout}
-            className="flex items-center gap-1.5 py-1 px-3 rounded-[4px] border-2 border-[#B8001F] bg-white hover:bg-[#B8001F]/10 text-[#B8001F] transition-all active:scale-95 shadow-xs cursor-pointer"
-            style={{ fontFamily: "'Roboto', sans-serif" }}
+            className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-[4px] border-2 border-[#B8001F] bg-white hover:bg-[#B8001F]/10 text-[#B8001F] transition-all active:scale-95 shadow-xs cursor-pointer w-full"
           >
             <LogOut size={13} className="shrink-0 text-[#B8001F]" />
-            <span className="text-xs font-black uppercase tracking-wider">
-              SALIR
+            <span className="text-xs font-black tracking-wider">
+              Salir
             </span>
           </button>
         </div>
       </div>
 
-      {/* MODAL 1: EDICIÓN GENERAL (MOCKUP VISUAL) */}
+      {/* MODAL 1: EDICIÓN GENERAL */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
-          <div className="bg-white border-2 border-gray-300 rounded-[4px] p-5 w-full max-w-md shadow-xl space-y-4 text-left">
-            <div className="flex items-center justify-between pb-2.5 border-b-2 border-gray-100">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
-                  <Edit2 size={15} />
-                </div>
-                <h3 className="text-sm font-black text-gray-800 normal-case">
-                  Editar Credenciales
-                </h3>
-              </div>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-[4px] transition-colors cursor-pointer"
-              >
-                <X size={16} />
-              </button>
-            </div>
-
-            <div className="space-y-3">
-              <div>
-                <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider mb-1 flex items-center gap-1">
-                  <Camera size={12} className="text-[#0E5E6F]" /> Foto de Perfil
-                </label>
-                <div className="flex items-center gap-3 p-2 border-2 border-gray-200 rounded-[4px] bg-gray-50">
-                  <div className="w-12 h-12 rounded-[4px] bg-white border border-gray-300 overflow-hidden shrink-0 flex items-center justify-center relative">
-                    <img
-                      src={profileData.avatar}
-                      alt="Previsualización"
-                      className="w-full h-full object-cover"
-                    />
+        <div className="absolute inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
+          <div className="bg-white border-2 border-gray-300 rounded-[4px] w-[92%] max-w-[320px] max-h-[92%] shadow-xl flex flex-col text-left overflow-hidden">
+            <div className="px-3.5 pt-3 pb-2.5 space-y-2.5 overflow-y-auto">
+              {/* Encabezado */}
+              <div className="flex items-center justify-between pb-2 border-b-2 border-gray-100">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
+                    <Edit2 size={14} />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        className="px-2.5 py-1 text-[11px] font-bold bg-white border-2 border-gray-200 rounded-[4px] text-gray-700 flex items-center gap-1 shadow-xs"
-                      >
-                        <Upload size={12} className="text-[#0E5E6F]" /> Seleccionar
-                      </button>
-                      <span className="text-[10px] text-gray-500 font-semibold truncate">
-                        foto_perfil.jpg
-                      </span>
+                  <h3 className="text-xs font-black text-gray-800 normal-case">
+                    Editar Credenciales
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-[4px] transition-colors cursor-pointer"
+                >
+                  <X size={15} />
+                </button>
+              </div>
+
+              {/* Formulario Vertical */}
+              <form onSubmit={handleSave} className="space-y-2">
+                <div>
+                  <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1 flex items-center gap-1">
+                    <Camera size={11} className="text-[#0E5E6F]" /> Foto de perfil
+                  </label>
+
+                  <div className="flex items-center gap-2 p-1.5 border-2 border-gray-200 rounded-[4px] bg-gray-50">
+                    <div className="w-9 h-9 rounded-[4px] bg-white border border-gray-300 overflow-hidden shrink-0 flex items-center justify-center relative">
+                      <img
+                        src={profileData.avatar}
+                        alt="Previsualización"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={handleFakeUpload}
+                          disabled={isUploading}
+                          className="px-2.5 py-1 text-[11px] font-bold bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-100 rounded-[4px] text-gray-700 flex items-center gap-1 cursor-pointer transition-colors active:scale-95 shadow-xs disabled:opacity-50"
+                        >
+                          {isUploading ? (
+                            <Loader2 size={12} className="animate-spin text-[#0E5E6F]" />
+                          ) : (
+                            <Upload size={12} className="text-[#0E5E6F]" />
+                          )}
+                          {isUploading ? "Cargando..." : "Seleccionar"}
+                        </button>
+                        <span className="text-[10px] text-gray-500 font-semibold truncate">
+                          {simulatedFile || "img"}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider mb-1">
-                  Teléfono
-                </label>
-                <div className="relative">
-                  <Phone size={13} className="absolute left-3 top-3 text-gray-400" />
-                  <input
-                    type="text"
-                    value={editForm.phone}
-                    onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                    className="w-full pl-8 pr-3 py-2 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
-                  />
+                <div>
+                  <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                    Teléfono
+                  </label>
+                  <div className="relative">
+                    <Phone size={13} className="absolute left-3 top-2.5 text-gray-400" />
+                    <input
+                      type="text"
+                      value={editForm.phone}
+                      onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                      className="w-full pl-8 pr-3 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider mb-1">
-                  Correo Electrónico
-                </label>
-                <div className="relative">
-                  <Mail size={13} className="absolute left-3 top-3 text-gray-400" />
-                  <input
-                    type="email"
-                    value={editForm.email}
-                    onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                    className="w-full pl-8 pr-3 py-2 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
-                  />
+                <div>
+                  <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                    Correo electrónico
+                  </label>
+                  <div className="relative">
+                    <Mail size={13} className="absolute left-3 top-2.5 text-gray-400" />
+                    <input
+                      type="email"
+                      value={editForm.email}
+                      onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                      className="w-full pl-8 pr-3 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider mb-1">
-                  Nueva Contraseña
-                </label>
-                <div className="relative">
-                  <Lock size={13} className="absolute left-3 top-3 text-gray-400" />
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={editForm.password}
-                    onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
-                    className="w-full pl-8 pr-8 py-2 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
-                  />
+                <div>
+                  <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                    Nueva contraseña
+                  </label>
+                  <div className="relative">
+                    <Lock size={13} className="absolute left-3 top-2.5 text-gray-400" />
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={editForm.password}
+                      onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
+                      className="w-full pl-8 pr-8 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-2.5 top-2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                    >
+                      {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex gap-2 pt-1.5 border-t border-gray-100">
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 cursor-pointer"
+                    onClick={() => setIsModalOpen(false)}
+                    className="flex-1 py-2 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-600 font-bold rounded-[4px] text-xs flex items-center justify-center gap-1 transition-colors active:scale-95 cursor-pointer"
                   >
-                    {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                    <X size={13} /> Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 py-2 px-4 bg-[#0E5E6F] border-2 border-[#0E5E6F] text-white font-bold rounded-[4px] text-xs flex items-center justify-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer"
+                  >
+                    <Save size={13} /> Guardar
                   </button>
                 </div>
-              </div>
-
-              <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="py-1.5 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-600 font-bold rounded-[4px] text-xs flex items-center gap-1 transition-colors cursor-pointer"
-                >
-                  <X size={13} /> Cancelar
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="py-1.5 px-4 bg-[#0E5E6F] border-2 border-[#0E5E6F] text-white font-bold rounded-[4px] text-xs flex items-center gap-1 transition-all shadow-xs cursor-pointer"
-                >
-                  <Save size={13} /> Guardar
-                </button>
-              </div>
+              </form>
             </div>
           </div>
         </div>
       )}
 
-      {/* MODAL 2: PILOTO AHAC (MOCKUP CON CONFIRMACIÓN) */}
+      {/* MODAL 2: PILOTO AHAC */}
       {isPilotModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
-          <div className="bg-white border-2 border-gray-300 rounded-[4px] p-5 w-full max-w-md shadow-xl space-y-4 text-left">
-            
-            {/* Si aún NO se ha enviado el formulario */}
-            {!isPilotSubmitted ? (
-              <>
-                <div className="flex items-center justify-between pb-2.5 border-b-2 border-gray-100">
-                  <div className="flex items-center gap-2">
-                    <div className="p-1.5 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
-                      <Plane size={16} />
+        <div className="absolute inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
+          <div className="bg-white border-2 border-gray-300 rounded-[4px] w-[92%] max-w-[320px] max-h-[92%] shadow-xl flex flex-col text-left overflow-hidden">
+            <div className="px-3.5 pt-3 pb-2.5 space-y-2.5 overflow-y-auto">
+              
+              {!isPilotSubmitted ? (
+                <>
+                  <div className="flex items-center justify-between pb-2 border-b-2 border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
+                        <Plane size={14} />
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="text-xs font-black text-gray-800 normal-case leading-tight truncate">
+                          Cambiar a Piloto
+                        </h3>
+                        <p className="text-[9px] text-gray-500 font-medium truncate">
+                          Agencia Hondureña de Aeronáutica Civil
+                        </p>
+                      </div>
                     </div>
+                    <button
+                      onClick={() => setIsPilotModalOpen(false)}
+                      className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-[4px] transition-colors cursor-pointer"
+                    >
+                      <X size={15} />
+                    </button>
+                  </div>
+
+                  <form onSubmit={handleSendPilotData} className="space-y-2">
                     <div>
-                      <h3 className="text-sm font-black text-gray-800 normal-case leading-tight">
-                        Cambiar a una cuenta de  Piloto
-                      </h3>
-                      <p className="text-[10px] text-gray-500 font-medium">
-                        Agencia Hondureña de Aeronáutica Civil
-                      </p>
+                      <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                        Correo electrónico
+                      </label>
+                      <div className="relative">
+                        <Mail size={13} className="absolute left-3 top-2.5 text-gray-400" />
+                        <input
+                          type="email"
+                          value={pilotForm.email}
+                          onChange={(e) => setPilotForm({ ...pilotForm, email: e.target.value })}
+                          className="w-full pl-8 pr-3 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
+                          required
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <button
-                    onClick={() => setIsPilotModalOpen(false)}
-                    className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-[4px] transition-colors cursor-pointer"
-                  >
-                    <X size={16} />
-                  </button>
-                </div>
 
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
-                      Correo Electrónico
-                    </label>
-                    <div className="relative">
-                      <Mail size={13} className="absolute left-3 top-3 text-gray-400" />
-                      <input
-                        type="email"
-                        value={pilotForm.email}
-                        onChange={(e) => setPilotForm({ ...pilotForm, email: e.target.value })}
-                        className="w-full pl-8 pr-3 py-2 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
-                      />
+                    <div>
+                      <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                        Contraseña
+                      </label>
+                      <div className="relative">
+                        <Lock size={13} className="absolute left-3 top-2.5 text-gray-400" />
+                        <input
+                          type={showPilotPassword ? "text" : "password"}
+                          value={pilotForm.password}
+                          onChange={(e) => setPilotForm({ ...pilotForm, password: e.target.value })}
+                          className="w-full pl-8 pr-8 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
+                          required
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPilotPassword(!showPilotPassword)}
+                          className="absolute right-2.5 top-2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                        >
+                          {showPilotPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                        </button>
+                      </div>
                     </div>
-                  </div>
 
-                  <div>
-                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
-                      Contraseña
-                    </label>
-                    <div className="relative">
-                      <Lock size={13} className="absolute left-3 top-3 text-gray-400" />
-                      <input
-                        type={showPilotPassword ? "text" : "password"}
-                        value={pilotForm.password}
-                        onChange={(e) => setPilotForm({ ...pilotForm, password: e.target.value })}
-                        className="w-full pl-8 pr-8 py-2 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
-                      />
+                    <div>
+                      <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                        Código de la AHAC
+                      </label>
+                      <div className="relative">
+                        <ShieldCheck size={13} className="absolute left-3 top-2.5 text-gray-400" />
+                        <input
+                          type="text"
+                          value={pilotForm.ahacCode}
+                          onChange={(e) => setPilotForm({ ...pilotForm, ahacCode: e.target.value })}
+                          className="w-full pl-8 pr-3 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800 uppercase"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2 pt-1.5 border-t border-gray-100">
                       <button
                         type="button"
-                        onClick={() => setShowPilotPassword(!showPilotPassword)}
-                        className="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 cursor-pointer"
+                        onClick={() => setIsPilotModalOpen(false)}
+                        className="flex-1 py-2 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-600 font-bold rounded-[4px] text-xs flex items-center justify-center gap-1 transition-colors active:scale-95 cursor-pointer"
                       >
-                        {showPilotPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                        <X size={13} /> Cancelar
+                      </button>
+                      <button
+                        type="submit"
+                        className="flex-1 py-2 px-4 bg-[#0E5E6F] border-2 border-[#0E5E6F] text-white font-bold rounded-[4px] text-xs flex items-center justify-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer"
+                      >
+                        <Plane size={13} /> Validar
                       </button>
                     </div>
+                  </form>
+                </>
+              ) : (
+                /* CONFIRMACIÓN DE ENVÍO DE PILOTO */
+                <div className="py-2 text-center space-y-3 animate-in zoom-in-95 duration-150">
+                  <div className="w-10 h-10 bg-emerald-50 border-2 border-emerald-300 rounded-full flex items-center justify-center mx-auto text-emerald-600">
+                    <CheckCircle2 size={22} />
                   </div>
 
-                  <div>
-                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
-                      Código de la AHAC
-                    </label>
-                    <div className="relative">
-                      <ShieldCheck size={13} className="absolute left-3 top-3 text-gray-400" />
-                      <input
-                        type="text"
-                        value={pilotForm.ahacCode}
-                        onChange={(e) => setPilotForm({ ...pilotForm, ahacCode: e.target.value })}
-                        className="w-full pl-8 pr-3 py-2 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800 uppercase"
-                      />
-                    </div>
+                  <div className="space-y-1">
+                    <h4 className="text-xs font-black text-gray-900 leading-tight">
+                      ¡Solicitud Enviada Exitosamente!
+                    </h4>
+                    <p className="text-[10px] font-medium text-gray-600 leading-tight px-1">
+                      Tus datos y credenciales AHAC han sido registrados. Un administrador revisará tu solicitud.
+                    </p>
                   </div>
 
-                  <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                  <div className="p-2 bg-amber-50 border-2 border-amber-200 rounded-[4px] flex items-center gap-1.5 text-left">
+                    <Clock size={14} className="text-amber-600 shrink-0" />
+                    <span className="text-[9px] font-bold text-amber-800 leading-tight">
+                      Tiempo estimado de verificación: 24 a 48 horas.
+                    </span>
+                  </div>
+
+                  <div className="pt-1.5 border-t border-gray-100">
                     <button
                       type="button"
                       onClick={() => setIsPilotModalOpen(false)}
-                      className="py-1.5 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-600 font-bold rounded-[4px] text-xs flex items-center gap-1 transition-colors cursor-pointer"
+                      className="w-full py-2 bg-[#0E5E6F] border-2 border-[#0E5E6F] text-white font-bold rounded-[4px] text-xs transition-all active:scale-95 shadow-xs cursor-pointer"
                     >
-                      <X size={13} /> Cancelar
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleSendPilotData}
-                      className="py-1.5 px-4 bg-[#0E5E6F] border-2 border-[#0E5E6F] text-white font-bold rounded-[4px] text-xs flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
-                    >
-                      <Plane size={13} /> Validar
+                      Entendido
                     </button>
                   </div>
                 </div>
-              </>
-            ) : (
-              /* VISTA DE CONFIRMACIÓN AL ENVIAR */
-              <div className="py-4 text-center space-y-4 animate-in zoom-in-95 duration-150">
-                <div className="w-12 h-12 bg-emerald-50 border-2 border-emerald-300 rounded-full flex items-center justify-center mx-auto text-emerald-600">
-                  <CheckCircle2 size={28} />
-                </div>
+              )}
 
-                <div className="space-y-1.5">
-                  <h4 className="text-base font-black text-gray-900">
-                    ¡Solicitud Enviada Exitosamente!
-                  </h4>
-                  <p className="text-xs font-semibold text-gray-600 leading-relaxed px-2">
-                    Tus datos y credenciales AHAC han sido registrados. Un administrador revisará la información y se pondrá en contacto contigo a la brevedad.
-                  </p>
-                </div>
-
-                <div className="p-2.5 bg-amber-50 border-2 border-amber-200 rounded-[4px] flex items-center gap-2 text-left">
-                  <Clock size={16} className="text-amber-600 shrink-0" />
-                  <span className="text-[11px] font-bold text-amber-800">
-                    Tiempo estimado de verificación: 24 a 48 horas hábiles.
-                  </span>
-                </div>
-
-                <div className="pt-2 border-t border-gray-100">
-                  <button
-                    type="button"
-                    onClick={() => setIsPilotModalOpen(false)}
-                    className="w-full py-2 bg-[#0E5E6F] text-white font-bold rounded-[4px] text-xs transition-all shadow-xs cursor-pointer active:scale-95"
-                  >
-                    Entendido
-                  </button>
-                </div>
-              </div>
-            )}
-
+            </div>
           </div>
         </div>
       )}

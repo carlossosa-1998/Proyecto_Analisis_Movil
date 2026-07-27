@@ -481,7 +481,7 @@ export default function App() {
           borderRadius: 18, // Bordes menos curvos, más rectos
           overflow: "hidden",
           boxShadow: "0 0 0 5px #3a3a40, 0 30px 80px rgba(0,0,0,0.65)",
-          background: "#F2F2F2",
+          background: "#ffffff",
         }}
       >
         {/* Dynamic Island (Isla Dinámica de iPhone) */}

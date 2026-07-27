@@ -1,5 +1,5 @@
 import { AlertCircle, ArrowUp, BarChart2, Battery, BatteryCharging, Bell, Check, CheckCheck, CheckCircle, Lock, CheckCircle2, ChevronLeft, Clock, CreditCard, Crosshair, DollarSign, Download, Droplet, Edit2, Edit3, Eye, EyeOff, FileText, Info, Layers, LogOut, Mail, MapPin, Maximize2, MessageSquare, MoreVertical, Package, Paperclip, Pause, Phone, PlaneTakeoff, Plus, Radio, Save, Search, Send, Settings, ShieldCheck, ShoppingBag, Star, Thermometer, ToggleLeft, ToggleRight, Trash2, TrendingUp, User, UserPlus, Video, Wind, X, Zap, Activity, AlertTriangle, BarChart3, Compass, Sparkles, ChevronRight, RotateCcw, SearchIcon, ShieldAlert, Sliders, UserCheck, Users, Wrench, PieChart, Calendar, Briefcase, Camera, Loader2, Upload, TagIcon, UploadCloud, Filter } from 'lucide-react';
-import React, { useState} from 'react';
+import React, { useState, useRef } from 'react';
 
 const DashboardWidget = ({
   title,
@@ -2523,13 +2523,16 @@ export const AdminHelpView = () => {
     const [inputText, setInputText] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
 
-    // Navegación móvil: en pantalla angosta solo se ve una vista a la vez
-    // 'lista' = listado de granjeros/pilotos, 'chat' = conversación activa
+    // Navegación móvil
     const [vistaMovil, setVistaMovil] = useState<'lista' | 'chat'>('lista');
+
+    // Menú desplegable del Header (3 puntos)
+    const [isHeaderMenuOpen, setIsHeaderMenuOpen] = useState<boolean>(false);
 
     // Estados para el Modal de Ticket / Nota del Administrador
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+    const [modalStep, setModalStep] = useState<1 | 2>(1);
     const [ticketForm, setTicketForm] = useState({
         granjero: 'Carlos Sosa',
         categoria: 'Soporte Técnico Drones',
@@ -2566,6 +2569,15 @@ export const AdminHelpView = () => {
         setInputText('');
     };
 
+    const handleTicketNext = (e: React.FormEvent) => {
+        e.preventDefault();
+        setModalStep(2);
+    };
+
+    const handleTicketBack = () => {
+        setModalStep(1);
+    };
+
     const handleTicketSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!ticketForm.nota.trim()) return;
@@ -2575,6 +2587,7 @@ export const AdminHelpView = () => {
     const closeModal = () => {
         setIsModalOpen(false);
         setIsSubmitted(false);
+        setModalStep(1);
         setTicketForm({
             granjero: 'Carlos Sosa',
             categoria: 'Soporte Técnico Drones',
@@ -2588,12 +2601,70 @@ export const AdminHelpView = () => {
         c.role.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    // Simulación de arrastre táctil (drag-to-scroll)
+    const DRAG_THRESHOLD = 6;
+    const dragState = useRef({ tracking: false, dragging: false, startY: 0, scrollTop: 0, pointerId: 0 });
+
+    const isInteractiveTarget = (target: EventTarget | null) => {
+        const el = target as HTMLElement | null;
+        return !!el?.closest('input, textarea, select, button, a, option, label');
+    };
+
+    const handleDragStart = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (isInteractiveTarget(e.target)) return;
+        const el = e.currentTarget;
+        dragState.current = { tracking: true, dragging: false, startY: e.clientY, scrollTop: el.scrollTop, pointerId: e.pointerId };
+    };
+
+    const handleDragMove = (e: React.PointerEvent<HTMLDivElement>) => {
+        const state = dragState.current;
+        if (!state.tracking) return;
+        const el = e.currentTarget;
+        const deltaY = e.clientY - state.startY;
+
+        if (!state.dragging) {
+            if (Math.abs(deltaY) < DRAG_THRESHOLD) return;
+            state.dragging = true;
+            el.setPointerCapture(state.pointerId);
+        }
+
+        el.scrollTop = state.scrollTop - deltaY;
+    };
+
+    const handleDragEnd = (e: React.PointerEvent<HTMLDivElement>) => {
+        const state = dragState.current;
+        if (state.dragging) {
+            try {
+                e.currentTarget.releasePointerCapture(state.pointerId);
+            } catch {
+                // El puntero ya pudo haber sido liberado
+            }
+        }
+        dragState.current = { tracking: false, dragging: false, startY: 0, scrollTop: 0, pointerId: 0 };
+    };
+
+    const dragScrollProps = {
+        onPointerDown: handleDragStart,
+        onPointerMove: handleDragMove,
+        onPointerUp: handleDragEnd,
+        onPointerLeave: handleDragEnd,
+        onPointerCancel: handleDragEnd,
+    };
+
     return (
         <div className="w-full h-full min-h-0 flex flex-col bg-white overflow-hidden relative font-sans">
+            <style>{`
+                .scrollbar-hide::-webkit-scrollbar { display: none; }
+                .scrollbar-hide {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                    -webkit-overflow-scrolling: touch;
+                    overscroll-behavior: contain;
+                }
+            `}</style>
             <div className="flex flex-1 h-full min-h-0 overflow-hidden">
 
-                {/* ================= BARRA LATERAL (LISTA DE CLIENTES / GRANJEROS) =================
-                     Vista completa en móvil; se oculta al entrar a una conversación */}
+                {/* ================= BARRA LATERAL (LISTA DE CLIENTES / GRANJEROS) ================= */}
                 <div className={`w-full flex-col bg-gray-50/60 h-full min-h-0 shrink-0 ${vistaMovil === 'lista' ? 'flex' : 'hidden'}`}>
 
                     {/* TÍTULO Y BOTÓN DE REGISTRAR TICKET */}
@@ -2606,7 +2677,7 @@ export const AdminHelpView = () => {
                         {/* BOTÓN NUEVA NOTA / TICKET */}
                         <button
                             onClick={() => setIsModalOpen(true)}
-                            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white font-semibold text-xs rounded-md shadow-xs transition cursor-pointer shrink-0"
+                            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white font-semibold text-xs rounded-[4px] shadow-xs transition cursor-pointer shrink-0"
                         >
                             <FileText size={14} />
                             <span>Ticket</span>
@@ -2622,13 +2693,16 @@ export const AdminHelpView = () => {
                                 placeholder="Buscar granjero o finca..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-md text-sm focus:outline-none focus:border-[#0E5E6F] transition"
+                                className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:border-[#0E5E6F] transition"
                             />
                         </div>
                     </div>
 
                     {/* LISTA DE CHATS */}
-                    <div className="flex-1 overflow-y-auto min-h-0 divide-y divide-gray-100">
+                    <div
+                        className="flex-1 overflow-y-auto min-h-0 divide-y divide-gray-100 scrollbar-hide touch-pan-y select-none cursor-grab active:cursor-grabbing"
+                        {...dragScrollProps}
+                    >
                         {filteredChats.map((chat) => {
                             const lastMsg = chat.messages[chat.messages.length - 1];
                             const isSelected = chat.id === activeChatId;
@@ -2651,7 +2725,7 @@ export const AdminHelpView = () => {
                                         <img
                                             src={chat.avatar}
                                             alt={chat.name}
-                                            className="w-12 h-12 rounded-md object-cover shadow-xs"
+                                            className="w-12 h-12 rounded-[4px] object-cover shadow-xs"
                                         />
                                         <span
                                             className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 border-2 border-white rounded-full ${
@@ -2691,17 +2765,16 @@ export const AdminHelpView = () => {
                     </div>
                 </div>
 
-                {/* ================= ÁREA DE CONVERSACIÓN =================
-                     Vista completa en móvil; solo visible al seleccionar un chat */}
+                {/* ================= ÁREA DE CONVERSACIÓN ================= */}
                 <div className={`w-full flex-col h-full min-h-0 bg-[#f8fafc] overflow-hidden ${vistaMovil === 'chat' ? 'flex' : 'hidden'}`}>
 
                     {/* HEADER DEL CHAT */}
-                    <div className="p-3 bg-white border-b border-gray-200 flex items-center justify-between gap-2 shrink-0 min-w-0">
+                    <div className="p-2.5 bg-white border-b border-gray-200 flex items-center justify-between gap-1.5 shrink-0 min-w-0 relative">
                         <div className="flex items-center gap-2 min-w-0 flex-1">
                             {/* BOTÓN VOLVER A LA LISTA */}
                             <button
                                 onClick={() => setVistaMovil('lista')}
-                                className="p-1.5 -ml-1 text-gray-500 hover:text-[#0E5E6F] hover:bg-gray-100 rounded-md transition shrink-0 cursor-pointer"
+                                className="p-1 -ml-1 text-gray-500 hover:text-[#0E5E6F] hover:bg-gray-100 rounded-[4px] transition shrink-0 cursor-pointer"
                                 aria-label="Volver a la lista"
                             >
                                 <ChevronLeft size={22} />
@@ -2711,7 +2784,7 @@ export const AdminHelpView = () => {
                                 <img
                                     src={activeChat.avatar}
                                     alt={activeChat.name}
-                                    className="w-10 h-10 rounded-md object-cover"
+                                    className="w-9 h-9 rounded-[4px] object-cover"
                                 />
                             </div>
 
@@ -2720,19 +2793,19 @@ export const AdminHelpView = () => {
                                     {activeChat.name}
                                 </h2>
 
-                                <span className="text-xs text-[#0E5E6F] font-medium truncate mt-0.5">
+                                <span className="text-[11px] text-[#0E5E6F] font-medium truncate">
                                     {activeChat.role}
                                 </span>
 
-                                <div className="text-xs text-gray-500 mt-0.5">
+                                <div className="text-[11px] text-gray-500 leading-none">
                                     {activeChat.online ? (
                                         <span className="text-emerald-600 font-medium flex items-center gap-1">
-                                            <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+                                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
                                             En línea
                                         </span>
                                     ) : (
-                                        <span className="text-gray-400 font-medium flex items-center gap-1">
-                                            <span className="w-2 h-2 rounded-full bg-gray-400 inline-block shrink-0"></span>
+                                        <span className="text-gray-400 font-medium flex items-center gap-1 truncate">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-gray-400 inline-block shrink-0"></span>
                                             <span className="truncate">
                                                 Desconectado {activeChat.lastSeen ? `(${activeChat.lastSeen})` : ''}
                                             </span>
@@ -2742,26 +2815,53 @@ export const AdminHelpView = () => {
                             </div>
                         </div>
 
-                        {/* BOTONES DE ACCIÓN */}
-                        <div className="flex items-center gap-0.5 text-gray-500 shrink-0">
+                        {/* MENÚ DE TRES PUNTOS CON ACCIONES DESPLEGABLES */}
+                        <div className="relative shrink-0">
                             <button
-                                className="p-2 hover:bg-gray-100 text-gray-600 hover:text-[#0E5E6F] rounded-md transition"
-                                aria-label="Llamada de voz"
+                                onClick={() => setIsHeaderMenuOpen(!isHeaderMenuOpen)}
+                                className="p-2 hover:bg-gray-100 text-gray-600 hover:text-[#0E5E6F] rounded-[4px] transition cursor-pointer"
+                                aria-label="Opciones de soporte"
                             >
-                                <Phone size={18} />
+                                <MoreVertical size={20} />
                             </button>
 
-                            <button
-                                className="p-2 hover:bg-gray-100 text-gray-600 hover:text-[#0E5E6F] rounded-md transition"
-                                aria-label="Opciones adicionales"
-                            >
-                                <MoreVertical size={18} />
-                            </button>
+                            {/* Menú Desplegable */}
+                            {isHeaderMenuOpen && (
+                                <>
+                                    <div
+                                        className="fixed inset-0 z-10"
+                                        onClick={() => setIsHeaderMenuOpen(false)}
+                                    />
+                                    <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-[4px] shadow-lg py-1 z-20 animate-fade-in">
+                                        <button
+                                            onClick={() => {
+                                                setIsHeaderMenuOpen(false);
+                                            }}
+                                            className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
+                                        >
+                                            <Phone size={15} className="text-[#0E5E6F]" />
+                                            <span>Llamada de soporte</span>
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                setIsHeaderMenuOpen(false);
+                                            }}
+                                            className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
+                                        >
+                                            <Video size={15} className="text-[#0E5E6F]" />
+                                            <span>Videollamada taller</span>
+                                        </button>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
 
                     {/* HISTORIAL DE MENSAJES */}
-                    <div className="flex-1 overflow-y-auto min-h-0 p-3 space-y-3 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px]">
+                    <div
+                        className="flex-1 overflow-y-auto min-h-0 p-3 space-y-3 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] scrollbar-hide touch-pan-y select-none cursor-grab active:cursor-grabbing"
+                        {...dragScrollProps}
+                    >
                         {activeChat.messages.map((msg) => {
                             const isAdminMsg = msg.sender === 'other';
 
@@ -2774,12 +2874,12 @@ export const AdminHelpView = () => {
                                         <img
                                             src={activeChat.avatar}
                                             alt={activeChat.name}
-                                            className="w-7 h-7 rounded-md object-cover mb-1 shrink-0"
+                                            className="w-7 h-7 rounded-[4px] object-cover mb-1 shrink-0"
                                         />
                                     )}
 
                                     <div
-                                        className={`max-w-[80%] px-3.5 py-2.5 rounded-md text-sm ${
+                                        className={`max-w-[80%] px-3.5 py-2.5 rounded-[4px] text-sm ${
                                             isAdminMsg
                                                 ? 'bg-[#0E5E6F] text-white'
                                                 : 'bg-white text-gray-800 border border-gray-100 shadow-xs'
@@ -2804,7 +2904,7 @@ export const AdminHelpView = () => {
                                         <img
                                             src={adminAvatar}
                                             alt="Administrador Soporte"
-                                            className="w-7 h-7 rounded-md object-cover mb-1 shrink-0 border border-gray-200"
+                                            className="w-7 h-7 rounded-[4px] object-cover mb-1 shrink-0 border border-gray-200"
                                         />
                                     )}
                                 </div>
@@ -2819,23 +2919,24 @@ export const AdminHelpView = () => {
                     >
                         <button
                             type="button"
-                            className="p-2 text-gray-400 hover:text-[#0E5E6F] hover:bg-gray-100 rounded-md transition shrink-0"
+                            className="p-2 text-gray-400 hover:text-[#0E5E6F] hover:bg-gray-100 rounded-[4px] transition shrink-0"
+                            title="Adjuntar archivo o imagen"
                         >
                             <Paperclip size={20} />
                         </button>
 
                         <input
                             type="text"
-                            placeholder="Responder como administrador..."
+                            placeholder="Escribe tu mensaje..."
                             value={inputText}
                             onChange={(e) => setInputText(e.target.value)}
-                            className="flex-1 bg-gray-50 border border-gray-200 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition min-w-0"
+                            className="flex-1 bg-gray-50 border border-gray-200 rounded-[4px] px-4 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition min-w-0"
                         />
 
                         <button
                             type="submit"
                             disabled={!inputText.trim()}
-                            className="p-2.5 bg-[#0E5E6F] text-white rounded-md hover:bg-[#0A4754] disabled:opacity-40 disabled:hover:bg-[#0E5E6F] transition cursor-pointer shrink-0"
+                            className="p-2.5 bg-[#0E5E6F] text-white rounded-[4px] hover:bg-[#0A4754] disabled:opacity-40 disabled:hover:bg-[#0E5E6F] transition cursor-pointer shrink-0"
                         >
                             <Send size={18} />
                         </button>
@@ -2846,128 +2947,162 @@ export const AdminHelpView = () => {
 
             {/* ================= MODAL DE REGISTRO DE TICKET ADMIN ================= */}
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-end justify-center z-50 animate-fade-in">
-                    <div className="bg-white w-full rounded-t-2xl shadow-2xl overflow-hidden border-t border-gray-100 flex flex-col max-h-[88%]">
-
-                        {/* Manija del bottom sheet */}
-                        <div className="flex justify-center pt-2.5 pb-1 shrink-0">
-                            <span className="w-10 h-1.5 bg-gray-300 rounded-full"></span>
-                        </div>
+                <div className="absolute inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fade-in">
+                    <div className="bg-white w-[92%] max-w-[360px] rounded-[4px] shadow-2xl overflow-hidden border border-gray-100 flex flex-col max-h-[92%]">
 
                         {/* Header del Modal */}
-                        <div className="p-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between shrink-0">
+                        <div className="p-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between gap-2 shrink-0">
                             <div className="flex items-center gap-2 min-w-0">
-                                <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-md shrink-0">
-                                    <FileText size={20} />
+                                <div className="p-1.5 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0">
+                                    <FileText size={16} />
                                 </div>
                                 <div className="min-w-0">
-                                    <h3 className="font-bold text-gray-900 text-base truncate">Registrar Ticket Interno</h3>
-                                    <p className="text-xs text-gray-500 truncate">Documentar caso de asistencia</p>
+                                    <h3 className="font-bold text-gray-900 text-sm truncate leading-tight">
+                                        Registrar ticket
+                                    </h3>
+                                    {!isSubmitted && (
+                                        <p className="text-[10px] text-gray-500 truncate">
+                                            Paso {modalStep} de 2
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                             <button
                                 onClick={closeModal}
-                                className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-md transition cursor-pointer shrink-0"
+                                className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-[4px] transition cursor-pointer shrink-0"
                             >
-                                <X size={20} />
+                                <X size={18} />
                             </button>
                         </div>
 
+                        {/* Indicador de progreso por pasos */}
+                        {!isSubmitted && (
+                            <div className="flex gap-1.5 px-3.5 pt-2.5 shrink-0">
+                                <span className={`h-1 flex-1 rounded-full ${modalStep >= 1 ? 'bg-[#0E5E6F]' : 'bg-gray-200'}`} />
+                                <span className={`h-1 flex-1 rounded-full ${modalStep >= 2 ? 'bg-[#0E5E6F]' : 'bg-gray-200'}`} />
+                            </div>
+                        )}
+
                         {/* Contenido del Modal */}
-                        <div className="p-5 overflow-y-auto">
+                        <div className="p-3.5 overflow-y-auto scrollbar-hide touch-pan-y" {...dragScrollProps}>
                             {!isSubmitted ? (
-                                <form onSubmit={handleTicketSubmit} className="space-y-4">
-                                    <div>
-                                        <label className="block text-xs font-semibold text-gray-700 mb-1">
-                                            Granjero / cliente
-                                        </label>
-                                        <input
-                                            type="text"
-                                            required
-                                            value={ticketForm.granjero}
-                                            onChange={(e) => setTicketForm({ ...ticketForm, granjero: e.target.value })}
-                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
-                                        />
-                                    </div>
+                                modalStep === 1 ? (
+                                    <form onSubmit={handleTicketNext} className="space-y-3">
+                                        <div>
+                                            <label className="block text-xs font-semibold text-gray-700 mb-1">
+                                                Granjero
+                                            </label>
+                                            <input
+                                                type="text"
+                                                required
+                                                value={ticketForm.granjero}
+                                                onChange={(e) => setTicketForm({ ...ticketForm, granjero: e.target.value })}
+                                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
+                                            />
+                                        </div>
 
-                                    <div>
-                                        <label className="block text-xs font-semibold text-gray-700 mb-1">
-                                            Categoría
-                                        </label>
-                                        <select
-                                            value={ticketForm.categoria}
-                                            onChange={(e) => setTicketForm({ ...ticketForm, categoria: e.target.value })}
-                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
-                                        >
-                                            <option value="Soporte Técnico Drones">Soporte técnico drones</option>
-                                            <option value="Falla en Telemetría">Falla en telemetría IoT</option>
-                                            <option value="Facturación y Licencias">Facturación y licencias</option>
-                                            <option value="Análisis NDVI">Revisión fitozoosanitaria (NDVI)</option>
-                                        </select>
-                                    </div>
+                                        <div>
+                                            <label className="block text-xs font-semibold text-gray-700 mb-1">
+                                                Categoría
+                                            </label>
+                                            <select
+                                                value={ticketForm.categoria}
+                                                onChange={(e) => setTicketForm({ ...ticketForm, categoria: e.target.value })}
+                                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
+                                            >
+                                                <option value="Soporte Técnico Drones">Soporte técnico</option>
+                                                <option value="Falla en Telemetría">Falla de telemetría</option>
+                                                <option value="Facturación y Licencias">Facturación</option>
+                                                <option value="Análisis NDVI">Revisión NDVI</option>
+                                            </select>
+                                        </div>
 
-                                    <div>
-                                        <label className="block text-xs font-semibold text-gray-700 mb-1">
-                                            Prioridad
-                                        </label>
-                                        <select
-                                            value={ticketForm.prioridad}
-                                            onChange={(e) => setTicketForm({ ...ticketForm, prioridad: e.target.value })}
-                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
-                                        >
-                                            <option value="Baja">Baja</option>
-                                            <option value="Media">Media</option>
-                                            <option value="Alta">Alta</option>
-                                            <option value="Urgente">Urgente</option>
-                                        </select>
-                                    </div>
+                                        <div>
+                                            <label className="block text-xs font-semibold text-gray-700 mb-1">
+                                                Prioridad
+                                            </label>
+                                            <select
+                                                value={ticketForm.prioridad}
+                                                onChange={(e) => setTicketForm({ ...ticketForm, prioridad: e.target.value })}
+                                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
+                                            >
+                                                <option value="Baja">Baja</option>
+                                                <option value="Media">Media</option>
+                                                <option value="Alta">Alta</option>
+                                                <option value="Urgente">Urgente</option>
+                                            </select>
+                                        </div>
 
-                                    <div>
-                                        <label className="block text-xs font-semibold text-gray-700 mb-1">
-                                            Notas internas / diagnóstico
-                                        </label>
-                                        <textarea
-                                            required
-                                            rows={4}
-                                            placeholder="Escribe un resumen técnico del problema o solución acordada..."
-                                            value={ticketForm.nota}
-                                            onChange={(e) => setTicketForm({ ...ticketForm, nota: e.target.value })}
-                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition resize-none"
-                                        ></textarea>
-                                    </div>
+                                        <div className="flex items-center justify-end gap-2 pt-1">
+                                            <button
+                                                type="button"
+                                                onClick={closeModal}
+                                                className="px-3.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-[4px] transition cursor-pointer"
+                                            >
+                                                Cancelar
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                className="px-3.5 py-1.5 text-xs font-semibold text-white bg-[#0E5E6F] hover:bg-[#0A4754] rounded-[4px] shadow-xs transition cursor-pointer"
+                                            >
+                                                Siguiente
+                                            </button>
+                                        </div>
+                                    </form>
+                                ) : (
+                                    <form onSubmit={handleTicketSubmit} className="space-y-3">
+                                        <div>
+                                            <label className="block text-xs font-semibold text-gray-700 mb-1">
+                                                Diagnóstico
+                                            </label>
+                                            <textarea
+                                                required
+                                                rows={4}
+                                                placeholder="Resumen técnico del problema o la solución..."
+                                                value={ticketForm.nota}
+                                                onChange={(e) => setTicketForm({ ...ticketForm, nota: e.target.value })}
+                                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition resize-none"
+                                            ></textarea>
+                                        </div>
 
-                                    <div className="flex items-center justify-end gap-2 pt-2">
-                                        <button
-                                            type="button"
-                                            onClick={closeModal}
-                                            className="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-md transition cursor-pointer"
-                                        >
-                                            Cancelar
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            className="px-4 py-2 text-xs font-semibold text-white bg-[#0E5E6F] hover:bg-[#0A4754] rounded-md shadow-xs transition cursor-pointer"
-                                        >
-                                            Guardar ticket
-                                        </button>
-                                    </div>
-                                </form>
+                                        <div className="p-2 bg-gray-50 border border-gray-100 rounded-[4px] text-[11px] text-gray-500 space-y-0.5">
+                                            <p className="truncate"><span className="font-semibold text-gray-600">Granjero:</span> {ticketForm.granjero}</p>
+                                            <p className="truncate"><span className="font-semibold text-gray-600">Prioridad:</span> {ticketForm.prioridad}</p>
+                                        </div>
+
+                                        <div className="flex items-center justify-between gap-2 pt-1">
+                                            <button
+                                                type="button"
+                                                onClick={handleTicketBack}
+                                                className="px-3.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-[4px] transition cursor-pointer"
+                                            >
+                                                Atrás
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                className="px-3.5 py-1.5 text-xs font-semibold text-white bg-[#0E5E6F] hover:bg-[#0A4754] rounded-[4px] shadow-xs transition cursor-pointer"
+                                            >
+                                                Guardar
+                                            </button>
+                                        </div>
+                                    </form>
+                                )
                             ) : (
                                 /* Confirmación */
-                                <div className="py-6 text-center space-y-4">
-                                    <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
-                                        <CheckCircle2 size={32} />
+                                <div className="py-3 text-center space-y-2.5">
+                                    <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                                        <CheckCircle2 size={22} />
                                     </div>
-                                    <div className="space-y-1">
-                                        <h4 className="text-lg font-bold text-gray-900">¡Ticket registrado!</h4>
+                                    <div className="space-y-0.5">
+                                        <h4 className="text-sm font-bold text-gray-900">Ticket registrado</h4>
                                         <p className="text-xs text-gray-600 max-w-xs mx-auto leading-relaxed">
-                                            El ticket ha sido guardado exitosamente en el historial del cliente y asignado a seguimiento.
+                                            Se guardó en el historial del cliente.
                                         </p>
                                     </div>
-                                    <div className="pt-2">
+                                    <div className="pt-1">
                                         <button
                                             onClick={closeModal}
-                                            className="w-full py-2.5 px-4 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-semibold rounded-md transition cursor-pointer"
+                                            className="w-full py-1.5 px-4 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-semibold rounded-[4px] transition cursor-pointer"
                                         >
                                             Cerrar
                                         </button>
@@ -2983,7 +3118,6 @@ export const AdminHelpView = () => {
         </div>
     );
 };
-
 
 export const AdminConfigCargoView = ({ onNext, onBack }: any) => (
     <div className="p-10 max-w-6xl mx-auto">
@@ -3843,18 +3977,15 @@ export const AdminMapsView = () => {
                     <div className="text-left min-w-0">
                         <div className="flex items-center gap-1.5">
                             <h1 className="text-xs font-bold text-gray-900 tracking-tight truncate">
-                                Edición de Mapas
+                                Editor de mapas
                             </h1>
-                            <span className="text-[8px] font-bold tracking-wider px-1.5 py-0.2 rounded-[4px] border border-[#0E5E6F]/30 bg-[#0E5E6F]/10 text-[#0E5E6F] shrink-0">
-                                Admin
-                            </span>
                         </div>
                         <button
                             onClick={handleOpenIdModal}
-                            className="text-[10px] text-gray-500 font-medium leading-none truncate hover:text-[#0E5E6F] transition-colors cursor-pointer text-left"
+                            className="text-[10px] text-gray-500 font-medium leading-none truncate hover:text-[#0E5E6F] transition-colors cursor-pointer text-left block"
                             title="Cambiar ID de misión"
                         >
-                            #{mappingId}
+                            ID: #{mappingId}
                         </button>
                     </div>
                 </div>
@@ -5292,7 +5423,7 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
         password: "••••••••••••",
         avatar: "src/img/admin_perfil.png",
         avatarBg: "bg-[#0E5E6F] text-white",
-        roleLabel: "Administrador General · Sistema",
+        roleLabel: "Administrador general · sistema",
         location: "Oficina Central Tegucigalpa, FM",
         area: "12,800 ha administradas",
         services: "1,240 operaciones activas",
@@ -5352,7 +5483,10 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
     };
 
     return (
-        <div className="w-full h-full mx-auto p-2 bg-white antialiased select-none font-sans flex flex-col justify-center items-center relative">
+        <div
+            className="w-full h-full mx-auto p-2 bg-white antialiased select-none flex flex-col justify-center items-center relative"
+            style={{ fontFamily: "'Roboto', sans-serif" }}
+        >
             <div className="w-full h-full flex-1 bg-white border-2 border-gray-200 rounded-[4px] overflow-hidden flex flex-col justify-between shadow-xs">
                 
                 {/* CABECERA */}
@@ -5387,10 +5521,9 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col items-start gap-2 w-full">
+                    <div className="flex flex-col items-center gap-2 w-full">
                         <span
-                            className={`text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-[4px] border-2 ${profileData.roleColor}`}
-                            style={{ fontFamily: "'Instrument Sans', sans-serif" }}
+                            className={`w-full text-center text-[10px] font-black tracking-wider px-3 py-1 rounded-[4px] border-2 break-words whitespace-normal ${profileData.roleColor}`}
                         >
                             {profileData.roleLabel}
                         </span>
@@ -5406,13 +5539,13 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                 {/* MÉTRICAS PRINCIPALES — grid 2x2 táctil */}
                 <div className="grid grid-cols-2 divide-x-2 divide-y-2 divide-gray-100 bg-white border-b-2 border-gray-200 text-left">
                     {/* Sede Principal */}
-                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col">
+                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
                         <div className="flex items-center gap-1.5">
                             <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
                                 <MapPin size={14} />
                             </div>
-                            <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest block">
-                                Sede Principal
+                            <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                Sede principal
                             </span>
                         </div>
                         <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
@@ -5421,13 +5554,13 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                     </div>
 
                     {/* Cobertura Global */}
-                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col">
+                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
                         <div className="flex items-center gap-1.5">
                             <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
                                 <Layers size={14} />
                             </div>
-                            <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest block">
-                                Cobertura Global
+                            <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                Cobertura global
                             </span>
                         </div>
                         <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
@@ -5436,31 +5569,31 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                     </div>
 
                     {/* Gestión Activa */}
-                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col">
+                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
                         <div className="flex items-center gap-1.5">
                             <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
                                 <BarChart2 size={14} />
                             </div>
-                            <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest block">
-                                Gestión Activa
+                            <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                Gestión activa
                             </span>
                         </div>
-                        <span className="text-[11px] text-gray-800 font-bold block truncate leading-tight mt-0.5">
+                        <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5 w-full">
                             {profileData.services}
                         </span>
                     </div>
 
                     {/* Estado del Sistema */}
-                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col">
+                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
                         <div className="flex items-center gap-1.5">
                             <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
                                 <CheckCircle size={14} />
                             </div>
-                            <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest block">
+                            <span className="text-[9px] font-black text-gray-400 tracking-widest block">
                                 Estado
                             </span>
                         </div>
-                        <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] uppercase inline-block mt-0.5">
+                        <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] inline-block mt-0.5">
                             {profileData.standing}
                         </span>
                     </div>
@@ -5480,13 +5613,13 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                             onClick={handleOpenModal}
                             className="w-full py-2 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] text-xs flex items-center justify-center gap-1.5 transition-colors active:scale-95 shadow-xs cursor-pointer"
                         >
-                            <Edit2 size={13} className="text-[#0E5E6F]" /> Editar Información
+                            <Edit2 size={13} className="text-[#0E5E6F]" /> Editar información
                         </button>
                     </div>
 
                     <div className="grid grid-cols-1 gap-2.5 text-left">
                         <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider flex items-center gap-1">
+                            <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
                                 <Phone size={12} className="text-[#0E5E6F]" /> Teléfono
                             </span>
                             <p className="font-bold text-xs text-gray-800 mt-0.5">
@@ -5495,7 +5628,7 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                         </div>
 
                         <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider flex items-center gap-1">
+                            <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
                                 <Mail size={12} className="text-[#0E5E6F]" /> Correo
                             </span>
                             <p className="font-bold text-xs text-gray-800 mt-0.5 truncate">
@@ -5504,7 +5637,7 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                         </div>
 
                         <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider flex items-center gap-1">
+                            <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
                                 <Lock size={12} className="text-[#0E5E6F]" /> Contraseña
                             </span>
                             <p className="font-mono font-bold text-xs text-gray-800 mt-0.5">
@@ -5523,11 +5656,10 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                     <button
                         onClick={onLogout}
                         className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-[4px] border-2 border-[#B8001F] bg-white hover:bg-[#B8001F]/10 text-[#B8001F] transition-all active:scale-95 shadow-xs cursor-pointer w-full"
-                        style={{ fontFamily: "'Instrument Sans', sans-serif" }}
                     >
                         <LogOut size={13} className="shrink-0 text-[#B8001F]" />
-                        <span className="text-xs font-black uppercase tracking-wider">
-                            SALIR
+                        <span className="text-xs font-black tracking-wider">
+                            Salir
                         </span>
                     </button>
                 </div>
@@ -5535,20 +5667,16 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
 
             {/* BOTTOM SHEET DE EDICIÓN */}
             {isModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-end justify-center animate-in fade-in duration-150">
-                    <div className="bg-white border-t-2 border-gray-300 rounded-t-[16px] w-full max-h-[85vh] shadow-xl flex flex-col text-left overflow-hidden">
-                        <div className="flex justify-center pt-2 pb-1 shrink-0">
-                            <div className="w-10 h-1 rounded-full bg-gray-300" />
-                        </div>
-
-                        <div className="px-5 pt-1 pb-3 space-y-4 overflow-y-auto">
+                <div className="absolute inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
+                    <div className="bg-white border-2 border-gray-300 rounded-[4px] w-[92%] max-w-[320px] max-h-[92%] shadow-xl flex flex-col text-left overflow-hidden">
+                        <div className="px-3.5 pt-3 pb-2.5 space-y-2.5 overflow-y-auto">
                         {/* Encabezado del Modal */}
-                        <div className="flex items-center justify-between pb-2.5 border-b-2 border-gray-100">
+                        <div className="flex items-center justify-between pb-2 border-b-2 border-gray-100">
                             <div className="flex items-center gap-2">
                                 <div className="p-1.5 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
-                                    <Edit2 size={15} />
+                                    <Edit2 size={14} />
                                 </div>
-                                <h3 className="text-sm font-black text-gray-800 normal-case">
+                                <h3 className="text-xs font-black text-gray-800 normal-case">
                                     Editar Credenciales
                                 </h3>
                             </div>
@@ -5556,20 +5684,20 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                                 onClick={() => setIsModalOpen(false)}
                                 className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-[4px] transition-colors cursor-pointer"
                             >
-                                <X size={16} />
+                                <X size={15} />
                             </button>
                         </div>
 
                         {/* Formulario Vertical */}
-                        <form onSubmit={handleSave} className="space-y-3">
+                        <form onSubmit={handleSave} className="space-y-2">
                             {/* SELECTOR TOTALMENTE FALSO DE FOTO DE PERFIL */}
                             <div>
-                                <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider mb-1 flex items-center gap-1">
-                                    <Camera size={12} className="text-[#0E5E6F]" /> Foto de Perfil
+                                <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1 flex items-center gap-1">
+                                    <Camera size={11} className="text-[#0E5E6F]" /> Foto de perfil
                                 </label>
 
-                                <div className="flex items-center gap-3 p-2 border-2 border-gray-200 rounded-[4px] bg-gray-50">
-                                    <div className="w-12 h-12 rounded-[4px] bg-white border border-gray-300 overflow-hidden shrink-0 flex items-center justify-center relative">
+                                <div className="flex items-center gap-2 p-1.5 border-2 border-gray-200 rounded-[4px] bg-gray-50">
+                                    <div className="w-9 h-9 rounded-[4px] bg-white border border-gray-300 overflow-hidden shrink-0 flex items-center justify-center relative">
                                         <img
                                             src={profileData.avatar}
                                             alt="Previsualización"
@@ -5593,7 +5721,7 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                                                 {isUploading ? "Cargando..." : "Seleccionar"}
                                             </button>
                                             <span className="text-[10px] text-gray-500 font-semibold truncate">
-                                                {simulatedFile || "JPG o PNG (Máx. 2MB)"}
+                                                {simulatedFile || "img"}
                                             </span>
                                         </div>
                                     </div>
@@ -5601,71 +5729,71 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                             </div>
 
                             <div>
-                                <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider mb-1">
+                                <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
                                     Teléfono
                                 </label>
                                 <div className="relative">
-                                    <Phone size={13} className="absolute left-3 top-3 text-gray-400" />
+                                    <Phone size={13} className="absolute left-3 top-2.5 text-gray-400" />
                                     <input
                                         type="text"
                                         value={editForm.phone}
                                         onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                                        className="w-full pl-8 pr-3 py-2 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
+                                        className="w-full pl-8 pr-3 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
                                         required
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider mb-1">
-                                    Correo Electrónico
+                                <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                                    Correo electrónico
                                 </label>
                                 <div className="relative">
-                                    <Mail size={13} className="absolute left-3 top-3 text-gray-400" />
+                                    <Mail size={13} className="absolute left-3 top-2.5 text-gray-400" />
                                     <input
                                         type="email"
                                         value={editForm.email}
                                         onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                                        className="w-full pl-8 pr-3 py-2 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
+                                        className="w-full pl-8 pr-3 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
                                         required
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider mb-1">
-                                    Nueva Contraseña
+                                <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                                    Nueva contraseña
                                 </label>
                                 <div className="relative">
-                                    <Lock size={13} className="absolute left-3 top-3 text-gray-400" />
+                                    <Lock size={13} className="absolute left-3 top-2.5 text-gray-400" />
                                     <input
                                         type={showPassword ? "text" : "password"}
                                         value={editForm.password}
                                         onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
-                                        className="w-full pl-8 pr-8 py-2 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
+                                        className="w-full pl-8 pr-8 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
                                         required
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 cursor-pointer"
+                                        className="absolute right-2.5 top-2 text-gray-400 hover:text-gray-600 cursor-pointer"
                                     >
                                         {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                                     </button>
                                 </div>
                             </div>
 
-                            <div className="flex gap-2 pt-2 border-t border-gray-100">
+                            <div className="flex gap-2 pt-1.5 border-t border-gray-100">
                                 <button
                                     type="button"
                                     onClick={() => setIsModalOpen(false)}
-                                    className="flex-1 py-2.5 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-600 font-bold rounded-[4px] text-xs flex items-center justify-center gap-1 transition-colors active:scale-95 cursor-pointer"
+                                    className="flex-1 py-2 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-600 font-bold rounded-[4px] text-xs flex items-center justify-center gap-1 transition-colors active:scale-95 cursor-pointer"
                                 >
                                     <X size={13} /> Cancelar
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex-1 py-2.5 px-4 bg-[#0E5E6F] border-2 border-[#0E5E6F] text-white font-bold rounded-[4px] text-xs flex items-center justify-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer"
+                                    className="flex-1 py-2 px-4 bg-[#0E5E6F] border-2 border-[#0E5E6F] text-white font-bold rounded-[4px] text-xs flex items-center justify-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer"
                                 >
                                     <Save size={13} /> Guardar
                                 </button>

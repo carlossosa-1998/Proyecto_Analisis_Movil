@@ -94,40 +94,72 @@ export const LandingView = ({
     const [indiceImagenApp, fijarIndiceImagenApp] = useState(0);
     const [menuAbierto, fijarMenuAbierto] = useState(false);
 
-    // Referencias y estado para el scroll de los carruseles (funciona con touch de forma nativa
-    // y también permite arrastrar con mouse cuando se previsualiza en escritorio)
+    // Referencias y estados para el scroll por arrastre/mouse (Simulación Táctil)
+    const refContenedorPrincipal = useRef<HTMLDivElement | null>(null);
     const refServicios = useRef<HTMLDivElement | null>(null);
     const refDrones = useRef<HTMLDivElement | null>(null);
-    const estadoArrastre = useRef({
+
+    // Estado de arrastre horizontal (Carruseles)
+    const estadoArrastreHorizontal = useRef({
         activado: false,
         xInicial: 0,
         scrollInicial: 0,
     });
 
-    const manejarInicioArrastre = (
+    // Estado de arrastre vertical (Vista Principal)
+    const estadoArrastreVertical = useRef({
+        activado: false,
+        yInicial: 0,
+        scrollInicial: 0,
+    });
+
+    // --- MENEJO DE ARRASTRE HORIZONTAL (CARRUSELES) ---
+    const manejarInicioArrastreHorizontal = (
         e: React.MouseEvent,
         ref: React.RefObject<HTMLDivElement | null>,
     ) => {
         if (!ref.current) return;
-        estadoArrastre.current.activado = true;
-        estadoArrastre.current.xInicial = e.pageX - ref.current.offsetLeft;
-        estadoArrastre.current.scrollInicial = ref.current.scrollLeft;
+        estadoArrastreHorizontal.current.activado = true;
+        estadoArrastreHorizontal.current.xInicial = e.pageX - ref.current.offsetLeft;
+        estadoArrastreHorizontal.current.scrollInicial = ref.current.scrollLeft;
     };
 
-    const manejarFinArrastre = () => {
-        estadoArrastre.current.activado = false;
+    const manejarFinArrastreHorizontal = () => {
+        estadoArrastreHorizontal.current.activado = false;
     };
 
-    const manejarArrastre = (
+    const manejarArrastreHorizontal = (
         e: React.MouseEvent,
         ref: React.RefObject<HTMLDivElement | null>,
     ) => {
-        if (!estadoArrastre.current.activado || !ref.current) return;
+        if (!estadoArrastreHorizontal.current.activado || !ref.current) return;
         e.preventDefault();
         const x = e.pageX - ref.current.offsetLeft;
-        const desplazamiento = (x - estadoArrastre.current.xInicial) * 2; // Factor de velocidad
+        const desplazamiento = (x - estadoArrastreHorizontal.current.xInicial) * 2;
         ref.current.scrollLeft =
-            estadoArrastre.current.scrollInicial - desplazamiento;
+            estadoArrastreHorizontal.current.scrollInicial - desplazamiento;
+    };
+
+    // --- MANEJO DE ARRASTRE VERTICAL (CONTENEDOR PRINCIPAL TÁCTIL) ---
+    const manejarInicioArrastreVertical = (e: React.MouseEvent) => {
+        if (!refContenedorPrincipal.current) return;
+        estadoArrastreVertical.current.activado = true;
+        estadoArrastreVertical.current.yInicial = e.pageY - refContenedorPrincipal.current.offsetTop;
+        estadoArrastreVertical.current.scrollInicial = refContenedorPrincipal.current.scrollTop;
+    };
+
+    const manejarFinArrastreVertical = () => {
+        estadoArrastreVertical.current.activado = false;
+    };
+
+    const manejarArrastreVertical = (e: React.MouseEvent) => {
+        if (!estadoArrastreVertical.current.activado || !refContenedorPrincipal.current) return;
+        
+        // Evitamos prevenir el comportamiento por defecto en campos o botones si fuera necesario
+        const y = e.pageY - refContenedorPrincipal.current.offsetTop;
+        const desplazamiento = (y - estadoArrastreVertical.current.yInicial) * 1.5; // Factor de velocidad vertical
+        refContenedorPrincipal.current.scrollTop =
+            estadoArrastreVertical.current.scrollInicial - desplazamiento;
     };
 
     const imagenesCarruselPrincipal = [
@@ -355,7 +387,7 @@ export const LandingView = ({
     }, [imagenesAppMovil.length]);
 
     return (
-        <div className="w-full h-full bg-white flex flex-col overflow-hidden relative">
+        <div className="w-full h-full bg-white flex flex-col overflow-hidden relative select-none">
             {/* ─── NAVBAR MÓVIL ─── */}
             <nav className="sticky top-0 z-40 bg-white/95 border-b-2 border-gray-200 px-4 flex items-center justify-between h-14 w-full shrink-0 shadow-sm backdrop-blur">
                 <div className="flex items-center gap-2 min-w-0">
@@ -454,8 +486,15 @@ export const LandingView = ({
                 </div>
             )}
 
-            {/* ─── CONTENEDOR PRINCIPAL CON SCROLL ─── */}
-            <div className="flex-1 w-full overflow-y-auto scroll-smooth">
+            {/* ─── CONTENEDOR PRINCIPAL CON SCROLL Y DESPLAZAMIENTO TÁCTIL ─── */}
+            <div
+                ref={refContenedorPrincipal}
+                onMouseDown={manejarInicioArrastreVertical}
+                onMouseLeave={manejarFinArrastreVertical}
+                onMouseUp={manejarFinArrastreVertical}
+                onMouseMove={manejarArrastreVertical}
+                className="flex-1 w-full overflow-y-auto cursor-grab active:cursor-grabbing [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            >
                 {/* SECCIÓN 1: HERO */}
                 <section
                     id="inicio"
@@ -584,17 +623,20 @@ export const LandingView = ({
                                 </div>
                             </div>
 
-                            {/* Galería de Servicios (carrusel horizontal, deslizable con el dedo) */}
+                            {/* Galería de Servicios (carrusel horizontal, deslizable) */}
                             <div className="w-full relative h-[190px] mt-2">
                                 <div className="absolute top-0 left-0 bottom-0 w-8 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none" />
                                 <div className="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none" />
 
                                 <div
                                     ref={refServicios}
-                                    onMouseDown={(e) => manejarInicioArrastre(e, refServicios)}
-                                    onMouseLeave={manejarFinArrastre}
-                                    onMouseUp={manejarFinArrastre}
-                                    onMouseMove={(e) => manejarArrastre(e, refServicios)}
+                                    onMouseDown={(e) => {
+                                        e.stopPropagation();
+                                        manejarInicioArrastreHorizontal(e, refServicios);
+                                    }}
+                                    onMouseLeave={manejarFinArrastreHorizontal}
+                                    onMouseUp={manejarFinArrastreHorizontal}
+                                    onMouseMove={(e) => manejarArrastreHorizontal(e, refServicios)}
                                     className="flex gap-3 w-full h-full overflow-x-auto snap-x snap-mandatory cursor-grab active:cursor-grabbing select-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-1"
                                 >
                                     {datosServicios.map((servicio) => (
@@ -769,10 +811,13 @@ export const LandingView = ({
 
                                     <div
                                         ref={refDrones}
-                                        onMouseDown={(e) => manejarInicioArrastre(e, refDrones)}
-                                        onMouseLeave={manejarFinArrastre}
-                                        onMouseUp={manejarFinArrastre}
-                                        onMouseMove={(e) => manejarArrastre(e, refDrones)}
+                                        onMouseDown={(e) => {
+                                            e.stopPropagation();
+                                            manejarInicioArrastreHorizontal(e, refDrones);
+                                        }}
+                                        onMouseLeave={manejarFinArrastreHorizontal}
+                                        onMouseUp={manejarFinArrastreHorizontal}
+                                        onMouseMove={(e) => manejarArrastreHorizontal(e, refDrones)}
                                         className="flex gap-3 w-full overflow-x-auto snap-x snap-mandatory pb-4 cursor-grab active:cursor-grabbing select-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-1"
                                     >
                                         {datosDrones.map((dron) => {
@@ -892,7 +937,7 @@ export const LandingView = ({
             {/* ─── MODAL TIPO HOJA INFERIOR (BOTTOM SHEET) ─── */}
             {dronSeleccionado && (
                 <div className="fixed inset-0 z-50 flex items-end justify-center bg-gray-900/60 backdrop-blur-sm">
-                    <div className="bg-white border-t-2 border-gray-200 w-full rounded-t-[14px] p-4 shadow-2xl relative max-h-[88%] overflow-y-auto">
+                    <div className="bg-white border-t-2 border-gray-200 w-full rounded-t-[14px] p-4 shadow-2xl relative max-h-[88%] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                         <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-3" />
 
                         <div className="flex justify-between items-start border-b border-gray-200 pb-2 mb-3">

@@ -1,5 +1,5 @@
-import { Activity, AlertOctagon, AlertTriangle, BarChart2, Battery, BatteryCharging, Calendar, Lock, Camera, Check, CheckCheck, CheckCircle, CheckCircle2, Clock, Compass, Cpu, Download, Droplets, Edit2, Eye, EyeOff, FileText, Info, Layers, LogOut, Mail, MapPin, MoreVertical, Navigation, Paperclip, Pause, Phone, Play, RefreshCw, RotateCw, Save, Search, Send, Settings, Signal, User, Video, Wifi, Wind, Wrench, X, XCircle, Award, BarChart3, Bell, Briefcase, ChevronRight, DollarSign, Film, Home, Radio, SearchIcon, ShieldCheck, Sliders, Sparkles, TrendingUp, Zap, FileDown, Upload, Loader2, AlertCircle, ArrowLeft, Building2, CreditCard, QrCode, Tag, UserCheck, Wallet, Edit3, Trash2, Headphones, Plane, ShoppingBag } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import { Activity, AlertOctagon, AlertTriangle, BarChart2, Battery, BatteryCharging, Calendar, Lock, Camera, Check, CheckCheck, CheckCircle, CheckCircle2, Clock, Compass, Cpu, Download, Droplets, Edit2, Eye, EyeOff, FileText, Info, Layers, LogOut, Mail, MapPin, MoreVertical, Navigation, Paperclip, Pause, Phone, Play, RefreshCw, RotateCw, Save, Search, Send, Settings, Signal, User, Video, Wifi, Wind, Wrench, X, XCircle, Award, BarChart3, Bell, Briefcase, ChevronRight, DollarSign, Film, Home, Radio, SearchIcon, ShieldCheck, Sliders, Sparkles, TrendingUp, Zap, FileDown, Upload, Loader2, AlertCircle, ArrowLeft, Building2, CreditCard, QrCode, Tag, UserCheck, Wallet, Edit3, Trash2, Headphones, Plane, ShoppingBag, ChevronLeft, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect, useRef} from 'react';
 
 const WireframeButton = ({
     children,
@@ -783,7 +783,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
       <div className="flex flex-col gap-3 mb-4 pb-3 border-b-2 border-gray-100 select-none">
         <div className="text-left space-y-0.5">
           <h1 className="text-lg font-black text-gray-900 tracking-tight">
-            Dashboard del piloto
+            Panel de Control del Piloto
           </h1>
           <p className="text-gray-500 text-[11px] font-medium tracking-wide">
             Centro de control de vuelo • Telemetría, hobby y operaciones comerciales
@@ -933,7 +933,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
         <div className="grid grid-cols-2 gap-3 mb-4 text-left">
           <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
             <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[10px] font-bold text-gray-500 tracking-wider truncate">Horas de vuelo hobby</span>
+              <span className="text-[10px] font-bold text-gray-500 tracking-wider">Horas de vuelo hobby</span>
               <div style={{ backgroundColor: HEX_COLORS.emerald100, color: "#065F46", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
                 <Clock size={14} />
               </div>
@@ -944,7 +944,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
 
           <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
             <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[10px] font-bold text-gray-500 tracking-wider truncate">Metraje y fotos HD</span>
+              <span className="text-[10px] font-bold text-gray-500 tracking-wider">Metraje y fotos HD</span>
               <div style={{ backgroundColor: HEX_COLORS.blue100, color: "#1E40AF", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
                 <Camera size={14} />
               </div>
@@ -955,7 +955,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
 
           <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
             <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[10px] font-bold text-gray-500 tracking-wider truncate">Distancia explorada</span>
+              <span className="text-[10px] font-bold text-gray-500 tracking-wider">Distancia explorada</span>
               <div style={{ backgroundColor: HEX_COLORS.purple100, color: "#6B21A8", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
                 <Compass size={14} />
               </div>
@@ -966,7 +966,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
 
           <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
             <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[10px] font-bold text-gray-500 tracking-wider truncate">Drones en hangar</span>
+              <span className="text-[10px] font-bold text-gray-500 tracking-wider">Drones en hangar</span>
               <div style={{ backgroundColor: HEX_COLORS.amber100, color: "#92400E", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
                 <Radio size={14} />
               </div>
@@ -1760,7 +1760,7 @@ export const PilotoMisionesView = () => {
             </div>
           </div>
 
-          {/* Filtros */}
+          {/* Filtros - Selects en filas separadas */}
           <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 mb-3 shadow-xs flex flex-col gap-2">
             <div className="relative w-full">
               <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -1773,11 +1773,12 @@ export const PilotoMisionesView = () => {
               />
             </div>
 
-            <div className="flex gap-2">
+            {/* Selects en vertical (uno debajo del otro) */}
+            <div className="flex flex-col gap-2">
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="flex-1 min-w-0 border-2 border-gray-200 rounded-[4px] px-2 py-2 text-[11px] bg-white text-gray-800 font-bold focus:border-[#0E5E6F] outline-none cursor-pointer"
+                className="w-full border-2 border-gray-200 rounded-[4px] px-2 py-2 text-[11px] bg-white text-gray-800 font-bold focus:border-[#0E5E6F] outline-none cursor-pointer"
               >
                 <option value="ALL">Todas las Categorías</option>
                 <option value="fumigacion">Fumigación</option>
@@ -1788,7 +1789,7 @@ export const PilotoMisionesView = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="flex-1 min-w-0 border-2 border-gray-200 rounded-[4px] px-2 py-2 text-[11px] bg-white text-gray-800 font-bold focus:border-[#0E5E6F] outline-none cursor-pointer"
+                className="w-full border-2 border-gray-200 rounded-[4px] px-2 py-2 text-[11px] bg-white text-gray-800 font-bold focus:border-[#0E5E6F] outline-none cursor-pointer"
               >
                 <option value="ALL">Todos los Estados</option>
                 <option value="Pendiente">Pendientes</option>
@@ -1799,7 +1800,7 @@ export const PilotoMisionesView = () => {
             </div>
           </div>
 
-          {/* Listado de misiones en tarjetas (reemplaza la tabla en escritorio) */}
+          {/* Listado de misiones en tarjetas */}
           <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xs overflow-hidden divide-y divide-gray-100">
             {filteredMissions.map((mision) => (
               <div key={mision.id} className="p-3 space-y-2 hover:bg-gray-50/60 transition-colors">
@@ -1915,9 +1916,10 @@ export const PilotoMisionesView = () => {
                 </div>
               </div>
 
-              {/* CONTENIDO PRINCIPAL: lista de misiones en carrusel horizontal + cámara debajo */}
-              <div className="flex-1 flex flex-col overflow-hidden">
-                <div className="w-full border-b border-gray-200 bg-white flex flex-col overflow-hidden shrink-0">
+              {/* CONTENIDO PRINCIPAL: Scroll vertical habilitado */}
+              <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-3 bg-gray-50">
+                {/* Carrusel de misiones activas - pasarela horizontal con scroll suave */}
+                <div className="w-full border border-gray-200 bg-white rounded-[4px] flex flex-col overflow-hidden shrink-0">
                   <div className="px-3 py-2 border-b border-gray-100 flex items-center justify-between bg-gray-50">
                     <h3 className="text-xs font-black text-gray-800">Misiones Activas</h3>
                     <span className="bg-[#0E5E6F] text-white text-[9px] font-bold px-2 py-0.5 rounded-[4px]">
@@ -1925,7 +1927,8 @@ export const PilotoMisionesView = () => {
                     </span>
                   </div>
 
-                  <div className="overflow-x-auto flex gap-2 p-2.5 custom-scrollbar">
+                  {/* Carrusel horizontal con scroll suave y cursor grab */}
+                  <div className="overflow-x-auto overflow-y-hidden scroll-smooth p-2.5 flex gap-2 custom-scrollbar cursor-grab active:cursor-grabbing">
                     {activeMissions.map((m) => {
                       const isCurrent = currentActiveMission?.id === m.id;
                       return (
@@ -1962,109 +1965,109 @@ export const PilotoMisionesView = () => {
                   </div>
                 </div>
 
-                <div className="flex-1 p-3 flex flex-col gap-3 overflow-y-auto bg-gray-50">
-                  {currentActiveMission && (
-                    <div className="flex-1 min-h-[260px] bg-gray-950 rounded-[4px] overflow-hidden relative border border-gray-800 shadow-md">
-                      <img
-                        src="src/img/vista_aerea.png"
-                        alt="Vista Aérea"
-                        className={`absolute inset-0 w-full h-full object-cover rounded-[4px] transition-opacity duration-300 ${isPlayingFeed ? "opacity-100" : "opacity-40 grayscale"}`}
-                        onError={(e) => {
-                          e.currentTarget.onerror = null;
-                          e.currentTarget.src = "https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=1600&q=80";
-                        }}
-                      />
+                {/* Cámara y controles */}
+                {currentActiveMission && (
+                  <div className="flex-1 min-h-[260px] bg-gray-950 rounded-[4px] overflow-hidden relative border border-gray-800 shadow-md">
+                    <img
+                      src="src/img/vista_aerea.png"
+                      alt="Vista Aérea"
+                      className={`absolute inset-0 w-full h-full object-cover rounded-[4px] transition-opacity duration-300 ${isPlayingFeed ? "opacity-100" : "opacity-40 grayscale"}`}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=1600&q=80";
+                      }}
+                    />
 
-                      <div className="absolute inset-0 pointer-events-none p-2.5 flex flex-col justify-between z-10">
-                        <div className="flex justify-between items-start gap-2">
-                          <div className="bg-black/60 backdrop-blur-sm px-2 py-1 rounded-[4px] border border-white/10 flex items-center gap-1.5">
-                            <span className={`w-2 h-2 rounded-[4px] shrink-0 aspect-square ${isPlayingFeed ? "bg-red-500 animate-ping" : "bg-yellow-500"}`}></span>
-                            <span className="text-white text-[9px] font-mono font-bold tracking-wide">{currentActiveMission.id}</span>
-                          </div>
-
-                          <div className="pointer-events-auto flex items-center gap-1.5 bg-black/60 backdrop-blur-sm p-1 rounded-[4px] border border-white/10">
-                            {rthArmed && (
-                              <button
-                                onClick={() => { setRthArmed(false); addLog("Cancelada alerta RTH", "yellow"); }}
-                                className="px-2 py-1 bg-gray-800 hover:bg-gray-700 text-gray-300 text-[9px] font-bold rounded-[4px] transition-all cursor-pointer"
-                              >
-                                Cancelar
-                              </button>
-                            )}
-                            <button
-                              onClick={handleExecuteRTH}
-                              className={`px-2.5 py-1 rounded-[4px] flex items-center gap-1.5 text-white font-bold text-[9px] uppercase transition-all shadow cursor-pointer ${
-                                isRthActive ? "bg-orange-600 animate-pulse" : rthArmed ? "bg-red-600 animate-bounce" : "bg-red-600/80 hover:bg-red-600"
-                              }`}
-                            >
-                              <AlertOctagon size={12} className="shrink-0" />
-                              <span>{isRthActive ? "RTH Activo" : rthArmed ? "Confirmar" : "RTH"}</span>
-                            </button>
-                          </div>
+                    <div className="absolute inset-0 pointer-events-none p-2.5 flex flex-col justify-between z-10">
+                      <div className="flex justify-between items-start gap-2">
+                        <div className="bg-black/60 backdrop-blur-sm px-2 py-1 rounded-[4px] border border-white/10 flex items-center gap-1.5">
+                          <span className={`w-2 h-2 rounded-[4px] shrink-0 aspect-square ${isPlayingFeed ? "bg-red-500 animate-ping" : "bg-yellow-500"}`}></span>
+                          <span className="text-white text-[9px] font-mono font-bold tracking-wide">{currentActiveMission.id}</span>
                         </div>
 
-                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-                          <div className="w-14 h-14 border border-white rounded-[4px] shrink-0 aspect-square flex items-center justify-center">
-                            <div className="w-1 h-1 bg-white rounded-[4px] shrink-0 aspect-square"></div>
-                          </div>
+                        <div className="pointer-events-auto flex items-center gap-1.5 bg-black/60 backdrop-blur-sm p-1 rounded-[4px] border border-white/10">
+                          {rthArmed && (
+                            <button
+                              onClick={() => { setRthArmed(false); addLog("Cancelada alerta RTH", "yellow"); }}
+                              className="px-2 py-1 bg-gray-800 hover:bg-gray-700 text-gray-300 text-[9px] font-bold rounded-[4px] transition-all cursor-pointer"
+                            >
+                              Cancelar
+                            </button>
+                          )}
+                          <button
+                            onClick={handleExecuteRTH}
+                            className={`px-2.5 py-1 rounded-[4px] flex items-center gap-1.5 text-white font-bold text-[9px] uppercase transition-all shadow cursor-pointer ${
+                              isRthActive ? "bg-orange-600 animate-pulse" : rthArmed ? "bg-red-600 animate-bounce" : "bg-red-600/80 hover:bg-red-600"
+                            }`}
+                          >
+                            <AlertOctagon size={12} className="shrink-0" />
+                            <span>{isRthActive ? "RTH Activo" : rthArmed ? "Confirmar" : "RTH"}</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+                        <div className="w-14 h-14 border border-white rounded-[4px] shrink-0 aspect-square flex items-center justify-center">
+                          <div className="w-1 h-1 bg-white rounded-[4px] shrink-0 aspect-square"></div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-1.5 items-stretch">
+                        <div className="bg-black/60 backdrop-blur-sm px-2.5 py-1.5 rounded-[4px] border border-white/10 flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[9px] text-white">
+                          <div>ALT: <strong className="text-amber-300">{telemetry.alt}m</strong></div>
+                          <div className="border-l border-white/20 pl-2.5">VEL: <strong className="text-amber-300">{telemetry.speed}m/s</strong></div>
+                          <div className="border-l border-white/20 pl-2.5">DIST: <strong className="text-amber-300">{telemetry.dist}m</strong></div>
+                          <div className="border-l border-white/20 pl-2.5">HDG: <strong className="text-amber-300">{telemetry.heading}°</strong></div>
                         </div>
 
-                        <div className="flex flex-col gap-1.5 items-stretch">
-                          <div className="bg-black/60 backdrop-blur-sm px-2.5 py-1.5 rounded-[4px] border border-white/10 flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[9px] text-white">
-                            <div>ALT: <strong className="text-amber-300">{telemetry.alt}m</strong></div>
-                            <div className="border-l border-white/20 pl-2.5">VEL: <strong className="text-amber-300">{telemetry.speed}m/s</strong></div>
-                            <div className="border-l border-white/20 pl-2.5">DIST: <strong className="text-amber-300">{telemetry.dist}m</strong></div>
-                            <div className="border-l border-white/20 pl-2.5">HDG: <strong className="text-amber-300">{telemetry.heading}°</strong></div>
-                          </div>
-
-                          <div className="pointer-events-auto flex items-center gap-1.5">
-                            <button
-                              onClick={() => addLog(`Captura guardada en ${currentActiveMission.location}`, "green")}
-                              className="flex-1 bg-black/60 hover:bg-black text-white px-2.5 py-1.5 rounded-[4px] border border-white/20 backdrop-blur-sm text-[10px] font-bold flex items-center justify-center gap-1 cursor-pointer"
-                            >
-                              <Camera size={12} className="shrink-0" /> Captura
-                            </button>
-                            <button
-                              onClick={() => {
-                                setIsPlayingFeed(!isPlayingFeed);
-                                addLog(isPlayingFeed ? "Transmisión pausada" : "Transmisión reanudada", "yellow");
-                              }}
-                              className="flex-1 bg-black/60 hover:bg-black text-white px-2.5 py-1.5 rounded-[4px] border border-white/20 backdrop-blur-sm text-[10px] font-bold flex items-center justify-center gap-1 cursor-pointer"
-                            >
-                              {isPlayingFeed ? <Pause size={12} className="shrink-0" /> : <Play size={12} className="shrink-0" />}
-                              {isPlayingFeed ? "Pausar" : "Reanudar"}
-                            </button>
-                          </div>
+                        <div className="pointer-events-auto flex items-center gap-1.5">
+                          <button
+                            onClick={() => addLog(`Captura guardada en ${currentActiveMission.location}`, "green")}
+                            className="flex-1 bg-black/60 hover:bg-black text-white px-2.5 py-1.5 rounded-[4px] border border-white/20 backdrop-blur-sm text-[10px] font-bold flex items-center justify-center gap-1 cursor-pointer"
+                          >
+                            <Camera size={12} className="shrink-0" /> Captura
+                          </button>
+                          <button
+                            onClick={() => {
+                              setIsPlayingFeed(!isPlayingFeed);
+                              addLog(isPlayingFeed ? "Transmisión pausada" : "Transmisión reanudada", "yellow");
+                            }}
+                            className="flex-1 bg-black/60 hover:bg-black text-white px-2.5 py-1.5 rounded-[4px] border border-white/20 backdrop-blur-sm text-[10px] font-bold flex items-center justify-center gap-1 cursor-pointer"
+                          >
+                            {isPlayingFeed ? <Pause size={12} className="shrink-0" /> : <Play size={12} className="shrink-0" />}
+                            {isPlayingFeed ? "Pausar" : "Reanudar"}
+                          </button>
                         </div>
                       </div>
                     </div>
-                  )}
+                  </div>
+                )}
 
-                  <div className="h-28 bg-gray-950 border border-gray-800 rounded-[4px] overflow-hidden flex flex-col shadow shrink-0">
-                    <div className="px-3 py-1.5 bg-gray-900 border-b border-gray-800 flex items-center justify-between shrink-0">
-                      <div className="flex items-center gap-1.5">
-                        <RefreshCw size={11} className="text-green-400 animate-spin shrink-0" />
-                        <span className="text-[10px] font-mono font-bold text-gray-300 uppercase">Log de Telemetría</span>
+                {/* Log de telemetría */}
+                <div className="h-28 bg-gray-950 border border-gray-800 rounded-[4px] overflow-hidden flex flex-col shadow shrink-0">
+                  <div className="px-3 py-1.5 bg-gray-900 border-b border-gray-800 flex items-center justify-between shrink-0">
+                    <div className="flex items-center gap-1.5">
+                      <RefreshCw size={11} className="text-green-400 animate-spin shrink-0" />
+                      <span className="text-[10px] font-mono font-bold text-gray-300 uppercase">Log de Telemetría</span>
+                    </div>
+                    <button
+                      onClick={() => addLog("Sistemas verificados OK", "green")}
+                      className="text-[9px] bg-gray-800 hover:bg-gray-700 text-green-400 font-mono px-2 py-0.5 rounded-[4px] border border-gray-700 cursor-pointer"
+                    >
+                      + Check
+                    </button>
+                  </div>
+                  <div className="flex-1 min-h-0 overflow-y-auto p-2 font-mono text-[10px] space-y-1 text-left">
+                    {logs.map((log) => (
+                      <div key={log.id} className="flex items-start gap-2 border-b border-gray-900/50 pb-0.5">
+                        <span className="text-gray-500 shrink-0">[{log.time}]</span>
+                        <span className={
+                          log.type === "green" ? "text-emerald-400" : log.type === "yellow" ? "text-amber-300" : log.type === "red" ? "text-red-400 font-bold" : "text-sky-300"
+                        }>
+                          {log.text}
+                        </span>
                       </div>
-                      <button
-                        onClick={() => addLog("Sistemas verificados OK", "green")}
-                        className="text-[9px] bg-gray-800 hover:bg-gray-700 text-green-400 font-mono px-2 py-0.5 rounded-[4px] border border-gray-700 cursor-pointer"
-                      >
-                        + Check
-                      </button>
-                    </div>
-                    <div className="flex-1 min-h-0 overflow-y-auto p-2 font-mono text-[10px] space-y-1 text-left">
-                      {logs.map((log) => (
-                        <div key={log.id} className="flex items-start gap-2 border-b border-gray-900/50 pb-0.5">
-                          <span className="text-gray-500 shrink-0">[{log.time}]</span>
-                          <span className={
-                            log.type === "green" ? "text-emerald-400" : log.type === "yellow" ? "text-amber-300" : log.type === "red" ? "text-red-400 font-bold" : "text-sky-300"
-                          }>
-                            {log.text}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -2223,7 +2226,6 @@ export const PilotoMisionesView = () => {
     </div>
   );
 };
-
 
 // 3. Estado de Drones
 export const PilotoDronView = () => {
@@ -2467,21 +2469,34 @@ export const PilotoDronView = () => {
     };
 
     return (
-        <div style={{ fontFamily: "'Roboto', sans-serif" }} className="p-6 md:p-8 max-w-7xl mx-auto flex flex-col gap-6 text-left min-h-screen">
+        <div style={{ fontFamily: "'Roboto', sans-serif" }} className="p-3 max-w-md mx-auto flex flex-col gap-4 text-left min-h-screen">
+            {/* Estilos para ocultar barras de scroll */}
+            <style>{`
+                .scrollbar-hidden {
+                    scrollbar-width: none !important;
+                    -ms-overflow-style: none !important;
+                }
+                .scrollbar-hidden::-webkit-scrollbar {
+                    display: none !important;
+                    width: 0 !important;
+                    height: 0 !important;
+                }
+            `}</style>
+
             {/* CABECERA PRINCIPAL Y PESTAÑAS */}
-            <div className="border-b border-gray-200 pb-5">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+            <div className="border-b border-gray-200 pb-4">
+                <div className="flex flex-col gap-3 mb-4">
                     <div>
-                        <Title className="text-3xl font-extrabold text-gray-900 tracking-tight flex items-center gap-3">
+                        <Title className="text-lg font-extrabold text-gray-900 tracking-tight flex flex-col items-start gap-1.5">
                             <span>Adquisición y Estado de Drones</span>
                             <span 
                                 style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                className="whitespace-nowrap bg-[#0E5E6F]/10 text-[#0E5E6F] text-xs font-bold px-2.5 py-1 tracking-wider border border-[#0E5E6F]/20"
+                                className="whitespace-nowrap bg-[#0E5E6F]/10 text-[#0E5E6F] text-[10px] font-bold px-2 py-0.5 tracking-wider border border-[#0E5E6F]/20"
                             >
                                 Catálogo oficial
                             </span>
                         </Title>
-                        <Text className="text-xs text-gray-500 mt-1 block">
+                        <Text className="text-[11px] text-gray-500 mt-1 block">
                             Supervisa tu flota actual de aeronaves o explora el catálogo completo para adquirir nuevas unidades operativas.
                         </Text>
                     </div>
@@ -2492,38 +2507,38 @@ export const PilotoDronView = () => {
                         <button
                             onClick={() => setActiveMainTab("mis-drones")}
                             style={{ borderRadius: "4px 4px 0 0", fontFamily: "'Roboto', sans-serif" }}
-                            className={`pb-3 px-4 font-bold text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-2 ${
+                            className={`flex-1 pb-3 px-2 font-bold text-[11px] transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                                 activeMainTab === "mis-drones"
                                     ? "text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
                                     : "text-gray-500 hover:text-gray-800"
                             }`}
                         >
-                            <Plane size={18} />
+                            <Plane size={16} />
                             <span>Estado de dron ({misDronesComprados.length})</span>
                         </button>
 
                         <button
                             onClick={() => setActiveMainTab("comprar")}
                             style={{ borderRadius: "4px 4px 0 0", fontFamily: "'Roboto', sans-serif" }}
-                            className={`pb-3 px-4 font-bold text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-2 ${
+                            className={`flex-1 pb-3 px-2 font-bold text-[11px] transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                                 activeMainTab === "comprar"
                                     ? "text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
                                     : "text-gray-500 hover:text-gray-800"
                             }`}
                         >
-                            <ShoppingBag size={18} />
+                            <ShoppingBag size={16} />
                             <span>Comprar drones</span>
                         </button>
                     </div>
                 )}
             </div>
 
-            {/* ZONA DE COMPRA: CHECKOUT */}
+            {/* ZONA DE COMPRA: CHECKOUT (PASARELA CON DISEÑO DE 3.TXT) */}
             {selectedDroneForCheckout ? (
                 <div className="flex flex-col gap-3 animate-in fade-in duration-200">
                     <button
                         onClick={() => setSelectedDroneForCheckout(null)}
-                        className="flex items-center gap-1.5 text-xs text-gray-700 hover:text-gray-900 w-fit cursor-pointer bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-[4px] border border-gray-200 transition"
+                        className="flex items-center gap-1.5 text-xs text-gray-700 hover:text-gray-900 w-fit cursor-pointer bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-[4px] border border-gray-200 transition active:scale-95"
                     >
                         <ArrowLeft size={14} /> Volver a selección de catálogo
                     </button>
@@ -2541,80 +2556,15 @@ export const PilotoDronView = () => {
                             </Text>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-stretch">
-                            {/* RESUMEN DEL DRON */}
-                            <div className="lg:col-span-5 bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
+                        <div className="grid grid-cols-1 gap-3 items-stretch">
+                            {/* FORMULARIO DE PAGO (SEGUNDO BLOQUE CON EL FORMATO Y MICROINTERACCIONES DE 3.TXT) */}
+                            <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
                                 <div>
-                                    <Title
-                                        as="h3"
-                                        className="text-xs font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
-                                    >
-                                        Resumen de la Orden
-                                    </Title>
-
-                                    <div className="bg-gray-50 p-2.5 rounded-[4px] border border-gray-200 flex flex-col gap-1 mb-2">
-                                        <div className="flex gap-3 mb-2">
-                                            <div className="w-20 h-20 bg-gray-200 rounded shrink-0 border border-gray-300 overflow-hidden">
-                                                <img src={selectedDroneForCheckout.imagen} alt="drone" className="w-full h-full object-cover" />
-                                            </div>
-                                            <div>
-                                                <span className="text-[9px] text-[#0E5E6F] bg-[#0E5E6F]/10 px-2 py-0.5 rounded-[4px] border border-[#0E5E6F]/20 w-fit block mb-1">
-                                                    {selectedDroneForCheckout.etiqueta}
-                                                </span>
-                                                <Title
-                                                    as="h2"
-                                                    className="text-base font-black text-gray-900 leading-tight"
-                                                >
-                                                    {selectedDroneForCheckout.nombre}
-                                                </Title>
-                                            </div>
-                                        </div>
-                                        
-                                        <Text className="text-[11px] text-gray-600 block leading-tight mb-2">
-                                            {selectedDroneForCheckout.descripcion}
-                                        </Text>
-                                        
-                                        <div className="mt-1.5 pt-1.5 border-t border-gray-200 flex justify-between items-baseline">
-                                            <span className="text-[11px] text-gray-500">
-                                                Total a pagar:
-                                            </span>
-                                            <span className="text-lg font-black text-[#0E5E6F]">
-                                                {selectedDroneForCheckout.precio}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <Text className="text-[10px] text-gray-700 block mb-1 font-bold">
-                                        Especificaciones del equipo:
-                                    </Text>
-                                    <ul className="flex flex-col gap-1 text-[11px] text-gray-600">
-                                        {Object.entries(selectedDroneForCheckout.especificaciones).map(
-                                            ([key, val]: any, idx: number) => (
-                                                <li key={idx} className="flex items-center gap-1.5">
-                                                    <CheckCircle2
-                                                        size={12}
-                                                        className="text-[#0E5E6F] shrink-0"
-                                                    />
-                                                    <span><strong>{key}:</strong> {val}</span>
-                                                </li>
-                                            ),
-                                        )}
-                                    </ul>
-                                </div>
-
-                                <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-900 text-[10px]">
-                                    <ShieldCheck size={14} className="text-amber-600 shrink-0" />
-                                    <span>Garantía de hardware y soporte comercial de la red BIODRON.</span>
-                                </div>
-                            </div>
-
-                            {/* FORMULARIO DE PAGO */}
-                            <div className="lg:col-span-7 bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
-                                <div>
-                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 p-1 bg-gray-100 rounded-[4px] border border-gray-200 mb-2.5">
+                                    {/* Selector de Método de Pago */}
+                                    <div className="grid grid-cols-2 gap-1 p-1 bg-gray-100 rounded-[4px] border border-gray-200 mb-2.5">
                                         <button
                                             onClick={() => setPaymentMethod("card")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "card"
+                                            className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "card"
                                                     ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                 }`}
@@ -2625,7 +2575,7 @@ export const PilotoDronView = () => {
 
                                         <button
                                             onClick={() => setPaymentMethod("transfer")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "transfer"
+                                            className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "transfer"
                                                     ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                 }`}
@@ -2636,7 +2586,7 @@ export const PilotoDronView = () => {
 
                                         <button
                                             onClick={() => setPaymentMethod("qr")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "qr"
+                                            className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "qr"
                                                     ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                 }`}
@@ -2647,7 +2597,7 @@ export const PilotoDronView = () => {
 
                                         <button
                                             onClick={() => setPaymentMethod("wallet")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "wallet"
+                                            className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "wallet"
                                                     ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                 }`}
@@ -2657,17 +2607,18 @@ export const PilotoDronView = () => {
                                         </button>
                                     </div>
 
-                                    {/* TARJETA */}
+                                    {/* TARJETA DE CRÉDITO Y PASARELAS */}
                                     {paymentMethod === "card" && (
                                         <div className="flex flex-col gap-3">
+                                            {/* Selector de pasarelas */}
                                             <div>
                                                 <span className="text-gray-700 text-[10px] block mb-1.5">Pasarela de pago:</span>
-                                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                                                <div className="grid grid-cols-2 gap-1.5">
                                                     {["PixelPay", "ClinPays", "Recurrente", "Pagadito"].map((gateway) => (
                                                         <button
                                                             key={gateway}
                                                             onClick={() => setSelectedGateway(gateway)}
-                                                            className={`py-1 px-2 rounded-[4px] text-[10px] font-bold border transition cursor-pointer ${selectedGateway === gateway
+                                                            className={`py-1 px-2 rounded-[4px] text-[10px] font-bold border transition cursor-pointer active:scale-95 ${selectedGateway === gateway
                                                                     ? "bg-[#0E5E6F] text-white border-[#0E5E6F]"
                                                                     : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
                                                                 }`}
@@ -2678,8 +2629,8 @@ export const PilotoDronView = () => {
                                                 </div>
                                             </div>
 
-                                            <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
-                                                <div className="sm:col-span-5 flex justify-center">
+                                            <div className="grid grid-cols-1 gap-3 items-center">
+                                                <div className="flex justify-center">
                                                     <div className="w-full max-w-[190px] aspect-[1.58/1] bg-gradient-to-tr from-slate-900 via-slate-800 to-[#0E5E6F] text-white p-2.5 rounded-[4px] shadow-sm border border-slate-700 flex flex-col justify-between">
                                                         <div className="flex justify-between items-center">
                                                             <span className="text-[8px] font-extrabold uppercase tracking-wider text-slate-300">
@@ -2717,7 +2668,7 @@ export const PilotoDronView = () => {
                                                     </div>
                                                 </div>
 
-                                                <div className="sm:col-span-7 grid grid-cols-2 gap-1.5 text-[11px]">
+                                                <div className="grid grid-cols-2 gap-1.5 text-[11px]">
                                                     <div className="col-span-2 flex flex-col gap-0.5">
                                                         <label className="text-gray-700 text-[10px]">Número de tarjeta</label>
                                                         <input
@@ -2774,7 +2725,7 @@ export const PilotoDronView = () => {
                                         <div className="flex flex-col gap-2 text-xs">
                                             <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5">
                                                 <span className="text-gray-800 text-[11px] block mb-1">Cuentas oficiales BIODRON</span>
-                                                <div className="grid grid-cols-2 gap-2 text-[10px]">
+                                                <div className="grid grid-cols-1 gap-2 text-[10px]">
                                                     <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
                                                         <span className="font-bold text-[#0E5E6F] block">BAC Credomatic</span>
                                                         <span className="text-gray-600 block">Cuenta: 11-401-009823-1</span>
@@ -2793,24 +2744,24 @@ export const PilotoDronView = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="border border-dashed border-gray-300 rounded-[4px] p-2.5 text-center flex items-center justify-center gap-2 hover:border-[#0E5E6F] transition cursor-pointer bg-gray-50/50">
+                                            <div className="border border-dashed border-gray-300 rounded-[4px] p-2.5 text-center flex items-center justify-center gap-2 hover:border-[#0E5E6F] transition cursor-pointer active:scale-95 bg-gray-50/50">
                                                 <Upload size={16} className="text-[#0E5E6F]" />
                                                 <span className="text-gray-700 text-[11px]">Subir comprobante de pago</span>
                                             </div>
                                         </div>
                                     )}
 
-                                    {/* QR */}
+                                    {/* PAGO CON QR */}
                                     {paymentMethod === "qr" && (
-                                        <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-[4px] p-3">
-                                            <div className="flex-1">
+                                        <div className="flex flex-col items-center gap-3 bg-gray-50 border border-gray-200 rounded-[4px] p-3">
+                                            <div className="flex-1 w-full">
                                                 <span className="text-gray-700 text-[10px] block mb-1.5">Generar código mediante:</span>
                                                 <div className="flex flex-wrap gap-1 mb-2">
                                                     {["PixelPay", "Banrural", "Atlántida"].map((wallet) => (
                                                         <button
                                                             key={wallet}
                                                             onClick={() => setSelectedQrWallet(wallet)}
-                                                            className={`py-1 px-2 rounded-[4px] text-[10px] font-bold border transition cursor-pointer ${selectedQrWallet === wallet
+                                                            className={`py-1 px-2 rounded-[4px] text-[10px] font-bold border transition cursor-pointer active:scale-95 ${selectedQrWallet === wallet
                                                                     ? "bg-[#0E5E6F] text-white border-[#0E5E6F]"
                                                                     : "bg-white text-gray-600 border-gray-200 hover:bg-gray-100"
                                                                 }`}
@@ -2823,13 +2774,13 @@ export const PilotoDronView = () => {
                                                     Escanea este código desde la app de <strong>{selectedQrWallet}</strong> para pagar el total de {selectedDroneForCheckout.precio}.
                                                 </span>
                                             </div>
-                                            <div className="shrink-0 p-2 bg-white border border-gray-200 rounded-lg shadow-sm flex items-center justify-center">
+                                            <div className="shrink-0 p-2 bg-white border border-gray-200 rounded-[4px] shadow-sm flex items-center justify-center">
                                                 <QrCode size={64} className="text-gray-800" />
                                             </div>
                                         </div>
                                     )}
 
-                                    {/* WALLET */}
+                                    {/* SALDO WALLET */}
                                     {paymentMethod === "wallet" && (
                                         <div className="flex flex-col gap-2 text-xs">
                                             <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5 flex justify-between items-center">
@@ -2869,7 +2820,7 @@ export const PilotoDronView = () => {
                                         (paymentMethod === "wallet" && userWalletBalance < getPrecioNum(selectedDroneForCheckout.precio))
                                     }
                                     onClick={handleConfirmPurchase}
-                                    className="w-full py-2 px-3 bg-[#0E5E6F] hover:bg-[#0A4552] disabled:bg-gray-300 text-white text-xs rounded-[4px] shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer mt-2"
+                                    className="w-full py-2.5 px-3 bg-[#0E5E6F] hover:bg-[#0A4552] disabled:bg-gray-300 text-white text-xs rounded-[4px] shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer mt-2 active:scale-95"
                                 >
                                     {isProcessing ? (
                                         <span>Procesando...</span>
@@ -2882,6 +2833,71 @@ export const PilotoDronView = () => {
                                         </>
                                     )}
                                 </button>
+                            </div>
+                            {/* RESUMEN DEL DRON (PRIMER BLOQUE SEGÚN DISEÑO DE 3.TXT) */}
+                            <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
+                                <div>
+                                    <Title
+                                        as="h3"
+                                        className="text-xs font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
+                                    >
+                                        Resumen de la Orden
+                                    </Title>
+
+                                    <div className="bg-gray-50 p-2.5 rounded-[4px] border border-gray-200 flex flex-col gap-1 mb-2">
+                                        <div className="flex gap-3 mb-2">
+                                            <div className="w-20 h-20 bg-gray-200 rounded shrink-0 border border-gray-300 overflow-hidden">
+                                                <img src={selectedDroneForCheckout.imagen} alt="drone" className="w-full h-full object-cover" />
+                                            </div>
+                                            <div>
+                                                <span className="text-[9px] text-[#0E5E6F] bg-[#0E5E6F]/10 px-2 py-0.5 rounded-[4px] border border-[#0E5E6F]/20 w-fit block mb-1">
+                                                    {selectedDroneForCheckout.etiqueta}
+                                                </span>
+                                                <Title
+                                                    as="h2"
+                                                    className="text-base font-black text-gray-900 leading-tight"
+                                                >
+                                                    {selectedDroneForCheckout.nombre}
+                                                </Title>
+                                            </div>
+                                        </div>
+
+                                        <Text className="text-[11px] text-gray-600 block leading-tight mb-2">
+                                            {selectedDroneForCheckout.descripcion}
+                                        </Text>
+
+                                        <div className="mt-1.5 pt-1.5 border-t border-gray-200 flex justify-between items-baseline">
+                                            <span className="text-[11px] text-gray-500">
+                                                Total a pagar:
+                                            </span>
+                                            <span className="text-lg font-black text-[#0E5E6F]">
+                                                {selectedDroneForCheckout.precio}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <Text className="text-[10px] text-gray-700 block mb-1 font-bold">
+                                        Especificaciones del equipo:
+                                    </Text>
+                                    <ul className="flex flex-col gap-1 text-[11px] text-gray-600">
+                                        {Object.entries(selectedDroneForCheckout.especificaciones).map(
+                                            ([key, val]: any, idx: number) => (
+                                                <li key={idx} className="flex items-center gap-1.5">
+                                                    <CheckCircle2
+                                                        size={12}
+                                                        className="text-[#0E5E6F] shrink-0"
+                                                    />
+                                                    <span><strong>{key}:</strong> {val}</span>
+                                                </li>
+                                            ),
+                                        )}
+                                    </ul>
+                                </div>
+
+                                <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-900 text-[10px]">
+                                    <ShieldCheck size={14} className="text-amber-600 shrink-0" />
+                                    <span>Garantía de hardware y soporte comercial de la red BIODRON.</span>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -2909,73 +2925,84 @@ export const PilotoDronView = () => {
                                 </button>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 gap-5">
                                 {misDronesComprados.map((drone) => (
                                     <div 
                                         key={drone.id} 
                                         style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                        className="bg-white border border-gray-200 p-5 shadow-xs space-y-4 hover:shadow-md transition flex flex-col justify-between"
+                                        className="bg-white border border-gray-200 shadow-xs overflow-hidden flex flex-col"
                                     >
-                                        <div>
-                                            <div className="flex justify-between items-start mb-2">
-                                                <span 
-                                                    style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                                    className="text-[10px] font-bold text-[#0E5E6F] bg-[#0E5E6F]/10 border border-[#0E5E6F]/20 px-2.5 py-0.5 tracking-wider"
-                                                >
-                                                    {drone.categoria}
-                                                </span>
-                                                <span 
-                                                    style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                                    className={`text-[10px] font-bold px-2.5 py-1 border ${
-                                                        drone.estado === "Operativo"
-                                                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                                                            : "bg-amber-50 text-amber-700 border-amber-200"
-                                                    }`}
-                                                >
-                                                    {drone.estado}
-                                                </span>
-                                            </div>
-                                            <h3 className="font-extrabold text-gray-900 text-lg mt-1">{drone.nombre}</h3>
-                                            <p className="text-xs text-gray-400 font-mono">N/S: {drone.numeroSerie}</p>
-                                        </div>
-
-                                        <div 
-                                            style={{ borderRadius: "4px" }}
-                                            className="h-40 bg-gray-100 overflow-hidden border border-gray-100"
-                                        >
+                                        {/* IMAGEN CON INSIGNIAS SUPERPUESTAS */}
+                                        <div className="relative h-40 bg-gray-100 overflow-hidden border-b border-gray-100">
+                                            <span 
+                                                style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
+                                                className="absolute top-2 left-2 z-10 text-[10px] font-bold text-[#0E5E6F] bg-white/95 backdrop-blur-xs border border-[#0E5E6F]/20 px-2.5 py-0.5 tracking-wider shadow-xs"
+                                            >
+                                                {drone.categoria}
+                                            </span>
+                                            <span 
+                                                style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
+                                                className={`absolute top-2 right-2 z-10 text-[10px] font-bold px-2.5 py-1 border shadow-xs ${
+                                                    drone.estado === "Operativo"
+                                                        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                                        : "bg-amber-50 text-amber-700 border-amber-200"
+                                                }`}
+                                            >
+                                                {drone.estado}
+                                            </span>
                                             <img 
                                                 src={drone.imagen} 
                                                 alt={drone.nombre} 
-                                                style={{ borderRadius: "4px" }}
                                                 className="w-full h-full object-cover" 
                                             />
                                         </div>
 
-                                        <div 
-                                            style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                            className="grid grid-cols-2 gap-3 text-xs bg-gray-50 p-3 border border-gray-200"
-                                        >
-                                            <div className="flex items-center gap-2.5">
-                                                <Battery size={18} className="text-emerald-600" />
-                                                <div>
-                                                    <p className="text-[9px] text-gray-400 font-bold">Batería restante</p>
-                                                    <p className="font-bold text-gray-800">{drone.bateria}%</p>
+                                        <div className="p-4 flex flex-col gap-3">
+                                            <div>
+                                                <h3 className="font-extrabold text-gray-900 text-base leading-tight">{drone.nombre}</h3>
+                                                <p className="text-[11px] text-gray-400 font-mono mt-0.5">N/S: {drone.numeroSerie}</p>
+                                            </div>
+
+                                            {/* BATERÍA COMO BARRA DE PROGRESO */}
+                                            <div 
+                                                style={{ borderRadius: "4px" }}
+                                                className="bg-gray-50 border border-gray-200 p-2.5"
+                                            >
+                                                <div className="flex items-center justify-between mb-1.5">
+                                                    <div className="flex items-center gap-1.5 text-[10px] text-gray-500 font-bold uppercase tracking-wide">
+                                                        <Battery size={13} className="text-emerald-600" />
+                                                        <span>Batería restante</span>
+                                                    </div>
+                                                    <span className="text-xs font-black text-gray-800">{drone.bateria}%</span>
+                                                </div>
+                                                <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                                    <div
+                                                        className={`h-full rounded-full ${drone.bateria > 60 ? "bg-emerald-500" : drone.bateria > 30 ? "bg-amber-500" : "bg-red-500"}`}
+                                                        style={{ width: `${drone.bateria}%` }}
+                                                    />
                                                 </div>
                                             </div>
 
-                                            <div className="flex items-center gap-2.5">
-                                                <Radio size={18} className="text-[#0E5E6F]" />
-                                                <div>
-                                                    <p className="text-[9px] text-gray-400 font-bold">Horas de vuelo</p>
-                                                    <p className="font-bold text-gray-800">{drone.horasVuelo} hrs</p>
+                                            {/* DETALLES EN LISTA VERTICAL */}
+                                            <div className="flex flex-col divide-y divide-gray-100 bg-gray-50/80 rounded-[4px] border border-gray-200/80 overflow-hidden">
+                                                <div className="flex items-center gap-2.5 px-3 py-2.5">
+                                                    <div className="p-1.5 bg-white rounded-[4px] border border-gray-200 shrink-0">
+                                                        <Radio size={14} className="text-[#0E5E6F]" />
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[9px] uppercase text-gray-400 leading-none">Horas de vuelo</span>
+                                                        <span className="text-xs font-bold text-gray-800 mt-1">{drone.horasVuelo} hrs</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="pt-2 border-t border-gray-100 flex flex-col gap-3">
-                                            <div className="flex justify-between items-center text-xs text-gray-500">
-                                                <span>Última revisión técnica:</span>
-                                                <span className="font-bold text-gray-700">{drone.ultimaRevision}</span>
+                                                <div className="flex items-center gap-2.5 px-3 py-2.5">
+                                                    <div className="p-1.5 bg-white rounded-[4px] border border-gray-200 shrink-0">
+                                                        <Calendar size={14} className="text-[#0E5E6F]" />
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[9px] uppercase text-gray-400 leading-none">Última revisión técnica</span>
+                                                        <span className="text-xs font-bold text-gray-800 mt-1">{drone.ultimaRevision}</span>
+                                                    </div>
+                                                </div>
                                             </div>
 
                                             {/* BOTÓN SOLICITAR AYUDA TÉCNICA */}
@@ -2985,7 +3012,7 @@ export const PilotoDronView = () => {
                                                     setSupportSubmitted(false);
                                                 }}
                                                 style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                                className="w-full py-2 px-3 bg-[#0E5E6F] hover:bg-[#0A4552] text-white text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+                                                className="w-full py-2.5 px-3 bg-[#0E5E6F] hover:bg-[#0A4552] text-white text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
                                             >
                                                 <Headphones size={14} />
                                                 <span>Solicitar ayuda técnica</span>
@@ -3000,32 +3027,38 @@ export const PilotoDronView = () => {
                     /* COMPRAR DRONES */
                     <div className="space-y-6">
                         <div>
-                            <div className="border-b-2 border-gray-200 mb-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-1 select-none">
-                                {[
-                                    { id: "micro", label: "Micro drones", icon: <Zap size={13} /> },
-                                    { id: "mini", label: "Mini drones", icon: <Tag size={13} /> },
-                                    { id: "pequeno", label: "Drones pequeños", icon: <Wrench size={13} /> },
-                                    { id: "grande", label: "Drones grandes", icon: <UserCheck size={13} /> },
-                                ].map((tab) => {
-                                    const isActive = selectedCategory === tab.id;
-                                    return (
-                                        <button
-                                            key={tab.id}
-                                            onClick={() => setSelectedCategory(tab.id as any)}
-                                            style={{ borderRadius: "4px 4px 0 0", fontFamily: "'Roboto', sans-serif" }}
-                                            className={`px-1.5 py-3 text-[11px] sm:text-xs font-bold flex items-center justify-center gap-1 border-t-2 border-x-2 -mb-[2px] transition-all text-center cursor-pointer ${
-                                                isActive
-                                                    ? "border-t-[#0E5E6F] border-x-gray-200 border-b-white bg-white text-[#0E5E6F] shadow-xs"
-                                                    : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-                                            }`}
+                            <div className="mb-6">
+                                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-1.5">
+                                    Categoría de dron
+                                </label>
+                                <div className="relative flex items-center gap-2">
+                                    <div
+                                        style={{ borderRadius: "4px" }}
+                                        className="shrink-0 w-10 h-10 flex items-center justify-center bg-[#0E5E6F]/10 border border-[#0E5E6F]/20 text-[#0E5E6F]"
+                                    >
+                                        {selectedCategory === "micro" && <Zap size={16} />}
+                                        {selectedCategory === "mini" && <Tag size={16} />}
+                                        {selectedCategory === "pequeno" && <Wrench size={16} />}
+                                        {selectedCategory === "grande" && <UserCheck size={16} />}
+                                    </div>
+                                    <div className="relative flex-1">
+                                        <select
+                                            value={selectedCategory}
+                                            onChange={(e) => setSelectedCategory(e.target.value as any)}
+                                            style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
+                                            className="w-full appearance-none bg-white border-2 border-gray-200 text-gray-900 font-bold text-[12px] py-2.5 pl-3 pr-9 cursor-pointer outline-none focus:border-[#0E5E6F] transition-all"
                                         >
-                                            <span className={isActive ? "text-[#0E5E6F]" : "text-gray-400"}>
-                                                {tab.icon}
-                                            </span>
-                                            <span className="truncate">{tab.label}</span>
-                                        </button>
-                                    );
-                                })}
+                                            <option value="micro">Micro drones</option>
+                                            <option value="mini">Mini drones</option>
+                                            <option value="pequeno">Drones pequeños</option>
+                                            <option value="grande">Drones grandes</option>
+                                        </select>
+                                        <ChevronDown
+                                            size={15}
+                                            className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                                        />
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="mb-4">
@@ -3063,30 +3096,25 @@ export const PilotoDronView = () => {
                         </div>
 
                         {/* LISTA DE DRONES */}
-                        <div className="grid grid-cols-1 gap-6">
+                        <div className="grid grid-cols-1 gap-5">
                             {dronesFiltrados.map((drone) => (
                                 <div
                                     key={drone.id}
                                     style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                    className={`relative bg-white border transition-all flex flex-col md:flex-row overflow-visible shadow-sm hover:shadow-md ${
+                                    className={`relative bg-white border transition-all flex flex-col overflow-hidden shadow-sm ${
                                         drone.destacado
-                                            ? "border-[#0E5E6F] ring-2 ring-[#0E5E6F]/20"
-                                            : "border-gray-200 hover:border-gray-300"
+                                            ? "border-[#0E5E6F] ring-2 ring-[#0E5E6F]/15"
+                                            : "border-gray-200"
                                     }`}
                                 >
+                                    {/* CINTA DE DESTACADO INTEGRADA */}
                                     {drone.destacado && (
-                                        <span 
-                                            style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                            className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 bg-[#0E5E6F] text-white text-[10px] font-black px-3.5 py-1 uppercase tracking-wider shadow-md flex items-center gap-1 border border-white"
-                                        >
+                                        <div className="bg-[#0E5E6F] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1.5 flex items-center gap-1.5">
                                             <Zap size={12} /> Destacado
-                                        </span>
+                                        </div>
                                     )}
 
-                                    <div 
-                                        style={{ borderRadius: "4px 0 0 4px" }}
-                                        className="relative bg-gray-100 border-b md:border-b-0 md:border-r border-gray-200 w-full md:w-2/5 shrink-0 min-h-[200px] md:min-h-full overflow-hidden group"
-                                    >
+                                    <div className="relative bg-gray-100 border-b border-gray-200 w-full h-44 shrink-0 overflow-hidden">
                                         <span 
                                             style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
                                             className="absolute top-2 left-2 z-10 bg-white/95 backdrop-blur-xs text-gray-800 border border-gray-200 text-[10px] font-bold px-2.5 py-1 uppercase tracking-wider shadow-xs"
@@ -3097,64 +3125,75 @@ export const PilotoDronView = () => {
                                         <img
                                             src={drone.imagen}
                                             alt={drone.nombre}
-                                            style={{ borderRadius: "4px" }}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                            className="w-full h-full object-cover"
                                             onError={(e) => {
                                                 (e.target as HTMLElement).style.display = "none";
                                             }}
                                         />
                                     </div>
 
-                                    <div className="p-5 md:p-6 flex-1 flex flex-col justify-between gap-4">
+                                    <div className="p-4 flex flex-col gap-3">
                                         <div>
-                                            <div className="flex justify-between items-baseline mb-1">
-                                                <Title as="h3" className="text-xl font-extrabold text-gray-900">
-                                                    {drone.nombre}
-                                                </Title>
-                                                <Text className="text-xl font-black text-[#0E5E6F]">
-                                                    {drone.precio}
-                                                </Text>
-                                            </div>
+                                            <Title as="h3" className="text-base font-extrabold text-gray-900 leading-tight">
+                                                {drone.nombre}
+                                            </Title>
                                             <Text className="text-xs text-gray-600 line-clamp-2 font-medium leading-relaxed block mt-1">
                                                 {drone.descripcion}
                                             </Text>
                                         </div>
 
+                                        {/* BLOQUE DE PRECIO DESTACADO */}
+                                        <div
+                                            className={`rounded-[4px] px-3.5 py-3 flex items-baseline justify-between border ${drone.destacado
+                                                    ? "bg-[#0E5E6F]/5 border-[#0E5E6F]/20"
+                                                    : "bg-gray-50 border-gray-200"
+                                                }`}
+                                        >
+                                            <span className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">
+                                                Precio comercial
+                                            </span>
+                                            <span className="text-xl font-black text-[#0E5E6F]">
+                                                {drone.precio}
+                                            </span>
+                                        </div>
+
+                                        {/* SPECS EN TRÍO COMPACTO */}
                                         <div 
                                             style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                            className="bg-gray-50 p-3 border border-gray-200 grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs"
+                                            className="bg-gray-50 p-2.5 border border-gray-200 grid grid-cols-3 gap-1.5 text-xs"
                                         >
-                                            <div className="flex flex-col">
-                                                <span className="font-medium text-gray-400 text-[10px]">Carga / Capacidad</span>
-                                                <span className="font-bold text-gray-800">{drone.especificaciones["Capacidad de carga"]}</span>
+                                            <div className="flex flex-col items-center text-center gap-0.5">
+                                                <span className="font-medium text-gray-400 text-[9px] leading-tight">Carga</span>
+                                                <span className="font-bold text-gray-800 text-[11px] leading-tight">{drone.especificaciones["Capacidad de carga"]}</span>
                                             </div>
-                                            <div className="flex flex-col">
-                                                <span className="font-medium text-gray-400 text-[10px]">Tiempo vuelo</span>
-                                                <span className="font-bold text-gray-800">{drone.especificaciones["Tiempo de vuelo"]}</span>
+                                            <div className="flex flex-col items-center text-center gap-0.5 border-x border-gray-200">
+                                                <span className="font-medium text-gray-400 text-[9px] leading-tight">T. vuelo</span>
+                                                <span className="font-bold text-gray-800 text-[11px] leading-tight">{drone.especificaciones["Tiempo de vuelo"]}</span>
                                             </div>
-                                            <div className="flex flex-col">
-                                                <span className="font-medium text-gray-400 text-[10px]">Velocidad máx</span>
-                                                <span className="font-bold text-gray-800">{drone.especificaciones["Velocidad máxima"]}</span>
+                                            <div className="flex flex-col items-center text-center gap-0.5">
+                                                <span className="font-medium text-gray-400 text-[9px] leading-tight">Vel. máx</span>
+                                                <span className="font-bold text-gray-800 text-[11px] leading-tight">{drone.especificaciones["Velocidad máxima"]}</span>
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
-                                            <button
-                                                onClick={() => setSelectedDrone(drone)}
-                                                style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                                className="flex-1 py-2.5 px-4 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold transition border border-gray-200 flex items-center justify-center gap-1.5 cursor-pointer"
-                                            >
-                                                <Info size={14} />
-                                                Ficha técnica
-                                            </button>
-
+                                        {/* CTA APILADOS A ANCHO COMPLETO */}
+                                        <div className="flex flex-col gap-2 pt-1 border-t border-gray-100 mt-1">
                                             <button
                                                 onClick={() => iniciarCompra(drone)}
                                                 style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                                className="flex-1 py-2.5 px-4 bg-[#0E5E6F] hover:bg-[#0A4552] text-white text-xs font-bold transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                                                className="w-full py-2.5 px-4 bg-[#0E5E6F] hover:bg-[#0A4552] text-white text-xs font-bold transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
                                             >
                                                 <ShoppingBag size={14} />
                                                 Comprar
+                                            </button>
+
+                                            <button
+                                                onClick={() => setSelectedDrone(drone)}
+                                                style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
+                                                className="w-full py-2.5 px-4 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold transition border border-gray-200 flex items-center justify-center gap-1.5 cursor-pointer"
+                                            >
+                                                <Info size={14} />
+                                                Ficha técnica
                                             </button>
                                         </div>
                                     </div>
@@ -3165,13 +3204,16 @@ export const PilotoDronView = () => {
                 )
             )}
 
-            {/* MODAL SOLICITUD DE AYUDA TÉCNICA */}
+            {/* ============================================================ */}
+            {/* MODAL DE SOLICITUD DE AYUDA TÉCNICA */}
+            {/* ============================================================ */}
             {supportDrone && (
-                <div style={{ fontFamily: "'Roboto', sans-serif" }} className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 text-left">
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-end justify-center overscroll-none">
                     <div 
-                        style={{ borderRadius: "4px" }}
-                        className="bg-white max-w-lg w-full border border-gray-200 shadow-2xl overflow-hidden p-6 space-y-4"
+                        className="scrollbar-hidden bg-white w-full max-w-md mx-auto max-h-[90dvh] overflow-y-auto overflow-x-hidden rounded-t-2xl p-5 pb-6 space-y-4 animate-in fade-in slide-in-from-bottom duration-200"
                     >
+                        <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto -mt-1 mb-1" />
+
                         <div className="flex justify-between items-center border-b border-gray-100 pb-3">
                             <div className="flex items-center gap-2">
                                 <Headphones className="text-[#0E5E6F]" size={20} />
@@ -3217,21 +3259,21 @@ export const PilotoDronView = () => {
                                     />
                                 </div>
 
-                                <div className="pt-3 border-t border-gray-100 flex justify-end gap-2">
+                                <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">
+                                    <button
+                                        type="submit"
+                                        style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
+                                        className="w-full px-4 py-2.5 bg-[#0E5E6F] hover:bg-[#0A4552] text-white font-bold text-xs shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
+                                    >
+                                        <Send size={14} /> Enviar Solicitud
+                                    </button>
                                     <button
                                         type="button"
                                         onClick={closeSupportModal}
                                         style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                        className="px-4 py-2 border border-gray-300 text-xs font-bold text-gray-600 hover:bg-gray-50 cursor-pointer"
+                                        className="w-full px-4 py-2.5 border border-gray-300 text-xs font-bold text-gray-600 hover:bg-gray-50 cursor-pointer"
                                     >
                                         Cancelar
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                        className="px-4 py-2 bg-[#0E5E6F] hover:bg-[#0A4552] text-white font-bold text-xs shadow-xs transition flex items-center gap-1.5 cursor-pointer"
-                                    >
-                                        <Send size={14} /> Enviar Solicitud
                                     </button>
                                 </div>
                             </form>
@@ -3250,7 +3292,7 @@ export const PilotoDronView = () => {
                                 <button
                                     onClick={closeSupportModal}
                                     style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                    className="mt-3 px-5 py-2 bg-[#0E5E6F] text-white font-bold text-xs hover:bg-[#0A4552] transition cursor-pointer"
+                                    className="mt-3 w-full px-5 py-2.5 bg-[#0E5E6F] text-white font-bold text-xs hover:bg-[#0A4552] transition cursor-pointer"
                                 >
                                     Entendido
                                 </button>
@@ -3260,21 +3302,23 @@ export const PilotoDronView = () => {
                 </div>
             )}
 
-            {/* MODAL FICHA TÉCNICA */}
+            {/* ============================================================ */}
+            {/* MODAL DE FICHA TÉCNICA */}
+            {/* ============================================================ */}
             {selectedDrone && (
-                <div style={{ fontFamily: "'Roboto', sans-serif" }} className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 md:p-6 animate-in fade-in duration-200 text-left">
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-end justify-center overscroll-none">
                     <div 
-                        style={{ borderRadius: "4px" }}
-                        className="bg-white max-w-4xl w-full border border-gray-200 shadow-2xl overflow-hidden flex flex-col my-auto"
+                        className="scrollbar-hidden bg-white w-full max-w-md mx-auto max-h-[90dvh] overflow-y-auto overflow-x-hidden rounded-t-2xl p-5 space-y-4 animate-in fade-in slide-in-from-bottom duration-200"
                     >
-                        <div className="px-5 py-3.5 border-b border-gray-200 flex justify-between items-center bg-gray-50 shrink-0">
-                            <div className="flex items-center gap-3">
-                                <Title as="h2" className="text-lg font-black text-gray-900">
+                        {/* Cabecera */}
+                        <div className="flex justify-between items-center border-b border-gray-200 pb-3">
+                            <div className="flex items-center gap-2 min-w-0">
+                                <Title as="h2" className="text-base font-black text-gray-900 truncate">
                                     {selectedDrone.nombre}
                                 </Title>
                                 <span 
                                     style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                    className="text-[10px] font-black tracking-wider bg-[#0E5E6F]/10 text-[#0E5E6F] px-2.5 py-0.5 border border-[#0E5E6F]/20"
+                                    className="text-[10px] font-black tracking-wider bg-[#0E5E6F]/10 text-[#0E5E6F] px-2 py-0.5 border border-[#0E5E6F]/20 shrink-0"
                                 >
                                     {selectedDrone.etiqueta}
                                 </span>
@@ -3282,23 +3326,23 @@ export const PilotoDronView = () => {
                             <button
                                 onClick={() => setSelectedDrone(null)}
                                 style={{ borderRadius: "4px" }}
-                                className="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-200 transition cursor-pointer"
+                                className="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-200 transition cursor-pointer shrink-0"
                             >
                                 <X size={18} />
                             </button>
                         </div>
 
-                        <div className="p-5 grid grid-cols-1 md:grid-cols-12 gap-5 items-stretch">
+                        {/* Contenido */}
+                        <div className="flex flex-col gap-4">
                             <div 
                                 style={{ borderRadius: "4px" }}
-                                className="md:col-span-6 flex flex-col justify-between bg-gray-50 border border-gray-200 overflow-hidden min-h-[240px]"
+                                className="flex flex-col bg-gray-50 border border-gray-200 overflow-hidden"
                             >
-                                <div className="relative w-full h-full min-h-[180px] bg-gray-100">
+                                <div className="relative w-full h-48 bg-gray-100">
                                     <img
                                         src={selectedDrone.imagen}
                                         alt={selectedDrone.nombre}
-                                        style={{ borderRadius: "4px" }}
-                                        className="w-full h-full object-cover min-h-[200px]"
+                                        className="w-full h-full object-cover"
                                     />
                                 </div>
                                 <div className="p-3.5 bg-white border-t border-gray-200">
@@ -3308,53 +3352,51 @@ export const PilotoDronView = () => {
                                     <Text className="text-xl font-black text-[#0E5E6F] block mb-1">
                                         {selectedDrone.precio}
                                     </Text>
-                                    <Text className="text-xs text-gray-600 font-medium leading-relaxed block line-clamp-2">
+                                    <Text className="text-xs text-gray-600 font-medium leading-relaxed block">
                                         {selectedDrone.descripcion}
                                     </Text>
                                 </div>
                             </div>
 
-                            <div className="md:col-span-6 flex flex-col justify-between gap-3">
-                                <div>
-                                    <Text className="text-[11px] font-bold text-gray-400 tracking-wider mb-2 block">
-                                        Especificaciones Técnicas
-                                    </Text>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        {Object.entries(selectedDrone.especificaciones).map(
-                                            ([clave, valor]: any) => (
-                                                <div
-                                                    key={clave}
-                                                    style={{ borderRadius: "4px" }}
-                                                    className="p-2.5 bg-gray-50 border border-gray-200 flex flex-col justify-center"
-                                                >
-                                                    <span className="text-[9px] text-gray-400 font-bold truncate">
-                                                        {clave}
-                                                    </span>
-                                                    <span className="text-xs font-bold text-gray-800 truncate">
-                                                        {valor}
-                                                    </span>
-                                                </div>
-                                            ),
-                                        )}
-                                    </div>
+                            <div>
+                                <Text className="text-[11px] font-bold text-gray-400 tracking-wider mb-2 block">
+                                    Especificaciones Técnicas
+                                </Text>
+                                <div className="grid grid-cols-2 gap-2">
+                                    {Object.entries(selectedDrone.especificaciones).map(
+                                        ([clave, valor]: any) => (
+                                            <div
+                                                key={clave}
+                                                style={{ borderRadius: "4px" }}
+                                                className="p-2.5 bg-gray-50 border border-gray-200 flex flex-col justify-center"
+                                            >
+                                                <span className="text-[9px] text-gray-400 font-bold truncate">
+                                                    {clave}
+                                                </span>
+                                                <span className="text-xs font-bold text-gray-800 truncate">
+                                                    {valor}
+                                                </span>
+                                            </div>
+                                        ),
+                                    )}
                                 </div>
                             </div>
                         </div>
 
-                        <div className="px-5 py-3 border-t border-gray-200 bg-gray-50 flex justify-end gap-2 shrink-0">
+                        {/* Botones */}
+                        <div className="pt-3 border-t border-gray-200 flex flex-col gap-2">
                             <button
                                 onClick={() => iniciarCompra(selectedDrone)}
                                 style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                className="px-4 py-2 bg-[#0E5E6F] hover:bg-[#0A4552] text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer"
+                                className="w-full px-4 py-2.5 bg-[#0E5E6F] hover:bg-[#0A4552] text-white text-xs font-bold transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
                             >
                                 <ShoppingBag size={14} />
                                 Comprar
                             </button>
-
                             <button
                                 onClick={() => setSelectedDrone(null)}
                                 style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                className="px-4 py-2 border border-gray-300 text-xs font-bold text-gray-700 bg-white hover:bg-gray-100 cursor-pointer"
+                                className="w-full px-4 py-2.5 border border-gray-300 text-xs font-bold text-gray-700 bg-white hover:bg-gray-100 cursor-pointer"
                             >
                                 Cerrar
                             </button>
@@ -3379,9 +3421,9 @@ export const PilotoMapsView = () => {
     const [showHeatmap, setShowHeatmap] = useState(false);
     const [showBoundaries, setShowBoundaries] = useState(true);
 
-    // Paneles colapsados por defecto
-    const [isLeftCollapsed, setIsLeftCollapsed] = useState(false);
-    const [isRightCollapsed, setIsRightCollapsed] = useState(false);
+    // Panel móvil activo: en vez de colapsar/expandir 2 columnas laterales,
+    // en móvil solo un panel se muestra a la vez como bottom sheet sobre el mapa
+    const [activePanel, setActivePanel] = useState<"capas" | "dron" | null>(null);
 
     // Parámetros de la Misión
     const [altitude, setAltitude] = useState(45);
@@ -3425,9 +3467,9 @@ export const PilotoMapsView = () => {
       `}</style>
 
             {/* BARRA SUPERIOR DE COMANDO */}
-            <header className="bg-gray-50 border-b-2 border-gray-200 px-4 flex items-center justify-between shrink-0 h-12 z-30 w-full">
-                <div className="flex items-center gap-2">
-                    <div className="p-1 bg-[#0E5E6F] text-white rounded-[4px] shadow-xs">
+            <header className="bg-gray-50 border-b-2 border-gray-200 px-3 flex items-center justify-between shrink-0 h-12 z-30 w-full">
+                <div className="flex items-center gap-2 min-w-0">
+                    <div className="p-1 bg-[#0E5E6F] text-white rounded-[4px] shadow-xs shrink-0">
                         <svg
                             className="w-4 h-4"
                             fill="none"
@@ -3441,23 +3483,27 @@ export const PilotoMapsView = () => {
                             />
                         </svg>
                     </div>
-                    <div className="text-left">
+                    <div className="text-left min-w-0">
                         <div className="flex items-center gap-1.5">
-                            <h1 className="text-xs sm:text-sm font-bold text-gray-900 tracking-tight">
-                                Edición y Aprobación de Mapas
+                            <h1 className="text-xs font-bold text-gray-900 tracking-tight truncate">
+                                Editor de mapas
                             </h1>
-                            <span className="text-[8px] font-bold tracking-wider px-1.5 py-0.2 rounded-[4px] border border-[#0E5E6F]/30 bg-[#0E5E6F]/10 text-[#0E5E6F]">
-                                Admin
-                            </span>
                         </div>
-                        <p className="text-[10px] text-gray-500 font-medium leading-none">
-                            Zonas y parámetros de vuelo.
-                        </p>
+                        <button
+                            onClick={handleOpenIdModal}
+                            className="text-[10px] text-gray-500 font-medium leading-none truncate hover:text-[#0E5E6F] transition-colors cursor-pointer text-left block"
+                            title="Cambiar ID de misión"
+                        >
+                            ID: #{mappingId}
+                        </button>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-1.5">
-                    <button className="py-1 px-2.5 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] text-[11px] flex items-center gap-1 transition-colors active:scale-95 shadow-xs cursor-pointer">
+                <div className="flex items-center gap-1.5 shrink-0">
+                    <button 
+                        className="p-1.5 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] flex items-center justify-center transition-colors active:scale-95 shadow-xs cursor-pointer"
+                        title="Borrar selección"
+                    >
                         <svg
                             className="w-3.5 h-3.5 text-rose-600"
                             fill="none"
@@ -3471,9 +3517,8 @@ export const PilotoMapsView = () => {
                                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                             />
                         </svg>
-                        <span>Borrar selección</span>
                     </button>
-                    <button className="py-1 px-3 bg-[#0E5E6F] border-2 border-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold rounded-[4px] text-[11px] flex items-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer">
+                    <button className="py-1 px-2.5 bg-[#0E5E6F] border-2 border-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold rounded-[4px] text-[11px] flex items-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer">
                         <svg
                             className="w-3.5 h-3.5"
                             fill="none"
@@ -3493,278 +3538,9 @@ export const PilotoMapsView = () => {
             </header>
 
             {/* ÁREA PRINCIPAL DEL EDITOR */}
-            <main className="flex-1 flex overflow-hidden relative min-h-0 w-full">
-                {/* PANEL IZQUIERDO */}
-                <aside
-                    className={`bg-white border-r-2 border-gray-200 flex flex-col shrink-0 transition-all duration-300 relative z-20 h-full overflow-visible ${isLeftCollapsed ? "w-12" : "w-56"
-                        }`}
-                >
-                    {/* Botón Flotante para Abrir/Cerrar */}
-                    <button
-                        onClick={() => setIsLeftCollapsed(!isLeftCollapsed)}
-                        className="absolute -right-3.5 top-3 bg-white border-2 border-gray-300 hover:border-[#0E5E6F] text-gray-700 hover:text-[#0E5E6F] rounded-full p-1 z-40 shadow-lg active:scale-95 cursor-pointer transition-all"
-                        title={isLeftCollapsed ? "Expandir menú" : "Colapsar menú"}
-                    >
-                        <svg
-                            className={`w-3.5 h-3.5 transition-transform duration-300 ${isLeftCollapsed ? "rotate-180" : ""}`}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="3"
-                                d="M15 19l-7-7 7-7"
-                            />
-                        </svg>
-                    </button>
-
-                    {!isLeftCollapsed ? (
-                        <div className="p-2.5 flex flex-col gap-2.5 overflow-y-auto no-scrollbar text-left h-full max-h-full">
-                            {/* SECCIÓN EDICIÓN ACTIVA */}
-                            <div 
-                                onClick={handleOpenIdModal}
-                                className="p-2 bg-gray-50 hover:bg-[#0E5E6F]/5 border-2 border-gray-200 hover:border-[#0E5E6F] rounded-[4px] shrink-0 cursor-pointer transition-all flex items-center justify-between group"
-                                title="Hacer clic para cambiar ID de misión"
-                            >
-                                <div>
-                                    <span className="text-[9px] font-bold tracking-wider text-gray-400 block">
-                                        Edición activa
-                                    </span>
-                                    <span className="text-[11px] font-bold text-gray-800 block mt-0.5 group-hover:text-[#0E5E6F]">
-                                        ID: #{mappingId}
-                                    </span>
-                                </div>
-                                <svg
-                                    className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#0E5E6F] transition-colors shrink-0"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                                    />
-                                </svg>
-                            </div>
-
-                            <div className="shrink-0">
-                                <h2 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1 uppercase">
-                                    Herramientas De Dibujo
-                                </h2>
-                                <div className="space-y-1">
-                                    <button
-                                        onClick={() => setSelectedTool("polygon")}
-                                        className={`w-full flex items-center justify-between p-1.5 rounded-[4px] border-2 text-[11px] font-bold transition-all cursor-pointer ${selectedTool === "polygon"
-                                                ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
-                                                : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
-                                            }`}
-                                    >
-                                        <div className="flex items-center gap-1.5">
-                                            <div className="w-3 h-3 border-2 border-current rounded-xs" />
-                                            <span>Pentágono</span>
-                                        </div>
-                                        {selectedTool === "polygon" && (
-                                            <span className="text-[8px] font-bold tracking-wider bg-[#0E5E6F] text-white px-1.5 py-0.2 rounded-[4px]">
-                                                Activo
-                                            </span>
-                                        )}
-                                    </button>
-
-                                    <button
-                                        onClick={() => setSelectedTool("octagon")}
-                                        className={`w-full flex items-center justify-between p-1.5 rounded-[4px] border-2 text-[11px] font-bold transition-all cursor-pointer ${selectedTool === "octagon"
-                                                ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
-                                                : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
-                                            }`}
-                                    >
-                                        <div className="flex items-center gap-1.5">
-                                            <div className="w-3 h-3 border-2 border-current rounded-full" />
-                                            <span>Octágono</span>
-                                        </div>
-                                        {selectedTool === "octagon" && (
-                                            <span className="text-[8px] font-bold tracking-wider bg-[#0E5E6F] text-white px-1.5 py-0.2 rounded-[4px]">
-                                                Activo
-                                            </span>
-                                        )}
-                                    </button>
-
-                                    <button
-                                        onClick={() => setSelectedTool("delete")}
-                                        className={`w-full flex items-center gap-1.5 p-1.5 rounded-[4px] border-2 text-[11px] font-bold transition-all cursor-pointer ${selectedTool === "delete"
-                                                ? "border-rose-500 bg-rose-50 text-rose-700"
-                                                : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
-                                            }`}
-                                    >
-                                        <svg
-                                            className="w-3.5 h-3.5"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                            />
-                                        </svg>
-                                        <span>Eliminar</span>
-                                    </button>
-
-                                    <button
-                                        onClick={() => setSelectedTool("move")}
-                                        className={`w-full flex items-center gap-1.5 p-1.5 rounded-[4px] border-2 text-[11px] font-bold transition-all cursor-pointer ${selectedTool === "move"
-                                                ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
-                                                : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
-                                            }`}
-                                    >
-                                        <svg
-                                            className="w-3.5 h-3.5"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M4 8h16M4 16h16"
-                                            />
-                                        </svg>
-                                        <span>Mover nodos</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <hr className="border-gray-200 shrink-0" />
-
-                            <div className="shrink-0">
-                                <h2 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1 uppercase">
-                                    Capas Del Mapa
-                                </h2>
-                                <div className="space-y-0.5 mb-1.5">
-                                    {[
-                                        { id: "satellite", label: "Satélite" },
-                                        { id: "hybrid", label: "Híbrido" },
-                                        { id: "terrain", label: "Terreno" },
-                                    ].map((layer) => (
-                                        <label
-                                            key={layer.id}
-                                            className="flex items-center gap-1.5 text-[11px] font-bold text-gray-700 cursor-pointer p-0.5 hover:bg-gray-50 rounded-[4px]"
-                                        >
-                                            <input
-                                                type="radio"
-                                                name="mapLayer"
-                                                checked={mapLayer === layer.id}
-                                                onChange={() => setMapLayer(layer.id as any)}
-                                                className="accent-[#0E5E6F]"
-                                            />
-                                            <span>{layer.label}</span>
-                                        </label>
-                                    ))}
-                                </div>
-
-                                <div className="space-y-1 pt-1.5 border-t border-gray-100">
-                                    <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
-                                        <span>Zonas</span>
-                                        <input
-                                            type="checkbox"
-                                            checked={showZones}
-                                            onChange={(e) => setShowZones(e.target.checked)}
-                                            className="accent-[#0E5E6F] cursor-pointer"
-                                        />
-                                    </div>
-                                    <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
-                                        <span>Mapa NDVI</span>
-                                        <input
-                                            type="checkbox"
-                                            checked={showHeatmap}
-                                            onChange={(e) => setShowHeatmap(e.target.checked)}
-                                            className="accent-[#0E5E6F] cursor-pointer"
-                                        />
-                                    </div>
-                                    <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
-                                        <span>Límites</span>
-                                        <input
-                                            type="checkbox"
-                                            checked={showBoundaries}
-                                            onChange={(e) => setShowBoundaries(e.target.checked)}
-                                            className="accent-[#0E5E6F] cursor-pointer"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ) : (
-                        /* ACCESOS RÁPIDOS PANEL IZQUIERDO COLAPSADO */
-                        <div className="py-4 flex flex-col items-center gap-3">
-                            <button
-                                onClick={handleOpenIdModal}
-                                className="p-2 bg-gray-100 hover:bg-[#0E5E6F]/10 hover:text-[#0E5E6F] rounded-[4px] text-gray-600 transition-colors cursor-pointer"
-                                title={`Cambiar ID de misión (${mappingId})`}
-                            >
-                                <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
-                                    />
-                                </svg>
-                            </button>
-                            <button
-                                onClick={() => setIsLeftCollapsed(false)}
-                                className="p-2 bg-gray-100 hover:bg-[#0E5E6F]/10 hover:text-[#0E5E6F] rounded-[4px] text-gray-600 transition-colors cursor-pointer"
-                                title="Herramientas de dibujo"
-                            >
-                                <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                                    />
-                                </svg>
-                            </button>
-                            <button
-                                onClick={() => setIsLeftCollapsed(false)}
-                                className="p-2 bg-gray-100 hover:bg-[#0E5E6F]/10 hover:text-[#0E5E6F] rounded-[4px] text-gray-600 transition-colors cursor-pointer"
-                                title="Capas del mapa"
-                            >
-                                <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    )}
-                </aside>
-
-                {/* MAPA INTERACTIVO (ÁREA CENTRAL) */}
-                <div className="flex-1 bg-slate-900 relative overflow-hidden h-full min-w-0">
+            <main className="flex-1 relative overflow-hidden min-h-0 w-full">
+                {/* MAPA INTERACTIVO (ÁREA CENTRAL, pantalla completa) */}
+                <div className="absolute inset-0 bg-slate-900 overflow-hidden">
                     <div
                         className="absolute inset-0 bg-cover bg-center w-full h-full object-cover pointer-events-none rounded-[4px]"
                         style={{
@@ -3852,6 +3628,67 @@ export const PilotoMapsView = () => {
                         </text>
                     </svg>
 
+                    {/* DOCK FLOTANTE: HERRAMIENTAS DE DIBUJO */}
+                    <div className="absolute top-3 left-3 flex flex-col gap-1 z-10 bg-white/95 backdrop-blur-xs p-1 rounded-[4px] border-2 border-gray-200 shadow-md">
+                        <button
+                            onClick={() => setSelectedTool("polygon")}
+                            className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${
+                                selectedTool === "polygon"
+                                    ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
+                                    : "border-transparent text-gray-600 hover:bg-gray-50"
+                            }`}
+                            title="Pentágono"
+                        >
+                            <div className="w-3 h-3 border-2 border-current rounded-xs" />
+                        </button>
+
+                        <button
+                            onClick={() => setSelectedTool("octagon")}
+                            className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${
+                                selectedTool === "octagon"
+                                    ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
+                                    : "border-transparent text-gray-600 hover:bg-gray-50"
+                            }`}
+                            title="Octágono"
+                        >
+                            <div className="w-3 h-3 border-2 border-current rounded-full" />
+                        </button>
+
+                        <button
+                            onClick={() => setSelectedTool("delete")}
+                            className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${
+                                selectedTool === "delete"
+                                    ? "border-rose-500 bg-rose-50 text-rose-700"
+                                    : "border-transparent text-gray-600 hover:bg-gray-50"
+                            }`}
+                            title="Eliminar"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                />
+                            </svg>
+                        </button>
+
+                        <button
+                            onClick={() => setSelectedTool("move")}
+                            className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${
+                                selectedTool === "move"
+                                    ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
+                                    : "border-transparent text-gray-600 hover:bg-gray-50"
+                            }`}
+                            title="Mover nodos"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h16M4 16h16" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    {/* ZOOM */}
                     <div className="absolute top-3 right-3 flex flex-col gap-1 z-10">
                         <button className="w-7 h-7 bg-white border-2 border-gray-200 rounded-[4px] shadow-md hover:bg-gray-50 text-gray-700 font-bold flex items-center justify-center text-xs cursor-pointer">
                             +
@@ -3860,42 +3697,181 @@ export const PilotoMapsView = () => {
                             -
                         </button>
                     </div>
-                </div>
 
-                {/* PANEL DERECHO */}
-                <aside
-                    className={`bg-white border-l-2 border-gray-200 flex flex-col shrink-0 transition-all duration-300 relative z-20 h-full overflow-visible ${isRightCollapsed ? "w-12" : "w-64"
-                        }`}
-                >
-                    {/* Botón Flotante para Abrir/Cerrar */}
-                    <button
-                        onClick={() => setIsRightCollapsed(!isRightCollapsed)}
-                        className="absolute -left-3.5 top-3 bg-white border-2 border-gray-300 hover:border-[#0E5E6F] text-gray-700 hover:text-[#0E5E6F] rounded-full p-1 z-40 shadow-lg active:scale-95 cursor-pointer transition-all"
-                        title={isRightCollapsed ? "Expandir menú" : "Colapsar menú"}
-                    >
-                        <svg
-                            className={`w-3.5 h-3.5 transition-transform duration-300 ${isRightCollapsed ? "" : "rotate-180"}`}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                    {/* FABs: abren los bottom sheets de Capas y Control de dron */}
+                    <div className="absolute bottom-3 right-3 flex flex-col gap-2 z-10">
+                        <button
+                            onClick={() => setActivePanel("capas")}
+                            className="w-11 h-11 bg-white border-2 border-gray-200 rounded-full shadow-lg hover:border-[#0E5E6F] hover:text-[#0E5E6F] text-gray-700 flex items-center justify-center cursor-pointer active:scale-95 transition-all"
+                            title="Capas del mapa"
                         >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="3"
-                                d="M15 19l-7-7 7-7"
-                            />
-                        </svg>
-                    </button>
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+                                />
+                            </svg>
+                        </button>
 
-                    {!isRightCollapsed ? (
-                        <div className="p-2.5 flex flex-col gap-2.5 overflow-y-auto no-scrollbar text-left h-full max-h-full">
-                            <div className="flex items-center justify-between pb-1 border-b-2 border-gray-100 shrink-0">
-                                <h2 className="text-[11px] font-bold tracking-wider text-gray-800">
-                                    Control Del Dron
-                                </h2>
+                        <button
+                            onClick={() => setActivePanel("dron")}
+                            className="w-11 h-11 bg-[#0E5E6F] border-2 border-[#0E5E6F] rounded-full shadow-lg text-white flex items-center justify-center cursor-pointer active:scale-95 transition-all relative"
+                            title="Control del dron"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                                />
+                            </svg>
+                            <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 border-2 border-white rounded-full" />
+                        </button>
+                    </div>
+                </div>
+            </main>
+
+            {/* ================= BOTTOM SHEET: CAPAS Y EDICIÓN ACTIVA ================= */}
+            {activePanel === "capas" && (
+                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
+                    <div className="bg-white w-full rounded-t-2xl shadow-2xl border-t-2 border-gray-200 flex flex-col max-h-[75%] font-sans">
+                        <div className="flex justify-center pt-2.5 pb-1 shrink-0">
+                            <span className="w-10 h-1.5 bg-gray-300 rounded-full" />
+                        </div>
+
+                        <div className="px-4 pb-2 flex items-center justify-between border-b border-gray-100 shrink-0">
+                            <h2 className="text-xs font-bold tracking-wider text-gray-800 uppercase">
+                                Capas Del Mapa
+                            </h2>
+                            <button
+                                onClick={() => setActivePanel(null)}
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="p-4 flex flex-col gap-3 overflow-y-auto no-scrollbar text-left">
+                            {/* SECCIÓN EDICIÓN ACTIVA */}
+                            <div 
+                                onClick={handleOpenIdModal}
+                                className="p-2 bg-gray-50 hover:bg-[#0E5E6F]/5 border-2 border-gray-200 hover:border-[#0E5E6F] rounded-[4px] shrink-0 cursor-pointer transition-all flex items-center justify-between group"
+                                title="Hacer clic para cambiar ID de misión"
+                            >
+                                <div>
+                                    <span className="text-[9px] font-bold tracking-wider text-gray-400 block">
+                                        Edición activa
+                                    </span>
+                                    <span className="text-[11px] font-bold text-gray-800 block mt-0.5 group-hover:text-[#0E5E6F]">
+                                        ID: #{mappingId}
+                                    </span>
+                                </div>
+                                <svg
+                                    className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#0E5E6F] transition-colors shrink-0"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                                    />
+                                </svg>
                             </div>
 
+                            <div>
+                                <h3 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1 uppercase">
+                                    Capas Del Mapa
+                                </h3>
+                                <div className="space-y-0.5 mb-1.5">
+                                    {[
+                                        { id: "satellite", label: "Satélite" },
+                                        { id: "hybrid", label: "Híbrido" },
+                                        { id: "terrain", label: "Terreno" },
+                                    ].map((layer) => (
+                                        <label
+                                            key={layer.id}
+                                            className="flex items-center gap-1.5 text-[11px] font-bold text-gray-700 cursor-pointer p-1 hover:bg-gray-50 rounded-[4px]"
+                                        >
+                                            <input
+                                                type="radio"
+                                                name="mapLayer"
+                                                checked={mapLayer === layer.id}
+                                                onChange={() => setMapLayer(layer.id as any)}
+                                                className="accent-[#0E5E6F]"
+                                            />
+                                            <span>{layer.label}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <hr className="border-gray-200" />
+
+                            <div className="space-y-1.5">
+                                <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                    <span>Zonas</span>
+                                    <input
+                                        type="checkbox"
+                                        checked={showZones}
+                                        onChange={(e) => setShowZones(e.target.checked)}
+                                        className="accent-[#0E5E6F] cursor-pointer"
+                                    />
+                                </div>
+                                <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                    <span>Mapa NDVI</span>
+                                    <input
+                                        type="checkbox"
+                                        checked={showHeatmap}
+                                        onChange={(e) => setShowHeatmap(e.target.checked)}
+                                        className="accent-[#0E5E6F] cursor-pointer"
+                                    />
+                                </div>
+                                <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                    <span>Límites</span>
+                                    <input
+                                        type="checkbox"
+                                        checked={showBoundaries}
+                                        onChange={(e) => setShowBoundaries(e.target.checked)}
+                                        className="accent-[#0E5E6F] cursor-pointer"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ================= BOTTOM SHEET: CONTROL DEL DRON ================= */}
+            {activePanel === "dron" && (
+                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
+                    <div className="bg-white w-full rounded-t-2xl shadow-2xl border-t-2 border-gray-200 flex flex-col max-h-[88%] font-sans">
+                        <div className="flex justify-center pt-2.5 pb-1 shrink-0">
+                            <span className="w-10 h-1.5 bg-gray-300 rounded-full" />
+                        </div>
+
+                        <div className="px-4 pb-2 flex items-center justify-between border-b-2 border-gray-100 shrink-0">
+                            <h2 className="text-[11px] font-bold tracking-wider text-gray-800">
+                                Control Del Dron
+                            </h2>
+                            <button
+                                onClick={() => setActivePanel(null)}
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="p-4 flex flex-col gap-2.5 overflow-y-auto no-scrollbar text-left">
                             {/* CARD ESTADO DRON */}
                             <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px] space-y-1.5 shrink-0">
                                 <div className="flex justify-between items-center text-[11px]">
@@ -3920,9 +3896,9 @@ export const PilotoMapsView = () => {
                             </div>
 
                             <div className="shrink-0">
-                                <h2 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1.5 uppercase">
+                                <h3 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1.5 uppercase">
                                     Parámetros De Vuelo
-                                </h2>
+                                </h3>
 
                                 <div className="space-y-3">
                                     {/* ALTITUD (#CA5116) */}
@@ -4029,164 +4005,132 @@ export const PilotoMapsView = () => {
                                     </div>
                                 </div>
                             </div>
-
-                            <hr className="border-gray-200 mt-auto shrink-0" />
-
-                            {/* BOTONES INFERIORES COMPLETOS */}
-                            <div className="space-y-1.5 pt-0.5 shrink-0">
-                                <button 
-                                    onClick={handleApproveMapping}
-                                    className="w-full py-2 bg-[#0E5E6F] hover:bg-[#0a4754] border-2 border-[#0E5E6F] text-white font-bold text-[11px] rounded-[4px] flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer"
-                                >
-                                    <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                                        <polygon points="5 3 19 12 5 21 5 3" />
-                                    </svg>
-                                    <span>Enviar edición</span>
-                                </button>
-
-                                <button className="w-full py-1.5 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
-                                    Auto-dibujar zona
-                                </button>
-
-                                <button className="w-full py-1.5 bg-white border-2 border-rose-200 hover:bg-rose-50 text-rose-600 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
-                                    Cancelar edición
-                                </button>
-                            </div>
-                        </div>
-                    ) : (
-                        /* ACCESOS RÁPIDOS PANEL DERECHO COLAPSADO */
-                        <div className="py-4 flex flex-col items-center gap-3">
-                            <button
-                                onClick={() => setIsRightCollapsed(false)}
-                                className="p-2 bg-gray-100 hover:bg-[#0E5E6F]/10 hover:text-[#0E5E6F] rounded-[4px] text-gray-600 transition-colors cursor-pointer"
-                                title="Control de misión dron"
-                            >
-                                <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                                    />
-                                </svg>
-                            </button>
-                            <button
-                                onClick={() => setIsRightCollapsed(false)}
-                                className="p-2 bg-gray-100 hover:bg-[#0E5E6F]/10 hover:text-[#0E5E6F] rounded-[4px] text-gray-600 transition-colors cursor-pointer"
-                                title="Parámetros de vuelo"
-                            >
-                                <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    )}
-                </aside>
-            </main>
-
-            {/* MODAL CAMBIO DE ID DE MAPEO */}
-            {isIdModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
-                    <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-2xl w-full max-w-sm overflow-hidden text-left p-4 space-y-3 animate-in fade-in zoom-in-95 duration-150 font-sans">
-                        <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                            <h3 className="text-xs font-bold text-gray-900 tracking-wide">
-                                Cambiar ID de misión para mapeo
-                            </h3>
-                            <button
-                                onClick={() => setIsIdModalOpen(false)}
-                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
                         </div>
 
-                        <form onSubmit={handleSaveId} className="space-y-3">
-                            <div>
-                                <label className="block text-[10px] font-bold text-gray-500 mb-1">
-                                    Código / ID de la Misión
-                                </label>
-                                <input
-                                    type="text"
-                                    value={tempMappingId}
-                                    onChange={(e) => setTempMappingId(e.target.value)}
-                                    placeholder="Ej. MIS-FUM-001"
-                                    className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-mono font-bold text-gray-800 focus:border-[#0E5E6F] outline-none"
-                                    autoFocus
-                                />
-                                <p className="text-[10px] text-gray-400 mt-1">
-                                    Ingresa el código único de la misión para cargar y editar su mapa correspondiente.
-                                </p>
-                            </div>
+                        {/* BOTONES INFERIORES */}
+                        <div className="p-3 space-y-1.5 border-t border-gray-100 shrink-0">
+                            <button 
+                                onClick={handleApproveMapping}
+                                className="w-full py-2 bg-[#0E5E6F] hover:bg-[#0a4754] border-2 border-[#0E5E6F] text-white font-bold text-[11px] rounded-[4px] flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer"
+                            >
+                                <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                                    <polygon points="5 3 19 12 5 21 5 3" />
+                                </svg>
+                                <span>Enviar edición</span>
+                            </button>
 
-                            <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsIdModalOpen(false)}
-                                    className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
-                                >
-                                    Cancelar
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
-                                >
-                                    Guardar ID
-                                </button>
-                            </div>
-                        </form>
+                            <button className="w-full py-1.5 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
+                                Auto-dibujar zona
+                            </button>
+
+                            <button className="w-full py-1.5 bg-white border-2 border-rose-200 hover:bg-rose-50 text-rose-600 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
+                                Cancelar edición
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
 
-            {/* MODAL CONFIRMACIÓN DE APROBACIÓN DE MAPEO */}
+            {/* BOTTOM SHEET CAMBIO DE ID DE MAPEO */}
+            {isIdModalOpen && (
+                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
+                    <div className="bg-white border-t-2 border-gray-200 rounded-t-2xl shadow-2xl w-full overflow-hidden text-left animate-in fade-in duration-150 font-sans">
+                        <div className="flex justify-center pt-2.5 pb-1">
+                            <span className="w-10 h-1.5 bg-gray-300 rounded-full" />
+                        </div>
+
+                        <div className="px-4 pb-3 space-y-3">
+                            <div className="flex justify-between items-center border-b border-gray-100 pb-2">
+                                <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                                    Cambiar ID de misión para mapeo
+                                </h3>
+                                <button
+                                    onClick={() => setIsIdModalOpen(false)}
+                                    className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleSaveId} className="space-y-3">
+                                <div>
+                                    <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                                        Código / ID de la Misión
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={tempMappingId}
+                                        onChange={(e) => setTempMappingId(e.target.value)}
+                                        placeholder="Ej. MIS-FUM-001"
+                                        className="w-full border-2 border-gray-200 rounded-[4px] p-2.5 text-xs font-mono font-bold text-gray-800 focus:border-[#0E5E6F] outline-none"
+                                        autoFocus
+                                    />
+                                    <p className="text-[10px] text-gray-400 mt-1">
+                                        Ingresa el código único de la misión para cargar y editar su mapa correspondiente.
+                                    </p>
+                                </div>
+
+                                <div className="flex gap-2 pt-2 border-t border-gray-100">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsIdModalOpen(false)}
+                                        className="flex-1 px-3 py-2 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="flex-1 px-4 py-2 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
+                                    >
+                                        Guardar ID
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* BOTTOM SHEET CONFIRMACIÓN DE APROBACIÓN DE MAPEO */}
             {isApprovalModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
-                    <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-2xl w-full max-w-sm overflow-hidden text-left p-4 space-y-3 animate-in fade-in zoom-in-95 duration-150 font-sans">
-                        <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
-                            <div className="p-1 bg-amber-100 text-amber-700 rounded-[4px]">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <h3 className="text-xs font-bold text-gray-900 tracking-wide">
-                                Mapeo enviado a revisión
-                            </h3>
+                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
+                    <div className="bg-white border-t-2 border-gray-200 rounded-t-2xl shadow-2xl w-full overflow-hidden text-left animate-in fade-in duration-150 font-sans">
+                        <div className="flex justify-center pt-2.5 pb-1">
+                            <span className="w-10 h-1.5 bg-gray-300 rounded-full" />
                         </div>
 
-                        <div className="space-y-2 text-xs text-gray-600 font-medium">
-                            <p>
-                                La edición del mapa para la misión <span className="font-bold text-gray-800">#{mappingId}</span> ha sido enviada exitosamente a uno de los administradores.
-                            </p>
-                            <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] text-[11px] text-amber-800 font-semibold">
-                                Estado: En espera de ser aprobada por el administrador.
+                        <div className="px-4 pb-4 space-y-3">
+                            <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
+                                <div className="p-1 bg-amber-100 text-amber-700 rounded-[4px]">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                                    Mapeo enviado a revisión
+                                </h3>
                             </div>
-                        </div>
 
-                        <div className="flex justify-end pt-2 border-t border-gray-100">
-                            <button
-                                type="button"
-                                onClick={() => setIsApprovalModalOpen(false)}
-                                className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
-                            >
-                                Entendido
-                            </button>
+                            <div className="space-y-2 text-xs text-gray-600 font-medium">
+                                <p>
+                                    La edición del mapa para la misión <span className="font-bold text-gray-800">#{mappingId}</span> ha sido enviada exitosamente a uno de los administradores.
+                                </p>
+                                <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] text-[11px] text-amber-800 font-semibold">
+                                    Estado: En espera de ser aprobada por el administrador.
+                                </div>
+                            </div>
+
+                            <div className="pt-2 border-t border-gray-100">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsApprovalModalOpen(false)}
+                                    className="w-full px-4 py-2.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
+                                >
+                                    Entendido
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -4440,14 +4384,37 @@ export const PilotoSuscripcionesView = () => {
     };
 
     return (
-        <div
-            className="p-3 md:p-5 max-w-7xl mx-auto flex flex-col gap-4 text-left antialiased text-gray-800"
+        /* El contenedor principal actúa como Marco Relativo para el Modal Sticky */
+        <div 
+            className="relative w-full h-full max-w-md mx-auto text-left antialiased text-gray-800 select-none touch-manipulation overflow-hidden"
             style={{ fontFamily: "'Roboto', sans-serif" }}
         >
-            {/* CABECERA PRINCIPAL */}
-            <div className="border-b border-gray-200 pb-2.5 flex justify-between items-center">
-                <div>
-                    <Title className="text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight flex items-center gap-2">
+            <style>{`
+                html, body, div, select, textarea {
+                    -ms-overflow-style: none !important;
+                    scrollbar-width: none !important;
+                }
+                ::-webkit-scrollbar {
+                    display: none !important;
+                    width: 0px !important;
+                    height: 0px !important;
+                    background: transparent !important;
+                }
+                .no-scrollbar::-webkit-scrollbar {
+                    display: none !important;
+                    width: 0px !important;
+                }
+                .no-scrollbar {
+                    -ms-overflow-style: none !important;
+                    scrollbar-width: none !important;
+                }
+            `}</style>
+
+            {/* CONTENIDO SCROLLEABLE SEPARADO DEL MODAL */}
+            <div className="w-full h-full p-3 flex flex-col gap-4 overflow-y-auto no-scrollbar">
+                {/* CABECERA PRINCIPAL */}
+                <div className="border-b border-gray-200 pb-2.5 flex flex-col gap-1 shrink-0">
+                    <Title className="text-lg font-extrabold text-gray-900 tracking-tight flex flex-col items-start gap-1.5">
                         <span>Gestión de Suscripciones y Beneficios para Pilotos</span>
                         <span className="whitespace-nowrap bg-[#0E5E6F]/10 text-[#0E5E6F] text-[10px] font-bold px-2 py-0.5 rounded-[4px] tracking-wider border border-[#0E5E6F]/20">
                             Pilotos BIODRON
@@ -4457,454 +4424,496 @@ export const PilotoSuscripcionesView = () => {
                         Administra tu apoyo técnico, tarifas por uso de plataforma, beneficios operativos y alianzas comerciales para pilotos.
                     </Text>
                 </div>
-            </div>
 
-            {/* PROCESO DE PAGO */}
-            {selectedPlanForCheckout ? (
-                <div className="flex flex-col gap-3 animate-in fade-in duration-200">
-                    <button
-                        onClick={() => setSelectedPlanForCheckout(null)}
-                        className="flex items-center gap-1.5 text-xs text-gray-700 hover:text-gray-900 w-fit cursor-pointer bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-[4px] border border-gray-200 transition"
-                    >
-                        <ArrowLeft size={14} /> Volver a selección de opciones
-                    </button>
+                {/* PROCESO DE PAGO */}
+                {selectedPlanForCheckout ? (
+                    <div className="flex flex-col gap-3 animate-in fade-in duration-200">
+                        <button
+                            onClick={() => setSelectedPlanForCheckout(null)}
+                            className="flex items-center gap-1.5 text-xs text-gray-700 hover:text-gray-900 w-fit cursor-pointer bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-[4px] border border-gray-200 transition active:scale-95"
+                        >
+                            <ArrowLeft size={14} /> Volver a selección de opciones
+                        </button>
 
-                    {paymentSuccess ? (
-                        <div className="bg-emerald-50 border border-emerald-300 rounded-[4px] p-5 text-center flex flex-col items-center justify-center gap-2 my-2">
-                            <div className="p-2.5 bg-emerald-500 text-white rounded-[4px]">
-                                <Check size={24} />
-                            </div>
-                            <Title as="h2" className="text-lg font-black text-emerald-950">
-                                ¡Solicitud Procesada con Éxito!
-                            </Title>
-                            <Text className="text-xs text-emerald-800 font-medium max-w-md block">
-                                Tu solicitud ha sido registrada correctamente para <strong>{selectedPlanForCheckout.nombre}</strong>.
-                            </Text>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-stretch">
-                            {/* RESUMEN DEL PLAN */}
-                            <div className="lg:col-span-5 bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
-                                <div>
-                                    <Title
-                                        as="h3"
-                                        className="text-xs font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
-                                    >
-                                        Resumen de la Orden
-                                    </Title>
-
-                                    <div className="bg-gray-50 p-2.5 rounded-[4px] border border-gray-200 flex flex-col gap-1 mb-2">
-                                        <span className="text-[9px] text-[#0E5E6F] bg-[#0E5E6F]/10 px-2 py-0.5 rounded-[4px] border border-[#0E5E6F]/20 w-fit">
-                                            {selectedPlanForCheckout.etiqueta}
-                                        </span>
-                                        <Title
-                                            as="h2"
-                                            className="text-base font-black text-gray-900"
-                                        >
-                                            {selectedPlanForCheckout.nombre}
-                                        </Title>
-                                        <Text className="text-[11px] text-gray-600 block leading-tight">
-                                            {selectedPlanForCheckout.descripcion}
-                                        </Text>
-                                        <div className="mt-1.5 pt-1.5 border-t border-gray-200 flex justify-between items-baseline">
-                                            <span className="text-[11px] text-gray-500">
-                                                Total a pagar:
-                                            </span>
-                                            <span className="text-lg font-black text-[#0E5E6F]">
-                                                {selectedPlanForCheckout.precio}{" "}
-                                                <span className="text-[9px] text-gray-500 font-normal">
-                                                    {selectedPlanForCheckout.periodo}
-                                                </span>
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <Text className="text-[10px] text-gray-700 block mb-1">
-                                        Detalles incluidos:
-                                    </Text>
-                                    <ul className="flex flex-col gap-1 text-[11px] text-gray-600">
-                                        {selectedPlanForCheckout.caracteristicas.map(
-                                            (item: string, idx: number) => (
-                                                <li key={idx} className="flex items-center gap-1.5">
-                                                    <CheckCircle2
-                                                        size={12}
-                                                        className="text-[#0E5E6F] shrink-0"
-                                                    />
-                                                    <span>{item}</span>
-                                                </li>
-                                            ),
-                                        )}
-                                    </ul>
+                        {paymentSuccess ? (
+                            <div className="bg-emerald-50 border border-emerald-300 rounded-[4px] p-5 text-center flex flex-col items-center justify-center gap-2 my-2">
+                                <div className="p-2.5 bg-emerald-500 text-white rounded-[4px]">
+                                    <Check size={24} />
                                 </div>
-
-                                <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-900 text-[10px]">
-                                    <ShieldCheck size={14} className="text-amber-600 shrink-0" />
-                                    <span>Garantía de servicio y soporte técnico para pilotos BIODRON.</span>
-                                </div>
+                                <Title as="h2" className="text-lg font-black text-emerald-950">
+                                    ¡Solicitud Procesada con Éxito!
+                                </Title>
+                                <Text className="text-xs text-emerald-800 font-medium max-w-md block">
+                                    Tu solicitud ha sido registrada correctamente para <strong>{selectedPlanForCheckout.nombre}</strong>.
+                                </Text>
                             </div>
-
-                            {/* FORMULARIO DE PAGO */}
-                            <div className="lg:col-span-7 bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
-                                <div>
-                                    {/* Selector de Método de Pago */}
-                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 p-1 bg-gray-100 rounded-[4px] border border-gray-200 mb-2.5">
-                                        <button
-                                            onClick={() => setPaymentMethod("card")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "card"
-                                                    ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
-                                                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
-                                                }`}
-                                        >
-                                            <CreditCard size={13} />
-                                            <span>Tarjeta</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => setPaymentMethod("transfer")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "transfer"
-                                                    ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
-                                                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
-                                                }`}
-                                        >
-                                            <Building2 size={13} />
-                                            <span>Bancos</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => setPaymentMethod("qr")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "qr"
-                                                    ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
-                                                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
-                                                }`}
-                                        >
-                                            <QrCode size={13} />
-                                            <span>Código QR</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => setPaymentMethod("wallet")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "wallet"
-                                                    ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
-                                                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
-                                                }`}
-                                        >
-                                            <Wallet size={13} />
-                                            <span>Saldo BIODRON</span>
-                                        </button>
-                                    </div>
-
-                                    {/* TARJETA DE CRÉDITO Y PASARELAS */}
-                                    {paymentMethod === "card" && (
-                                        <div className="flex flex-col gap-3">
-                                            {/* Selector de pasarelas */}
-                                            <div>
-                                                <span className="text-gray-700 text-[10px] block mb-1.5">Pasarela de pago:</span>
-                                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
-                                                    {["PixelPay", "ClinPays", "Recurrente", "Pagadito"].map((gateway) => (
-                                                        <button
-                                                            key={gateway}
-                                                            onClick={() => setSelectedGateway(gateway)}
-                                                            className={`py-1 px-2 rounded-[4px] text-[10px] font-bold border transition cursor-pointer ${selectedGateway === gateway
-                                                                    ? "bg-[#0E5E6F] text-white border-[#0E5E6F]"
-                                                                    : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
-                                                                }`}
-                                                        >
-                                                            {gateway}
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
-                                                <div className="sm:col-span-5 flex justify-center">
-                                                    <div className="w-full max-w-[190px] aspect-[1.58/1] bg-gradient-to-tr from-slate-900 via-slate-800 to-[#0E5E6F] text-white p-2.5 rounded-[4px] shadow-sm border border-slate-700 flex flex-col justify-between">
-                                                        <div className="flex justify-between items-center">
-                                                            <span className="text-[8px] font-extrabold uppercase tracking-wider text-slate-300">
-                                                                BIODRON PILOTO
-                                                            </span>
-                                                            <CreditCard size={15} className="text-amber-400" />
-                                                        </div>
-                                                        <div>
-                                                            <span className="text-[11px] font-mono tracking-wider block font-bold text-slate-100">
-                                                                {cardData.number
-                                                                    ? cardData.number
-                                                                        .replace(/(.{4})/g, "$1 ")
-                                                                        .trim()
-                                                                    : "•••• •••• •••• ••••"}
-                                                            </span>
-                                                        </div>
-                                                        <div className="flex justify-between items-end text-[9px]">
-                                                            <div className="truncate max-w-[90px]">
-                                                                <span className="text-[7px] text-slate-400 uppercase block leading-none">
-                                                                    Titular
-                                                                </span>
-                                                                <span className="font-bold tracking-wide uppercase truncate block mt-0.5">
-                                                                    {cardData.name || "Nombre titular"}
-                                                                </span>
-                                                            </div>
-                                                            <div className="text-right">
-                                                                <span className="text-[7px] text-slate-400 uppercase block leading-none">
-                                                                    Vence
-                                                                </span>
-                                                                <span className="font-bold tracking-wider block mt-0.5">
-                                                                    {cardData.expiry || "MM/AA"}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="sm:col-span-7 grid grid-cols-2 gap-1.5 text-[11px]">
-                                                    <div className="col-span-2 flex flex-col gap-0.5">
-                                                        <label className="text-gray-700 text-[10px]">
-                                                            Número de tarjeta
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            maxLength={16}
-                                                            placeholder="4000 0000 0000 0000"
-                                                            value={cardData.number}
-                                                            onChange={(e) =>
-                                                                setCardData({
-                                                                    ...cardData,
-                                                                    number: e.target.value,
-                                                                })
-                                                            }
-                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
-                                                        />
-                                                    </div>
-
-                                                    <div className="col-span-2 flex flex-col gap-0.5">
-                                                        <label className="text-gray-700 text-[10px]">
-                                                            Titular de la tarjeta
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder="Nombre impreso"
-                                                            value={cardData.name}
-                                                            onChange={(e) =>
-                                                                setCardData({ ...cardData, name: e.target.value })
-                                                            }
-                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
-                                                        />
-                                                    </div>
-
-                                                    <div className="flex flex-col gap-0.5">
-                                                        <label className="text-gray-700 text-[10px]">
-                                                            Vencimiento
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            maxLength={5}
-                                                            placeholder="MM/AA"
-                                                            value={cardData.expiry}
-                                                            onChange={(e) =>
-                                                                setCardData({
-                                                                    ...cardData,
-                                                                    expiry: e.target.value,
-                                                                })
-                                                            }
-                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
-                                                        />
-                                                    </div>
-
-                                                    <div className="flex flex-col gap-0.5">
-                                                        <label className="text-gray-700 text-[10px]">
-                                                            CVV
-                                                        </label>
-                                                        <input
-                                                            type="password"
-                                                            maxLength={4}
-                                                            placeholder="123"
-                                                            value={cardData.cvv}
-                                                            onChange={(e) =>
-                                                                setCardData({ ...cardData, cvv: e.target.value })
-                                                            }
-                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* TRANSFERENCIA */}
-                                    {paymentMethod === "transfer" && (
-                                        <div className="flex flex-col gap-2 text-xs">
-                                            <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5">
-                                                <span className="text-gray-800 text-[11px] block mb-1">
-                                                    Cuentas oficiales BIODRON
-                                                </span>
-                                                <div className="grid grid-cols-2 gap-2 text-[10px]">
-                                                    <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
-                                                        <span className="font-bold text-[#0E5E6F] block">BAC Credomatic</span>
-                                                        <span className="text-gray-600 block">Cuenta: 11-401-009823-1</span>
-                                                    </div>
-                                                    <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
-                                                        <span className="font-bold text-[#0E5E6F] block">Banco Atlántida</span>
-                                                        <span className="text-gray-600 block">Cuenta: 20000-847291</span>
-                                                    </div>
-                                                    <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
-                                                        <span className="font-bold text-[#0E5E6F] block">Ficohsa</span>
-                                                        <span className="text-gray-600 block">Cuenta: 21-102-393284</span>
-                                                    </div>
-                                                    <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
-                                                        <span className="font-bold text-[#0E5E6F] block">Banpaís</span>
-                                                        <span className="text-gray-600 block">Cuenta: 01-293-10293</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="border border-dashed border-gray-300 rounded-[4px] p-2.5 text-center flex items-center justify-center gap-2 hover:border-[#0E5E6F] transition cursor-pointer bg-gray-50/50">
-                                                <Upload size={16} className="text-[#0E5E6F]" />
-                                                <span className="text-gray-700 text-[11px]">
-                                                    Subir comprobante de pago
-                                                </span>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* PAGO CON QR */}
-                                    {paymentMethod === "qr" && (
-                                        <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-[4px] p-3">
-                                            <div className="flex-1">
-                                                <span className="text-gray-700 text-[10px] block mb-1.5">Generar código mediante:</span>
-                                                <div className="flex flex-wrap gap-1 mb-2">
-                                                    {["PixelPay", "Banrural", "Atlántida"].map((wallet) => (
-                                                        <button
-                                                            key={wallet}
-                                                            onClick={() => setSelectedQrWallet(wallet)}
-                                                            className={`py-1 px-2 rounded-[4px] text-[10px] font-bold border transition cursor-pointer ${selectedQrWallet === wallet
-                                                                    ? "bg-[#0E5E6F] text-white border-[#0E5E6F]"
-                                                                    : "bg-white text-gray-600 border-gray-200 hover:bg-gray-100"
-                                                                }`}
-                                                        >
-                                                            {wallet}
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                                <span className="text-[10px] text-gray-500 leading-tight block">
-                                                    Escanea este código desde la app de <strong>{selectedQrWallet}</strong> para pagar el total de {selectedPlanForCheckout.precio}.
-                                                </span>
-                                            </div>
-                                            <div className="shrink-0 p-2 bg-white border border-gray-200 rounded-lg shadow-sm flex items-center justify-center">
-                                                <QrCode size={64} className="text-gray-800" />
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* SALDO WALLET */}
-                                    {paymentMethod === "wallet" && (
-                                        <div className="flex flex-col gap-2 text-xs">
-                                            <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5 flex justify-between items-center">
-                                                <div>
-                                                    <span className="text-gray-500 font-medium block text-[10px]">
-                                                        Saldo disponible BIODRON
-                                                    </span>
-                                                    <span className="text-lg font-black text-gray-900">
-                                                        L{" "}
-                                                        {userWalletBalance.toLocaleString("es-HN", {
-                                                            minimumFractionDigits: 2,
-                                                        })}
-                                                    </span>
-                                                </div>
-                                                <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px]">
-                                                    <Wallet size={18} />
-                                                </div>
-                                            </div>
-
-                                            {userWalletBalance < selectedPlanForCheckout.precioNum ? (
-                                                <div className="p-1.5 bg-red-50 border border-red-200 rounded-[4px] flex items-center gap-1.5 text-red-800 text-[11px]">
-                                                    <AlertCircle
-                                                        size={14}
-                                                        className="shrink-0 text-red-600"
-                                                    />
-                                                    <span>
-                                                        Saldo insuficiente. Faltan L{" "}
-                                                        {(
-                                                            selectedPlanForCheckout.precioNum -
-                                                            userWalletBalance
-                                                        ).toLocaleString("es-HN")}
-                                                        .
-                                                    </span>
-                                                </div>
-                                            ) : (
-                                                <div className="p-1.5 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-1.5 text-emerald-800 text-[11px]">
-                                                    <CheckCircle2
-                                                        size={14}
-                                                        className="shrink-0 text-emerald-600"
-                                                    />
-                                                    <span>
-                                                        Saldo suficiente para procesar la transacción.
-                                                    </span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <button
-                                    disabled={
-                                        isProcessing ||
-                                        (paymentMethod === "wallet" &&
-                                            userWalletBalance < selectedPlanForCheckout.precioNum)
-                                    }
-                                    onClick={handleConfirmSubscription}
-                                    className="w-full py-2 px-3 bg-[#0E5E6F] hover:bg-[#0A4552] disabled:bg-gray-300 text-white text-xs rounded-[4px] shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer mt-2"
-                                >
-                                    {isProcessing ? (
-                                        <span>Procesando...</span>
-                                    ) : (
-                                        <>
-                                            <ShieldCheck size={15} />
-                                            <span>
-                                                Confirmar y adquirir por {selectedPlanForCheckout.precio}
-                                            </span>
-                                        </>
-                                    )}
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            ) : (
-                /* VISTA PRINCIPAL CON PESTAÑAS Y PLAN ACTIVO */
-                <div className="flex flex-col gap-5">
-                    {/* PLAN ACTIVO ACTUAL */}
-                    {planActual && (
-                        <div className="bg-white border border-[#0E5E6F] rounded-[4px] p-4 shadow-xs flex flex-col gap-3">
-                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-gray-100 pb-3">
-                                <div className="flex gap-3 items-start">
-                                    <div className="p-2 bg-[#0E5E6F] text-white rounded-[4px] shadow-xs shrink-0 mt-0.5">
-                                        <CheckCircle2 size={22} />
-                                    </div>
+                        ) : (
+                            <div className="grid grid-cols-1 gap-3 items-stretch">
+                                {/* FORMULARIO DE PAGO */}
+                                <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
                                     <div>
-                                        <div className="flex items-center gap-2 mb-0.5">
-                                            <span className="bg-[#0E5E6F]/10 text-[#0E5E6F] border border-[#0E5E6F]/20 text-[10px] px-2 py-0.5 rounded-[4px] tracking-wider">
-                                                Plan Activo
-                                            </span>
-                                            <span className="text-[11px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-[4px] border border-emerald-200">
-                                                Renovación automática
-                                            </span>
+                                        {/* Selector de Método de Pago */}
+                                        <div className="grid grid-cols-2 gap-1 p-1 bg-gray-100 rounded-[4px] border border-gray-200 mb-2.5">
+                                            <button
+                                                onClick={() => setPaymentMethod("card")}
+                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "card"
+                                                        ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
+                                                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
+                                                    }`}
+                                            >
+                                                <CreditCard size={13} />
+                                                <span>Tarjeta</span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => setPaymentMethod("transfer")}
+                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "transfer"
+                                                        ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
+                                                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
+                                                    }`}
+                                            >
+                                                <Building2 size={13} />
+                                                <span>Bancos</span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => setPaymentMethod("qr")}
+                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "qr"
+                                                        ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
+                                                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
+                                                    }`}
+                                            >
+                                                <QrCode size={13} />
+                                                <span>Código QR</span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => setPaymentMethod("wallet")}
+                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "wallet"
+                                                        ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
+                                                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
+                                                    }`}
+                                            >
+                                                <Wallet size={13} />
+                                                <span>Saldo BIODRON</span>
+                                            </button>
                                         </div>
-                                        <Title as="h2" className="text-lg font-black text-gray-900">
+
+                                        {/* TARJETA DE CRÉDITO Y PASARELAS */}
+                                        {paymentMethod === "card" && (
+                                            <div className="flex flex-col gap-3">
+                                                {/* Selector de pasarelas */}
+                                                <div>
+                                                    <span className="text-gray-700 text-[10px] block mb-1.5">Pasarela de pago:</span>
+                                                    <div className="grid grid-cols-2 gap-1.5">
+                                                        {["PixelPay", "ClinPays", "Recurrente", "Pagadito"].map((gateway) => (
+                                                            <button
+                                                                key={gateway}
+                                                                onClick={() => setSelectedGateway(gateway)}
+                                                                className={`py-1 px-2 rounded-[4px] text-[10px] font-bold border transition cursor-pointer active:scale-95 ${selectedGateway === gateway
+                                                                        ? "bg-[#0E5E6F] text-white border-[#0E5E6F]"
+                                                                        : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
+                                                                    }`}
+                                                            >
+                                                                {gateway}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                <div className="grid grid-cols-1 gap-3 items-center">
+                                                    <div className="flex justify-center">
+                                                        <div className="w-full max-w-[190px] aspect-[1.58/1] bg-gradient-to-tr from-slate-900 via-slate-800 to-[#0E5E6F] text-white p-2.5 rounded-[4px] shadow-sm border border-slate-700 flex flex-col justify-between">
+                                                            <div className="flex justify-between items-center">
+                                                                <span className="text-[8px] font-extrabold uppercase tracking-wider text-slate-300">
+                                                                    BIODRON PILOTO
+                                                                </span>
+                                                                <CreditCard size={15} className="text-amber-400" />
+                                                            </div>
+                                                            <div>
+                                                                <span className="text-[11px] font-mono tracking-wider block font-bold text-slate-100">
+                                                                    {cardData.number
+                                                                        ? cardData.number
+                                                                            .replace(/(.{4})/g, "$1 ")
+                                                                            .trim()
+                                                                        : "•••• •••• •••• ••••"}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex justify-between items-end text-[9px]">
+                                                                <div className="truncate max-w-[90px]">
+                                                                    <span className="text-[7px] text-slate-400 uppercase block leading-none">
+                                                                        Titular
+                                                                    </span>
+                                                                    <span className="font-bold tracking-wide uppercase truncate block mt-0.5">
+                                                                        {cardData.name || "Nombre titular"}
+                                                                    </span>
+                                                                </div>
+                                                                <div className="text-right">
+                                                                    <span className="text-[7px] text-slate-400 uppercase block leading-none">
+                                                                        Vence
+                                                                    </span>
+                                                                    <span className="font-bold tracking-wider block mt-0.5">
+                                                                        {cardData.expiry || "MM/AA"}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+                                                        <div className="col-span-2 flex flex-col gap-0.5">
+                                                            <label className="text-gray-700 text-[10px]">
+                                                                Número de tarjeta
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                maxLength={16}
+                                                                placeholder="4000 0000 0000 0000"
+                                                                value={cardData.number}
+                                                                onChange={(e) =>
+                                                                    setCardData({
+                                                                        ...cardData,
+                                                                        number: e.target.value,
+                                                                    })
+                                                                }
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                            />
+                                                        </div>
+
+                                                        <div className="col-span-2 flex flex-col gap-0.5">
+                                                            <label className="text-gray-700 text-[10px]">
+                                                                Titular de la tarjeta
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                placeholder="Nombre impreso"
+                                                                value={cardData.name}
+                                                                onChange={(e) =>
+                                                                    setCardData({ ...cardData, name: e.target.value })
+                                                                }
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                            />
+                                                        </div>
+
+                                                        <div className="flex flex-col gap-0.5">
+                                                            <label className="text-gray-700 text-[10px]">
+                                                                Vencimiento
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                maxLength={5}
+                                                                placeholder="MM/AA"
+                                                                value={cardData.expiry}
+                                                                onChange={(e) =>
+                                                                    setCardData({
+                                                                        ...cardData,
+                                                                        expiry: e.target.value,
+                                                                    })
+                                                                }
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                            />
+                                                        </div>
+
+                                                        <div className="flex flex-col gap-0.5">
+                                                            <label className="text-gray-700 text-[10px]">
+                                                                CVV
+                                                            </label>
+                                                            <input
+                                                                type="password"
+                                                                maxLength={4}
+                                                                placeholder="123"
+                                                                value={cardData.cvv}
+                                                                onChange={(e) =>
+                                                                    setCardData({ ...cardData, cvv: e.target.value })
+                                                                }
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* TRANSFERENCIA */}
+                                        {paymentMethod === "transfer" && (
+                                            <div className="flex flex-col gap-2 text-xs">
+                                                <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5">
+                                                    <span className="text-gray-800 text-[11px] block mb-1">
+                                                        Cuentas oficiales BIODRON
+                                                    </span>
+                                                    <div className="grid grid-cols-1 gap-2 text-[10px]">
+                                                        <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
+                                                            <span className="font-bold text-[#0E5E6F] block">BAC Credomatic</span>
+                                                            <span className="text-gray-600 block">Cuenta: 11-401-009823-1</span>
+                                                        </div>
+                                                        <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
+                                                            <span className="font-bold text-[#0E5E6F] block">Banco Atlántida</span>
+                                                            <span className="text-gray-600 block">Cuenta: 20000-847291</span>
+                                                        </div>
+                                                        <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
+                                                            <span className="font-bold text-[#0E5E6F] block">Ficohsa</span>
+                                                            <span className="text-gray-600 block">Cuenta: 21-102-393284</span>
+                                                        </div>
+                                                        <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
+                                                            <span className="font-bold text-[#0E5E6F] block">Banpaís</span>
+                                                            <span className="text-gray-600 block">Cuenta: 01-293-10293</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="border border-dashed border-gray-300 rounded-[4px] p-2.5 text-center flex items-center justify-center gap-2 hover:border-[#0E5E6F] transition cursor-pointer active:scale-95 bg-gray-50/50">
+                                                    <Upload size={16} className="text-[#0E5E6F]" />
+                                                    <span className="text-gray-700 text-[11px]">
+                                                        Subir comprobante de pago
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* PAGO CON QR */}
+                                        {paymentMethod === "qr" && (
+                                            <div className="flex flex-col items-center gap-3 bg-gray-50 border border-gray-200 rounded-[4px] p-3">
+                                                <div className="flex-1 w-full">
+                                                    <span className="text-gray-700 text-[10px] block mb-1.5">Generar código mediante:</span>
+                                                    <div className="flex flex-wrap gap-1 mb-2">
+                                                        {["PixelPay", "Banrural", "Atlántida"].map((wallet) => (
+                                                            <button
+                                                                key={wallet}
+                                                                onClick={() => setSelectedQrWallet(wallet)}
+                                                                className={`py-1 px-2 rounded-[4px] text-[10px] font-bold border transition cursor-pointer active:scale-95 ${selectedQrWallet === wallet
+                                                                        ? "bg-[#0E5E6F] text-white border-[#0E5E6F]"
+                                                                        : "bg-white text-gray-600 border-gray-200 hover:bg-gray-100"
+                                                                    }`}
+                                                            >
+                                                                {wallet}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                    <span className="text-[10px] text-gray-500 leading-tight block">
+                                                        Escanea este código desde la app de <strong>{selectedQrWallet}</strong> para pagar el total de {selectedPlanForCheckout.precio}.
+                                                    </span>
+                                                </div>
+                                                <div className="shrink-0 p-2 bg-white border border-gray-200 rounded-[4px] shadow-sm flex items-center justify-center">
+                                                    <QrCode size={64} className="text-gray-800" />
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* SALDO WALLET */}
+                                        {paymentMethod === "wallet" && (
+                                            <div className="flex flex-col gap-2 text-xs">
+                                                <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5 flex justify-between items-center">
+                                                    <div>
+                                                        <span className="text-gray-500 font-medium block text-[10px]">
+                                                            Saldo disponible BIODRON
+                                                        </span>
+                                                        <span className="text-lg font-black text-gray-900">
+                                                            L{" "}
+                                                            {userWalletBalance.toLocaleString("es-HN", {
+                                                                minimumFractionDigits: 2,
+                                                            })}
+                                                        </span>
+                                                    </div>
+                                                    <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px]">
+                                                        <Wallet size={18} />
+                                                    </div>
+                                                </div>
+
+                                                {userWalletBalance < selectedPlanForCheckout.precioNum ? (
+                                                    <div className="p-1.5 bg-red-50 border border-red-200 rounded-[4px] flex items-center gap-1.5 text-red-800 text-[11px]">
+                                                        <AlertCircle
+                                                            size={14}
+                                                            className="shrink-0 text-red-600"
+                                                        />
+                                                        <span>
+                                                            Saldo insuficiente. Faltan L{" "}
+                                                            {(
+                                                                selectedPlanForCheckout.precioNum -
+                                                                userWalletBalance
+                                                            ).toLocaleString("es-HN")}
+                                                            .
+                                                        </span>
+                                                    </div>
+                                                ) : (
+                                                    <div className="p-1.5 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-1.5 text-emerald-800 text-[11px]">
+                                                        <CheckCircle2
+                                                            size={14}
+                                                            className="shrink-0 text-emerald-600"
+                                                        />
+                                                        <span>
+                                                            Saldo suficiente para procesar la transacción.
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <button
+                                        disabled={
+                                            isProcessing ||
+                                            (paymentMethod === "wallet" &&
+                                                userWalletBalance < selectedPlanForCheckout.precioNum)
+                                        }
+                                        onClick={handleConfirmSubscription}
+                                        className="w-full py-2.5 px-3 bg-[#0E5E6F] hover:bg-[#0A4552] disabled:bg-gray-300 text-white text-xs rounded-[4px] shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer mt-2 active:scale-95"
+                                    >
+                                        {isProcessing ? (
+                                            <span>Procesando...</span>
+                                        ) : (
+                                            <>
+                                                <ShieldCheck size={15} />
+                                                <span>
+                                                    Confirmar y adquirir por {selectedPlanForCheckout.precio}
+                                                </span>
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+                                {/* RESUMEN DEL PLAN */}
+                                <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
+                                    <div>
+                                        <Title
+                                            as="h3"
+                                            className="text-xs font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
+                                        >
+                                            Resumen de la Orden
+                                        </Title>
+
+                                        <div className="bg-gray-50 p-2.5 rounded-[4px] border border-gray-200 flex flex-col gap-1 mb-2">
+                                            <span className="text-[9px] text-[#0E5E6F] bg-[#0E5E6F]/10 px-2 py-0.5 rounded-[4px] border border-[#0E5E6F]/20 w-fit">
+                                                {selectedPlanForCheckout.etiqueta}
+                                            </span>
+                                            <Title
+                                                as="h2"
+                                                className="text-base font-black text-gray-900"
+                                            >
+                                                {selectedPlanForCheckout.nombre}
+                                            </Title>
+                                            <Text className="text-[11px] text-gray-600 block leading-tight">
+                                                {selectedPlanForCheckout.descripcion}
+                                            </Text>
+                                            <div className="mt-1.5 pt-1.5 border-t border-gray-200 flex justify-between items-baseline">
+                                                <span className="text-[11px] text-gray-500">
+                                                    Total a pagar:
+                                                </span>
+                                                <span className="text-lg font-black text-[#0E5E6F]">
+                                                    {selectedPlanForCheckout.precio}{" "}
+                                                    <span className="text-[9px] text-gray-500 font-normal">
+                                                        {selectedPlanForCheckout.periodo}
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <Text className="text-[10px] text-gray-700 block mb-1">
+                                            Detalles incluidos:
+                                        </Text>
+                                        <ul className="flex flex-col gap-1 text-[11px] text-gray-600">
+                                            {selectedPlanForCheckout.caracteristicas.map(
+                                                (item: string, idx: number) => (
+                                                    <li key={idx} className="flex items-center gap-1.5">
+                                                        <CheckCircle2
+                                                            size={12}
+                                                            className="text-[#0E5E6F] shrink-0"
+                                                        />
+                                                        <span>{item}</span>
+                                                    </li>
+                                                ),
+                                            )}
+                                        </ul>
+                                    </div>
+
+                                    <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-900 text-[10px]">
+                                        <ShieldCheck size={14} className="text-amber-600 shrink-0" />
+                                        <span>Garantía de servicio y soporte técnico para pilotos BIODRON.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    /* VISTA PRINCIPAL CON SELECCIÓN Y PLAN ACTIVO */
+                    <div className="flex flex-col gap-5">
+                        {/* PLAN ACTIVO ACTUAL */}
+                        {planActual && (
+                            <div className="bg-white border-2 border-[#0E5E6F] rounded-[4px] shadow-sm overflow-hidden">
+                                <div className="bg-[#0E5E6F] px-4 py-2 flex items-center gap-2">
+                                    <CheckCircle2 size={15} className="text-white shrink-0" />
+                                    <span className="text-white text-[11px] font-bold tracking-wide">
+                                        Plan Activo
+                                    </span>
+                                    <span className="ml-auto text-[10px] text-white/90 bg-white/15 px-2 py-0.5 rounded-[4px] border border-white/20">
+                                        Renovación automática
+                                    </span>
+                                </div>
+
+                                <div className="p-4 flex flex-col gap-3.5">
+                                    <div>
+                                        <Title as="h2" className="text-lg font-black text-gray-900 leading-tight">
                                             {planActual.nombre}
                                         </Title>
-                                        <Text className="text-xs text-gray-600 block">
+                                        <Text className="text-xs text-[#555555] block mt-1">
                                             {planActual.descripcion}
                                         </Text>
                                     </div>
-                                </div>
 
-                                <div className="flex flex-col items-start md:items-end gap-2">
-                                    <span className="text-xl font-black text-[#0E5E6F]">
-                                        {planActual.precio}{" "}
-                                        <span className="text-xs font-normal text-gray-500">
-                                            {planActual.periodo}
+                                    <div className="bg-[#0E5E6F]/5 border border-[#0E5E6F]/20 rounded-[4px] px-3.5 py-3 flex items-baseline justify-between">
+                                        <span className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">
+                                            Costo actual
                                         </span>
-                                    </span>
+                                        <span className="text-2xl font-black text-[#0E5E6F]">
+                                            {planActual.precio}{" "}
+                                            <span className="text-xs font-normal text-gray-500">
+                                                {planActual.periodo}
+                                            </span>
+                                        </span>
+                                    </div>
 
-                                    {/* BOTÓN CANCELAR SUSCRIPCIÓN */}
+                                    <div className="flex flex-col divide-y divide-gray-100 bg-gray-50/80 rounded-[4px] border border-gray-200/80 overflow-hidden">
+                                        <div className="flex items-center gap-2.5 px-3 py-2.5">
+                                            <div className="p-1.5 bg-white rounded-[4px] border border-gray-200 shrink-0">
+                                                <Calendar size={14} className="text-[#0E5E6F]" />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-[9px] uppercase text-gray-400 leading-none">
+                                                    Próximo vencimiento
+                                                </span>
+                                                <span className="text-xs font-bold text-gray-800 mt-1">
+                                                    15 de agosto, 2026
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-2.5 px-3 py-2.5">
+                                            <div className="p-1.5 bg-white rounded-[4px] border border-gray-200 shrink-0">
+                                                <CreditCard size={14} className="text-[#0E5E6F]" />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-[9px] uppercase text-gray-400 leading-none">
+                                                    Método registrado
+                                                </span>
+                                                <span className="text-xs font-bold text-gray-800 mt-1">
+                                                    Visa terminada en •••• 4021
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-2.5 px-3 py-2.5">
+                                            <div className="p-1.5 bg-white rounded-[4px] border border-gray-200 shrink-0">
+                                                <Zap size={14} className="text-[#0E5E6F]" />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-[9px] uppercase text-gray-400 leading-none">
+                                                    Estado operativo
+                                                </span>
+                                                <span className="text-xs font-bold text-gray-800 mt-1">
+                                                    Piloto activo BIODRON
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <button
                                         type="button"
                                         onClick={() => setShowCancelModal(true)}
@@ -4913,241 +4922,206 @@ export const PilotoSuscripcionesView = () => {
                                             color: "#B8001F",
                                             borderRadius: "4px",
                                         }}
-                                        className="px-3 py-1.5 border-2 text-xs font-bold bg-white hover:bg-red-50 transition-colors active:scale-95 flex items-center gap-1.5 cursor-pointer shadow-xs"
+                                        className="w-full px-3 py-2.5 border-2 text-xs font-bold bg-white hover:bg-red-50 transition-colors active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer"
                                     >
                                         <XCircle size={14} />
                                         <span>Cancelar suscripción</span>
                                     </button>
                                 </div>
                             </div>
+                        )}
 
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs bg-gray-50/80 p-3 rounded-[4px] border border-gray-200/80">
-                                <div className="flex items-center gap-2">
-                                    <Calendar size={16} className="text-[#0E5E6F] shrink-0" />
-                                    <div>
-                                        <span className="text-[9px] uppercase text-gray-400 block">
-                                            Próximo vencimiento
-                                        </span>
-                                        <span className="font-bold text-gray-800">
-                                            15 de agosto, 2026
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-2 border-t sm:border-t-0 sm:border-l border-gray-200 pt-1.5 sm:pt-0 sm:pl-3">
-                                    <CreditCard size={16} className="text-[#0E5E6F] shrink-0" />
-                                    <div>
-                                        <span className="text-[9px] uppercase text-gray-400 block">
-                                            Método registrado
-                                        </span>
-                                        <span className="font-bold text-gray-800">
-                                            Visa terminada en •••• 4021
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-2 border-t sm:border-t-0 sm:border-l border-gray-200 pt-1.5 sm:pt-0 sm:pl-3">
-                                    <Zap size={16} className="text-[#0E5E6F] shrink-0" />
-                                    <div>
-                                        <span className="text-[9px] uppercase text-gray-400 block">
-                                            Estado operativo
-                                        </span>
-                                        <span className="font-bold text-gray-800">
-                                            Piloto activo BIODRON
-                                        </span>
-                                    </div>
-                                </div>
+                        <div>
+                            <div className="mb-4">
+                                <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1.5">
+                                    Categoría de servicios
+                                </label>
+                                <select
+                                    value={activeTab}
+                                    onChange={(e) => setActiveTab(e.target.value as TabType)}
+                                    className="w-full text-xs font-bold bg-white border-2 border-gray-200 text-gray-800 rounded-[4px] p-2.5 focus:border-[#0E5E6F] focus:outline-none shadow-xs cursor-pointer"
+                                >
+                                    <option value="apoyo-tecnico">Apoyo técnico y taller</option>
+                                    <option value="cobros-plataforma">Cobros por plataforma</option>
+                                    <option value="beneficios-operativos">Beneficios operativos</option>
+                                    <option value="alianzas-comerciales">Alianzas y repuestos</option>
+                                </select>
                             </div>
-                        </div>
-                    )}
 
-                    {/* NAVEGACIÓN POR PESTAÑAS */}
-                    <div>
-                        <div className="border-b-2 border-gray-200 mb-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-1 select-none">
-                            {[
-                                { id: "apoyo-tecnico", label: "Apoyo técnico y taller", icon: <Wrench size={13} /> },
-                                { id: "cobros-plataforma", label: "Cobros por plataforma", icon: <Zap size={13} /> },
-                                { id: "beneficios-operativos", label: "Beneficios operativos", icon: <Tag size={13} /> },
-                                { id: "alianzas-comerciales", label: "Alianzas y repuestos", icon: <UserCheck size={13} /> },
-                            ].map((tab) => {
-                                const isActive = activeTab === tab.id;
-                                return (
-                                    <button
-                                        key={tab.id}
-                                        onClick={() => setActiveTab(tab.id as TabType)}
-                                        style={{ borderRadius: "4px 4px 0 0" }}
-                                        className={`px-1.5 py-3 text-[11px] sm:text-xs font-bold flex items-center justify-center gap-1 border-t-2 border-x-2 -mb-[2px] transition-all text-center cursor-pointer ${
-                                            isActive
-                                                ? "border-t-[#0E5E6F] border-x-gray-200 border-b-white bg-white text-[#0E5E6F] shadow-xs"
-                                                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-                                        }`}
-                                    >
-                                        <span className={isActive ? "text-[#0E5E6F]" : "text-gray-400"}>
-                                            {tab.icon}
-                                        </span>
-                                        <span className="truncate">{tab.label}</span>
-                                    </button>
-                                );
-                            })}
-                        </div>
+                            <div className="mb-4">
+                                {activeTab === "apoyo-tecnico" && (
+                                    <Text className="text-xs text-gray-500 block">
+                                        Planes de asistencia técnica, diagnóstico y mantenimiento correctivo especializados para los equipos y drones del piloto.
+                                    </Text>
+                                )}
+                                {activeTab === "cobros-plataforma" && (
+                                    <Text className="text-xs text-gray-500 block">
+                                        Tarifas y comisiones preferenciales por el uso de la plataforma BIODRON, gestión de misiones y cobros automatizados.
+                                    </Text>
+                                )}
+                                {activeTab === "beneficios-operativos" && (
+                                    <Text className="text-xs text-gray-500 block">
+                                        Ventajas de conectividad RTK, cobertura de protección y herramientas logísticas orientadas a facilitar tu trabajo en campo.
+                                    </Text>
+                                )}
+                                {activeTab === "alianzas-comerciales" && (
+                                    <Text className="text-xs text-gray-500 block">
+                                        Convenios exclusivos con descuentos en repuestos originales DJI, programas de renovación de flota y capacitación continua.
+                                    </Text>
+                                )}
+                            </div>
 
-                        {/* DESCRIPCIÓN DE LA CATEGORÍA */}
-                        <div className="mb-4">
-                            {activeTab === "apoyo-tecnico" && (
-                                <Text className="text-xs text-gray-500 block">
-                                    Planes de asistencia técnica, diagnóstico y mantenimiento correctivo especializados para los equipos y drones del piloto.
-                                </Text>
-                            )}
-                            {activeTab === "cobros-plataforma" && (
-                                <Text className="text-xs text-gray-500 block">
-                                    Tarifas y comisiones preferenciales por el uso de la plataforma BIODRON, gestión de misiones y cobros automatizados.
-                                </Text>
-                            )}
-                            {activeTab === "beneficios-operativos" && (
-                                <Text className="text-xs text-gray-500 block">
-                                    Ventajas de conectividad RTK, cobertura de protección y herramientas logísticas orientadas a facilitar tu trabajo en campo.
-                                </Text>
-                            )}
-                            {activeTab === "alianzas-comerciales" && (
-                                <Text className="text-xs text-gray-500 block">
-                                    Convenios exclusivos con descuentos en repuestos originales DJI, programas de renovación de flota y capacitación continua.
-                                </Text>
-                            )}
-                        </div>
+                            <div className="grid grid-cols-1 gap-4">
+                                {catalogos[activeTab].map((plan) => {
+                                    const esPlanActual = plan.id === activePlanId;
 
-                        {/* REJILLA CON TRES PLANES POR PESTAÑA */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
-                            {catalogos[activeTab].map((plan) => {
-                                const esPlanActual = plan.id === activePlanId;
-
-                                return (
-                                    <div
-                                        key={plan.id}
-                                        className={`relative bg-white rounded-[4px] border transition-all flex flex-col justify-between p-4 shadow-xs hover:shadow-md ${plan.destacado
-                                                ? "border-[#0E5E6F] ring-2 ring-[#0E5E6F]/20"
-                                                : "border-gray-200 hover:border-gray-300"
-                                            }`}
-                                    >
-                                        {/* INSIGNIA DESTACADO */}
-                                        {plan.destacado && (
-                                            <span className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 bg-[#0E5E6F] text-white text-[10px] px-3 py-0.5 rounded-[4px] uppercase tracking-wider shadow-sm flex items-center gap-1 border border-white">
-                                                <Zap size={11} /> Destacado
-                                            </span>
-                                        )}
-
-                                        <div>
-                                            <div className="flex justify-between items-start mb-2">
-                                                <span className="bg-gray-100 text-gray-800 border border-gray-200 text-[10px] px-2 py-0.5 rounded-[4px] tracking-wider">
-                                                    {plan.etiqueta}
-                                                </span>
-                                                {esPlanActual && (
-                                                    <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded-[4px] font-bold">
-                                                        Contratado
-                                                    </span>
-                                                )}
-                                            </div>
-
-                                            {/* TÍTULO DEL PLAN */}
-                                            <Title
-                                                as="h3"
-                                                className="text-base font-extrabold text-gray-900 mb-1"
-                                            >
-                                                {plan.nombre}
-                                            </Title>
-
-                                            <div className="mb-2">
-                                                <span className="text-2xl font-black text-[#0E5E6F]">
-                                                    {plan.precio}
-                                                </span>
-                                                <span className="text-xs text-gray-500 font-medium">
-                                                    {plan.periodo}
-                                                </span>
-                                            </div>
-
-                                            <Text className="text-xs text-gray-600 font-medium leading-relaxed block mb-4">
-                                                {plan.descripcion}
-                                            </Text>
-
-                                            <div className="border-t border-gray-100 pt-2.5 mb-4">
-                                                <Text className="text-[10px] uppercase text-gray-400 tracking-wider block mb-1.5">
-                                                    Incluye:
-                                                </Text>
-                                                <ul className="flex flex-col gap-1.5">
-                                                    {plan.caracteristicas.map((item, idx) => (
-                                                        <li
-                                                            key={idx}
-                                                            className="flex items-start gap-1.5 text-xs text-gray-700"
-                                                        >
-                                                            <CheckCircle2
-                                                                size={13}
-                                                                className="text-[#0E5E6F] shrink-0 mt-0.5"
-                                                            />
-                                                            <span>{item}</span>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                        <button
-                                            disabled={esPlanActual}
-                                            onClick={() => setSelectedPlanForCheckout(plan)}
-                                            className={`w-full py-2 px-3 rounded-[4px] text-xs transition flex items-center justify-center gap-1.5 cursor-pointer ${esPlanActual
-                                                    ? "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
-                                                    : plan.destacado
-                                                        ? "bg-[#0E5E6F] hover:bg-[#0A4552] text-white shadow-xs font-bold"
-                                                        : "bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-200"
+                                    return (
+                                        <div
+                                            key={plan.id}
+                                            className={`relative bg-white rounded-[4px] border transition-all flex flex-col overflow-hidden shadow-xs ${plan.destacado
+                                                    ? "border-[#0E5E6F] ring-2 ring-[#0E5E6F]/15"
+                                                    : "border-gray-200"
                                                 }`}
                                         >
-                                            {esPlanActual ? "Opción actual" : "Seleccionar plan"}
-                                        </button>
-                                    </div>
-                                );
-                            })}
+                                            {plan.destacado && (
+                                                <div className="bg-[#0E5E6F] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 flex items-center gap-1.5">
+                                                    <Zap size={12} /> Plan Destacado
+                                                </div>
+                                            )}
+
+                                            <div className="p-4 flex flex-col gap-3">
+                                                <div className="flex justify-between items-start gap-2">
+                                                    <span className="bg-gray-100 text-gray-800 border border-gray-200 text-[10px] px-2 py-0.5 rounded-[4px] tracking-wider">
+                                                        {plan.etiqueta}
+                                                    </span>
+                                                    {esPlanActual && (
+                                                        <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded-[4px] font-bold flex items-center gap-1 shrink-0">
+                                                            <CheckCircle2 size={11} /> Contratado
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                <div>
+                                                    <Title
+                                                        as="h3"
+                                                        className="text-base font-extrabold text-gray-900 leading-tight"
+                                                    >
+                                                        {plan.nombre}
+                                                    </Title>
+                                                    <Text className="text-xs text-gray-600 font-medium leading-relaxed block mt-1">
+                                                        {plan.descripcion}
+                                                    </Text>
+                                                </div>
+
+                                                <div
+                                                    className={`rounded-[4px] px-3.5 py-3 flex items-baseline justify-between border ${plan.destacado
+                                                            ? "bg-[#0E5E6F]/5 border-[#0E5E6F]/20"
+                                                            : "bg-gray-50 border-gray-200"
+                                                        }`}
+                                                >
+                                                    <span className="text-2xl font-black text-[#0E5E6F]">
+                                                        {plan.precio}
+                                                    </span>
+                                                    <span className="text-xs text-gray-500 font-medium">
+                                                        {plan.periodo}
+                                                    </span>
+                                                </div>
+
+                                                <div>
+                                                    <Text className="text-[10px] uppercase text-gray-400 tracking-wider block mb-1.5">
+                                                        Incluye:
+                                                    </Text>
+                                                    <ul className="flex flex-col gap-1.5">
+                                                        {plan.caracteristicas.map((item, idx) => (
+                                                            <li
+                                                                key={idx}
+                                                                className="flex items-start gap-2 text-xs text-gray-700 bg-gray-50/70 rounded-[4px] px-2 py-1.5"
+                                                            >
+                                                                <CheckCircle2
+                                                                    size={13}
+                                                                    className="text-[#0E5E6F] shrink-0 mt-0.5"
+                                                                />
+                                                                <span>{item}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+
+                                                <button
+                                                    disabled={esPlanActual}
+                                                    onClick={() => setSelectedPlanForCheckout(plan)}
+                                                    className={`w-full py-2.5 px-3 rounded-[4px] text-xs transition flex items-center justify-center gap-1.5 cursor-pointer mt-1 active:scale-95 ${esPlanActual
+                                                            ? "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
+                                                            : plan.destacado
+                                                                ? "bg-[#0E5E6F] hover:bg-[#0A4552] text-white shadow-xs font-bold"
+                                                                : "bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-200"
+                                                        }`}
+                                                >
+                                                    {esPlanActual ? "Opción actual" : "Seleccionar plan"}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
 
-            {/* MODAL DE CONFIRMACIÓN DE CANCELACIÓN DE SUSCRIPCIÓN */}
+            {/* MODAL CON POSICIÓN ABSOLUTA DENTRO DEL CONTENEDOR RAIZ FUERA DEL DIV SCROLLEABLE */}
             {showCancelModal && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
+                <div 
+                    style={{ borderRadius: "4px" }}
+                    className="absolute inset-0 z-50 flex items-center justify-center p-3 bg-black/60 backdrop-blur-xs overflow-hidden"
+                    onClick={() => setShowCancelModal(false)}
+                >
                     <div
-                        style={{ borderRadius: "4px" }}
-                        className="bg-white border-2 border-gray-200 max-w-md w-full p-5 shadow-2xl animate-in fade-in zoom-in-95 duration-150 relative"
+                        style={{
+                            borderRadius: "4px",
+                            border: "1px solid #E5E7EB",
+                            scrollbarWidth: "none",
+                            msOverflowStyle: "none"
+                        }}
+                        className="bg-white w-[92%] max-h-[85%] p-4 shadow-2xl relative flex flex-col justify-between overflow-y-auto no-scrollbar animate-in fade-in zoom-in-95 duration-150"
+                        onClick={(e) => e.stopPropagation()}
                     >
-                        <button
-                            onClick={() => setShowCancelModal(false)}
-                            className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 cursor-pointer p-1"
-                        >
-                            <X size={16} />
-                        </button>
-
-                        <div className="flex items-center gap-2.5 text-[#B8001F] mb-3">
-                            <AlertCircle size={22} />
-                            <Title as="h3" className="text-base font-extrabold text-gray-900">
-                                ¿Cancelar Suscripción Actual?
-                            </Title>
-                        </div>
-
-                        <Text className="text-xs text-gray-600 leading-relaxed mb-5">
-                            Al cancelar tu suscripción como piloto, perderás el soporte técnico prioritario, las ventajas operativas y las comisiones preferenciales en la plataforma BIODRON a partir de la próxima fecha de corte.
-                        </Text>
-
-                        <div className="flex justify-end gap-2.5 pt-2 border-t border-gray-100">
+                        <div>
                             <button
                                 onClick={() => setShowCancelModal(false)}
-                                className="px-3.5 py-1.5 border border-gray-300 text-xs font-bold text-gray-700 rounded-[4px] hover:bg-gray-100 transition cursor-pointer"
+                                style={{ borderRadius: "4px" }}
+                                className="absolute top-2.5 right-2.5 text-gray-400 hover:text-gray-700 cursor-pointer p-1 active:scale-95"
                             >
-                                Conservar suscripción
+                                <X size={16} />
+                            </button>
+
+                            <div className="flex items-center gap-2 text-[#B8001F] mb-2 pr-6">
+                                <AlertCircle size={18} className="shrink-0" />
+                                <Title as="h3" className="text-xs font-extrabold text-gray-900 leading-tight">
+                                    ¿Cancelar Suscripción Actual?
+                                </Title>
+                            </div>
+
+                            <Text className="text-[11px] text-[#555555] leading-normal mb-3 block">
+                                Al cancelar tu suscripción como piloto, perderás el soporte técnico prioritario, las ventajas operativas y las comisiones preferenciales en la plataforma BIODRON a partir de la próxima fecha de corte.
+                            </Text>
+                        </div>
+
+                        <div className="flex flex-col gap-2 pt-2 border-t border-gray-100 shrink-0">
+                            <button
+                                onClick={handleConfirmCancel}
+                                style={{ backgroundColor: "#B8001F", borderRadius: "4px" }}
+                                className="w-full px-3 py-2 text-xs font-bold text-white hover:opacity-90 transition cursor-pointer shadow-xs active:scale-95"
+                            >
+                                Confirmar cancelación
                             </button>
 
                             <button
-                                onClick={handleConfirmCancel}
-                                style={{ backgroundColor: "#B8001F" }}
-                                className="px-3.5 py-1.5 text-xs font-bold text-white rounded-[4px] hover:opacity-90 transition cursor-pointer shadow-xs"
+                                onClick={() => setShowCancelModal(false)}
+                                style={{ borderRadius: "4px" }}
+                                className="w-full px-3 py-2 border border-gray-300 text-xs font-bold text-gray-700 hover:bg-gray-100 transition cursor-pointer active:scale-95"
                             >
-                                Confirmar cancelación
+                                Conservar suscripción
                             </button>
                         </div>
                     </div>
@@ -5338,7 +5312,7 @@ export const PilotoHistoryView = () => {
     (flights.filter((f) => f.status === 'completed').length / flights.length) * 100
   );
 
-  // Badge de Estado (Sin icono / Sentence Case)
+  // Badge de Estado
   const getStatusBadge = (status: FlightLog['status']) => {
     switch (status) {
       case 'completed':
@@ -5362,7 +5336,7 @@ export const PilotoHistoryView = () => {
     }
   };
 
-  // Badge de Tipo de Misión (Sin icono / Sentence Case)
+  // Badge de Tipo de Misión
   const getTypeBadge = (type: FlightLog['type']) => {
     switch (type) {
       case 'fumigation':
@@ -5392,22 +5366,19 @@ export const PilotoHistoryView = () => {
       {/* ================= ENCABEZADO Y RESUMEN ================= */}
       <div className="flex flex-col gap-3 bg-white p-4 rounded-[4px] border border-gray-200 shadow-xs">
         <div>
-          {/* Title Case */}
           <h1 className="text-base font-bold text-gray-900 flex items-center gap-2 flex-wrap">
             Historial de Bitácora y Vuelos
             <span className="text-[10px] bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-[4px] border border-gray-200">
               {flights.length} registros
             </span>
           </h1>
-          {/* Sentence Case */}
           <p className="text-xs text-gray-500 mt-0.5">
             Registro detallado de misiones de aspersión, fotogrametría y vuelos de prospección.
           </p>
         </div>
 
-        {/* Botón: Sentence Case */}
         <button
-          onClick={() => { }}
+          onClick={() => {}}
           className="flex items-center justify-center gap-1.5 px-3 py-2.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-semibold rounded-[4px] transition cursor-pointer shadow-xs w-full"
         >
           <Download size={14} />
@@ -5419,8 +5390,7 @@ export const PilotoHistoryView = () => {
       <div className="grid grid-cols-2 gap-2.5">
         <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between min-w-0">
           <div className="min-w-0">
-            {/* Subtítulo: Title Case */}
-            <p className="text-[10px] text-gray-500 font-medium truncate">Área Cubierta Total</p>
+            <p className="text-[10px] text-gray-500 font-medium">Área Cubierta Total</p>
             <h3 className="text-lg font-bold text-gray-900 mt-0.5">{totalArea} <span className="text-xs font-normal text-gray-500">ha</span></h3>
           </div>
           <div className="p-2 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
@@ -5430,8 +5400,7 @@ export const PilotoHistoryView = () => {
 
         <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between min-w-0">
           <div className="min-w-0">
-            {/* Subtítulo: Title Case */}
-            <p className="text-[10px] text-gray-500 font-medium truncate">Tiempo Acumulado</p>
+            <p className="text-[10px] text-gray-500 font-medium">Tiempo Acumulado</p>
             <h3 className="text-lg font-bold text-gray-900 mt-0.5">{totalHours} <span className="text-xs font-normal text-gray-500">hrs</span></h3>
           </div>
           <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0">
@@ -5441,8 +5410,7 @@ export const PilotoHistoryView = () => {
 
         <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between min-w-0">
           <div className="min-w-0">
-            {/* Subtítulo: Title Case */}
-            <p className="text-[10px] text-gray-500 font-medium truncate">Tasa de Éxito</p>
+            <p className="text-[10px] text-gray-500 font-medium">Tasa de Éxito</p>
             <h3 className="text-lg font-bold text-emerald-700 mt-0.5">{successRate}%</h3>
           </div>
           <div className="p-2 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
@@ -5452,8 +5420,7 @@ export const PilotoHistoryView = () => {
 
         <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between min-w-0">
           <div className="min-w-0">
-            {/* Subtítulo: Title Case */}
-            <p className="text-[10px] text-gray-500 font-medium truncate">Volumen Aplicado</p>
+            <p className="text-[10px] text-gray-500 font-medium">Volumen Aplicado</p>
             <h3 className="text-lg font-bold text-gray-900 mt-0.5">1,400 <span className="text-xs font-normal text-gray-500">L</span></h3>
           </div>
           <div className="p-2 bg-cyan-50 text-cyan-600 rounded-[4px] shrink-0">
@@ -5475,12 +5442,11 @@ export const PilotoHistoryView = () => {
           />
         </div>
 
-        <div className="flex items-center gap-2 text-xs">
-          {/* Selects: Sentence Case */}
+        <div className="flex flex-col gap-2 text-xs">
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="flex-1 min-w-0 px-2 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
+            className="w-full px-2 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
           >
             <option value="all">Todas las misiones</option>
             <option value="fumigation">Fumigación</option>
@@ -5491,7 +5457,7 @@ export const PilotoHistoryView = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="flex-1 min-w-0 px-2 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
+            className="w-full px-2 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
           >
             <option value="all">Todos los estados</option>
             <option value="completed">Completados</option>
@@ -5501,7 +5467,7 @@ export const PilotoHistoryView = () => {
         </div>
       </div>
 
-      {/* ================= LISTADO DE VUELOS (tarjetas en vez de tabla) ================= */}
+      {/* ================= LISTADO DE VUELOS (tarjetas) ================= */}
       <div className="bg-white rounded-[4px] border border-gray-200 shadow-xs overflow-hidden w-full">
         <div className="divide-y divide-gray-100">
           {filteredFlights.length > 0 ? (
@@ -5511,41 +5477,48 @@ export const PilotoHistoryView = () => {
                 className="p-3 space-y-2 hover:bg-gray-50/70 transition cursor-pointer"
                 onClick={() => setSelectedFlight(flight)}
               >
+                {/* Fila superior: ID + fecha + badge de estado */}
                 <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <div className="font-bold text-gray-900 text-xs">{flight.id}</div>
+                  <div className="flex-1">
+                    <div className="font-bold text-gray-900 text-xs break-words">{flight.id}</div>
                     <div className="text-[10px] text-gray-400 font-medium flex items-center gap-1 mt-0.5">
                       <Calendar size={10} />
-                      {flight.date}
+                      <span className="break-words">{flight.date}</span>
                     </div>
                   </div>
-                  {getStatusBadge(flight.status)}
+                  <div className="shrink-0">{getStatusBadge(flight.status)}</div>
                 </div>
 
-                <div>
-                  <div className="font-semibold text-gray-800 text-xs">
+                {/* Nombre del dron y tipo (envuelven en varias líneas si es necesario) */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="font-semibold text-gray-800 text-xs break-words">
                     {flight.droneName}
-                  </div>
-                  <div className="mt-1">{getTypeBadge(flight.type)}</div>
+                  </span>
+                  <span className="shrink-0">{getTypeBadge(flight.type)}</span>
                 </div>
 
-                <div className="text-gray-700 font-medium flex items-center gap-1 text-[11px]">
-                  <MapPin size={11} className="text-gray-400 shrink-0" />
-                  <span className="truncate">{flight.location}</span>
-                </div>
-                <div className="text-[10px] text-gray-400 flex items-center gap-1">
-                  <User size={10} />
-                  <span className="truncate">{flight.pilot}</span>
+                {/* Ubicación (sin truncar, con wrap) */}
+                <div className="text-gray-700 font-medium flex items-start gap-1 text-[11px]">
+                  <MapPin size={11} className="text-gray-400 shrink-0 mt-0.5" />
+                  <span className="break-words">{flight.location}</span>
                 </div>
 
+                {/* Piloto (sin truncar, con wrap) */}
+                <div className="text-[10px] text-gray-400 flex items-start gap-1">
+                  <User size={10} className="shrink-0 mt-0.5" />
+                  <span className="break-words">{flight.pilot}</span>
+                </div>
+
+                {/* Área cubierta y duración */}
                 <div className="flex items-center justify-between pt-1 border-t border-gray-100">
-                  <div className="font-bold text-gray-900 text-xs">{flight.areaCovered}</div>
-                  <div className="text-[10px] text-gray-400 font-medium flex items-center gap-0.5">
+                  <div className="font-bold text-gray-900 text-xs break-words">{flight.areaCovered}</div>
+                  <div className="text-[10px] text-gray-400 font-medium flex items-center gap-0.5 shrink-0">
                     <Clock size={10} />
                     {flight.duration}
                   </div>
                 </div>
 
+                {/* Botones de acción */}
                 <div className="flex items-center gap-1.5 pt-1" onClick={(e) => e.stopPropagation()}>
                   <button
                     onClick={() => setSelectedFlight(flight)}
@@ -5556,7 +5529,7 @@ export const PilotoHistoryView = () => {
                   </button>
 
                   <button
-                    onClick={() => { }}
+                    onClick={() => {}}
                     className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-[11px] font-medium rounded-[4px] transition cursor-pointer shadow-xs"
                   >
                     <Download size={13} />
@@ -5572,7 +5545,7 @@ export const PilotoHistoryView = () => {
           )}
         </div>
 
-        {/* Footer estático: Sentence Case */}
+        {/* Footer */}
         <div className="p-3 bg-gray-50/80 border-t border-gray-200 text-[11px] text-gray-500 text-center">
           <span>Mostrando {filteredFlights.length} de {flights.length} registros</span>
         </div>
@@ -5585,17 +5558,16 @@ export const PilotoHistoryView = () => {
 
             <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto mt-2 mb-1 shrink-0" />
 
-            {/* Header del Sheet: Title Case */}
             <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between shrink-0 gap-2">
               <div className="flex items-center gap-2.5 min-w-0">
                 <div className="p-2 bg-[#0E5E6F] text-white rounded-[4px] font-bold text-xs shrink-0">
                   {selectedFlight.id}
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-gray-900 text-sm leading-tight truncate">
+                  <h3 className="font-bold text-gray-900 text-sm leading-tight break-words">
                     {selectedFlight.typeName}
                   </h3>
-                  <p className="text-[11px] text-gray-500 truncate">
+                  <p className="text-[11px] text-gray-500 break-words">
                     {selectedFlight.droneName} • {selectedFlight.date}
                   </p>
                 </div>
@@ -5609,23 +5581,20 @@ export const PilotoHistoryView = () => {
               </button>
             </div>
 
-            {/* Contenido del Sheet */}
             <div className="p-4 overflow-y-auto space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-3 p-3 bg-gray-50 rounded-[4px] border border-gray-200">
                 <div>
-                  {/* Etiqueta: Sentence Case */}
                   <span className="text-gray-400 text-[10px] font-semibold uppercase block">Ubicación</span>
-                  <span className="font-bold text-gray-800 flex items-center gap-1 mt-0.5">
-                    <MapPin size={12} className="text-[#0E5E6F] shrink-0" />
-                    <span className="truncate">{selectedFlight.location}</span>
+                  <span className="font-bold text-gray-800 flex items-start gap-1 mt-0.5">
+                    <MapPin size={12} className="text-[#0E5E6F] shrink-0 mt-0.5" />
+                    <span className="break-words">{selectedFlight.location}</span>
                   </span>
                 </div>
                 <div>
-                  {/* Etiqueta: Sentence Case */}
                   <span className="text-gray-400 text-[10px] font-semibold uppercase block">Piloto a cargo</span>
-                  <span className="font-semibold text-gray-800 flex items-center gap-1 mt-0.5">
-                    <User size={12} className="text-[#0E5E6F] shrink-0" />
-                    <span className="truncate">{selectedFlight.pilot}</span>
+                  <span className="font-semibold text-gray-800 flex items-start gap-1 mt-0.5">
+                    <User size={12} className="text-[#0E5E6F] shrink-0 mt-0.5" />
+                    <span className="break-words">{selectedFlight.pilot}</span>
                   </span>
                 </div>
               </div>
@@ -5633,67 +5602,60 @@ export const PilotoHistoryView = () => {
               <div className="grid grid-cols-3 gap-2">
                 <div className="p-2 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
                   <span className="text-gray-400 text-[9px] uppercase font-semibold block">Duración</span>
-                  <span className="font-bold text-gray-900 text-xs">{selectedFlight.duration}</span>
-                  <span className="text-[8px] text-gray-400 block">{selectedFlight.startTime} - {selectedFlight.endTime}</span>
+                  <span className="font-bold text-gray-900 text-xs break-words">{selectedFlight.duration}</span>
+                  <span className="text-[8px] text-gray-400 block break-words">{selectedFlight.startTime} - {selectedFlight.endTime}</span>
                 </div>
 
                 <div className="p-2 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
                   <span className="text-gray-400 text-[9px] uppercase font-semibold block">Área cubierta</span>
-                  <span className="font-bold text-emerald-700 text-xs">{selectedFlight.areaCovered}</span>
-                  <span className="text-[8px] text-gray-400 block">Vel: {selectedFlight.avgSpeed}</span>
+                  <span className="font-bold text-emerald-700 text-xs break-words">{selectedFlight.areaCovered}</span>
+                  <span className="text-[8px] text-gray-400 block break-words">Vel: {selectedFlight.avgSpeed}</span>
                 </div>
 
                 <div className="p-2 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
                   <span className="text-gray-400 text-[9px] uppercase font-semibold block">Batería usada</span>
-                  <span className="font-bold text-gray-900 text-xs">{selectedFlight.batteryUsed}%</span>
-                  <span className="text-[8px] text-gray-400 block">Alt: {selectedFlight.maxAltitude}</span>
+                  <span className="font-bold text-gray-900 text-xs break-words">{selectedFlight.batteryUsed}%</span>
+                  <span className="text-[8px] text-gray-400 block break-words">Alt: {selectedFlight.maxAltitude}</span>
                 </div>
               </div>
 
               {selectedFlight.productApplied && (
                 <div className="p-3 bg-cyan-50/60 border border-cyan-100 rounded-[4px]">
-                  {/* Subtítulo Modal: Title Case */}
                   <h4 className="font-bold text-cyan-950 text-xs mb-1 flex items-center gap-1.5">
                     Detalles de Aplicación Líquida
                   </h4>
                   <div className="grid grid-cols-2 gap-2 text-xs text-cyan-900 mt-2">
                     <div>
-                      {/* Sentence Case */}
                       <span className="text-gray-500 text-[10px] block">Producto / insumo:</span>
-                      <span className="font-semibold">{selectedFlight.productApplied}</span>
+                      <span className="font-semibold break-words">{selectedFlight.productApplied}</span>
                     </div>
                     <div>
-                      {/* Sentence Case */}
                       <span className="text-gray-500 text-[10px] block">Volumen despachado:</span>
-                      <span className="font-semibold">{selectedFlight.volumeApplied}</span>
+                      <span className="font-semibold break-words">{selectedFlight.volumeApplied}</span>
                     </div>
                   </div>
                 </div>
               )}
 
               <div className="p-3 bg-gray-50 rounded-[4px] border border-gray-200">
-                {/* Sentence Case */}
                 <span className="text-gray-400 text-[10px] font-semibold uppercase block mb-1">
                   Observaciones de la misión
                 </span>
-                <p className="text-gray-700 leading-relaxed italic">
+                <p className="text-gray-700 leading-relaxed italic break-words">
                   "{selectedFlight.notes || 'Sin observaciones registradas.'}"
                 </p>
               </div>
             </div>
 
-            {/* Footer del Sheet */}
             <div className="p-3 bg-gray-50 border-t border-gray-200 flex flex-col gap-2 shrink-0">
-              {/* Botón Acción: Sentence Case */}
               <button
-                onClick={() => { }}
+                onClick={() => {}}
                 className="flex items-center justify-center gap-1 text-[11px] font-bold text-[#0E5E6F] hover:underline cursor-pointer py-1"
               >
                 <FileText size={13} />
                 <span>Descargar telemetría KML</span>
               </button>
 
-              {/* Botón Cierre: Sentence Case */}
               <button
                 onClick={() => setSelectedFlight(null)}
                 className="px-3.5 py-2.5 bg-[#0E5E6F] text-white font-semibold text-xs rounded-[4px] hover:bg-[#0A4754] transition cursor-pointer w-full"
@@ -5801,11 +5763,18 @@ export const PilotoHelpView = () => {
   const [inputText, setInputText] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  // Estados para Modal de Solicitud de Asistencia de Piloto
+  // Navegación móvil
+  const [vistaMovil, setVistaMovil] = useState<'lista' | 'chat'>('lista');
+
+  // Menú desplegable del Header (3 puntos)
+  const [isHeaderMenuOpen, setIsHeaderMenuOpen] = useState<boolean>(false);
+
+  // Estados para Modal de Solicitud de Asistencia de Piloto (Paso a Paso)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [modalStep, setModalStep] = useState<1 | 2>(1);
   const [supportForm, setSupportForm] = useState({
-    dron: 'Dron #2 - DJi Agras T40',
+    dron: 'Dron #2 - DJI Agras T40',
     categoria: 'Falla de Telemetría / GPS',
     prioridad: 'Alta (En Campo)',
     descripcion: '',
@@ -5843,6 +5812,15 @@ export const PilotoHelpView = () => {
     setInputText('');
   };
 
+  const handleSupportNext = (e: React.FormEvent) => {
+    e.preventDefault();
+    setModalStep(2);
+  };
+
+  const handleSupportBack = () => {
+    setModalStep(1);
+  };
+
   const handleSupportSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!supportForm.descripcion.trim()) return;
@@ -5852,8 +5830,9 @@ export const PilotoHelpView = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setIsSubmitted(false);
+    setModalStep(1);
     setSupportForm({
-      dron: 'Dron #2 - DJi Agras T40',
+      dron: 'Dron #2 - DJI Agras T40',
       categoria: 'Falla de Telemetría / GPS',
       prioridad: 'Alta (En Campo)',
       descripcion: '',
@@ -5866,18 +5845,99 @@ export const PilotoHelpView = () => {
       c.role.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Simulación de arrastre táctil (drag-to-scroll)
+  const DRAG_THRESHOLD = 6;
+  const dragState = useRef({
+    tracking: false,
+    dragging: false,
+    startY: 0,
+    scrollTop: 0,
+    pointerId: 0,
+  });
+
+  const isInteractiveTarget = (target: EventTarget | null) => {
+    const el = target as HTMLElement | null;
+    return !!el?.closest('input, textarea, select, button, a, option, label');
+  };
+
+  const handleDragStart = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (isInteractiveTarget(e.target)) return;
+    const el = e.currentTarget;
+    dragState.current = {
+      tracking: true,
+      dragging: false,
+      startY: e.clientY,
+      scrollTop: el.scrollTop,
+      pointerId: e.pointerId,
+    };
+  };
+
+  const handleDragMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const state = dragState.current;
+    if (!state.tracking) return;
+    const el = e.currentTarget;
+    const deltaY = e.clientY - state.startY;
+
+    if (!state.dragging) {
+      if (Math.abs(deltaY) < DRAG_THRESHOLD) return;
+      state.dragging = true;
+      el.setPointerCapture(state.pointerId);
+    }
+
+    el.scrollTop = state.scrollTop - deltaY;
+  };
+
+  const handleDragEnd = (e: React.PointerEvent<HTMLDivElement>) => {
+    const state = dragState.current;
+    if (state.dragging) {
+      try {
+        e.currentTarget.releasePointerCapture(state.pointerId);
+      } catch {
+        // El puntero ya pudo haber sido liberado
+      }
+    }
+    dragState.current = {
+      tracking: false,
+      dragging: false,
+      startY: 0,
+      scrollTop: 0,
+      pointerId: 0,
+    };
+  };
+
+  const dragScrollProps = {
+    onPointerDown: handleDragStart,
+    onPointerMove: handleDragMove,
+    onPointerUp: handleDragEnd,
+    onPointerLeave: handleDragEnd,
+    onPointerCancel: handleDragEnd,
+  };
+
   return (
     <div className="w-full h-full min-h-0 flex flex-col bg-white overflow-hidden relative font-sans">
-      <div className="flex flex-col md:flex-row flex-1 h-full min-h-0 overflow-hidden">
+      <style>{`
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior: contain;
+        }
+      `}</style>
+      <div className="flex flex-1 h-full min-h-0 overflow-hidden">
         {/* ================= BARRA LATERAL (CANALES DE SOPORTE ADMIN) ================= */}
-        <div className="w-full md:w-80 lg:w-96 flex flex-col border-r border-gray-200 bg-gray-50/60 h-full min-h-0 shrink-0">
+        <div
+          className={`w-full flex-col bg-gray-50/60 h-full min-h-0 shrink-0 ${
+            vistaMovil === 'lista' ? 'flex' : 'hidden'
+          }`}
+        >
           {/* TÍTULO Y BOTÓN DE ASISTENCIA */}
-          <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between shrink-0">
-            <div>
-              <h2 className="font-bold text-gray-900 text-lg leading-tight">
+          <div className="p-3 border-b border-gray-200 bg-white flex items-center justify-between gap-2 shrink-0">
+            <div className="min-w-0">
+              <h2 className="font-bold text-gray-900 text-base leading-tight truncate">
                 Soporte Piloto
               </h2>
-              <p className="text-xs text-gray-500">
+              <p className="text-[11px] text-gray-500 truncate">
                 Asistencia técnica & administradores
               </p>
             </div>
@@ -5885,9 +5945,9 @@ export const PilotoHelpView = () => {
             {/* BOTÓN NUEVO TICKET / ASISTENCIA */}
             <button
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white font-medium text-xs rounded transition cursor-pointer"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white font-semibold text-xs rounded-[4px] shadow-xs transition cursor-pointer shrink-0"
             >
-              <Wrench size={15} />
+              <Wrench size={14} />
               <span>Pedir ayuda</span>
             </button>
           </div>
@@ -5901,16 +5961,19 @@ export const PilotoHelpView = () => {
               />
               <input
                 type="text"
-                placeholder="Buscar administrador o área..."
+                placeholder="Buscar administrador..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded text-sm focus:outline-none focus:border-[#0E5E6F] transition"
+                className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:border-[#0E5E6F] transition"
               />
             </div>
           </div>
 
           {/* LISTA DE CHATS CON ADMINS */}
-          <div className="flex-1 overflow-y-auto min-h-0 divide-y divide-gray-100">
+          <div
+            className="flex-1 overflow-y-auto min-h-0 divide-y divide-gray-100 scrollbar-hide touch-pan-y select-none cursor-grab active:cursor-grabbing"
+            {...dragScrollProps}
+          >
             {filteredChats.map((chat) => {
               const lastMsg = chat.messages[chat.messages.length - 1];
               const isSelected = chat.id === activeChatId;
@@ -5925,6 +5988,7 @@ export const PilotoHelpView = () => {
                         c.id === chat.id ? { ...c, unreadCount: 0 } : c
                       )
                     );
+                    setVistaMovil('chat');
                   }}
                   className={`w-full p-4 flex items-center gap-3 transition text-left cursor-pointer ${
                     isSelected
@@ -5936,7 +6000,7 @@ export const PilotoHelpView = () => {
                     <img
                       src={chat.avatar}
                       alt={chat.name}
-                      className="w-12 h-12 rounded object-cover shadow-xs"
+                      className="w-12 h-12 rounded-[4px] object-cover shadow-xs"
                     />
                     <span
                       className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 border-2 border-white rounded-full ${
@@ -5981,39 +6045,51 @@ export const PilotoHelpView = () => {
         </div>
 
         {/* ================= ÁREA DE CONVERSACIÓN ================= */}
-        <div className="flex-1 flex flex-col h-full min-h-0 bg-[#f8fafc] overflow-hidden">
+        <div
+          className={`w-full flex-col h-full min-h-0 bg-[#f8fafc] overflow-hidden ${
+            vistaMovil === 'chat' ? 'flex' : 'hidden'
+          }`}
+        >
           {/* HEADER DEL CHAT */}
-          <div className="p-3 sm:p-4 bg-white border-b border-gray-200 flex items-center justify-between gap-2 shrink-0 min-w-0">
-            <div className="flex items-center gap-3 min-w-0 flex-1">
+          <div className="p-2.5 bg-white border-b border-gray-200 flex items-center justify-between gap-1.5 shrink-0 min-w-0 relative">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              {/* BOTÓN VOLVER A LA LISTA */}
+              <button
+                onClick={() => setVistaMovil('lista')}
+                className="p-1 -ml-1 text-gray-500 hover:text-[#0E5E6F] hover:bg-gray-100 rounded-[4px] transition shrink-0 cursor-pointer"
+                aria-label="Volver a la lista"
+              >
+                <ChevronLeft size={22} />
+              </button>
+
               <div className="relative shrink-0">
                 <img
                   src={activeChat.avatar}
                   alt={activeChat.name}
-                  className="w-12 h-12 rounded object-cover"
+                  className="w-9 h-9 rounded-[4px] object-cover"
                 />
               </div>
 
               <div className="min-w-0 flex-1 flex flex-col justify-center">
-                <h2 className="font-bold text-gray-900 text-sm sm:text-base leading-tight truncate">
+                <h2 className="font-bold text-gray-900 text-sm leading-tight truncate">
                   {activeChat.name}
                 </h2>
 
-                <span className="text-xs text-[#0E5E6F] font-medium truncate mt-0.5">
+                <span className="text-[11px] text-[#0E5E6F] font-medium truncate">
                   {activeChat.role}
                 </span>
 
-                <div className="text-xs text-gray-500 mt-0.5">
+                <div className="text-[11px] text-gray-500 leading-none">
                   {activeChat.online ? (
                     <span className="text-emerald-600 font-medium flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-                      En línea para soporte
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+                      En línea
                     </span>
                   ) : (
-                    <span className="text-gray-400 font-medium flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-gray-400 inline-block shrink-0"></span>
+                    <span className="text-gray-400 font-medium flex items-center gap-1 truncate">
+                      <span className="w-1.5 h-1.5 rounded-full bg-gray-400 inline-block shrink-0"></span>
                       <span className="truncate">
-                        Desconectado{' '}
-                        {activeChat.lastSeen ? `(${activeChat.lastSeen})` : ''}
+                        Desconectado {activeChat.lastSeen ? `(${activeChat.lastSeen})` : ''}
                       </span>
                     </span>
                   )}
@@ -6021,33 +6097,53 @@ export const PilotoHelpView = () => {
               </div>
             </div>
 
-            {/* BOTONES DE ACCIÓN */}
-            <div className="flex items-center gap-1 text-gray-500 shrink-0">
+            {/* MENÚ DE TRES PUNTOS CON ACCIONES DESPLEGABLES */}
+            <div className="relative shrink-0">
               <button
-                className="p-2 hover:bg-gray-100 text-gray-600 hover:text-[#0E5E6F] rounded transition"
-                aria-label="Llamada directa"
+                onClick={() => setIsHeaderMenuOpen(!isHeaderMenuOpen)}
+                className="p-2 hover:bg-gray-100 text-gray-600 hover:text-[#0E5E6F] rounded-[4px] transition cursor-pointer"
+                aria-label="Opciones de soporte"
               >
-                <Phone size={18} />
+                <MoreVertical size={20} />
               </button>
 
-              <button
-                className="p-2 hover:bg-gray-100 text-gray-600 hover:text-[#0E5E6F] rounded transition"
-                aria-label="Videollamada de asistencia"
-              >
-                <Video size={18} />
-              </button>
-
-              <button
-                className="p-2 hover:bg-gray-100 text-gray-600 hover:text-[#0E5E6F] rounded transition"
-                aria-label="Opciones"
-              >
-                <MoreVertical size={18} />
-              </button>
+              {/* Menú Desplegable */}
+              {isHeaderMenuOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setIsHeaderMenuOpen(false)}
+                  />
+                  <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-[4px] shadow-lg py-1 z-20 animate-fade-in">
+                    <button
+                      onClick={() => {
+                        setIsHeaderMenuOpen(false);
+                      }}
+                      className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
+                    >
+                      <Phone size={15} className="text-[#0E5E6F]" />
+                      <span>Llamada de soporte</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsHeaderMenuOpen(false);
+                      }}
+                      className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
+                    >
+                      <Video size={15} className="text-[#0E5E6F]" />
+                      <span>Videollamada asistencia</span>
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
           {/* HISTORIAL DE MENSAJES */}
-          <div className="flex-1 overflow-y-auto min-h-0 p-4 space-y-3 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px]">
+          <div
+            className="flex-1 overflow-y-auto min-h-0 p-3 space-y-3 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] scrollbar-hide touch-pan-y select-none cursor-grab active:cursor-grabbing"
+            {...dragScrollProps}
+          >
             {activeChat.messages.map((msg) => {
               const isPilotMsg = msg.sender === 'other';
 
@@ -6062,12 +6158,12 @@ export const PilotoHelpView = () => {
                     <img
                       src={activeChat.avatar}
                       alt={activeChat.name}
-                      className="w-7 h-7 rounded object-cover mb-1 shrink-0"
+                      className="w-7 h-7 rounded-[4px] object-cover mb-1 shrink-0"
                     />
                   )}
 
                   <div
-                    className={`max-w-[75%] sm:max-w-[65%] px-4 py-2.5 rounded text-sm ${
+                    className={`max-w-[80%] px-3.5 py-2.5 rounded-[4px] text-sm ${
                       isPilotMsg
                         ? 'bg-[#0E5E6F] text-white'
                         : 'bg-white text-gray-800 border border-gray-100 shadow-xs'
@@ -6094,7 +6190,7 @@ export const PilotoHelpView = () => {
                     <img
                       src={pilotAvatar}
                       alt="Piloto Javier Reyes"
-                      className="w-7 h-7 rounded object-cover mb-1 shrink-0 border border-gray-200"
+                      className="w-7 h-7 rounded-[4px] object-cover mb-1 shrink-0 border border-gray-200"
                     />
                   )}
                 </div>
@@ -6109,7 +6205,7 @@ export const PilotoHelpView = () => {
           >
             <button
               type="button"
-              className="p-2 text-gray-400 hover:text-[#0E5E6F] hover:bg-gray-100 rounded transition shrink-0"
+              className="p-2 text-gray-400 hover:text-[#0E5E6F] hover:bg-gray-100 rounded-[4px] transition shrink-0"
               title="Adjuntar log de vuelo o captura"
             >
               <Paperclip size={20} />
@@ -6117,16 +6213,16 @@ export const PilotoHelpView = () => {
 
             <input
               type="text"
-              placeholder="Escribe tu consulta o reporte al administrador..."
+              placeholder="Escribe tu mensaje..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              className="flex-1 bg-gray-50 border border-gray-200 rounded px-4 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition min-w-0"
+              className="flex-1 bg-gray-50 border border-gray-200 rounded-[4px] px-4 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition min-w-0"
             />
 
             <button
               type="submit"
               disabled={!inputText.trim()}
-              className="p-2.5 bg-[#0E5E6F] text-white rounded hover:bg-[#0A4754] disabled:opacity-40 disabled:hover:bg-[#0E5E6F] transition cursor-pointer shrink-0"
+              className="p-2.5 bg-[#0E5E6F] text-white rounded-[4px] hover:bg-[#0A4754] disabled:opacity-40 disabled:hover:bg-[#0E5E6F] transition cursor-pointer shrink-0"
             >
               <Send size={18} />
             </button>
@@ -6134,172 +6230,226 @@ export const PilotoHelpView = () => {
         </div>
       </div>
 
-      {/* ================= MODAL DE SOLICITUD DE ASISTENCIA TÉCNICA ================= */}
+      {/* ================= MODAL DE SOLICITUD DE ASISTENCIA TÉCNICA (IDENTICO A TECNICO) ================= */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in">
-          <div className="bg-white w-full max-w-md rounded shadow-2xl overflow-hidden border border-gray-100 flex flex-col">
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fade-in">
+          <div className="bg-white w-[92%] max-w-[360px] rounded-[4px] shadow-2xl overflow-hidden border border-gray-100 flex flex-col max-h-[92%]">
             {/* Header del Modal */}
-            <div className="p-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded">
-                  <Wrench size={20} />
+            <div className="p-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between gap-2 shrink-0">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="p-1.5 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0">
+                  <Wrench size={16} />
                 </div>
-                <div>
-                  <h3 className="font-bold text-gray-900 text-base">
-                    Solicitar Asistencia Técnica
+                <div className="min-w-0">
+                  <h3 className="font-bold text-gray-900 text-sm truncate leading-tight">
+                    Solicitar Asistencia
                   </h3>
-                  <p className="text-xs text-gray-500">
-                    Reporte directo al administrador / soporte
-                  </p>
+                  {!isSubmitted && (
+                    <p className="text-[10px] text-gray-500 truncate">
+                      Paso {modalStep} de 2
+                    </p>
+                  )}
                 </div>
               </div>
               <button
                 onClick={closeModal}
-                className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded transition cursor-pointer"
+                className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-[4px] transition cursor-pointer shrink-0"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
 
+            {/* Indicador de progreso por pasos */}
+            {!isSubmitted && (
+              <div className="flex gap-1.5 px-3.5 pt-2.5 shrink-0">
+                <span
+                  className={`h-1 flex-1 rounded-full ${
+                    modalStep >= 1 ? 'bg-[#0E5E6F]' : 'bg-gray-200'
+                  }`}
+                />
+                <span
+                  className={`h-1 flex-1 rounded-full ${
+                    modalStep >= 2 ? 'bg-[#0E5E6F]' : 'bg-gray-200'
+                  }`}
+                />
+              </div>
+            )}
+
             {/* Contenido del Modal */}
-            <div className="p-5">
+            <div
+              className="p-3.5 overflow-y-auto scrollbar-hide touch-pan-y"
+              {...dragScrollProps}
+            >
               {!isSubmitted ? (
-                <form onSubmit={handleSupportSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Dron asignado / equipo
-                    </label>
-                    <select
-                      value={supportForm.dron}
-                      onChange={(e) =>
-                        setSupportForm({ ...supportForm, dron: e.target.value })
-                      }
-                      className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
-                    >
-                      <option value="Dron #1 - DJI Mavic 3 Multispectral">
-                        Dron #1 - DJI Mavic 3 Multispectral
-                      </option>
-                      <option value="Dron #2 - DJI Agras T40">
-                        Dron #2 - DJI Agras T40
-                      </option>
-                      <option value="Dron #3 - Sentera 65">
-                        Dron #3 - Sentera 65
-                      </option>
-                      <option value="Estación Base RTK / Control">
-                        Estación base RTK / control
-                      </option>
-                    </select>
-                  </div>
+                modalStep === 1 ? (
+                  <form onSubmit={handleSupportNext} className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1">
+                        Dron / equipo asignado
+                      </label>
+                      <select
+                        value={supportForm.dron}
+                        onChange={(e) =>
+                          setSupportForm({
+                            ...supportForm,
+                            dron: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
+                      >
+                        <option value="Dron #1 - DJI Mavic 3 Multispectral">
+                          DJI Mavic 3
+                        </option>
+                        <option value="Dron #2 - DJI Agras T40">
+                          DJI Agras T40
+                        </option>
+                        <option value="Dron #3 - Sentera 65">
+                          Sentera 65
+                        </option>
+                        <option value="Estación Base RTK / Control">
+                          Estación RTK / Control
+                        </option>
+                      </select>
+                    </div>
 
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Tipo de incidencia
-                    </label>
-                    <select
-                      value={supportForm.categoria}
-                      onChange={(e) =>
-                        setSupportForm({
-                          ...supportForm,
-                          categoria: e.target.value,
-                        })
-                      }
-                      className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
-                    >
-                      <option value="Falla de Telemetría / GPS">
-                        Falla de telemetría / pérdida RTK
-                      </option>
-                      <option value="Calibración de Sensores">
-                        Calibración de cámara / sensores
-                      </option>
-                      <option value="Desgaste / Falla Batería">
-                        Batería / alarma de voltaje
-                      </option>
-                      <option value="Autorización de Ruta / Clima">
-                        Autorización de vuelo / alerta climática
-                      </option>
-                      <option value="Otro">Otro problema técnico</option>
-                    </select>
-                  </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1">
+                        Tipo de incidencia
+                      </label>
+                      <select
+                        value={supportForm.categoria}
+                        onChange={(e) =>
+                          setSupportForm({
+                            ...supportForm,
+                            categoria: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
+                      >
+                        <option value="Falla de Telemetría / GPS">
+                          Falla de telemetría / RTK
+                        </option>
+                        <option value="Calibración de Sensores">
+                          Calibración cámara
+                        </option>
+                        <option value="Desgaste / Falla Batería">
+                          Batería / voltaje
+                        </option>
+                        <option value="Autorización de Ruta / Clima">
+                          Autorización / clima
+                        </option>
+                        <option value="Otro">Otro problema técnico</option>
+                      </select>
+                    </div>
 
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Prioridad
-                    </label>
-                    <select
-                      value={supportForm.prioridad}
-                      onChange={(e) =>
-                        setSupportForm({
-                          ...supportForm,
-                          prioridad: e.target.value,
-                        })
-                      }
-                      className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
-                    >
-                      <option value="Baja">Baja (consulta general)</option>
-                      <option value="Media">Media (pre-vuelo)</option>
-                      <option value="Alta (En Campo)">
-                        Alta (operación detenida en campo)
-                      </option>
-                      <option value="Urgente">
-                        Urgente (falla crítica o falla de equipo)
-                      </option>
-                    </select>
-                  </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1">
+                        Prioridad
+                      </label>
+                      <select
+                        value={supportForm.prioridad}
+                        onChange={(e) =>
+                          setSupportForm({
+                            ...supportForm,
+                            prioridad: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
+                      >
+                        <option value="Baja">Baja</option>
+                        <option value="Media">Media</option>
+                        <option value="Alta (En Campo)">Alta (en campo)</option>
+                        <option value="Urgente">Urgente</option>
+                      </select>
+                    </div>
 
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Detalle de la falla o solicitud
-                    </label>
-                    <textarea
-                      required
-                      rows={4}
-                      placeholder="Describe los síntomas, mensajes de error en el control o condiciones en campo..."
-                      value={supportForm.descripcion}
-                      onChange={(e) =>
-                        setSupportForm({
-                          ...supportForm,
-                          descripcion: e.target.value,
-                        })
-                      }
-                      className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition resize-none"
-                    ></textarea>
-                  </div>
+                    <div className="flex items-center justify-end gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={closeModal}
+                        className="px-3.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-[4px] transition cursor-pointer"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-3.5 py-1.5 text-xs font-semibold text-white bg-[#0E5E6F] hover:bg-[#0A4754] rounded-[4px] shadow-xs transition cursor-pointer"
+                      >
+                        Siguiente
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <form onSubmit={handleSupportSubmit} className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1">
+                        Descripción técnica
+                      </label>
+                      <textarea
+                        required
+                        rows={4}
+                        placeholder="Describe síntomas, mensajes de error en el control o condiciones en campo..."
+                        value={supportForm.descripcion}
+                        onChange={(e) =>
+                          setSupportForm({
+                            ...supportForm,
+                            descripcion: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition resize-none"
+                      ></textarea>
+                    </div>
 
-                  <div className="flex items-center justify-end gap-2 pt-2">
-                    <button
-                      type="button"
-                      onClick={closeModal}
-                      className="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded transition cursor-pointer"
-                    >
-                      Cancelar
-                    </button>
-                    <button
-                      type="submit"
-                      className="px-4 py-2 text-xs font-medium text-white bg-[#0E5E6F] hover:bg-[#0A4754] rounded shadow-xs transition cursor-pointer"
-                    >
-                      Enviar reporte
-                    </button>
-                  </div>
-                </form>
+                    <div className="p-2 bg-gray-50 border border-gray-100 rounded-[4px] text-[11px] text-gray-500 space-y-0.5">
+                      <p className="truncate">
+                        <span className="font-semibold text-gray-600">
+                          Equipo:
+                        </span>{' '}
+                        {supportForm.dron}
+                      </p>
+                      <p className="truncate">
+                        <span className="font-semibold text-gray-600">
+                          Prioridad:
+                        </span>{' '}
+                        {supportForm.prioridad}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={handleSupportBack}
+                        className="px-3.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-[4px] transition cursor-pointer"
+                      >
+                        Atrás
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-3.5 py-1.5 text-xs font-semibold text-white bg-[#0E5E6F] hover:bg-[#0A4754] rounded-[4px] shadow-xs transition cursor-pointer"
+                      >
+                        Enviar ticket
+                      </button>
+                    </div>
+                  </form>
+                )
               ) : (
                 /* Confirmación */
-                <div className="py-6 text-center space-y-4">
-                  <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
-                    <CheckCircle2 size={32} />
+                <div className="py-3 text-center space-y-2.5">
+                  <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                    <CheckCircle2 size={22} />
                   </div>
-                  <div className="space-y-1">
-                    <h4 className="text-lg font-bold text-gray-900">
+                  <div className="space-y-0.5">
+                    <h4 className="text-sm font-bold text-gray-900">
                       ¡Solicitud enviada!
                     </h4>
                     <p className="text-xs text-gray-600 max-w-xs mx-auto leading-relaxed">
-                      El equipo de administradores y soporte técnico ha recibido
-                      tu reporte de campo. Te contactarán por este chat.
+                      El equipo de administradores y soporte ha recibido tu reporte de campo.
                     </p>
                   </div>
-                  <div className="pt-2">
+                  <div className="pt-1">
                     <button
                       onClick={closeModal}
-                      className="w-full py-2.5 px-4 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-medium rounded transition cursor-pointer"
+                      className="w-full py-1.5 px-4 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-semibold rounded-[4px] transition cursor-pointer"
                     >
                       Entendido
                     </button>
@@ -6385,14 +6535,17 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
     };
 
     return (
-        <div className="w-full h-full max-w-6xl mx-auto p-2 sm:p-3 bg-white antialiased select-none font-sans flex flex-col justify-center items-center relative">
+        <div
+            className="w-full h-full mx-auto p-2 bg-white antialiased select-none flex flex-col justify-center items-center relative"
+            style={{ fontFamily: "'Roboto', sans-serif" }}
+        >
             <div className="w-full h-full flex-1 bg-white border-2 border-gray-200 rounded-[4px] overflow-hidden flex flex-col justify-between shadow-xs">
                 
                 {/* CABECERA */}
-                <div className="bg-gray-50 border-b-2 border-gray-200 px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
+                <div className="bg-gray-50 border-b-2 border-gray-200 px-4 py-4 flex flex-col items-start gap-3">
+                    <div className="flex items-center gap-3 w-full">
                         {/* AVATAR */}
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-[4px] bg-white border-2 border-gray-300 overflow-hidden shrink-0 shadow-xs relative group flex items-center justify-center">
+                        <div className="w-14 h-14 rounded-[4px] bg-white border-2 border-gray-300 overflow-hidden shrink-0 shadow-xs relative group flex items-center justify-center">
                             {!imgError ? (
                                 <img
                                     src={profileData.avatar}
@@ -6401,146 +6554,145 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                                     onError={() => setImgError(true)}
                                 />
                             ) : (
-                                <div className={`w-full h-full flex items-center justify-center font-black text-xl rounded-[4px] ${profileData.avatarBg}`}>
+                                <div className={`w-full h-full flex items-center justify-center font-black text-lg rounded-[4px] ${profileData.avatarBg}`}>
                                     {profileData.initials}
                                 </div>
                             )}
                             <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-[4px]">
-                                <Briefcase size={20} className="text-white drop-shadow" />
+                                <Briefcase size={18} className="text-white drop-shadow" />
                             </div>
                         </div>
 
-                        <div className="text-left">
-                            <h2 className="text-xl sm:text-2xl text-gray-900 font-black tracking-tight normal-case leading-tight">
+                        <div className="text-left min-w-0 flex-1">
+                            <h2 className="text-base text-gray-900 font-black tracking-tight normal-case leading-tight truncate">
                                 {profileData.name}
                             </h2>
-                            <p className="text-gray-500 font-semibold text-xs sm:text-sm mt-1">
+                            <p className="text-gray-500 font-semibold text-[11px] mt-0.5 truncate">
                                 {profileData.email}
                             </p>
                         </div>
                     </div>
 
-                    <div className="flex flex-col items-start sm:items-end gap-2 w-full sm:w-auto">
+                    <div className="flex flex-col items-center gap-2 w-full">
                         <span
-                            className={`text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-[4px] border-2 ${profileData.roleColor}`}
-                            style={{ fontFamily: "'Instrument Sans', sans-serif" }}
+                            className={`w-full text-center text-[10px] font-black tracking-wider px-3 py-1 rounded-[4px] border-2 break-words whitespace-normal ${profileData.roleColor}`}
                         >
                             {profileData.roleLabel}
                         </span>
 
                         {saveSuccess && (
-                            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-[4px] flex items-center gap-1 animate-in fade-in duration-150">
-                                <Check size={13} /> Actualizado
+                            <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-[4px] flex items-center gap-1 animate-in fade-in duration-150">
+                                <Check size={12} /> Actualizado
                             </span>
                         )}
                     </div>
                 </div>
 
-                {/* MÉTRICAS PRINCIPALES */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x-2 divide-gray-100 bg-white border-b-2 border-gray-200 text-left flex-1 items-center">
+                {/* MÉTRICAS PRINCIPALES — grid 2x2 táctil */}
+                <div className="grid grid-cols-2 divide-x-2 divide-y-2 divide-gray-100 bg-white border-b-2 border-gray-200 text-left">
                     {/* Base Regional */}
-                    <div className="p-3 sm:p-3.5 hover:bg-gray-50/50 transition-colors flex items-start gap-2.5 h-full justify-center flex-col">
-                        <div className="flex items-center gap-2">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1.5 border-2 border-gray-200 rounded-[4px]">
-                                <MapPin size={16} />
+                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+                        <div className="flex items-center gap-1.5">
+                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                                <MapPin size={14} />
                             </div>
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
+                            <span className="text-[9px] font-black text-gray-400 tracking-widest block">
                                 Base Regional
                             </span>
                         </div>
-                        <span className="text-xs sm:text-sm text-gray-800 font-bold block break-words leading-tight mt-0.5">
+                        <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
                             {profileData.location}
                         </span>
                     </div>
 
                     {/* Cobertura */}
-                    <div className="p-3 sm:p-3.5 hover:bg-gray-50/50 transition-colors flex items-start gap-2.5 h-full justify-center flex-col">
-                        <div className="flex items-center gap-2">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1.5 border-2 border-gray-200 rounded-[4px]">
-                                <Layers size={16} />
+                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+                        <div className="flex items-center gap-1.5">
+                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                                <Layers size={14} />
                             </div>
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
+                            <span className="text-[9px] font-black text-gray-400 tracking-widest block">
                                 Cobertura Total
                             </span>
                         </div>
-                        <span className="text-xs sm:text-sm text-gray-800 font-bold block break-words leading-tight mt-0.5">
+                        <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
                             {profileData.area}
                         </span>
                     </div>
 
                     {/* Historial */}
-                    <div className="p-3 sm:p-3.5 hover:bg-gray-50/50 transition-colors flex items-start gap-2.5 h-full justify-center flex-col">
-                        <div className="flex items-center gap-2">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1.5 border-2 border-gray-200 rounded-[4px]">
-                                <BarChart2 size={16} />
+                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+                        <div className="flex items-center gap-1.5">
+                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                                <BarChart2 size={14} />
                             </div>
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
+                            <span className="text-[9px] font-black text-gray-400 tracking-widest block">
                                 Historial
                             </span>
                         </div>
-                        <span className="text-xs sm:text-sm text-gray-800 font-bold block truncate leading-tight mt-0.5">
+                        <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5 w-full">
                             {profileData.services}
                         </span>
                     </div>
 
                     {/* Estado */}
-                    <div className="p-3 sm:p-3.5 hover:bg-gray-50/50 transition-colors flex items-start gap-2.5 h-full justify-center flex-col">
-                        <div className="flex items-center gap-2">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1.5 border-2 border-gray-200 rounded-[4px]">
-                                <CheckCircle size={16} />
+                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+                        <div className="flex items-center gap-1.5">
+                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                                <CheckCircle size={14} />
                             </div>
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
+                            <span className="text-[9px] font-black text-gray-400 tracking-widest block">
                                 Estado
                             </span>
                         </div>
-                        <span className="text-xs font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-[4px] uppercase inline-block mt-0.5">
+                        <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] inline-block mt-0.5">
                             {profileData.standing}
                         </span>
                     </div>
                 </div>
 
                 {/* DATOS DE CONTACTO Y CREDENCIALES */}
-                <div className="p-3.5 sm:p-4 bg-white flex-1 flex flex-col justify-center">
-                    <div className="flex items-center justify-between mb-2.5 pb-2 border-b-2 border-gray-100">
+                <div className="p-3.5 bg-white flex-1 flex flex-col justify-center">
+                    <div className="flex flex-col gap-2 mb-2.5 pb-2 border-b-2 border-gray-100">
                         <div className="flex items-center gap-2">
-                            <Settings size={16} className="text-[#0E5E6F]" />
-                            <h3 className="text-xs sm:text-sm font-black text-gray-800 normal-case">
+                            <Settings size={15} className="text-[#0E5E6F]" />
+                            <h3 className="text-xs font-black text-gray-800 normal-case">
                                 Credenciales y Datos de Contacto
                             </h3>
                         </div>
 
                         <button
                             onClick={handleOpenModal}
-                            className="py-1 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] text-xs flex items-center gap-1.5 transition-colors active:scale-95 shadow-xs cursor-pointer"
+                            className="w-full py-2 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] text-xs flex items-center justify-center gap-1.5 transition-colors active:scale-95 shadow-xs cursor-pointer"
                         >
-                            <Edit2 size={13} className="text-[#0E5E6F]" /> Editar Información
+                            <Edit2 size={13} className="text-[#0E5E6F]" /> Editar información
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-left">
+                    <div className="grid grid-cols-1 gap-2.5 text-left">
                         <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider flex items-center gap-1">
+                            <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
                                 <Phone size={12} className="text-[#0E5E6F]" /> Teléfono
                             </span>
-                            <p className="font-bold text-xs sm:text-sm text-gray-800 mt-0.5">
+                            <p className="font-bold text-xs text-gray-800 mt-0.5">
                                 {profileData.phone}
                             </p>
                         </div>
 
                         <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider flex items-center gap-1">
+                            <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
                                 <Mail size={12} className="text-[#0E5E6F]" /> Correo
                             </span>
-                            <p className="font-bold text-xs sm:text-sm text-gray-800 mt-0.5 truncate">
+                            <p className="font-bold text-xs text-gray-800 mt-0.5 truncate">
                                 {profileData.email}
                             </p>
                         </div>
 
                         <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider flex items-center gap-1">
+                            <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
                                 <Lock size={12} className="text-[#0E5E6F]" /> Contraseña
                             </span>
-                            <p className="font-mono font-bold text-xs sm:text-sm text-gray-800 mt-0.5">
+                            <p className="font-mono font-bold text-xs text-gray-800 mt-0.5">
                                 ••••••••••••
                             </p>
                         </div>
@@ -6548,157 +6700,158 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                 </div>
 
                 {/* PIE DE PÁGINA */}
-                <div className="border-t-2 border-gray-200 px-6 py-2 bg-gray-50 flex items-center justify-between gap-2">
-                    <span className="text-xs text-gray-400 font-medium text-left truncate">
+                <div className="border-t-2 border-gray-200 px-4 py-2.5 bg-gray-50 flex flex-col items-stretch gap-2">
+                    <span className="text-[10px] text-gray-400 font-medium text-left truncate">
                         Base Operativa SPS, Cortés
                     </span>
 
                     <button
                         onClick={onLogout}
-                        className="flex items-center gap-1.5 py-1 px-3 rounded-[4px] border-2 border-[#B8001F] bg-white hover:bg-[#B8001F]/10 text-[#B8001F] transition-all active:scale-95 shadow-xs cursor-pointer"
-                        style={{ fontFamily: "'Instrument Sans', sans-serif" }}
+                        className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-[4px] border-2 border-[#B8001F] bg-white hover:bg-[#B8001F]/10 text-[#B8001F] transition-all active:scale-95 shadow-xs cursor-pointer w-full"
                     >
                         <LogOut size={13} className="shrink-0 text-[#B8001F]" />
-                        <span className="text-xs font-black uppercase tracking-wider">
-                            SALIR
+                        <span className="text-xs font-black tracking-wider">
+                            Salir
                         </span>
                     </button>
                 </div>
             </div>
 
-            {/* MODAL VERTICAL FLOTANTE DE EDICIÓN */}
+            {/* BOTTOM SHEET DE EDICIÓN */}
             {isModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
-                    <div className="bg-white border-2 border-gray-300 rounded-[4px] p-5 w-full max-w-md shadow-xl space-y-4 text-left">
-                        {/* Encabezado del Modal */}
-                        <div className="flex items-center justify-between pb-2.5 border-b-2 border-gray-100">
-                            <div className="flex items-center gap-2">
-                                <div className="p-1.5 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
-                                    <Edit2 size={15} />
-                                </div>
-                                <h3 className="text-sm font-black text-gray-800 normal-case">
-                                    Editar Credenciales
-                                </h3>
-                            </div>
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-[4px] transition-colors cursor-pointer"
-                            >
-                                <X size={16} />
-                            </button>
-                        </div>
-
-                        {/* Formulario Vertical */}
-                        <form onSubmit={handleSave} className="space-y-3">
-                            {/* SELECTOR TOTALMENTE FALSO DE FOTO DE PERFIL */}
-                            <div>
-                                <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider mb-1 flex items-center gap-1">
-                                    <Camera size={12} className="text-[#0E5E6F]" /> Foto de Perfil
-                                </label>
-
-                                <div className="flex items-center gap-3 p-2 border-2 border-gray-200 rounded-[4px] bg-gray-50">
-                                    <div className="w-12 h-12 rounded-[4px] bg-white border border-gray-300 overflow-hidden shrink-0 flex items-center justify-center relative">
-                                        <img
-                                            src={profileData.avatar}
-                                            alt="Previsualización"
-                                            className="w-full h-full object-cover"
-                                        />
+                <div className="absolute inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
+                    <div className="bg-white border-2 border-gray-300 rounded-[4px] w-[92%] max-w-[320px] max-h-[92%] shadow-xl flex flex-col text-left overflow-hidden">
+                        <div className="px-3.5 pt-3 pb-2.5 space-y-2.5 overflow-y-auto">
+                            {/* Encabezado del Modal */}
+                            <div className="flex items-center justify-between pb-2 border-b-2 border-gray-100">
+                                <div className="flex items-center gap-2">
+                                    <div className="p-1.5 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
+                                        <Edit2 size={14} />
                                     </div>
+                                    <h3 className="text-xs font-black text-gray-800 normal-case">
+                                        Editar Credenciales
+                                    </h3>
+                                </div>
+                                <button
+                                    onClick={() => setIsModalOpen(false)}
+                                    className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-[4px] transition-colors cursor-pointer"
+                                >
+                                    <X size={15} />
+                                </button>
+                            </div>
 
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center gap-2">
-                                            <button
-                                                type="button"
-                                                onClick={handleFakeUpload}
-                                                disabled={isUploading}
-                                                className="px-2.5 py-1 text-[11px] font-bold bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-100 rounded-[4px] text-gray-700 flex items-center gap-1 cursor-pointer transition-colors active:scale-95 shadow-xs disabled:opacity-50"
-                                            >
-                                                {isUploading ? (
-                                                    <Loader2 size={12} className="animate-spin text-[#0E5E6F]" />
-                                                ) : (
-                                                    <Upload size={12} className="text-[#0E5E6F]" />
-                                                )}
-                                                {isUploading ? "Cargando..." : "Seleccionar"}
-                                            </button>
-                                            <span className="text-[10px] text-gray-500 font-semibold truncate">
-                                                {simulatedFile || "JPG o PNG (Máx. 2MB)"}
-                                            </span>
+                            {/* Formulario Vertical */}
+                            <form onSubmit={handleSave} className="space-y-2">
+                                {/* SELECTOR TOTALMENTE FALSO DE FOTO DE PERFIL */}
+                                <div>
+                                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1 flex items-center gap-1">
+                                        <Camera size={11} className="text-[#0E5E6F]" /> Foto de perfil
+                                    </label>
+
+                                    <div className="flex items-center gap-2 p-1.5 border-2 border-gray-200 rounded-[4px] bg-gray-50">
+                                        <div className="w-9 h-9 rounded-[4px] bg-white border border-gray-300 overflow-hidden shrink-0 flex items-center justify-center relative">
+                                            <img
+                                                src={profileData.avatar}
+                                                alt="Previsualización"
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={handleFakeUpload}
+                                                    disabled={isUploading}
+                                                    className="px-2.5 py-1 text-[11px] font-bold bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-100 rounded-[4px] text-gray-700 flex items-center gap-1 cursor-pointer transition-colors active:scale-95 shadow-xs disabled:opacity-50"
+                                                >
+                                                    {isUploading ? (
+                                                        <Loader2 size={12} className="animate-spin text-[#0E5E6F]" />
+                                                    ) : (
+                                                        <Upload size={12} className="text-[#0E5E6F]" />
+                                                    )}
+                                                    {isUploading ? "Cargando..." : "Seleccionar"}
+                                                </button>
+                                                <span className="text-[10px] text-gray-500 font-semibold truncate">
+                                                    {simulatedFile || "img"}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div>
-                                <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider mb-1">
-                                    Teléfono
-                                </label>
-                                <div className="relative">
-                                    <Phone size={13} className="absolute left-3 top-3 text-gray-400" />
-                                    <input
-                                        type="text"
-                                        value={editForm.phone}
-                                        onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                                        className="w-full pl-8 pr-3 py-2 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
-                                        required
-                                    />
+                                <div>
+                                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                                        Teléfono
+                                    </label>
+                                    <div className="relative">
+                                        <Phone size={13} className="absolute left-3 top-2.5 text-gray-400" />
+                                        <input
+                                            type="text"
+                                            value={editForm.phone}
+                                            onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                                            className="w-full pl-8 pr-3 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
+                                            required
+                                        />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div>
-                                <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider mb-1">
-                                    Correo Electrónico
-                                </label>
-                                <div className="relative">
-                                    <Mail size={13} className="absolute left-3 top-3 text-gray-400" />
-                                    <input
-                                        type="email"
-                                        value={editForm.email}
-                                        onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                                        className="w-full pl-8 pr-3 py-2 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
-                                        required
-                                    />
+                                <div>
+                                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                                        Correo electrónico
+                                    </label>
+                                    <div className="relative">
+                                        <Mail size={13} className="absolute left-3 top-2.5 text-gray-400" />
+                                        <input
+                                            type="email"
+                                            value={editForm.email}
+                                            onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                                            className="w-full pl-8 pr-3 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
+                                            required
+                                        />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div>
-                                <label className="block text-[10px] font-black uppercase text-gray-500 tracking-wider mb-1">
-                                    Nueva Contraseña
-                                </label>
-                                <div className="relative">
-                                    <Lock size={13} className="absolute left-3 top-3 text-gray-400" />
-                                    <input
-                                        type={showPassword ? "text" : "password"}
-                                        value={editForm.password}
-                                        onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
-                                        className="w-full pl-8 pr-8 py-2 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
-                                        required
-                                    />
+                                <div>
+                                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                                        Nueva contraseña
+                                    </label>
+                                    <div className="relative">
+                                        <Lock size={13} className="absolute left-3 top-2.5 text-gray-400" />
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            value={editForm.password}
+                                            onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
+                                            className="w-full pl-8 pr-8 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-2.5 top-2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                                        >
+                                            {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-2 pt-1.5 border-t border-gray-100">
                                     <button
                                         type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 cursor-pointer"
+                                        onClick={() => setIsModalOpen(false)}
+                                        className="flex-1 py-2 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-600 font-bold rounded-[4px] text-xs flex items-center justify-center gap-1 transition-colors active:scale-95 cursor-pointer"
                                     >
-                                        {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                                        <X size={13} /> Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="flex-1 py-2 px-4 bg-[#0E5E6F] border-2 border-[#0E5E6F] text-white font-bold rounded-[4px] text-xs flex items-center justify-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer"
+                                    >
+                                        <Save size={13} /> Guardar
                                     </button>
                                 </div>
-                            </div>
-
-                            <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsModalOpen(false)}
-                                    className="py-1.5 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-600 font-bold rounded-[4px] text-xs flex items-center gap-1 transition-colors active:scale-95 cursor-pointer"
-                                >
-                                    <X size={13} /> Cancelar
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="py-1.5 px-4 bg-[#0E5E6F] border-2 border-[#0E5E6F] text-white font-bold rounded-[4px] text-xs flex items-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer"
-                                >
-                                    <Save size={13} /> Guardar
-                                </button>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             )}
