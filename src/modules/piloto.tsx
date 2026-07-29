@@ -889,10 +889,10 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
       {/* BARRA SUPERIOR CON NOTIFICACIONES */}
       <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-gray-100 relative">
         <div className="text-left space-y-0.5 min-w-0">
-          <h1 className="text-base font-black text-gray-900 tracking-tight leading-snug">
+          <h1 className="text-lg font-black text-gray-900 tracking-tight leading-snug">
             Panel de Control del Piloto
           </h1>
-          <p className="text-gray-500 text-[10px] font-medium tracking-wide leading-snug">
+          <p className="text-xs text-gray-500 font-medium tracking-wide leading-snug">
             Centro de control de vuelo • Telemetría, hobby y operaciones comerciales
           </p>
           <div className="pt-1">
@@ -951,7 +951,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
           >
             <div className="flex justify-between items-center mb-1">
-              <span className="text-[9px] font-black text-gray-500 tracking-wider">
+              <span className="text-xs font-black text-gray-500 tracking-wider">
                 Horas Vuelo Hobby
               </span>
               <div
@@ -966,7 +966,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
               </div>
             </div>
             <p className="text-lg font-black text-gray-900 mb-0.5">84.5 hrs</p>
-            <p className="text-[8px] text-gray-400 font-semibold leading-snug">Tiempo acumulado</p>
+            <p className="text-xs text-gray-400 font-semibold leading-snug">Tiempo acumulado</p>
           </div>
 
           <div
@@ -974,7 +974,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
           >
             <div className="flex justify-between items-center mb-1">
-              <span className="text-[9px] font-black text-gray-500 tracking-wider">
+              <span className="text-xs font-black text-gray-500 tracking-wider">
                 Metraje Y Fotos
               </span>
               <div
@@ -989,7 +989,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
               </div>
             </div>
             <p className="text-lg font-black text-gray-900 mb-0.5">1,240 items</p>
-            <p className="text-[8px] text-gray-400 font-semibold leading-snug">Capturas en la nube</p>
+            <p className="text-xs text-gray-400 font-semibold leading-snug">Capturas en la nube</p>
           </div>
 
           <div
@@ -997,7 +997,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
           >
             <div className="flex justify-between items-center mb-1">
-              <span className="text-[9px] font-black text-gray-500 tracking-wider">
+              <span className="text-xs font-black text-gray-500 tracking-wider">
                 Distancia Explorada
               </span>
               <div
@@ -1012,7 +1012,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
               </div>
             </div>
             <p className="text-lg font-black text-gray-900 mb-0.5">480 km</p>
-            <p className="text-[8px] text-gray-400 font-semibold leading-snug">Rutas de ocio</p>
+            <p className="text-xs text-gray-400 font-semibold leading-snug">Rutas de ocio</p>
           </div>
 
           <div
@@ -1020,7 +1020,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
           >
             <div className="flex justify-between items-center mb-1">
-              <span className="text-[9px] font-black text-gray-500 tracking-wider">
+              <span className="text-xs font-black text-gray-500 tracking-wider">
                 Drones En Hangar
               </span>
               <div
@@ -1035,7 +1035,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
               </div>
             </div>
             <p className="text-lg font-black text-gray-900 mb-0.5">4 unidades</p>
-            <p className="text-[8px] text-gray-400 font-semibold leading-snug">Mavic 3, FPV, Mini, Inspire</p>
+            <p className="text-xs text-gray-400 font-semibold leading-snug">Mavic 3, FPV, Mini, Inspire</p>
           </div>
         </div>
       ) : (
@@ -1046,7 +1046,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
           >
             <div className="flex justify-between items-center mb-1">
-              <span className="text-[9px] font-black text-gray-500 tracking-wider">
+              <span className="text-xs font-black text-gray-500 tracking-wider">
                 Facturación Mensual
               </span>
               <div
@@ -1061,7 +1061,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
               </div>
             </div>
             <p className="text-lg font-black text-gray-900 mb-0.5">L551,250</p>
-            <p className="text-[8px] text-gray-400 font-semibold leading-snug">Ingresos de este mes</p>
+            <p className="text-xs text-gray-400 font-semibold leading-snug">Ingresos de este mes</p>
           </div>
 
           <div
@@ -1069,7 +1069,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
           >
             <div className="flex justify-between items-center mb-1">
-              <span className="text-[9px] font-black text-gray-500 tracking-wider">
+              <span className="text-xs font-black text-gray-500 tracking-wider">
                 Contratos Activos
               </span>
               <div
@@ -1084,7 +1084,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
               </div>
             </div>
             <p className="text-lg font-black text-gray-900 mb-0.5">14 clientes</p>
-            <p className="text-[8px] text-gray-400 font-semibold leading-snug">Empresas vigentes</p>
+            <p className="text-xs text-gray-400 font-semibold leading-snug">Empresas vigentes</p>
           </div>
 
           <div
@@ -1092,7 +1092,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
           >
             <div className="flex justify-between items-center mb-1">
-              <span className="text-[9px] font-black text-gray-500 tracking-wider">
+              <span className="text-xs font-black text-gray-500 tracking-wider">
                 Horas Comerciales
               </span>
               <div
@@ -1107,7 +1107,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
               </div>
             </div>
             <p className="text-lg font-black text-gray-900 mb-0.5">195 hrs</p>
-            <p className="text-[8px] text-gray-400 font-semibold leading-snug">Vuelo facturado</p>
+            <p className="text-xs text-gray-400 font-semibold leading-snug">Vuelo facturado</p>
           </div>
 
           <div
@@ -1115,7 +1115,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
           >
             <div className="flex justify-between items-center mb-1">
-              <span className="text-[9px] font-black text-gray-500 tracking-wider">
+              <span className="text-xs font-black text-gray-500 tracking-wider">
                 Reputación
               </span>
               <div
@@ -1130,14 +1130,14 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
               </div>
             </div>
             <p className="text-lg font-black text-gray-900 mb-0.5">4.9 / 5.0</p>
-            <p className="text-[8px] text-gray-400 font-semibold leading-snug">Calificación general</p>
+            <p className="text-xs text-gray-400 font-semibold leading-snug">Calificación general</p>
           </div>
         </div>
       )}
 
       {/* SELECCIÓN DE CATEGORÍA DE SERVICIO */}
       <div className="mb-4">
-        <label className="block text-[10px] font-bold text-gray-500 mb-1 text-left">
+        <label className="block text-xs font-bold text-gray-500 mb-1 text-left">
           Seleccionar categoría de servicio
         </label>
         <div className="relative">
@@ -1145,7 +1145,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             value={activeTab}
             onChange={(e) => setActiveTab(e.target.value)}
             style={{ borderRadius: "4px" }}
-            className="w-full pl-3 pr-8 py-2.5 text-xs font-bold text-gray-800 bg-gray-50 border border-gray-300 appearance-none focus:outline-none focus:border-[#0E5E6F] touch-manipulation cursor-pointer"
+            className="w-full pl-3 pr-8 py-2.5 text-xs font-bold text-black bg-gray-50 border border-gray-300 appearance-none focus:outline-none focus:border-[#0E5E6F] touch-manipulation cursor-pointer"
           >
             {mainMode === "personal" ? (
               <>
@@ -1181,10 +1181,10 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
           <div className="flex items-center gap-2">
             <BarChart3 size={16} className="text-[#0E5E6F] shrink-0" />
             <div className="min-w-0">
-              <h3 className="text-[11px] font-black text-gray-900 tracking-wider capitalize truncate">
+              <h3 className="text-sm font-black text-gray-900 tracking-wider capitalize truncate">
                 {mainMode === "personal" ? "Actividad personal" : "Telemetría comercial"} — {activeTab.replace("_", " ")}
               </h3>
-              <p className="text-[9px] text-gray-500 font-medium">
+              <p className="text-xs text-gray-500 font-medium">
                 Eje Y: <strong className="text-gray-700">{chartUnit}</strong>
               </p>
             </div>
@@ -1204,7 +1204,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
                 type="button"
                 onClick={() => setChartPeriod(p.id as any)}
                 style={{ borderRadius: "4px" }}
-                className={`flex-1 py-1 text-[10px] font-bold transition-all cursor-pointer touch-manipulation ${
+                className={`flex-1 py-1 text-xs font-bold transition-all cursor-pointer touch-manipulation ${
                   chartPeriod === p.id
                     ? "bg-[#0E5E6F] text-white shadow-xs"
                     : "text-gray-500 active:text-gray-900"
@@ -1311,10 +1311,10 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
       >
         <div className="p-3 border-b border-gray-100 bg-gray-50/50 flex flex-col gap-2.5">
           <div>
-            <h3 className="text-[11px] font-black text-gray-900 tracking-wider capitalize">
+            <h3 className="text-sm font-black text-gray-900 tracking-wider capitalize">
               {mainMode === "personal" ? "Bitácora personal de vuelos" : "Registro de operaciones comerciales"} — {activeTab.replace("_", " ")}
             </h3>
-            <p className="text-[9px] text-gray-500 font-medium">
+            <p className="text-xs text-gray-500 font-medium">
               Telemetría y detalle de misiones ejecutadas
             </p>
           </div>
@@ -1350,7 +1350,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 style={{ borderRadius: "4px" }}
-                className="w-full pl-3 pr-8 py-2 text-xs font-bold text-gray-700 bg-white border border-gray-300 appearance-none focus:outline-none focus:border-[#0E5E6F] touch-manipulation cursor-pointer"
+                className="w-full pl-3 pr-8 py-2 text-xs font-bold text-black bg-white border border-gray-300 appearance-none focus:outline-none focus:border-[#0E5E6F] touch-manipulation cursor-pointer"
               >
                 <option value="todos">Todos los estados</option>
                 <option value="completado">Completados</option>
@@ -1376,7 +1376,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <p className="font-extrabold text-gray-900 text-xs">{row.id}</p>
-                    <p className="text-[9px] text-gray-400 font-mono">{row.fecha}</p>
+                    <p className="text-xs text-gray-400 font-mono">{row.fecha}</p>
                   </div>
                   <span
                     style={{
@@ -1390,18 +1390,18 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
                   </span>
                 </div>
 
-                <p className="text-[10px] font-medium text-gray-800 leading-snug">
+                <p className="text-xs font-medium text-gray-800 leading-snug">
                   {row.objetivo}
                 </p>
 
-                <div className="flex items-center gap-1 text-[10px] font-bold text-gray-700">
+                <div className="flex items-center gap-1 text-xs font-bold text-gray-700">
                   <MapPin size={11} className="text-gray-400 shrink-0" />
                   <span className="truncate">{row.ubicacion}</span>
                 </div>
 
                 <div className="flex items-center justify-between pt-1 border-t border-gray-50">
-                  <p className="font-bold text-[#0E5E6F] text-[10px]">{row.dron}</p>
-                  <p className="text-[9px] text-gray-400">
+                  <p className="font-bold text-[#0E5E6F] text-xs">{row.dron}</p>
+                  <p className="text-xs text-gray-400">
                     {row.duracion} · {row.cobertura}
                   </p>
                 </div>
@@ -1415,7 +1415,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
         </div>
 
         <div className="p-3 border-t border-gray-100 bg-gray-50/40 flex flex-col gap-2">
-          <span className="text-[10px] font-bold text-gray-400 text-center">
+          <span className="text-xs font-bold text-gray-400 text-center">
             {registrosActuales.length} vuelos registrados
           </span>
           <button
@@ -1445,12 +1445,12 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             <Zap size={16} />
           </div>
           <div>
-            <h4 className="text-[11px] font-black text-gray-900 leading-snug">
+            <h4 className="text-sm font-black text-gray-900 leading-snug">
               {mainMode === "personal"
                 ? "¿Quieres registrar un nuevo dron personal o comprar insumos?"
-                : "¿Deseas registrar un nuevo servicio comercial en la plataforma BIODRON?"}
+                : "¿Deseas registrar un nuevo servicio comercial en la plataforma TECNODACTYLUS?"}
             </h4>
-            <p className="text-[9px] text-gray-500 font-medium leading-snug">
+            <p className="text-xs text-gray-500 font-medium leading-snug">
               {mainMode === "personal"
                 ? "Explora el catálogo de accesorios, baterías y repuestos para tus equipos."
                 : "Publica tus tarifas y disponibilidad para recibir contrataciones de clientes."}
@@ -1783,8 +1783,8 @@ export const PilotoMisionesView = () => {
       {/* HEADER Y SELECTOR DE SECCIONES DE COLOR #0E5E6F SIN ÍCONOS */}
       <div className="bg-white border-b-2 border-gray-200 px-4 py-3 shrink-0 flex flex-col gap-3">
         <div>
-          <h1 className="text-base font-bold text-gray-900">Panel de Control del Piloto</h1>
-          <p className="text-gray-500 text-[11px]">Administra asignaciones o visualiza la telemetría en tiempo real.</p>
+          <h1 className="text-lg font-bold text-gray-900">Panel de Control del Piloto</h1>
+          <p className="text-xs text-gray-500">Administra asignaciones o visualiza la telemetría en tiempo real.</p>
         </div>
 
         <div className="flex bg-gray-100 p-1 rounded-[4px] border border-gray-200 shadow-inner w-full">
@@ -1819,28 +1819,28 @@ export const PilotoMisionesView = () => {
           <div className="grid grid-cols-2 gap-2.5 mb-4">
             <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
               <div className="min-w-0">
-                <span className="text-[9px] font-bold text-gray-400 tracking-wider block truncate">Fumigación</span>
+                <span className="text-xs font-bold text-gray-400 tracking-wider block">Fumigación</span>
                 <span className="text-lg font-black text-gray-900">{countByCategory("fumigacion")}</span>
               </div>
               <div className="p-1.5 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0"><Compass size={16} /></div>
             </div>
             <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
               <div className="min-w-0">
-                <span className="text-[9px] font-bold text-gray-400 tracking-wider block truncate">Monitoreo</span>
+                <span className="text-xs font-bold text-gray-400 tracking-wider block">Monitoreo</span>
                 <span className="text-lg font-black text-gray-900">{countByCategory("monitoreo")}</span>
               </div>
               <div className="p-1.5 bg-blue-50 text-blue-700 rounded-[4px] shrink-0"><Video size={16} /></div>
             </div>
             <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
               <div className="min-w-0">
-                <span className="text-[9px] font-bold text-gray-400 tracking-wider block truncate">Fotogrametría</span>
+                <span className="text-xs font-bold text-gray-400 tracking-wider block">Foto grametría</span>
                 <span className="text-lg font-black text-purple-900">{countByCategory("fotogrametria")}</span>
               </div>
               <div className="p-1.5 bg-purple-50 text-purple-700 rounded-[4px] shrink-0"><FileText size={16} /></div>
             </div>
             <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
               <div className="min-w-0">
-                <span className="text-[9px] font-bold text-gray-400 tracking-wider block truncate">En Curso</span>
+                <span className="text-xs font-bold text-gray-400 tracking-wider block">En Curso</span>
                 <span className="text-lg font-black text-emerald-700">{activeMissions.length}</span>
               </div>
               <div className="p-1.5 bg-emerald-50 text-emerald-700 rounded-[4px] shrink-0"><Play size={16} /></div>
@@ -1865,7 +1865,7 @@ export const PilotoMisionesView = () => {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full border-2 border-gray-200 rounded-[4px] px-2 py-2 text-[11px] bg-white text-gray-800 font-bold focus:border-[#0E5E6F] outline-none cursor-pointer"
+                className="w-full border-2 border-gray-300 rounded-[4px] px-2 py-2 text-xs bg-white text-black font-bold focus:border-[#0E5E6F] outline-none cursor-pointer"
               >
                 <option value="ALL">Todas las Categorías</option>
                 <option value="fumigacion">Fumigación</option>
@@ -1876,7 +1876,7 @@ export const PilotoMisionesView = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full border-2 border-gray-200 rounded-[4px] px-2 py-2 text-[11px] bg-white text-gray-800 font-bold focus:border-[#0E5E6F] outline-none cursor-pointer"
+                className="w-full border-2 border-gray-300 rounded-[4px] px-2 py-2 text-xs bg-white text-black font-bold focus:border-[#0E5E6F] outline-none cursor-pointer"
               >
                 <option value="ALL">Todos los Estados</option>
                 <option value="Pendiente">Pendientes</option>
@@ -1894,7 +1894,7 @@ export const PilotoMisionesView = () => {
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <span className="block font-mono text-[10px] font-bold text-gray-700">{mision.id}</span>
-                    <span className="text-[9px] text-gray-400 flex items-center gap-1 mt-0.5"><Calendar size={9} /> {mision.date}</span>
+                    <span className="text-xs text-gray-400 flex items-center gap-1 mt-0.5"><Calendar size={9} /> {mision.date}</span>
                   </div>
                   <span className={`shrink-0 inline-block text-[9px] font-bold px-1.5 py-0.5 rounded-[4px] border ${
                     mision.status === "Aceptada" || mision.status === "Completada" ? "border-emerald-200 bg-emerald-50 text-emerald-700" :
@@ -1907,18 +1907,18 @@ export const PilotoMisionesView = () => {
                 </div>
 
                 <div>
-                  <span className="block font-bold text-gray-900 text-[11px]">{mision.clientName}</span>
-                  <span className="text-[10px] text-[#0E5E6F] font-semibold">{mision.cropType}</span>
+                  <span className="block font-bold text-gray-900 text-xs">{mision.clientName}</span>
+                  <span className="text-xs text-[#0E5E6F] font-semibold">{mision.cropType}</span>
                 </div>
 
                 <div>
-                  <span className="text-[11px] font-semibold text-gray-800 block">{mision.droneAssigned}</span>
-                  <span className="text-[9px] text-gray-500 flex items-center gap-1 mt-0.5"><MapPin size={9} /> {mision.location}</span>
+                  <span className="text-xs font-semibold text-gray-800 block">{mision.droneAssigned}</span>
+                  <span className="text-xs text-gray-500 flex items-center gap-1 mt-0.5"><MapPin size={9} /> {mision.location}</span>
                 </div>
 
                 <div>
                   <span className="font-bold text-[10px] text-gray-800 block">Área: {mision.areaSize}</span>
-                  <p className="line-clamp-2 text-[9px] text-gray-500 leading-tight mt-0.5">{mision.description}</p>
+                  <p className="line-clamp-2 text-xs text-gray-500 leading-tight mt-0.5">{mision.description}</p>
                 </div>
 
                 <div className="flex flex-col gap-1.5 pt-1 border-t border-gray-100">
@@ -1928,7 +1928,7 @@ export const PilotoMisionesView = () => {
                         setActiveMissionId(mision.id);
                         setMainSection("en_curso");
                       }}
-                      className="px-2 py-1.5 text-[11px] font-bold rounded-[4px] bg-blue-100 text-blue-700 hover:bg-blue-200 cursor-pointer shadow-xs flex items-center justify-center gap-1 w-full transition-colors"
+                      className="px-2 py-1.5 text-xs font-bold rounded-[4px] bg-blue-100 text-blue-700 hover:bg-blue-200 cursor-pointer shadow-xs flex items-center justify-center gap-1 w-full transition-colors"
                     >
                       <Video size={12} /> Ver Cámara
                     </button>
@@ -1940,7 +1940,7 @@ export const PilotoMisionesView = () => {
                         setEditingMission({ ...mision });
                         setModalTab('info');
                       }}
-                      className="flex-1 py-1.5 bg-[#0E5E6F] text-white text-[11px] font-bold rounded-[4px] hover:bg-[#0a4754] transition-colors cursor-pointer flex items-center justify-center gap-1"
+                      className="flex-1 py-1.5 bg-[#0E5E6F] text-white text-xs font-bold rounded-[4px] hover:bg-[#0a4754] transition-colors cursor-pointer flex items-center justify-center gap-1"
                     >
                       <Edit3 size={12} /> Editar
                     </button>
@@ -1979,22 +1979,22 @@ export const PilotoMisionesView = () => {
                   <div className="flex items-center gap-1">
                     <Battery size={13} className="text-green-400 shrink-0" />
                     <span className="text-gray-400 text-[9px] uppercase">Bat:</span>
-                    <span className="font-bold text-green-400 text-[11px]">{telemetry.battery}%</span>
+                    <span className="font-bold text-green-400 text-xs">{telemetry.battery}%</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Signal size={13} className="text-green-400 shrink-0" />
                     <span className="text-gray-400 text-[9px] uppercase">GPS:</span>
-                    <span className="font-bold text-green-400 text-[11px]">{telemetry.satellites}sats</span>
+                    <span className="font-bold text-green-400 text-xs">{telemetry.satellites}sats</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Wifi size={13} className="text-green-400 shrink-0" />
                     <span className="text-gray-400 text-[9px] uppercase">Link:</span>
-                    <span className="font-bold text-green-400 text-[11px]">99%</span>
+                    <span className="font-bold text-green-400 text-xs">99%</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Wind size={13} className="text-yellow-400 shrink-0" />
                     <span className="text-gray-400 text-[9px] uppercase">Viento:</span>
-                    <span className="font-bold text-yellow-400 text-[11px]">{telemetry.wind}km/h</span>
+                    <span className="font-bold text-yellow-400 text-xs">{telemetry.wind}km/h</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span className={`w-2 h-2 rounded-[4px] shrink-0 aspect-square ${isRthActive ? "bg-red-500 animate-ping" : "bg-green-400 animate-pulse"}`}></span>
@@ -2010,7 +2010,7 @@ export const PilotoMisionesView = () => {
                 {/* Carrusel de misiones activas - pasarela horizontal con scroll suave */}
                 <div className="w-full border border-gray-200 bg-white rounded-[4px] flex flex-col overflow-hidden shrink-0">
                   <div className="px-3 py-2 border-b border-gray-100 flex items-center justify-between bg-gray-50">
-                    <h3 className="text-xs font-black text-gray-800">Misiones Activas</h3>
+                    <h3 className="text-sm font-black text-gray-800">Misiones Activas</h3>
                     <span className="bg-[#0E5E6F] text-white text-[9px] font-bold px-2 py-0.5 rounded-[4px]">
                       {activeMissions.length} en vuelo
                     </span>
@@ -2179,7 +2179,7 @@ export const PilotoMisionesView = () => {
                   {editingMission.id}
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-xs font-bold text-gray-900 truncate">
+                  <h3 className="text-sm font-bold text-gray-900 truncate">
                     {editingMission.cropType}
                   </h3>
                   <p className="text-[9px] text-gray-400 truncate">
@@ -2301,7 +2301,7 @@ export const PilotoMisionesView = () => {
               {modalTab === 'gestion' && (
                 <div className="space-y-3 text-xs">
                   <div>
-                    <label className="block font-bold text-gray-800 text-[11px] mb-1">Cambiar Estado:</label>
+                    <label className="block font-bold text-gray-800 text-xs mb-1">Cambiar Estado:</label>
                     <select
                       value={editingMission.status}
                       onChange={(e) => setEditingMission({ ...editingMission, status: e.target.value as MissionStatus })}
@@ -2353,13 +2353,13 @@ export const PilotoMisionesView = () => {
               <AlertTriangle size={16} /> <span>¿Confirmar eliminación?</span>
             </div>
 
-            <div className="bg-red-50/50 border border-red-100 rounded-[4px] p-2.5 space-y-1 text-[11px]">
+            <div className="bg-red-50/50 border border-red-100 rounded-[4px] p-2.5 space-y-1 text-xs">
               <p className="font-bold text-gray-900">{deletingMission.clientName} - <span className="text-[#0E5E6F]">{deletingMission.cropType}</span></p>
               <p className="font-mono text-[10px] text-gray-500">ID: {deletingMission.id} · {deletingMission.areaSize}</p>
               <p className="text-gray-500 text-[10px]"><MapPin size={9} className="inline mr-1" />{deletingMission.location}</p>
             </div>
 
-            <p className="text-[11px] text-gray-600">Esta acción no se puede deshacer y borrará la misión del sistema.</p>
+            <p className="text-xs text-gray-600">Esta acción no se puede deshacer y borrará la misión del sistema.</p>
 
             <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
               <button onClick={() => setDeletingMission(null)} className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer">
@@ -2442,6 +2442,7 @@ export const PilotoDronView = () => {
     ];
 
     const catalogoDrones: Drone[] = [
+        // --- DRONES EXISTENTES (se mantienen igual) ---
         {
             id: "micro-1",
             nombre: "BioScout Micro II",
@@ -2586,6 +2587,375 @@ export const PilotoDronView = () => {
                 "Sensor": "Telemetría Industrial",
             },
         },
+
+        // --- NUEVOS DRONES AGREGADOS DESDE 1.txt ---
+        // MICRO
+        {
+            id: "micro-3",
+            nombre: "Cheerson CX-10",
+            etiqueta: "Micro Dron / Juguete",
+            categoria: "micro",
+            imagen: "src/img/Cheerson_CX-10.jfif",
+            precio: "L 1,000",
+            descripcion: "Uno de los cuadricópteros más pequeños del mundo. Cabe en la palma de la mano e impresiona por su agilidad en espacios cerrados.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "5 min",
+                "Velocidad máxima": "15 km/h",
+                "Alcance": "30 m",
+                "Resistencia al viento": "3 m/s",
+                "Sensor": "Giroscopio 6 ejes",
+            },
+        },
+        {
+            id: "micro-4",
+            nombre: "DJI Tello",
+            etiqueta: "Micro Dron Educativo",
+            categoria: "micro",
+            imagen: "src/img/DJI_Tello.jfif",
+            precio: "L 5,300",
+            descripcion: "Diseñado con la tecnología de estabilidad de DJI y procesador Intel. Es ideal para aprender programación en Scratch y Python mientras vuelas.",
+            destacado: true,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "13 min",
+                "Velocidad máxima": "28 km/h",
+                "Alcance": "100 m",
+                "Resistencia al viento": "8 m/s",
+                "Sensor": "Visión + Barómetro",
+            },
+        },
+        {
+            id: "micro-5",
+            nombre: "Holy Stone HS210",
+            etiqueta: "Micro Dron de Entrenamiento",
+            categoria: "micro",
+            imagen: "src/img/Holy_Stone_HS210.jfif",
+            precio: "L 1,300",
+            descripcion: "Diseñado para niños y principiantes. Incluye protectores de hélice en 360 grados para tolerar choques constantes contra paredes o muebles.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "7 min por batería (incluye 3 baterías)",
+                "Velocidad máxima": "18 km/h",
+                "Alcance": "50 m",
+                "Resistencia al viento": "5 m/s",
+                "Sensor": "Giroscopio 6 ejes",
+            },
+        },
+        {
+            id: "micro-6",
+            nombre: "Eachine E010",
+            etiqueta: "Micro Dron / Base para FPV",
+            categoria: "micro",
+            imagen: "src/img/Eachine_E010.jfif",
+            precio: "L 900",
+            descripcion: "Dron resistente con hélices dentro de ductos de protección. Es famoso en la comunidad hacker para montarle micro cámaras FPV.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "5 min",
+                "Velocidad máxima": "15 km/h",
+                "Alcance": "30 m",
+                "Resistencia al viento": "3 m/s",
+                "Sensor": "Giroscopio 6 ejes",
+            },
+        },
+        {
+            id: "micro-7",
+            nombre: "Potensic A20",
+            etiqueta: "Micro Dron para Niños",
+            categoria: "micro",
+            imagen: "src/img/Potensic_A20.jfif",
+            precio: "L 1,200",
+            descripcion: "Mantiene la altura automáticamente gracias a su sensor barométrico interno, lo que facilita enormemente el pilotaje de entrada.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "6 min por batería",
+                "Velocidad máxima": "20 km/h",
+                "Alcance": "40 m",
+                "Resistencia al viento": "4 m/s",
+                "Sensor": "Barómetro + Giroscopio",
+            },
+        },
+
+        // MINI
+        {
+            id: "mini-3",
+            nombre: "DJI Mini 4 Pro",
+            etiqueta: "Mini Dron Profesional (<250g)",
+            categoria: "mini",
+            imagen: "src/img/DJI_Mini_4_Pro.jfif",
+            precio: "L 49,995",
+            descripcion: "El mini dron más avanzado del mercado. Posee esquivo de obstáculos en todas direcciones y calidad de video cinematográfica.",
+            destacado: true,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "45 min (con Batería Plus)",
+                "Velocidad máxima": "58 km/h",
+                "Alcance": "20 km (Transmisión O4)",
+                "Resistencia al viento": "10.7 m/s",
+                "Sensor": "Sensores omnidireccionales",
+            },
+        },
+        {
+            id: "mini-4",
+            nombre: "DJI Mini 2 SE",
+            etiqueta: "Mini Dron de Entrada",
+            categoria: "mini",
+            imagen: "src/img/DJI_Mini_2_SE.jfif",
+            precio: "L 11,500",
+            descripcion: "La mejor opción en cuanto a relación calidad-precio para iniciarse en la fotografía y video aéreo.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "31 min",
+                "Velocidad máxima": "57 km/h",
+                "Alcance": "10 km (OcuSync 2.0)",
+                "Resistencia al viento": "8.5 m/s",
+                "Sensor": "Sensores descendentes",
+            },
+        },
+        {
+            id: "mini-5",
+            nombre: "DJI Mini 3",
+            etiqueta: "Mini Dron Recreativo",
+            categoria: "mini",
+            imagen: "src/img/DJI_Mini_3.jfif",
+            precio: "L 16,000",
+            descripcion: "Diseñado con un estabilizador que rota 90° para capturar tomas verticales nativas optimizadas para TikTok e Instagram.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "38 min",
+                "Velocidad máxima": "57 km/h",
+                "Alcance": "10 km",
+                "Resistencia al viento": "8.5 m/s",
+                "Sensor": "Sensores descendentes",
+            },
+        },
+        {
+            id: "mini-6",
+            nombre: "Autel EVO Nano+",
+            etiqueta: "Mini Dron Avanzado",
+            categoria: "mini",
+            imagen: "src/img/Autel_EVO_Nano+.jfif",
+            precio: "L 24,000",
+            descripcion: "Alternativa de gama alta al DJI Mini con un sensor RYYB que capta más luz en entornos nocturnos o con sombras marcadas.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "28 min",
+                "Velocidad máxima": "68 km/h",
+                "Alcance": "10 km",
+                "Resistencia al viento": "8 m/s",
+                "Sensor": "RYYB 1/1.28\"",
+            },
+        },
+        {
+            id: "mini-7",
+            nombre: "FIMI X8 Mini V2",
+            etiqueta: "Mini Dron Económico",
+            categoria: "mini",
+            imagen: "src/img/FIMI_X8_Mini_V2.jfif",
+            precio: "L 10,000",
+            descripcion: "Dron plegable del ecosistema Xiaomi que ofrece video 4K y buena resistencia al viento por un precio contenido.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "31 min",
+                "Velocidad máxima": "58 km/h",
+                "Alcance": "9 km",
+                "Resistencia al viento": "10 m/s",
+                "Sensor": "Sensores descendentes",
+            },
+        },
+
+        // PEQUEÑOS / MEDIANOS
+        {
+            id: "pequeno-3",
+            nombre: "DJI Air 3",
+            etiqueta: "Dron Mediano Semi-profesional",
+            categoria: "pequeno",
+            imagen: "src/img/DJI_Air_3.jfif",
+            precio: "L 53,000",
+            descripcion: "Incorpora dos cámaras principales (gran angular y teleobjetivo 3x) con sensores de idéntica calidad para variar encuadres.",
+            destacado: true,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "46 min",
+                "Velocidad máxima": "75 km/h",
+                "Alcance": "20 km",
+                "Resistencia al viento": "12 m/s",
+                "Sensor": "Dual 1/1.3\" CMOS",
+            },
+        },
+        {
+            id: "pequeno-4",
+            nombre: "DJI Avata 2",
+            etiqueta: "Dron FPV / Cinewhoop",
+            categoria: "pequeno",
+            imagen: "src/img/DJI_Avata_2.jfif",
+            precio: "L 28,000",
+            descripcion: "Dron de vuelo inmersivo en primera persona (se vuela con gafas FPV). Posee protectores de hélices integrados para maniobras arriesgadas.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "23 min",
+                "Velocidad máxima": "60 km/h",
+                "Alcance": "13 km",
+                "Resistencia al viento": "8 m/s",
+                "Sensor": "Ultra gran angular 1/1.3\"",
+            },
+        },
+        {
+            id: "pequeno-5",
+            nombre: "DJI Mavic Air 2S",
+            etiqueta: "Dron Mediano Fotográfico",
+            categoria: "pequeno",
+            imagen: "src/img/DJI_Mavic_Air_2S.jfif",
+            precio: "L 26,000",
+            descripcion: "Referente fotográfico que equipa un sensor masivo de 1 pulgada, ideal para lograr alto rango dinámico en video 5.4K.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "31 min",
+                "Velocidad máxima": "68 km/h",
+                "Alcance": "12 km",
+                "Resistencia al viento": "8.5 m/s",
+                "Sensor": "CMOS 1\"",
+            },
+        },
+        {
+            id: "pequeno-6",
+            nombre: "Autel EVO Lite+",
+            etiqueta: "Dron Mediano Nocturno",
+            categoria: "pequeno",
+            imagen: "src/img/Autel_EVO_Lite+.jfif",
+            precio: "L 35,000",
+            descripcion: "Diseñado con apertura variable f/2.8-f/11 para ajustar la entrada de luz y algoritmos avanzados para tomas nocturnas impecables.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "40 min",
+                "Velocidad máxima": "72 km/h",
+                "Alcance": "12 km",
+                "Resistencia al viento": "10 m/s",
+                "Sensor": "1\" CMOS",
+            },
+        },
+        {
+            id: "pequeno-7",
+            nombre: "Skydio 2+",
+            etiqueta: "Dron Mediano Autónomo",
+            categoria: "pequeno",
+            imagen: "src/img/Skydio_2+.jfif",
+            precio: "L 32,000",
+            descripcion: "Líder en esquivo de obstáculos y seguimiento autónomo utilizando 6 cámaras de visión 360° para grabar deportes de acción.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "27 min",
+                "Velocidad máxima": "60 km/h",
+                "Alcance": "6 km",
+                "Resistencia al viento": "8 m/s",
+                "Sensor": "Sony 1/2.3\"",
+            },
+        },
+
+        // GRANDES
+        {
+            id: "grande-3",
+            nombre: "DJI Mavic 3 Pro",
+            etiqueta: "Dron Profesional / Cine",
+            categoria: "grande",
+            imagen: "src/img/DJI_Mavic_3_Pro.jfif",
+            precio: "L 128,500",
+            descripcion: "El estándar en producción comercial. Incorpora tres lentes Hasselblad para cubrir desde ángulos amplios hasta telefoto.",
+            destacado: true,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "43 min",
+                "Velocidad máxima": "75 km/h",
+                "Alcance": "15 km",
+                "Resistencia al viento": "12 m/s",
+                "Sensor": "Triple Hasselblad",
+            },
+        },
+        {
+            id: "grande-4",
+            nombre: "Autel EVO II Pro V3",
+            etiqueta: "Dron Profesional / Topografía",
+            categoria: "grande",
+            imagen: "src/img/Autel_EVO_II_Pro_V3.jfif",
+            precio: "L 80,300",
+            descripcion: "Herramienta utilizada en mapeo y fotogrametría técnica. No aplica restricciones de zona de vuelo geofencing.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "40 min",
+                "Velocidad máxima": "72 km/h",
+                "Alcance": "15 km",
+                "Resistencia al viento": "12 m/s",
+                "Sensor": "1\" CMOS",
+            },
+        },
+        {
+            id: "grande-5",
+            nombre: "DJI Inspire 3",
+            etiqueta: "Dron Cinematográfico (Cine)",
+            categoria: "grande",
+            imagen: "src/img/DJI_Inspire_3.jfif",
+            precio: "L 441,800",
+            descripcion: "Sistema de cine aéreo Full-Frame para producciones cinematográficas. Soporta lentes intercambiables y doble control para piloto y camarógrafo.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "28 min",
+                "Velocidad máxima": "94 km/h",
+                "Alcance": "15 km",
+                "Resistencia al viento": "12 m/s",
+                "Sensor": "Zenmuse X9-8K Full-Frame",
+            },
+        },
+        {
+            id: "grande-6",
+            nombre: "DJI Matrice 350 RTK",
+            etiqueta: "Dron Industrial / Búsqueda y Rescate",
+            categoria: "grande",
+            imagen: "src/img/DJI_Matrice_350_RTK.jfif",
+            precio: "L 450,000",
+            descripcion: "Plataforma industrial resistente al agua e intemperie (IP55). Diseñado para inspección de torres eléctricas, emergencias y seguridad.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "Hasta 2.7 kg",
+                "Tiempo de vuelo": "55 min",
+                "Velocidad máxima": "83 km/h",
+                "Alcance": "20 km",
+                "Resistencia al viento": "15 m/s",
+                "Sensor": "RTK + Sensores múltiples",
+            },
+        },
+        {
+            id: "grande-7",
+            nombre: "DJI Agras T40",
+            etiqueta: "Mega Dron Agrícola",
+            categoria: "grande",
+            imagen: "src/img/DJI_Agras_T40.jfif",
+            precio: "L 500,000",
+            descripcion: "Dron industrial gigante utilizado para fumigación, siembra y dispersión de fertilizantes en cultivos a gran escala.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "40 L (líquidos) / 50 kg (sólidos)",
+                "Tiempo de vuelo": "10 min por tanque",
+                "Velocidad máxima": "50 km/h",
+                "Alcance": "7 km",
+                "Resistencia al viento": "12 m/s",
+                "Sensor": "Radar + Sensores de flujo",
+            },
+        },
     ];
 
     const dronesFiltrados = catalogoDrones.filter(d => d.categoria === selectedCategory);
@@ -2643,12 +3013,12 @@ export const PilotoDronView = () => {
                             <span>Adquisición y Estado de Drones</span>
                             <span 
                                 style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                className="whitespace-nowrap bg-[#0E5E6F]/10 text-[#0E5E6F] text-[10px] font-bold px-2 py-0.5 tracking-wider border border-[#0E5E6F]/20"
+                                className="whitespace-nowrap bg-[#0E5E6F]/10 text-[#0E5E6F] text-xs font-bold px-2 py-0.5 tracking-wider border border-[#0E5E6F]/20"
                             >
                                 Catálogo oficial
                             </span>
                         </Title>
-                        <Text className="text-[11px] text-gray-500 mt-1 block">
+                        <Text className="text-xs text-gray-500 mt-1 block">
                             Supervisa tu flota actual de aeronaves o explora el catálogo completo para adquirir nuevas unidades operativas.
                         </Text>
                     </div>
@@ -2659,7 +3029,7 @@ export const PilotoDronView = () => {
                         <button
                             onClick={() => setActiveMainTab("mis-drones")}
                             style={{ borderRadius: "4px 4px 0 0", fontFamily: "'Roboto', sans-serif" }}
-                            className={`flex-1 pb-3 px-2 font-bold text-[11px] transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                            className={`flex-1 pb-3 px-2 font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                                 activeMainTab === "mis-drones"
                                     ? "text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
                                     : "text-gray-500 hover:text-gray-800"
@@ -2672,7 +3042,7 @@ export const PilotoDronView = () => {
                         <button
                             onClick={() => setActiveMainTab("comprar")}
                             style={{ borderRadius: "4px 4px 0 0", fontFamily: "'Roboto', sans-serif" }}
-                            className={`flex-1 pb-3 px-2 font-bold text-[11px] transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                            className={`flex-1 pb-3 px-2 font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                                 activeMainTab === "comprar"
                                     ? "text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
                                     : "text-gray-500 hover:text-gray-800"
@@ -2715,7 +3085,7 @@ export const PilotoDronView = () => {
                                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 p-1 bg-gray-100 rounded-[4px] border border-gray-200 mb-2.5">
                                         <button
                                             onClick={() => setPaymentMethod("card")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${
+                                            className={`py-1 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer ${
                                                 paymentMethod === "card"
                                                     ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
@@ -2727,7 +3097,7 @@ export const PilotoDronView = () => {
 
                                         <button
                                             onClick={() => setPaymentMethod("transfer")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${
+                                            className={`py-1 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer ${
                                                 paymentMethod === "transfer"
                                                     ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
@@ -2739,7 +3109,7 @@ export const PilotoDronView = () => {
 
                                         <button
                                             onClick={() => setPaymentMethod("qr")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${
+                                            className={`py-1 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer ${
                                                 paymentMethod === "qr"
                                                     ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
@@ -2751,14 +3121,14 @@ export const PilotoDronView = () => {
 
                                         <button
                                             onClick={() => setPaymentMethod("wallet")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${
+                                            className={`py-1 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer ${
                                                 paymentMethod === "wallet"
                                                     ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                             }`}
                                         >
                                             <Wallet size={13} />
-                                            <span>Saldo BIODRON</span>
+                                            <span>Saldo TECNODACTYLUS</span>
                                         </button>
                                     </div>
 
@@ -2766,7 +3136,7 @@ export const PilotoDronView = () => {
                                     {paymentMethod === "card" && (
                                         <div className="flex flex-col gap-3">
                                             <div>
-                                                <span className="text-gray-700 text-[10px] block mb-1.5">Pasarela de pago:</span>
+                                                <span className="text-gray-700 text-xs block mb-1.5">Pasarela de pago:</span>
                                                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
                                                     {["PixelPay", "ClinPays", "Recurrente", "Pagadito"].map((gateway) => (
                                                         <button
@@ -2789,7 +3159,7 @@ export const PilotoDronView = () => {
                                                     <div className="w-full max-w-[190px] aspect-[1.58/1] bg-gradient-to-tr from-slate-900 via-slate-800 to-[#0E5E6F] text-white p-2.5 rounded-[4px] shadow-sm border border-slate-700 flex flex-col justify-between">
                                                         <div className="flex justify-between items-center">
                                                             <span className="text-[8px] font-extrabold uppercase tracking-wider text-slate-300">
-                                                                BIODRON
+                                                                TECNODACTYLUS
                                                             </span>
                                                             <CreditCard size={15} className="text-amber-400" />
                                                         </div>
@@ -2823,7 +3193,7 @@ export const PilotoDronView = () => {
                                                     </div>
                                                 </div>
 
-                                                <div className="sm:col-span-7 grid grid-cols-2 gap-1.5 text-[11px]">
+                                                <div className="sm:col-span-7 grid grid-cols-2 gap-1.5 text-xs">
                                                     <div className="col-span-2 flex flex-col gap-0.5">
                                                         <label className="text-gray-700 text-[10px]">Número de tarjeta</label>
                                                         <input
@@ -2832,7 +3202,7 @@ export const PilotoDronView = () => {
                                                             placeholder="4000 0000 0000 0000"
                                                             value={cardData.number}
                                                             onChange={(e) => setCardData({ ...cardData, number: e.target.value }) }
-                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                         />
                                                     </div>
 
@@ -2843,7 +3213,7 @@ export const PilotoDronView = () => {
                                                             placeholder="Nombre impreso"
                                                             value={cardData.name}
                                                             onChange={(e) => setCardData({ ...cardData, name: e.target.value }) }
-                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                         />
                                                     </div>
 
@@ -2855,7 +3225,7 @@ export const PilotoDronView = () => {
                                                             placeholder="MM/AA"
                                                             value={cardData.expiry}
                                                             onChange={(e) => setCardData({ ...cardData, expiry: e.target.value }) }
-                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                         />
                                                     </div>
 
@@ -2867,7 +3237,7 @@ export const PilotoDronView = () => {
                                                             placeholder="123"
                                                             value={cardData.cvv}
                                                             onChange={(e) => setCardData({ ...cardData, cvv: e.target.value }) }
-                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                         />
                                                     </div>
                                                 </div>
@@ -2879,7 +3249,7 @@ export const PilotoDronView = () => {
                                     {paymentMethod === "transfer" && (
                                         <div className="flex flex-col gap-2 text-xs">
                                             <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5">
-                                                <span className="text-gray-800 text-[11px] block mb-1">Cuentas oficiales BIODRON</span>
+                                                <span className="text-gray-800 text-xs block mb-1">Cuentas oficiales TECNODACTYLUS</span>
                                                 <div className="grid grid-cols-1 gap-2 text-[10px]">
                                                     <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
                                                         <span className="font-bold text-[#0E5E6F] block">BAC Credomatic</span>
@@ -2901,7 +3271,7 @@ export const PilotoDronView = () => {
                                             </div>
                                             <div className="border border-dashed border-gray-300 rounded-[4px] p-2.5 text-center flex items-center justify-center gap-2 hover:border-[#0E5E6F] transition cursor-pointer bg-gray-50/50">
                                                 <Upload size={16} className="text-[#0E5E6F]" />
-                                                <span className="text-gray-700 text-[11px]">Subir comprobante de pago</span>
+                                                <span className="text-gray-700 text-xs">Subir comprobante de pago</span>
                                             </div>
                                         </div>
                                     )}
@@ -2910,7 +3280,7 @@ export const PilotoDronView = () => {
                                     {paymentMethod === "qr" && (
                                         <div className="flex flex-col items-center gap-3 bg-gray-50 border border-gray-200 rounded-[4px] p-3">
                                             <div className="flex-1 w-full">
-                                                <span className="text-gray-700 text-[10px] block mb-1.5">Generar código mediante:</span>
+                                                <span className="text-gray-700 text-xs block mb-1.5">Generar código mediante:</span>
                                                 <div className="flex flex-wrap gap-1 mb-2">
                                                     {["PixelPay", "Banrural", "Atlántida"].map((wallet) => (
                                                         <button
@@ -2930,7 +3300,7 @@ export const PilotoDronView = () => {
                                                     Escanea este código desde la app de <strong>{selectedQrWallet}</strong> para pagar el total de {selectedDroneForCheckout.precio}.
                                                 </span>
                                             </div>
-                                            <div className="shrink-0 p-2 bg-white border border-gray-200 rounded-lg shadow-sm flex items-center justify-center">
+                                            <div className="shrink-0 p-2 bg-white border border-gray-200 rounded-[4px] shadow-sm flex items-center justify-center">
                                                 <QrCode size={64} className="text-gray-800" />
                                             </div>
                                         </div>
@@ -2942,7 +3312,7 @@ export const PilotoDronView = () => {
                                             <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5 flex justify-between items-center">
                                                 <div>
                                                     <span className="text-gray-500 font-medium block text-[10px]">
-                                                        Saldo disponible BIODRON
+                                                        Saldo disponible TECNODACTYLUS
                                                     </span>
                                                     <span className="text-lg font-black text-gray-900">
                                                         L {userWalletBalance.toLocaleString("es-HN", { minimumFractionDigits: 2 })}
@@ -2954,14 +3324,14 @@ export const PilotoDronView = () => {
                                             </div>
 
                                             {userWalletBalance < getPrecioNum(selectedDroneForCheckout.precio) ? (
-                                                <div className="p-1.5 bg-red-50 border border-red-200 rounded-[4px] flex items-center gap-1.5 text-red-800 text-[11px]">
+                                                <div className="p-1.5 bg-red-50 border border-red-200 rounded-[4px] flex items-center gap-1.5 text-red-800 text-xs">
                                                     <AlertCircle size={14} className="shrink-0 text-red-600" />
                                                     <span>
                                                         Saldo insuficiente. Faltan L {(getPrecioNum(selectedDroneForCheckout.precio) - userWalletBalance).toLocaleString("es-HN")}.
                                                     </span>
                                                 </div>
                                             ) : (
-                                                <div className="p-1.5 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-1.5 text-emerald-800 text-[11px]">
+                                                <div className="p-1.5 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-1.5 text-emerald-800 text-xs">
                                                     <CheckCircle2 size={14} className="shrink-0 text-emerald-600" />
                                                     <span>Saldo suficiente para procesar la transacción.</span>
                                                 </div>
@@ -2996,7 +3366,7 @@ export const PilotoDronView = () => {
                                 <div>
                                     <Title
                                         as="h3"
-                                        className="text-xs font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
+                                        className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
                                     >
                                         Resumen de la Orden
                                     </Title>
@@ -3012,19 +3382,19 @@ export const PilotoDronView = () => {
                                                 </span>
                                                 <Title
                                                     as="h2"
-                                                    className="text-base font-black text-gray-900 leading-tight"
+                                                    className="text-lg font-black text-gray-900 leading-tight"
                                                 >
                                                     {selectedDroneForCheckout.nombre}
                                                 </Title>
                                             </div>
                                         </div>
                                         
-                                        <Text className="text-[11px] text-gray-600 block leading-tight mb-2">
+                                        <Text className="text-xs text-gray-600 block leading-tight mb-2">
                                             {selectedDroneForCheckout.descripcion}
                                         </Text>
                                         
                                         <div className="mt-1.5 pt-1.5 border-t border-gray-200 flex justify-between items-baseline">
-                                            <span className="text-[11px] text-gray-500">
+                                            <span className="text-xs text-gray-500">
                                                 Total a pagar:
                                             </span>
                                             <span className="text-lg font-black text-[#0E5E6F]">
@@ -3033,10 +3403,10 @@ export const PilotoDronView = () => {
                                         </div>
                                     </div>
 
-                                    <Text className="text-[10px] text-gray-700 block mb-1 font-bold">
+                                    <Text className="text-xs text-gray-700 block mb-1 font-bold">
                                         Especificaciones del equipo:
                                     </Text>
-                                    <ul className="flex flex-col gap-1 text-[11px] text-gray-600">
+                                    <ul className="flex flex-col gap-1 text-xs text-gray-600">
                                         {Object.entries(selectedDroneForCheckout.especificaciones).map(
                                             ([key, val]: any, idx: number) => (
                                                 <li key={idx} className="flex items-center gap-1.5">
@@ -3053,7 +3423,7 @@ export const PilotoDronView = () => {
 
                                 <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-900 text-[10px]">
                                     <ShieldCheck size={14} className="text-amber-600 shrink-0" />
-                                    <span>Garantía de hardware y soporte comercial de la red BIODRON.</span>
+                                    <span>Garantía de hardware y soporte comercial de la red TECNODACTYLUS.</span>
                                 </div>
                             </div>
                         </div>
@@ -3069,7 +3439,7 @@ export const PilotoDronView = () => {
                                 className="bg-gray-50 border-2 border-dashed border-gray-200 p-10 text-center flex flex-col items-center justify-center"
                             >
                                 <Plane className="w-12 h-12 text-gray-300 mb-2" />
-                                <h3 className="font-bold text-gray-700 text-sm">No tienes drones vinculados a tu cuenta</h3>
+                                <h3 className="text-sm font-bold text-gray-700">No tienes drones vinculados a tu cuenta</h3>
                                 <p className="text-xs text-gray-400 mt-1 max-w-sm">
                                     Explora el catálogo para adquirir unidades autorizadas según las necesidades de tus operaciones.
                                 </p>
@@ -3116,8 +3486,8 @@ export const PilotoDronView = () => {
 
                                         <div className="p-4 flex flex-col gap-3">
                                             <div>
-                                                <h3 className="font-extrabold text-gray-900 text-base leading-tight">{drone.nombre}</h3>
-                                                <p className="text-[11px] text-gray-400 font-mono mt-0.5">N/S: {drone.numeroSerie}</p>
+                                                <h3 className="text-lg font-extrabold text-gray-900 leading-tight">{drone.nombre}</h3>
+                                                <p className="text-xs text-gray-400 font-mono mt-0.5">N/S: {drone.numeroSerie}</p>
                                             </div>
 
                                             {/* BATERÍA COMO BARRA DE PROGRESO */}
@@ -3185,7 +3555,7 @@ export const PilotoDronView = () => {
                     <div className="space-y-6">
                         <div>
                             <div className="mb-6">
-                                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-1.5">
+                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">
                                     Categoría de dron
                                 </label>
                                 <div className="relative flex items-center gap-2">
@@ -3203,7 +3573,7 @@ export const PilotoDronView = () => {
                                             value={selectedCategory}
                                             onChange={(e) => setSelectedCategory(e.target.value as any)}
                                             style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                            className="w-full appearance-none bg-white border-2 border-gray-200 text-gray-900 font-bold text-[12px] py-2.5 pl-3 pr-9 cursor-pointer outline-none focus:border-[#0E5E6F] transition-all"
+                                            className="w-full appearance-none bg-white border-2 border-gray-300 text-black font-bold text-xs py-2.5 pl-3 pr-9 cursor-pointer outline-none focus:border-[#0E5E6F] transition-all"
                                         >
                                             <option value="micro">Micro drones</option>
                                             <option value="mini">Mini drones</option>
@@ -3291,7 +3661,7 @@ export const PilotoDronView = () => {
 
                                     <div className="p-4 flex flex-col gap-3">
                                         <div>
-                                            <Title as="h3" className="text-base font-extrabold text-gray-900 leading-tight">
+                                            <Title as="h3" className="text-sm font-extrabold text-gray-900 leading-tight">
                                                 {drone.nombre}
                                             </Title>
                                             <Text className="text-xs text-gray-600 line-clamp-2 font-medium leading-relaxed block mt-1">
@@ -3322,15 +3692,15 @@ export const PilotoDronView = () => {
                                         >
                                             <div className="flex flex-col items-center text-center gap-0.5">
                                                 <span className="font-medium text-gray-400 text-[9px] leading-tight">Carga</span>
-                                                <span className="font-bold text-gray-800 text-[11px] leading-tight">{drone.especificaciones["Capacidad de carga"]}</span>
+                                                <span className="font-bold text-gray-800 text-xs leading-tight">{drone.especificaciones["Capacidad de carga"]}</span>
                                             </div>
                                             <div className="flex flex-col items-center text-center gap-0.5 border-x border-gray-200">
                                                 <span className="font-medium text-gray-400 text-[9px] leading-tight">T. vuelo</span>
-                                                <span className="font-bold text-gray-800 text-[11px] leading-tight">{drone.especificaciones["Tiempo de vuelo"]}</span>
+                                                <span className="font-bold text-gray-800 text-xs leading-tight">{drone.especificaciones["Tiempo de vuelo"]}</span>
                                             </div>
                                             <div className="flex flex-col items-center text-center gap-0.5">
                                                 <span className="font-medium text-gray-400 text-[9px] leading-tight">Vel. máx</span>
-                                                <span className="font-bold text-gray-800 text-[11px] leading-tight">{drone.especificaciones["Velocidad máxima"]}</span>
+                                                <span className="font-bold text-gray-800 text-xs leading-tight">{drone.especificaciones["Velocidad máxima"]}</span>
                                             </div>
                                         </div>
 
@@ -3374,7 +3744,7 @@ export const PilotoDronView = () => {
                         <div className="flex items-center justify-between border-b border-gray-100 pb-2">
                             <div className="flex items-center gap-1.5">
                                 <Headphones className="text-[#0E5E6F]" size={16} />
-                                <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                                <h3 className="text-sm font-bold text-gray-900 tracking-wide">
                                     Solicitud de Ayuda Técnica
                                 </h3>
                             </div>
@@ -3403,7 +3773,7 @@ export const PilotoDronView = () => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                                    <label className="block text-xs font-bold text-gray-500 mb-1">
                                         Razón de la Petición
                                     </label>
                                     <textarea
@@ -3439,7 +3809,7 @@ export const PilotoDronView = () => {
                                     <div className="p-1 bg-emerald-100 text-emerald-700 rounded-[4px] shrink-0">
                                         <CheckCircle2 size={16} />
                                     </div>
-                                    <span className="text-[11px] font-bold text-emerald-800">
+                                    <span className="text-xs font-bold text-emerald-800">
                                         ¡Solicitud Enviada Exitosamente!
                                     </span>
                                 </div>
@@ -3474,7 +3844,7 @@ export const PilotoDronView = () => {
                                     {selectedDrone.categoria}
                                 </div>
                                 <div className="min-w-0">
-                                    <h3 className="text-xs font-bold text-gray-900 truncate">
+                                    <h3 className="text-sm font-bold text-gray-900 truncate">
                                         {selectedDrone.nombre}
                                     </h3>
                                     <p className="text-[9px] text-gray-400 truncate">
@@ -3562,7 +3932,7 @@ export const PilotoDronView = () => {
                                                     <span className="text-[8px] text-gray-400 font-bold truncate">
                                                         {clave}
                                                     </span>
-                                                    <span className="text-[11px] font-bold text-gray-800 truncate">
+                                                    <span className="text-xs font-bold text-gray-800 truncate">
                                                         {valor}
                                                     </span>
                                                 </div>
@@ -3673,13 +4043,13 @@ export const PilotoMapsView = () => {
                     </div>
                     <div className="text-left min-w-0">
                         <div className="flex items-center gap-1.5">
-                            <h1 className="text-xs font-bold text-gray-900 tracking-tight truncate">
+                            <h1 className="text-[11px] font-bold text-gray-900 tracking-tight">
                                 Editor de mapas
                             </h1>
                         </div>
                         <button
                             onClick={handleOpenIdModal}
-                            className="text-[10px] text-gray-500 font-medium leading-none truncate hover:text-[#0E5E6F] transition-colors cursor-pointer text-left block"
+                            className="text-[9px] text-gray-500 font-medium leading-none hover:text-[#0E5E6F] transition-colors cursor-pointer text-left block"
                             title="Cambiar ID de misión"
                         >
                             ID: #{mappingId}
@@ -3706,7 +4076,7 @@ export const PilotoMapsView = () => {
                             />
                         </svg>
                     </button>
-                    <button className="py-1 px-2.5 bg-[#0E5E6F] border-2 border-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold rounded-[4px] text-[11px] flex items-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer">
+                    <button className="py-1 px-2.5 bg-[#0E5E6F] border-2 border-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold rounded-[4px] text-xs flex items-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer">
                         <svg
                             className="w-3.5 h-3.5"
                             fill="none"
@@ -3927,8 +4297,8 @@ export const PilotoMapsView = () => {
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
                         <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-                            <h2 className="text-xs font-bold text-gray-900 tracking-wide uppercase">
-                                Capas Del Mapa
+                            <h2 className="text-sm font-bold text-gray-900 tracking-wide">
+                                Capas del Mapa
                             </h2>
                             <button
                                 onClick={() => setActivePanel(null)}
@@ -3951,7 +4321,7 @@ export const PilotoMapsView = () => {
                                     <span className="text-[9px] font-bold tracking-wider text-gray-400 block">
                                         Edición activa
                                     </span>
-                                    <span className="text-[11px] font-bold text-gray-800 block mt-0.5 group-hover:text-[#0E5E6F]">
+                                    <span className="text-xs font-bold text-gray-800 block mt-0.5 group-hover:text-[#0E5E6F]">
                                         ID: #{mappingId}
                                     </span>
                                 </div>
@@ -3971,8 +4341,8 @@ export const PilotoMapsView = () => {
                             </div>
 
                             <div>
-                                <h3 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1 uppercase">
-                                    Capas Del Mapa
+                                <h3 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1">
+                                    Capas del Mapa
                                 </h3>
                                 <div className="space-y-0.5 mb-1.5">
                                     {[
@@ -3982,7 +4352,7 @@ export const PilotoMapsView = () => {
                                     ].map((layer) => (
                                         <label
                                             key={layer.id}
-                                            className="flex items-center gap-1.5 text-[11px] font-bold text-gray-700 cursor-pointer p-1 hover:bg-gray-50 rounded-[4px]"
+                                            className="flex items-center gap-1.5 text-xs font-bold text-gray-700 cursor-pointer p-1 hover:bg-gray-50 rounded-[4px]"
                                         >
                                             <input
                                                 type="radio"
@@ -4000,7 +4370,7 @@ export const PilotoMapsView = () => {
                             <hr className="border-gray-200" />
 
                             <div className="space-y-1.5">
-                                <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                <div className="flex items-center justify-between text-xs font-bold text-gray-700">
                                     <span>Zonas</span>
                                     <input
                                         type="checkbox"
@@ -4009,7 +4379,7 @@ export const PilotoMapsView = () => {
                                         className="accent-[#0E5E6F] cursor-pointer"
                                     />
                                 </div>
-                                <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                <div className="flex items-center justify-between text-xs font-bold text-gray-700">
                                     <span>Mapa NDVI</span>
                                     <input
                                         type="checkbox"
@@ -4018,7 +4388,7 @@ export const PilotoMapsView = () => {
                                         className="accent-[#0E5E6F] cursor-pointer"
                                     />
                                 </div>
-                                <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                <div className="flex items-center justify-between text-xs font-bold text-gray-700">
                                     <span>Límites</span>
                                     <input
                                         type="checkbox"
@@ -4038,8 +4408,8 @@ export const PilotoMapsView = () => {
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
                         <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-                            <h2 className="text-xs font-bold text-gray-900 tracking-wide uppercase">
-                                Control Del Dron
+                            <h2 className="text-sm font-bold text-gray-900 tracking-wide">
+                                Control del Dron
                             </h2>
                             <button
                                 onClick={() => setActivePanel(null)}
@@ -4054,7 +4424,7 @@ export const PilotoMapsView = () => {
                         <div className="flex flex-col gap-2.5 text-left">
                             {/* CARD ESTADO DRON */}
                             <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px] space-y-1.5 shrink-0">
-                                <div className="flex justify-between items-center text-[11px]">
+                                <div className="flex justify-between items-center text-xs">
                                     <span className="font-bold text-gray-700">
                                         Dron Agras T50
                                     </span>
@@ -4076,14 +4446,14 @@ export const PilotoMapsView = () => {
                             </div>
 
                             <div className="shrink-0">
-                                <h3 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1.5 uppercase">
-                                    Parámetros De Vuelo
+                                <h3 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1.5">
+                                    Parámetros de Vuelo
                                 </h3>
 
                                 <div className="space-y-3">
                                     {/* ALTITUD (#CA5116) */}
                                     <div>
-                                        <div className="flex justify-between text-[11px] font-bold text-gray-700 mb-1">
+                                        <div className="flex justify-between text-xs font-bold text-gray-700 mb-1">
                                             <span>Altitud</span>
                                             <span className="font-bold" style={{ color: "#CA5116" }}>
                                                 {altitude} m
@@ -4117,7 +4487,7 @@ export const PilotoMapsView = () => {
 
                                     {/* VELOCIDAD (#2994B2) */}
                                     <div>
-                                        <div className="flex justify-between text-[11px] font-bold text-gray-700 mb-1">
+                                        <div className="flex justify-between text-xs font-bold text-gray-700 mb-1">
                                             <span>Velocidad</span>
                                             <span className="font-bold" style={{ color: "#2994B2" }}>
                                                 {speed} km/h
@@ -4151,7 +4521,7 @@ export const PilotoMapsView = () => {
 
                                     {/* DOSIS QUÍMICA (#B165E0) */}
                                     <div>
-                                        <div className="flex justify-between text-[11px] font-bold text-gray-700 mb-1">
+                                        <div className="flex justify-between text-xs font-bold text-gray-700 mb-1">
                                             <span>Dosis química</span>
                                             <span className="font-bold" style={{ color: "#B165E0" }}>
                                                 {rate} L/ha
@@ -4191,7 +4561,7 @@ export const PilotoMapsView = () => {
                         <div className="pt-2 space-y-1.5 border-t border-gray-100 shrink-0">
                             <button 
                                 onClick={handleApproveMapping}
-                                className="w-full py-2 bg-[#0E5E6F] hover:bg-[#0a4754] border-2 border-[#0E5E6F] text-white font-bold text-[11px] rounded-[4px] flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer"
+                                className="w-full py-2 bg-[#0E5E6F] hover:bg-[#0a4754] border-2 border-[#0E5E6F] text-white font-bold text-xs rounded-[4px] flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer"
                             >
                                 <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
                                     <polygon points="5 3 19 12 5 21 5 3" />
@@ -4199,11 +4569,11 @@ export const PilotoMapsView = () => {
                                 <span>Enviar edición</span>
                             </button>
 
-                            <button className="w-full py-1.5 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
+                            <button className="w-full py-1.5 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
                                 Auto-dibujar zona
                             </button>
 
-                            <button className="w-full py-1.5 bg-white border-2 border-rose-200 hover:bg-rose-50 text-rose-600 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
+                            <button className="w-full py-1.5 bg-white border-2 border-rose-200 hover:bg-rose-50 text-rose-600 font-bold text-xs rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
                                 Cancelar edición
                             </button>
                         </div>
@@ -4216,7 +4586,7 @@ export const PilotoMapsView = () => {
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
                         <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                            <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                            <h3 className="text-sm font-bold text-gray-900 tracking-wide">
                                 Cambiar ID de Misión para Mapeo
                             </h3>
                             <button
@@ -4231,7 +4601,7 @@ export const PilotoMapsView = () => {
 
                         <form onSubmit={handleSaveId} className="space-y-3">
                             <div>
-                                <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                                <label className="block text-xs font-bold text-gray-500 mb-1">
                                     Código / ID de la Misión
                                 </label>
                                 <input
@@ -4277,7 +4647,7 @@ export const PilotoMapsView = () => {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
-                            <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                            <h3 className="text-sm font-bold text-gray-900 tracking-wide">
                                 Mapeo Enviado a Revisión
                             </h3>
                         </div>
@@ -4286,7 +4656,7 @@ export const PilotoMapsView = () => {
                             <p>
                                 La edición del mapa para la misión <span className="font-bold text-gray-800">#{mappingId}</span> ha sido enviada exitosamente a uno de los administradores.
                             </p>
-                            <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] text-[11px] text-amber-800 font-medium">
+                            <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] text-xs text-amber-800 font-medium">
                                 Estado: En espera de ser aprobada por el administrador.
                             </div>
                         </div>
@@ -4439,7 +4809,7 @@ export const PilotoSuscripcionesView = () => {
                 descripcion: "Acceso a estaciones base RTK de alta precisión y datos móviles preferenciales para operación.",
                 caracteristicas: [
                     "Corrección RTK en tiempo real sin interrupciones.",
-                    "Acceso ilimitado a red de bases terrestres BIODRON.",
+                    "Acceso ilimitado a red de bases terrestres TECNODACTYLUS.",
                     "Baja latencia en transmisión de telemetría."
                 ],
                 destacado: false,
@@ -4584,11 +4954,11 @@ export const PilotoSuscripcionesView = () => {
                 <div className="border-b border-gray-200 pb-2.5 flex flex-col gap-1 shrink-0">
                     <Title className="text-lg font-extrabold text-gray-900 tracking-tight flex flex-col items-start gap-1.5">
                         <span>Gestión de Suscripciones y Beneficios para Pilotos</span>
-                        <span className="whitespace-nowrap bg-[#0E5E6F]/10 text-[#0E5E6F] text-[10px] font-bold px-2 py-0.5 rounded-[4px] tracking-wider border border-[#0E5E6F]/20">
-                            Pilotos BIODRON
+                        <span className="whitespace-nowrap bg-[#0E5E6F]/10 text-[#0E5E6F] text-xs font-bold px-2 py-0.5 rounded-[4px] tracking-wider border border-[#0E5E6F]/20">
+                            Pilotos TECNODACTYLUS
                         </span>
                     </Title>
-                    <Text className="text-[11px] text-gray-500 block mt-0.5">
+                    <Text className="text-xs text-gray-500 block mt-0.5">
                         Administra tu apoyo técnico, tarifas por uso de plataforma, beneficios operativos y alianzas comerciales para pilotos.
                     </Text>
                 </div>
@@ -4624,7 +4994,7 @@ export const PilotoSuscripcionesView = () => {
                                         <div className="grid grid-cols-2 gap-1 p-1 bg-gray-100 rounded-[4px] border border-gray-200 mb-2.5">
                                             <button
                                                 onClick={() => setPaymentMethod("card")}
-                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "card"
+                                                className={`py-1.5 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "card"
                                                         ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                     }`}
@@ -4635,7 +5005,7 @@ export const PilotoSuscripcionesView = () => {
 
                                             <button
                                                 onClick={() => setPaymentMethod("transfer")}
-                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "transfer"
+                                                className={`py-1.5 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "transfer"
                                                         ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                     }`}
@@ -4646,7 +5016,7 @@ export const PilotoSuscripcionesView = () => {
 
                                             <button
                                                 onClick={() => setPaymentMethod("qr")}
-                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "qr"
+                                                className={`py-1.5 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "qr"
                                                         ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                     }`}
@@ -4657,13 +5027,13 @@ export const PilotoSuscripcionesView = () => {
 
                                             <button
                                                 onClick={() => setPaymentMethod("wallet")}
-                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "wallet"
+                                                className={`py-1.5 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "wallet"
                                                         ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                     }`}
                                             >
                                                 <Wallet size={13} />
-                                                <span>Saldo BIODRON</span>
+                                                <span>Saldo TD</span>
                                             </button>
                                         </div>
 
@@ -4672,7 +5042,7 @@ export const PilotoSuscripcionesView = () => {
                                             <div className="flex flex-col gap-3">
                                                 {/* Selector de pasarelas */}
                                                 <div>
-                                                    <span className="text-gray-700 text-[10px] block mb-1.5">Pasarela de pago:</span>
+                                                    <span className="text-gray-700 text-xs block mb-1.5">Pasarela de pago:</span>
                                                     <div className="grid grid-cols-2 gap-1.5">
                                                         {["PixelPay", "ClinPays", "Recurrente", "Pagadito"].map((gateway) => (
                                                             <button
@@ -4694,7 +5064,7 @@ export const PilotoSuscripcionesView = () => {
                                                         <div className="w-full max-w-[190px] aspect-[1.58/1] bg-gradient-to-tr from-slate-900 via-slate-800 to-[#0E5E6F] text-white p-2.5 rounded-[4px] shadow-sm border border-slate-700 flex flex-col justify-between">
                                                             <div className="flex justify-between items-center">
                                                                 <span className="text-[8px] font-extrabold uppercase tracking-wider text-slate-300">
-                                                                    BIODRON PILOTO
+                                                                    TECNODACTYLUS PILOTO
                                                                 </span>
                                                                 <CreditCard size={15} className="text-amber-400" />
                                                             </div>
@@ -4728,7 +5098,7 @@ export const PilotoSuscripcionesView = () => {
                                                         </div>
                                                     </div>
 
-                                                    <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+                                                    <div className="grid grid-cols-2 gap-1.5 text-xs">
                                                         <div className="col-span-2 flex flex-col gap-0.5">
                                                             <label className="text-gray-700 text-[10px]">
                                                                 Número de tarjeta
@@ -4744,7 +5114,7 @@ export const PilotoSuscripcionesView = () => {
                                                                         number: e.target.value,
                                                                     })
                                                                 }
-                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                             />
                                                         </div>
 
@@ -4759,7 +5129,7 @@ export const PilotoSuscripcionesView = () => {
                                                                 onChange={(e) =>
                                                                     setCardData({ ...cardData, name: e.target.value })
                                                                 }
-                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                             />
                                                         </div>
 
@@ -4778,7 +5148,7 @@ export const PilotoSuscripcionesView = () => {
                                                                         expiry: e.target.value,
                                                                     })
                                                                 }
-                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                             />
                                                         </div>
 
@@ -4794,7 +5164,7 @@ export const PilotoSuscripcionesView = () => {
                                                                 onChange={(e) =>
                                                                     setCardData({ ...cardData, cvv: e.target.value })
                                                                 }
-                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                             />
                                                         </div>
                                                     </div>
@@ -4806,8 +5176,8 @@ export const PilotoSuscripcionesView = () => {
                                         {paymentMethod === "transfer" && (
                                             <div className="flex flex-col gap-2 text-xs">
                                                 <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5">
-                                                    <span className="text-gray-800 text-[11px] block mb-1">
-                                                        Cuentas oficiales BIODRON
+                                                    <span className="text-gray-800 text-xs block mb-1">
+                                                        Cuentas oficiales TECNODACTYLUS
                                                     </span>
                                                     <div className="grid grid-cols-1 gap-2 text-[10px]">
                                                         <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
@@ -4831,7 +5201,7 @@ export const PilotoSuscripcionesView = () => {
 
                                                 <div className="border border-dashed border-gray-300 rounded-[4px] p-2.5 text-center flex items-center justify-center gap-2 hover:border-[#0E5E6F] transition cursor-pointer active:scale-95 bg-gray-50/50">
                                                     <Upload size={16} className="text-[#0E5E6F]" />
-                                                    <span className="text-gray-700 text-[11px]">
+                                                    <span className="text-gray-700 text-xs">
                                                         Subir comprobante de pago
                                                     </span>
                                                 </div>
@@ -4842,7 +5212,7 @@ export const PilotoSuscripcionesView = () => {
                                         {paymentMethod === "qr" && (
                                             <div className="flex flex-col items-center gap-3 bg-gray-50 border border-gray-200 rounded-[4px] p-3">
                                                 <div className="flex-1 w-full">
-                                                    <span className="text-gray-700 text-[10px] block mb-1.5">Generar código mediante:</span>
+                                                    <span className="text-gray-700 text-xs block mb-1.5">Generar código mediante:</span>
                                                     <div className="flex flex-wrap gap-1 mb-2">
                                                         {["PixelPay", "Banrural", "Atlántida"].map((wallet) => (
                                                             <button
@@ -4873,7 +5243,7 @@ export const PilotoSuscripcionesView = () => {
                                                 <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5 flex justify-between items-center">
                                                     <div>
                                                         <span className="text-gray-500 font-medium block text-[10px]">
-                                                            Saldo disponible BIODRON
+                                                            Saldo disponible TECNODACTYLUS
                                                         </span>
                                                         <span className="text-lg font-black text-gray-900">
                                                             L{" "}
@@ -4888,7 +5258,7 @@ export const PilotoSuscripcionesView = () => {
                                                 </div>
 
                                                 {userWalletBalance < selectedPlanForCheckout.precioNum ? (
-                                                    <div className="p-1.5 bg-red-50 border border-red-200 rounded-[4px] flex items-center gap-1.5 text-red-800 text-[11px]">
+                                                    <div className="p-1.5 bg-red-50 border border-red-200 rounded-[4px] flex items-center gap-1.5 text-red-800 text-xs">
                                                         <AlertCircle
                                                             size={14}
                                                             className="shrink-0 text-red-600"
@@ -4903,7 +5273,7 @@ export const PilotoSuscripcionesView = () => {
                                                         </span>
                                                     </div>
                                                 ) : (
-                                                    <div className="p-1.5 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-1.5 text-emerald-800 text-[11px]">
+                                                    <div className="p-1.5 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-1.5 text-emerald-800 text-xs">
                                                         <CheckCircle2
                                                             size={14}
                                                             className="shrink-0 text-emerald-600"
@@ -4943,7 +5313,7 @@ export const PilotoSuscripcionesView = () => {
                                     <div>
                                         <Title
                                             as="h3"
-                                            className="text-xs font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
+                                            className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
                                         >
                                             Resumen de la Orden
                                         </Title>
@@ -4954,15 +5324,15 @@ export const PilotoSuscripcionesView = () => {
                                             </span>
                                             <Title
                                                 as="h2"
-                                                className="text-base font-black text-gray-900"
+                                                className="text-lg font-black text-gray-900"
                                             >
                                                 {selectedPlanForCheckout.nombre}
                                             </Title>
-                                            <Text className="text-[11px] text-gray-600 block leading-tight">
+                                            <Text className="text-xs text-gray-600 block leading-tight">
                                                 {selectedPlanForCheckout.descripcion}
                                             </Text>
                                             <div className="mt-1.5 pt-1.5 border-t border-gray-200 flex justify-between items-baseline">
-                                                <span className="text-[11px] text-gray-500">
+                                                <span className="text-xs text-gray-500">
                                                     Total a pagar:
                                                 </span>
                                                 <span className="text-lg font-black text-[#0E5E6F]">
@@ -4974,10 +5344,10 @@ export const PilotoSuscripcionesView = () => {
                                             </div>
                                         </div>
 
-                                        <Text className="text-[10px] text-gray-700 block mb-1">
+                                        <Text className="text-xs text-gray-700 block mb-1">
                                             Detalles incluidos:
                                         </Text>
-                                        <ul className="flex flex-col gap-1 text-[11px] text-gray-600">
+                                        <ul className="flex flex-col gap-1 text-xs text-gray-600">
                                             {selectedPlanForCheckout.caracteristicas.map(
                                                 (item: string, idx: number) => (
                                                     <li key={idx} className="flex items-center gap-1.5">
@@ -4994,7 +5364,7 @@ export const PilotoSuscripcionesView = () => {
 
                                     <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-900 text-[10px]">
                                         <ShieldCheck size={14} className="text-amber-600 shrink-0" />
-                                        <span>Garantía de servicio y soporte técnico para pilotos BIODRON.</span>
+                                        <span>Garantía de servicio y soporte técnico para pilotos TECNODACTYLUS.</span>
                                     </div>
                                 </div>
                             </div>
@@ -5008,7 +5378,7 @@ export const PilotoSuscripcionesView = () => {
                             <div className="bg-white border-2 border-[#0E5E6F] rounded-[4px] shadow-sm overflow-hidden">
                                 <div className="bg-[#0E5E6F] px-4 py-2 flex items-center gap-2">
                                     <CheckCircle2 size={15} className="text-white shrink-0" />
-                                    <span className="text-white text-[11px] font-bold tracking-wide">
+                                    <span className="text-white text-xs font-bold tracking-wide">
                                         Plan Activo
                                     </span>
                                     <span className="ml-auto text-[10px] text-white/90 bg-white/15 px-2 py-0.5 rounded-[4px] border border-white/20">
@@ -5076,7 +5446,7 @@ export const PilotoSuscripcionesView = () => {
                                                     Estado operativo
                                                 </span>
                                                 <span className="text-xs font-bold text-gray-800 mt-1">
-                                                    Piloto activo BIODRON
+                                                    Piloto activo TECNODACTYLUS
                                                 </span>
                                             </div>
                                         </div>
@@ -5101,13 +5471,13 @@ export const PilotoSuscripcionesView = () => {
 
                         <div>
                             <div className="mb-4">
-                                <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1.5">
+                                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">
                                     Categoría de servicios
                                 </label>
                                 <select
                                     value={activeTab}
                                     onChange={(e) => setActiveTab(e.target.value as TabType)}
-                                    className="w-full text-xs font-bold bg-white border-2 border-gray-200 text-gray-800 rounded-[4px] p-2.5 focus:border-[#0E5E6F] focus:outline-none shadow-xs cursor-pointer"
+                                    className="w-full text-xs font-bold bg-white border-2 border-gray-300 text-black rounded-[4px] p-2.5 focus:border-[#0E5E6F] focus:outline-none shadow-xs cursor-pointer"
                                 >
                                     <option value="apoyo-tecnico">Apoyo técnico y taller</option>
                                     <option value="cobros-plataforma">Cobros por plataforma</option>
@@ -5124,7 +5494,7 @@ export const PilotoSuscripcionesView = () => {
                                 )}
                                 {activeTab === "cobros-plataforma" && (
                                     <Text className="text-xs text-gray-500 block">
-                                        Tarifas y comisiones preferenciales por el uso de la plataforma BIODRON, gestión de misiones y cobros automatizados.
+                                        Tarifas y comisiones preferenciales por el uso de la plataforma TECNODACTYLUS, gestión de misiones y cobros automatizados.
                                     </Text>
                                 )}
                                 {activeTab === "beneficios-operativos" && (
@@ -5172,7 +5542,7 @@ export const PilotoSuscripcionesView = () => {
                                                 <div>
                                                     <Title
                                                         as="h3"
-                                                        className="text-base font-extrabold text-gray-900 leading-tight"
+                                                        className="text-sm font-extrabold text-gray-900 leading-tight"
                                                     >
                                                         {plan.nombre}
                                                     </Title>
@@ -5265,13 +5635,13 @@ export const PilotoSuscripcionesView = () => {
 
                             <div className="flex items-center gap-2 text-[#B8001F] mb-2 pr-6">
                                 <AlertCircle size={18} className="shrink-0" />
-                                <Title as="h3" className="text-xs font-extrabold text-gray-900 leading-tight">
+                                <Title as="h3" className="text-sm font-extrabold text-gray-900 leading-tight">
                                     ¿Cancelar Suscripción Actual?
                                 </Title>
                             </div>
 
-                            <Text className="text-[11px] text-[#555555] leading-normal mb-3 block">
-                                Al cancelar tu suscripción como piloto, perderás el soporte técnico prioritario, las ventajas operativas y las comisiones preferenciales en la plataforma BIODRON a partir de la próxima fecha de corte.
+                            <Text className="text-xs text-[#555555] leading-normal mb-3 block">
+                                Al cancelar tu suscripción como piloto, perderás el soporte técnico prioritario, las ventajas operativas y las comisiones preferenciales en la plataforma TECNODACTYLUS a partir de la próxima fecha de corte.
                             </Text>
                         </div>
 
@@ -5535,9 +5905,9 @@ export const PilotoHistoryView = () => {
       {/* ================= ENCABEZADO Y RESUMEN ================= */}
       <div className="flex flex-col gap-3 bg-white p-4 rounded-[4px] border border-gray-200 shadow-xs">
         <div>
-          <h1 className="text-base font-bold text-gray-900 flex items-center gap-2 flex-wrap">
+          <h1 className="text-lg font-bold text-gray-900 flex items-center gap-2 flex-wrap">
             Historial de Bitácora y Vuelos
-            <span className="text-[10px] bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-[4px] border border-gray-200">
+            <span className="text-xs bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-[4px] border border-gray-200">
               {flights.length} registros
             </span>
           </h1>
@@ -5559,7 +5929,7 @@ export const PilotoHistoryView = () => {
       <div className="grid grid-cols-2 gap-2.5">
         <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between min-w-0">
           <div className="min-w-0">
-            <p className="text-[10px] text-gray-500 font-medium">Área Cubierta Total</p>
+            <p className="text-xs text-gray-500 font-medium">Área Cubierta Total</p>
             <h3 className="text-lg font-bold text-gray-900 mt-0.5">{totalArea} <span className="text-xs font-normal text-gray-500">ha</span></h3>
           </div>
           <div className="p-2 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
@@ -5569,7 +5939,7 @@ export const PilotoHistoryView = () => {
 
         <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between min-w-0">
           <div className="min-w-0">
-            <p className="text-[10px] text-gray-500 font-medium">Tiempo Acumulado</p>
+            <p className="text-xs text-gray-500 font-medium">Tiempo Acumulado</p>
             <h3 className="text-lg font-bold text-gray-900 mt-0.5">{totalHours} <span className="text-xs font-normal text-gray-500">hrs</span></h3>
           </div>
           <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0">
@@ -5579,7 +5949,7 @@ export const PilotoHistoryView = () => {
 
         <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between min-w-0">
           <div className="min-w-0">
-            <p className="text-[10px] text-gray-500 font-medium">Tasa de Éxito</p>
+            <p className="text-xs text-gray-500 font-medium">Tasa de Éxito</p>
             <h3 className="text-lg font-bold text-emerald-700 mt-0.5">{successRate}%</h3>
           </div>
           <div className="p-2 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
@@ -5589,7 +5959,7 @@ export const PilotoHistoryView = () => {
 
         <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between min-w-0">
           <div className="min-w-0">
-            <p className="text-[10px] text-gray-500 font-medium">Volumen Aplicado</p>
+            <p className="text-xs text-gray-500 font-medium">Volumen Aplicado</p>
             <h3 className="text-lg font-bold text-gray-900 mt-0.5">1,400 <span className="text-xs font-normal text-gray-500">L</span></h3>
           </div>
           <div className="p-2 bg-cyan-50 text-cyan-600 rounded-[4px] shrink-0">
@@ -5615,7 +5985,7 @@ export const PilotoHistoryView = () => {
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="w-full px-2 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
+            className="w-full px-2 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
           >
             <option value="all">Todas las misiones</option>
             <option value="fumigation">Fumigación</option>
@@ -5626,7 +5996,7 @@ export const PilotoHistoryView = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full px-2 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
+            className="w-full px-2 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
           >
             <option value="all">Todos los estados</option>
             <option value="completed">Completados</option>
@@ -5670,7 +6040,7 @@ export const PilotoHistoryView = () => {
                 </div>
 
                 {/* Ubicación (sin truncar, con wrap) */}
-                <div className="text-gray-700 font-medium flex items-start gap-1 text-[11px]">
+                <div className="text-gray-700 font-medium flex items-start gap-1 text-xs">
                   <MapPin size={11} className="text-gray-400 shrink-0 mt-0.5" />
                   <span className="break-words">{flight.location}</span>
                 </div>
@@ -5697,7 +6067,7 @@ export const PilotoHistoryView = () => {
                       setSelectedFlight(flight);
                       setModalTab('info');
                     }}
-                    className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-medium rounded-[4px] transition cursor-pointer"
+                    className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded-[4px] transition cursor-pointer"
                   >
                     <Eye size={13} className="text-[#0E5E6F]" />
                     <span>Ver</span>
@@ -5705,7 +6075,7 @@ export const PilotoHistoryView = () => {
 
                   <button
                     onClick={() => {}}
-                    className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-[11px] font-medium rounded-[4px] transition cursor-pointer shadow-xs"
+                    className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-medium rounded-[4px] transition cursor-pointer shadow-xs"
                   >
                     <Download size={13} />
                     <span>PDF</span>
@@ -5721,7 +6091,7 @@ export const PilotoHistoryView = () => {
         </div>
 
         {/* Footer */}
-        <div className="p-3 bg-gray-50/80 border-t border-gray-200 text-[11px] text-gray-500 text-center">
+        <div className="p-3 bg-gray-50/80 border-t border-gray-200 text-xs text-gray-500 text-center">
           <span>Mostrando {filteredFlights.length} de {flights.length} registros</span>
         </div>
       </div>
@@ -5738,7 +6108,7 @@ export const PilotoHistoryView = () => {
                   {selectedFlight.id}
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-xs font-bold text-gray-900 truncate">
+                  <h3 className="text-sm font-bold text-gray-900 truncate">
                     {selectedFlight.typeName}
                   </h3>
                   <p className="text-[9px] text-gray-400 truncate">
@@ -6199,11 +6569,11 @@ export const PilotoHelpView = () => {
           {/* TÍTULO Y BOTÓN DE ASISTENCIA */}
           <div className="p-3 border-b border-gray-200 bg-white flex items-center justify-between gap-2 shrink-0">
             <div className="min-w-0">
-              <h2 className="font-bold text-gray-900 text-base leading-tight truncate">
+              <h2 className="font-bold text-gray-900 text-lg leading-tight truncate">
                 Soporte Piloto
               </h2>
-              <p className="text-[11px] text-gray-500 truncate">
-                Asistencia técnica & administradores
+              <p className="text-xs text-gray-500">
+                Asistencia técnica y de administradores.
               </p>
             </div>
 
@@ -6229,7 +6599,7 @@ export const PilotoHelpView = () => {
                 placeholder="Buscar administrador..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:border-[#0E5E6F] transition"
+                className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F] transition"
               />
             </div>
           </div>
@@ -6280,7 +6650,7 @@ export const PilotoHelpView = () => {
                         {chat.name}
                       </h3>
                       {lastMsg && (
-                        <span className="text-[11px] text-gray-400 font-medium shrink-0 ml-1">
+                        <span className="text-xs text-gray-400 font-medium shrink-0 ml-1">
                           {lastMsg.time}
                         </span>
                       )}
@@ -6340,11 +6710,11 @@ export const PilotoHelpView = () => {
                   {activeChat.name}
                 </h2>
 
-                <span className="text-[11px] text-[#0E5E6F] font-medium truncate">
+                <span className="text-xs text-[#0E5E6F] font-medium truncate">
                   {activeChat.role}
                 </span>
 
-                <div className="text-[11px] text-gray-500 leading-none">
+                <div className="text-xs text-gray-500 leading-none">
                   {activeChat.online ? (
                     <span className="text-emerald-600 font-medium flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
@@ -6379,12 +6749,12 @@ export const PilotoHelpView = () => {
                     className="fixed inset-0 z-10"
                     onClick={() => setIsHeaderMenuOpen(false)}
                   />
-                  <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-[4px] shadow-lg py-1 z-20 animate-fade-in">
+                  <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-300 rounded-[4px] shadow-lg py-1 z-20 animate-fade-in">
                     <button
                       onClick={() => {
                         setIsHeaderMenuOpen(false);
                       }}
-                      className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
+                      className="w-full px-3 py-2 text-xs text-black hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
                     >
                       <Phone size={15} className="text-[#0E5E6F]" />
                       <span>Llamada de soporte</span>
@@ -6393,7 +6763,7 @@ export const PilotoHelpView = () => {
                       onClick={() => {
                         setIsHeaderMenuOpen(false);
                       }}
-                      className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
+                      className="w-full px-3 py-2 text-xs text-black hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
                     >
                       <Video size={15} className="text-[#0E5E6F]" />
                       <span>Videollamada asistencia</span>
@@ -6428,7 +6798,7 @@ export const PilotoHelpView = () => {
                   )}
 
                   <div
-                    className={`max-w-[80%] px-3.5 py-2.5 rounded-[4px] text-sm ${
+                    className={`max-w-[80%] px-3.5 py-2.5 rounded-[4px] text-xs ${
                       isPilotMsg
                         ? 'bg-[#0E5E6F] text-white'
                         : 'bg-white text-gray-800 border border-gray-100 shadow-xs'
@@ -6481,7 +6851,7 @@ export const PilotoHelpView = () => {
               placeholder="Escribe tu mensaje..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              className="flex-1 bg-gray-50 border border-gray-200 rounded-[4px] px-4 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition min-w-0"
+              className="flex-1 bg-gray-50 border border-gray-200 rounded-[4px] px-4 py-2.5 text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition min-w-0"
             />
 
             <button
@@ -6495,7 +6865,7 @@ export const PilotoHelpView = () => {
         </div>
       </div>
 
-      {/* ================= MODAL DE SOLICITUD DE ASISTENCIA TÉCNICA (IDENTICO A TECNICO) ================= */}
+      {/* ================= MODAL DE SOLICITUD DE ASISTENCIA TÉCNICA ================= */}
       {isModalOpen && (
         <div className="absolute inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fade-in">
           <div className="bg-white w-[92%] max-w-[360px] rounded-[4px] shadow-2xl overflow-hidden border border-gray-100 flex flex-col max-h-[92%]">
@@ -6506,7 +6876,7 @@ export const PilotoHelpView = () => {
                   <Wrench size={16} />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-gray-900 text-sm truncate leading-tight">
+                  <h3 className="text-sm font-bold text-gray-900 truncate leading-tight">
                     Solicitar Asistencia
                   </h3>
                   {!isSubmitted && (
@@ -6560,7 +6930,7 @@ export const PilotoHelpView = () => {
                             dron: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
                       >
                         <option value="Dron #1 - DJI Mavic 3 Multispectral">
                           DJI Mavic 3
@@ -6589,7 +6959,7 @@ export const PilotoHelpView = () => {
                             categoria: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
                       >
                         <option value="Falla de Telemetría / GPS">
                           Falla de telemetría / RTK
@@ -6619,7 +6989,7 @@ export const PilotoHelpView = () => {
                             prioridad: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
                       >
                         <option value="Baja">Baja</option>
                         <option value="Media">Media</option>
@@ -6661,11 +7031,11 @@ export const PilotoHelpView = () => {
                             descripcion: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition resize-none"
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition resize-none"
                       ></textarea>
                     </div>
 
-                    <div className="p-2 bg-gray-50 border border-gray-100 rounded-[4px] text-[11px] text-gray-500 space-y-0.5">
+                    <div className="p-2 bg-gray-50 border border-gray-100 rounded-[4px] text-xs text-gray-500 space-y-0.5">
                       <p className="truncate">
                         <span className="font-semibold text-gray-600">
                           Equipo:
@@ -6700,7 +7070,7 @@ export const PilotoHelpView = () => {
               ) : (
                 /* Confirmación */
                 <div className="py-3 text-center space-y-2.5">
-                  <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                  <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-[4px] flex items-center justify-center mx-auto">
                     <CheckCircle2 size={22} />
                   </div>
                   <div className="space-y-0.5">
@@ -6832,10 +7202,10 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                         </div>
 
                         <div className="text-left min-w-0 flex-1">
-                            <h2 className="text-base text-gray-900 font-black tracking-tight normal-case leading-tight truncate">
+                            <h2 className="text-lg text-gray-900 font-black tracking-tight normal-case leading-tight truncate">
                                 {profileData.name}
                             </h2>
-                            <p className="text-gray-500 font-semibold text-[11px] mt-0.5 truncate">
+                            <p className="text-gray-500 font-semibold text-xs mt-0.5 truncate">
                                 {profileData.email}
                             </p>
                         </div>
@@ -6843,13 +7213,13 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
 
                     <div className="flex flex-col items-center gap-2 w-full">
                         <span
-                            className={`w-full text-center text-[10px] font-black tracking-wider px-3 py-1 rounded-[4px] border-2 break-words whitespace-normal ${profileData.roleColor}`}
+                            className={`w-full text-center text-xs font-black tracking-wider px-3 py-1 rounded-[4px] border-2 break-words whitespace-normal ${profileData.roleColor}`}
                         >
                             {profileData.roleLabel}
                         </span>
 
                         {saveSuccess && (
-                            <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-[4px] flex items-center gap-1 animate-in fade-in duration-150">
+                            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-[4px] flex items-center gap-1 animate-in fade-in duration-150">
                                 <Check size={12} /> Actualizado
                             </span>
                         )}
@@ -6861,7 +7231,7 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                     <button
                         type="button"
                         onClick={() => setActiveProfileTab("metricas")}
-                        className={`flex-1 py-2 text-xs font-black transition-colors cursor-pointer ${
+                        className={`flex-1 py-2 text-sm font-black transition-colors cursor-pointer ${
                             activeProfileTab === "metricas"
                                 ? "bg-white text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
                                 : "text-gray-500 hover:text-gray-700"
@@ -6872,7 +7242,7 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                     <button
                         type="button"
                         onClick={() => setActiveProfileTab("credenciales")}
-                        className={`flex-1 py-2 text-xs font-black transition-colors cursor-pointer ${
+                        className={`flex-1 py-2 text-sm font-black transition-colors cursor-pointer ${
                             activeProfileTab === "credenciales"
                                 ? "bg-white text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
                                 : "text-gray-500 hover:text-gray-700"
@@ -6891,11 +7261,11 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                                 <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
                                     <MapPin size={14} />
                                 </div>
-                                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                <span className="text-xs font-black text-gray-400 tracking-widest block">
                                     Base Regional
                                 </span>
                             </div>
-                            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
+                            <span className="text-xs text-gray-800 font-bold block break-words leading-tight mt-0.5">
                                 {profileData.location}
                             </span>
                         </div>
@@ -6906,11 +7276,11 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                                 <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
                                     <Layers size={14} />
                                 </div>
-                                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                <span className="text-xs font-black text-gray-400 tracking-widest block">
                                     Cobertura Total
                                 </span>
                             </div>
-                            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
+                            <span className="text-xs text-gray-800 font-bold block break-words leading-tight mt-0.5">
                                 {profileData.area}
                             </span>
                         </div>
@@ -6921,11 +7291,11 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                                 <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
                                     <BarChart2 size={14} />
                                 </div>
-                                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                <span className="text-xs font-black text-gray-400 tracking-widest block">
                                     Historial
                                 </span>
                             </div>
-                            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5 w-full">
+                            <span className="text-xs text-gray-800 font-bold block break-words leading-tight mt-0.5 w-full">
                                 {profileData.services}
                             </span>
                         </div>
@@ -6936,11 +7306,11 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                                 <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
                                     <CheckCircle size={14} />
                                 </div>
-                                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                <span className="text-xs font-black text-gray-400 tracking-widest block">
                                     Estado
                                 </span>
                             </div>
-                            <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] inline-block mt-0.5">
+                            <span className="text-xs font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] inline-block mt-0.5">
                                 {profileData.standing}
                             </span>
                         </div>
@@ -6953,7 +7323,7 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                         <div className="flex flex-col gap-2 mb-2.5 pb-2 border-b-2 border-gray-100">
                             <div className="flex items-center gap-2">
                                 <Settings size={15} className="text-[#0E5E6F]" />
-                                <h3 className="text-xs font-black text-gray-800 normal-case">
+                                <h3 className="text-sm font-black text-gray-800 normal-case">
                                     Credenciales y Datos de Contacto
                                 </h3>
                             </div>
@@ -6968,7 +7338,7 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
 
                         <div className="grid grid-cols-1 gap-1 text-left">
                             <div className="p-2 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-                                <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
+                                <span className="text-xs font-black text-gray-400 tracking-wider flex items-center gap-1">
                                     <Phone size={12} className="text-[#0E5E6F]" /> Teléfono
                                 </span>
                                 <p className="font-bold text-xs text-gray-800 mt-0.5">
@@ -6977,7 +7347,7 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                             </div>
 
                             <div className="p-2 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-                                <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
+                                <span className="text-xs font-black text-gray-400 tracking-wider flex items-center gap-1">
                                     <Mail size={12} className="text-[#0E5E6F]" /> Correo
                                 </span>
                                 <p className="font-bold text-xs text-gray-800 mt-0.5 truncate">
@@ -6990,7 +7360,7 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
 
                 {/* PIE DE PÁGINA */}
                 <div className="border-t-2 border-gray-200 px-4 py-2.5 bg-gray-50 flex flex-col items-stretch gap-2">
-                    <span className="text-[10px] text-gray-400 font-medium text-left truncate">
+                    <span className="text-xs text-gray-400 font-medium text-left truncate">
                         Base Operativa SPS, Cortés
                     </span>
 
@@ -7017,7 +7387,7 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                                     <div className="p-1.5 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
                                         <Edit2 size={14} />
                                     </div>
-                                    <h3 className="text-xs font-black text-gray-800 normal-case">
+                                    <h3 className="text-sm font-black text-gray-800 normal-case">
                                         Editar Credenciales
                                     </h3>
                                 </div>
@@ -7033,7 +7403,7 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                             <form onSubmit={handleSave} className="space-y-2">
                                 {/* SELECTOR TOTALMENTE FALSO DE FOTO DE PERFIL */}
                                 <div>
-                                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1 flex items-center gap-1">
+                                    <label className="block text-xs font-black text-gray-500 tracking-wider mb-1 flex items-center gap-1">
                                         <Camera size={11} className="text-[#0E5E6F]" /> Foto de perfil
                                     </label>
 
@@ -7052,7 +7422,7 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                                                     type="button"
                                                     onClick={handleFakeUpload}
                                                     disabled={isUploading}
-                                                    className="px-2.5 py-1 text-[11px] font-bold bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-100 rounded-[4px] text-gray-700 flex items-center gap-1 cursor-pointer transition-colors active:scale-95 shadow-xs disabled:opacity-50"
+                                                    className="px-2.5 py-1 text-xs font-bold bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-100 rounded-[4px] text-gray-700 flex items-center gap-1 cursor-pointer transition-colors active:scale-95 shadow-xs disabled:opacity-50"
                                                 >
                                                     {isUploading ? (
                                                         <Loader2 size={12} className="animate-spin text-[#0E5E6F]" />
@@ -7061,7 +7431,7 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                                                     )}
                                                     {isUploading ? "Cargando..." : "Seleccionar"}
                                                 </button>
-                                                <span className="text-[10px] text-gray-500 font-semibold truncate">
+                                                <span className="text-xs text-gray-500 font-semibold truncate">
                                                     {simulatedFile || "img"}
                                                 </span>
                                             </div>
@@ -7070,7 +7440,7 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                                    <label className="block text-xs font-black text-gray-500 tracking-wider mb-1">
                                         Teléfono
                                     </label>
                                     <div className="relative">
@@ -7085,7 +7455,7 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                                    <label className="block text-xs font-black text-gray-500 tracking-wider mb-1">
                                         Nueva contraseña
                                     </label>
                                     <div className="relative">
@@ -7107,7 +7477,7 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                                    <label className="block text-xs font-black text-gray-500 tracking-wider mb-1">
                                         Repetir contraseña
                                     </label>
                                     <div className="relative">

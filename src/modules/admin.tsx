@@ -2,58 +2,58 @@ import { AlertCircle, ArrowUp, BarChart2, Battery, BatteryCharging, Bell, Check,
 import React, { useState, useRef } from 'react';
 
 const DashboardWidget = ({
-  title,
-  children,
+    title,
+    children,
 }: {
-  title: string;
-  children: React.ReactNode;
+    title: string;
+    children: React.ReactNode;
 }) => (
-  <div className="bg-white border-2 border-gray-200 rounded-2xl p-6 shadow-sm">
-    <h3 className="text-sm text-gray-400 font-black uppercase tracking-widest mb-4">
-      {title}
-    </h3>
-    {children}
-  </div>
+    <div className="bg-white border-2 border-gray-200 rounded-2xl p-6 shadow-sm">
+        <h3 className="text-sm text-gray-400 font-black uppercase tracking-widest mb-4">
+            {title}
+        </h3>
+        {children}
+    </div>
 );
 
 const PlaceholderImage = ({
-  text = "Imagen",
-  className = "",
+    text = "Imagen",
+    className = "",
 }: {
-  text?: string;
-  className?: string;
+    text?: string;
+    className?: string;
 }) => (
-  <div
-    className={`relative flex items-center justify-center border-2 border-dashed border-gray-400 bg-gray-100 overflow-hidden ${className}`}
-  >
-    <svg
-      className="absolute inset-0 w-full h-full text-gray-300"
-      preserveAspectRatio="none"
+    <div
+        className={`relative flex items-center justify-center border-2 border-dashed border-gray-400 bg-gray-100 overflow-hidden ${className}`}
     >
-      <line
-        x1="0"
-        y1="0"
-        x2="100%"
-        y2="100%"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      <line
-        x1="100%"
-        y1="0"
-        x2="0"
-        y2="100%"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-    </svg>
-    <span
-      className="relative z-10 bg-white/90 px-3 py-1 text-xs text-gray-700 font-bold uppercase tracking-wider border border-gray-400 shadow-sm"
-      style={{ fontFamily: "'Instrument Sans', sans-serif" }}
-    >
-      {text}
-    </span>
-  </div>
+        <svg
+            className="absolute inset-0 w-full h-full text-gray-300"
+            preserveAspectRatio="none"
+        >
+            <line
+                x1="0"
+                y1="0"
+                x2="100%"
+                y2="100%"
+                stroke="currentColor"
+                strokeWidth="2"
+            />
+            <line
+                x1="100%"
+                y1="0"
+                x2="0"
+                y2="100%"
+                stroke="currentColor"
+                strokeWidth="2"
+            />
+        </svg>
+        <span
+            className="relative z-10 bg-white/90 px-3 py-1 text-xs text-gray-700 font-bold uppercase tracking-wider border border-gray-400 shadow-sm"
+            style={{ fontFamily: "'Instrument Sans', sans-serif" }}
+        >
+            {text}
+        </span>
+    </div>
 );
 
 const WireframeButton = ({
@@ -67,11 +67,10 @@ const WireframeButton = ({
         onClick={onClick}
         disabled={disabled}
         style={{ fontFamily: "'Roboto', sans-serif" }}
-        className={`px-4 py-2 tracking-wider transition-all border-2 rounded-[4px] ${
-            primary
+        className={`px-4 py-2 tracking-wider transition-all border-2 rounded-[4px] ${primary
                 ? "border-[#0E5E6F] bg-[#0E5E6F] text-white hover:bg-[#0b4a58]"
                 : "border-gray-800 bg-gray-100 text-gray-800 hover:bg-gray-200"
-        } ${disabled ? "opacity-40 cursor-not-allowed" : ""} ${className}`}
+            } ${disabled ? "opacity-40 cursor-not-allowed" : ""} ${className}`}
     >
         {children}
     </button>
@@ -117,57 +116,57 @@ const Text = ({ children, className = "", as: C = "p" }: any) => (
 );
 
 interface Plan {
-  id: number;
-  name: string;
-  price: number;
-  cycle: "Mensual" | "Anual" | "Trimestral";
-  flights: string;
-  area: string;
-  active: boolean;
+    id: number;
+    name: string;
+    price: number;
+    cycle: "Mensual" | "Anual" | "Trimestral";
+    flights: string;
+    area: string;
+    active: boolean;
 }
 
 interface DroneSale {
-  id: number;
-  name: string;
-  model: string;
-  price: number;
-  stock: number;
-  image: string;
-  tags: string[];
-  capacity: string;
+    id: number;
+    name: string;
+    model: string;
+    price: number;
+    stock: number;
+    image: string;
+    tags: string[];
+    capacity: string;
 }
 
 interface Message {
-  id: number;
-  sender: 'granjero' | 'admin' | 'other';
-  text: string;
-  time: string;
+    id: number;
+    sender: 'granjero' | 'admin' | 'other';
+    text: string;
+    time: string;
 }
 
 interface Chat {
-  id: string;
-  name: string;
-  role: string;
-  roleType: 'admin' | 'piloto';
-  avatar: string;
-  online: boolean;
-  lastSeen?: string;
-  unreadCount: number;
-  messages: Message[];
+    id: string;
+    name: string;
+    role: string;
+    roleType: 'admin' | 'piloto';
+    avatar: string;
+    online: boolean;
+    lastSeen?: string;
+    unreadCount: number;
+    messages: Message[];
 }
 
 interface ServiceRecord {
-  id: string;
-  type: string;
-  category: "fumigacion" | "busqueda" | "transporte" | "mapeo";
-  date: string;
-  time: string;
-  location: string;
-  pilot: string;
-  drone: string;
-  coverage: string;
-  metrics: { label: string; value: string; sub?: string }[];
-  summary: string;
+    id: string;
+    type: string;
+    category: "fumigacion" | "busqueda" | "transporte" | "mapeo";
+    date: string;
+    time: string;
+    location: string;
+    pilot: string;
+    drone: string;
+    coverage: string;
+    metrics: { label: string; value: string; sub?: string }[];
+    summary: string;
 }
 
 interface AdminProfileViewProps {
@@ -175,7 +174,7 @@ interface AdminProfileViewProps {
 }
 
 interface AdminDashboardProps {
-  onNavigate?: (view: string) => void;
+    onNavigate?: (view: string) => void;
 }
 
 type UserType = "client" | "pilot" | "tech" | "requests";
@@ -212,1047 +211,1046 @@ interface ServiceRequest {
 }
 
 export interface AdminLog {
-  id: string;
-  adminId: string;
-  adminName: string;
-  type: 'user_management' | 'system_config' | 'audit_security';
-  typeName: string;
-  targetModule: string;
-  responsible: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  duration: string;
-  affectedCount: string;
-  actionDetails: string;
-  authorizationCode: string;
-  status: 'completed' | 'interrupted' | 'failed';
-  securityLevel: string;
-  terminalIp: string;
-  notes: string;
+    id: string;
+    adminId: string;
+    adminName: string;
+    type: 'user_management' | 'system_config' | 'audit_security';
+    typeName: string;
+    targetModule: string;
+    responsible: string;
+    date: string;
+    startTime: string;
+    endTime: string;
+    duration: string;
+    affectedCount: string;
+    actionDetails: string;
+    authorizationCode: string;
+    status: 'completed' | 'interrupted' | 'failed';
+    securityLevel: string;
+    terminalIp: string;
+    notes: string;
 }
 
 // 1. Dashboard de Admin
 export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }) => {
-  // Estado de navegación por pestañas / secciones
-  const [activeTab, setActiveTab] = useState<string>("metricas");
+    // Estado de navegación por pestañas / secciones
+    const [activeTab, setActiveTab] = useState<string>("metricas");
 
-  // Estados de control de interfaz
-  const [chartPeriod, setChartPeriod] = useState<"semana" | "mes" | "anio">("mes");
-  const [showNotifications, setShowNotifications] = useState<boolean>(false);
-  const [tableSearch, setTableSearch] = useState<string>("");
-  const [statusFilter, setStatusFilter] = useState<string>("todos");
-  const [hoveredBar, setHoveredBar] = useState<number | null>(null);
+    // Estados de control de interfaz
+    const [chartPeriod, setChartPeriod] = useState<"semana" | "mes" | "anio">("mes");
+    const [showNotifications, setShowNotifications] = useState<boolean>(false);
+    const [tableSearch, setTableSearch] = useState<string>("");
+    const [statusFilter, setStatusFilter] = useState<string>("todos");
+    const [hoveredBar, setHoveredBar] = useState<number | null>(null);
 
-  // Estados para simular el gesto táctil de deslizar (swipe down) en el modal
-  const [dragY, setDragY] = useState<number>(0);
-  const touchStartY = useRef<number>(0);
-  const isDraggingModal = useRef<boolean>(false);
+    // Estados para simular el gesto táctil de deslizar (swipe down) en el modal
+    const [dragY, setDragY] = useState<number>(0);
+    const touchStartY = useRef<number>(0);
+    const isDraggingModal = useRef<boolean>(false);
 
-  // Paleta unificada de colores HEX
-  const HEX_COLORS = {
-    brandGreen: "#0E5E6F",
-    emerald100: "#D1FAE5",
-    red: "#B8001F",
-    amber100: "#FEF3C7",
-    blue100: "#DBEAFE",
-    orange100: "#FFEDD5",
-    purple100: "#F3E8FF",
-  };
+    // Paleta unificada de colores HEX
+    const HEX_COLORS = {
+        brandGreen: "#0E5E6F",
+        emerald100: "#D1FAE5",
+        red: "#B8001F",
+        amber100: "#FEF3C7",
+        blue100: "#DBEAFE",
+        orange100: "#FFEDD5",
+        purple100: "#F3E8FF",
+    };
 
-  // Notificaciones del rol administrador
-  const [notificaciones, setNotificaciones] = useState([
-    {
-      id: 1,
-      tipo: "alerta",
-      titulo: "Batería baja crítica",
-      detalle: "Dron Agras T40 (#DRN-01) en Misión Tegucigalpa reporta 14% de batería.",
-      tiempo: "Hace 2 min",
-      colorBg: HEX_COLORS.orange100,
-      textColor: "#C2410C",
-      icono: <AlertTriangle size={13} />,
-      unread: true,
-    },
-    {
-      id: 2,
-      tipo: "incidencia",
-      titulo: "Ticket de soporte urgente",
-      detalle: "Cliente 'AgroComer' reporta fallo en sensor NDVI en Ticket #TK-808.",
-      tiempo: "Hace 15 min",
-      colorBg: HEX_COLORS.amber100,
-      textColor: "#92400E",
-      icono: <ShieldAlert size={13} />,
-      unread: true,
-    },
-    {
-      id: 3,
-      tipo: "piloto",
-      titulo: "Piloto asignado",
-      detalle: "Piloto Carlos Mendoza inició la Misión #MIS-902 en Valle de Amarateca.",
-      tiempo: "Hace 1 hora",
-      colorBg: HEX_COLORS.blue100,
-      textColor: "#1E40AF",
-      icono: <UserCheck size={13} />,
-      unread: true,
-    },
-    {
-      id: 4,
-      tipo: "mantenimiento",
-      titulo: "Chequeo técnico finalizado",
-      detalle: "Técnico Luis Gómez completó mantenimiento preventivo del Matrice 300.",
-      tiempo: "Ayer, 04:30 PM",
-      colorBg: HEX_COLORS.emerald100,
-      textColor: "#065F46",
-      icono: <ShieldCheck size={13} />,
-      unread: false,
-    },
-  ]);
+    // Notificaciones del rol administrador
+    const [notificaciones, setNotificaciones] = useState([
+        {
+            id: 1,
+            tipo: "alerta",
+            titulo: "Batería baja crítica",
+            detalle: "Dron Agras T40 (#DRN-01) en Misión Tegucigalpa reporta 14% de batería.",
+            tiempo: "Hace 2 min",
+            colorBg: HEX_COLORS.orange100,
+            textColor: "#C2410C",
+            icono: <AlertTriangle size={13} />,
+            unread: true,
+        },
+        {
+            id: 2,
+            tipo: "incidencia",
+            titulo: "Ticket de soporte urgente",
+            detalle: "Cliente 'AgroComer' reporta fallo en sensor NDVI en Ticket #TK-808.",
+            tiempo: "Hace 15 min",
+            colorBg: HEX_COLORS.amber100,
+            textColor: "#92400E",
+            icono: <ShieldAlert size={13} />,
+            unread: true,
+        },
+        {
+            id: 3,
+            tipo: "piloto",
+            titulo: "Piloto asignado",
+            detalle: "Piloto Carlos Mendoza inició la Misión #MIS-902 en Valle de Amarateca.",
+            tiempo: "Hace 1 hora",
+            colorBg: HEX_COLORS.blue100,
+            textColor: "#1E40AF",
+            icono: <UserCheck size={13} />,
+            unread: true,
+        },
+        {
+            id: 4,
+            tipo: "mantenimiento",
+            titulo: "Chequeo técnico finalizado",
+            detalle: "Técnico Luis Gómez completó mantenimiento preventivo del Matrice 300.",
+            tiempo: "Ayer, 04:30 PM",
+            colorBg: HEX_COLORS.emerald100,
+            textColor: "#065F46",
+            icono: <ShieldCheck size={13} />,
+            unread: false,
+        },
+    ]);
 
-  // Manejadores para el gesto táctil de cierre rápido del modal
-  const handleTouchStartModal = (e: React.TouchEvent) => {
-    touchStartY.current = e.touches[0].clientY;
-    isDraggingModal.current = true;
-  };
+    // Manejadores para el gesto táctil de cierre rápido del modal
+    const handleTouchStartModal = (e: React.TouchEvent) => {
+        touchStartY.current = e.touches[0].clientY;
+        isDraggingModal.current = true;
+    };
 
-  const handleTouchMoveModal = (e: React.TouchEvent) => {
-    if (!isDraggingModal.current) return;
-    const currentY = e.touches[0].clientY;
-    const deltaY = currentY - touchStartY.current;
-    if (deltaY > 0) {
-      setDragY(deltaY);
-    }
-  };
+    const handleTouchMoveModal = (e: React.TouchEvent) => {
+        if (!isDraggingModal.current) return;
+        const currentY = e.touches[0].clientY;
+        const deltaY = currentY - touchStartY.current;
+        if (deltaY > 0) {
+            setDragY(deltaY);
+        }
+    };
 
-  const handleTouchEndModal = () => {
-    isDraggingModal.current = false;
-    if (dragY > 50) {
-      setShowNotifications(false);
-    }
-    setDragY(0);
-  };
+    const handleTouchEndModal = () => {
+        isDraggingModal.current = false;
+        if (dragY > 50) {
+            setShowNotifications(false);
+        }
+        setDragY(0);
+    };
 
-  // Simulador interactivo (Variables dinámicas)
-  const [simBateria, setSimBateria] = useState<number>(85);
-  const [simCargaInsumo, setSimCargaInsumo] = useState<number>(60);
-  const [simViento, setSimViento] = useState<number>(14);
+    // Simulador interactivo (Variables dinámicas)
+    const [simBateria, setSimBateria] = useState<number>(85);
+    const [simCargaInsumo, setSimCargaInsumo] = useState<number>(60);
+    const [simViento, setSimViento] = useState<number>(14);
 
-  // Cálculos dinámicos del simulador
-  const tiempoRestanteCalc = Math.round((simBateria / 100) * 35);
-  const temperaturaEst = Math.round(25 + (100 - simBateria) * 0.12 + simViento * 0.2);
-  const altitudSugerida = simViento > 20 ? "25 m (Baja por viento)" : "45 m (Óptima)";
+    // Cálculos dinámicos del simulador
+    const tiempoRestanteCalc = Math.round((simBateria / 100) * 35);
+    const temperaturaEst = Math.round(25 + (100 - simBateria) * 0.12 + simViento * 0.2);
+    const altitudSugerida = simViento > 20 ? "25 m (Baja por viento)" : "45 m (Óptima)";
 
-  const resetSimulador = () => {
-    setSimBateria(100);
-    setSimCargaInsumo(100);
-    setSimViento(8);
-  };
+    const resetSimulador = () => {
+        setSimBateria(100);
+        setSimCargaInsumo(100);
+        setSimViento(8);
+    };
 
-  // Datos para gráfico principal (Finanzas)
-  const chartData: Record<
-    string,
-    Record<string, { label: string; valor: number; detalle: string; unidad: string }[]>
-  > = {
-    metricas: {
-      semana: [
-        { label: "Lun", valor: 3200, detalle: "14 servicios ejecutados", unidad: "USD ($)" },
-        { label: "Mar", valor: 4500, detalle: "18 servicios ejecutados", unidad: "USD ($)" },
-        { label: "Mié", valor: 2800, detalle: "11 servicios ejecutados", unidad: "USD ($)" },
-        { label: "Jue", valor: 6100, detalle: "22 servicios ejecutados", unidad: "USD ($)" },
-        { label: "Vie", valor: 7500, detalle: "28 servicios ejecutados", unidad: "USD ($)" },
-        { label: "Sáb", valor: 5200, detalle: "19 servicios ejecutados", unidad: "USD ($)" },
-        { label: "Dom", valor: 1800, detalle: "8 servicios ejecutados", unidad: "USD ($)" },
-      ],
-      mes: [
-        { label: "Ene", valor: 18500, detalle: "Riego y fumigación líderes", unidad: "USD ($)" },
-        { label: "Feb", valor: 22400, detalle: "Alta demanda agro", unidad: "USD ($)" },
-        { label: "Mar", valor: 19800, detalle: "Mantenimientos incluidos", unidad: "USD ($)" },
-        { label: "Abr", valor: 28900, detalle: "Nuevas suscripciones VIP", unidad: "USD ($)" },
-        { label: "May", valor: 31200, detalle: "Pico de siembra aérea", unidad: "USD ($)" },
-        { label: "Jun", valor: 38500, detalle: "Récord de vuelos activos", unidad: "USD ($)" },
-      ],
-      anio: [
-        { label: "2023", valor: 145000, detalle: "Fase inicial BIODRON", unidad: "USD ($)" },
-        { label: "2024", valor: 280000, detalle: "Expansión de flota", unidad: "USD ($)" },
-        { label: "2025", valor: 410000, detalle: "Consolidación regional", unidad: "USD ($)" },
-        { label: "2026", valor: 590000, detalle: "Proyección actual", unidad: "USD ($)" },
-      ],
-    },
-  };
+    // Datos para gráfico principal (Finanzas)
+    const chartData: Record<
+        string,
+        Record<string, { label: string; valor: number; detalle: string; unidad: string }[]>
+    > = {
+        metricas: {
+            semana: [
+                { label: "Lun", valor: 3200, detalle: "14 servicios ejecutados", unidad: "L" },
+                { label: "Mar", valor: 4500, detalle: "18 servicios ejecutados", unidad: "L" },
+                { label: "Mié", valor: 2800, detalle: "11 servicios ejecutados", unidad: "L" },
+                { label: "Jue", valor: 6100, detalle: "22 servicios ejecutados", unidad: "L" },
+                { label: "Vie", valor: 7500, detalle: "28 servicios ejecutados", unidad: "L" },
+                { label: "Sáb", valor: 5200, detalle: "19 servicios ejecutados", unidad: "L" },
+                { label: "Dom", valor: 1800, detalle: "8 servicios ejecutados", unidad: "L" },
+            ],
+            mes: [
+                { label: "Ene", valor: 18500, detalle: "Riego y fumigación líderes", unidad: "L" },
+                { label: "Feb", valor: 22400, detalle: "Alta demanda agro", unidad: "L" },
+                { label: "Mar", valor: 19800, detalle: "Mantenimientos incluidos", unidad: "L" },
+                { label: "Abr", valor: 28900, detalle: "Nuevas suscripciones VIP", unidad: "L" },
+                { label: "May", valor: 31200, detalle: "Pico de siembra aérea", unidad: "L" },
+                { label: "Jun", valor: 38500, detalle: "Récord de vuelos activos", unidad: "L" },
+            ],
+            anio: [
+                { label: "2023", valor: 145000, detalle: "Fase inicial TECNODACTYLUS", unidad: "L" },
+                { label: "2024", valor: 280000, detalle: "Expansión de flota", unidad: "L" },
+                { label: "2025", valor: 410000, detalle: "Consolidación regional", unidad: "L" },
+                { label: "2026", valor: 590000, detalle: "Proyección actual", unidad: "L" },
+            ],
+        },
+    };
 
-  // Datos para gráficos secundarios por categoría de servicio
-  const serviciosData = [
-    {
-      nombre: "Fumigación de precisión",
-      ingreso: "$18,200 USD",
-      porcentaje: 45,
-      misiones: "62 vuelos",
-      color: HEX_COLORS.brandGreen,
-    },
-    {
-      nombre: "Mapeo fotogramétrico",
-      ingreso: "$10,400 USD",
-      porcentaje: 28,
-      misiones: "34 vuelos",
-      color: HEX_COLORS.blue100,
-      textColor: "#1E40AF",
-    },
-    {
-      nombre: "Riego focalizado",
-      ingreso: "$6,100 USD",
-      porcentaje: 16,
-      misiones: "21 vuelos",
-      color: HEX_COLORS.purple100,
-      textColor: "#6B21A8",
-    },
-    {
-      nombre: "Búsqueda y rescate térmico",
-      ingreso: "$3,800 USD",
-      porcentaje: 11,
-      misiones: "10 vuelos",
-      color: HEX_COLORS.amber100,
-      textColor: "#92400E",
-    },
-  ];
+    // Datos para gráficos secundarios por categoría de servicio
+    const serviciosData = [
+        {
+            nombre: "Fumigación de precisión",
+            ingreso: "L 18,200",
+            porcentaje: 45,
+            misiones: "62 vuelos",
+            color: HEX_COLORS.brandGreen,
+        },
+        {
+            nombre: "Mapeo fotogramétrico",
+            ingreso: "L 10,400",
+            porcentaje: 28,
+            misiones: "34 vuelos",
+            color: HEX_COLORS.blue100,
+            textColor: "#1E40AF",
+        },
+        {
+            nombre: "Riego focalizado",
+            ingreso: "L 6,100",
+            porcentaje: 16,
+            misiones: "21 vuelos",
+            color: HEX_COLORS.purple100,
+            textColor: "#6B21A8",
+        },
+        {
+            nombre: "Búsqueda y rescate térmico",
+            ingreso: "L 3,800",
+            porcentaje: 11,
+            misiones: "10 vuelos",
+            color: HEX_COLORS.amber100,
+            textColor: "#92400E",
+        },
+    ];
 
-  // Registros de tabla operativa
-  const datosRegistrosAdmin = [
-    {
-      id: "MTR-901",
-      cliente: "AgroPecuaria del Sur",
-      piloto: "Carlos Mendoza",
-      tecnico: "Luis Gómez",
-      servicio: "Fumigación de precisión",
-      dron: "Agras T40",
-      ganancia: "$1,250 USD",
-      estado: "En proceso",
-      tagColorBg: HEX_COLORS.blue100,
-      tagTextColor: "#1E40AF",
-    },
-    {
-      id: "MTR-898",
-      cliente: "Corporación Dinant",
-      piloto: "Ana Bermúdez",
-      tecnico: "Marcos Torres",
-      servicio: "Mapeo fotogramétrico",
-      dron: "Matrice 300 RTK",
-      ganancia: "$2,800 USD",
-      estado: "Completado",
-      tagColorBg: HEX_COLORS.emerald100,
-      tagTextColor: "#065F46",
-    },
-    {
-      id: "MTR-895",
-      cliente: "Hacienda El Porvenir",
-      piloto: "Roberto Varela",
-      tecnico: "Luis Gómez",
-      servicio: "Riego focalizado",
-      dron: "DJI Agras T30",
-      ganancia: "$950 USD",
-      estado: "Completado",
-      tagColorBg: HEX_COLORS.emerald100,
-      tagTextColor: "#065F46",
-    },
-    {
-      id: "MTR-890",
-      cliente: "Industrias Amarateca",
-      piloto: "Carlos Mendoza",
-      tecnico: "Marcos Torres",
-      servicio: "Búsqueda y rescate térmico",
-      dron: "Ehang Thermal 184",
-      ganancia: "$1,600 USD",
-      estado: "En alerta",
-      tagColorBg: HEX_COLORS.amber100,
-      tagTextColor: "#92400E",
-    },
-    {
-      id: "MTR-882",
-      cliente: "Finca El Hatillo",
-      piloto: "Sofia Reyes",
-      tecnico: "Gabriel Silva",
-      servicio: "Transporte exprés de insumos",
-      dron: "GRIFF Aviation 300",
-      ganancia: "$700 USD",
-      estado: "Completado",
-      tagColorBg: HEX_COLORS.emerald100,
-      tagTextColor: "#065F46",
-    },
-  ];
+    // Registros de tabla operativa
+    const datosRegistrosAdmin = [
+        {
+            id: "MTR-901",
+            cliente: "AgroPecuaria del Sur",
+            piloto: "Carlos Mendoza",
+            tecnico: "Luis Gómez",
+            servicio: "Fumigación de precisión",
+            dron: "Agras T40",
+            ganancia: "L 1,250",
+            estado: "En proceso",
+            tagColorBg: HEX_COLORS.blue100,
+            tagTextColor: "#1E40AF",
+        },
+        {
+            id: "MTR-898",
+            cliente: "Corporación Dinant",
+            piloto: "Ana Bermúdez",
+            tecnico: "Marcos Torres",
+            servicio: "Mapeo fotogramétrico",
+            dron: "Matrice 300 RTK",
+            ganancia: "L 2,800",
+            estado: "Completado",
+            tagColorBg: HEX_COLORS.emerald100,
+            tagTextColor: "#065F46",
+        },
+        {
+            id: "MTR-895",
+            cliente: "Hacienda El Porvenir",
+            piloto: "Roberto Varela",
+            tecnico: "Luis Gómez",
+            servicio: "Riego focalizado",
+            dron: "DJI Agras T30",
+            ganancia: "L 950",
+            estado: "Completado",
+            tagColorBg: HEX_COLORS.emerald100,
+            tagTextColor: "#065F46",
+        },
+        {
+            id: "MTR-890",
+            cliente: "Industrias Amarateca",
+            piloto: "Carlos Mendoza",
+            tecnico: "Marcos Torres",
+            servicio: "Búsqueda y rescate térmico",
+            dron: "Ehang Thermal 184",
+            ganancia: "L 1,600",
+            estado: "En alerta",
+            tagColorBg: HEX_COLORS.amber100,
+            tagTextColor: "#92400E",
+        },
+        {
+            id: "MTR-882",
+            cliente: "Finca El Hatillo",
+            piloto: "Sofia Reyes",
+            tecnico: "Gabriel Silva",
+            servicio: "Transporte exprés de insumos",
+            dron: "GRIFF Aviation 300",
+            ganancia: "L 700",
+            estado: "Completado",
+            tagColorBg: HEX_COLORS.emerald100,
+            tagTextColor: "#065F46",
+        },
+    ];
 
-  // Filtro de tabla
-  const registrosActuales = datosRegistrosAdmin.filter((item) => {
-    const matchesSearch =
-      item.id.toLowerCase().includes(tableSearch.toLowerCase()) ||
-      item.cliente.toLowerCase().includes(tableSearch.toLowerCase()) ||
-      item.piloto.toLowerCase().includes(tableSearch.toLowerCase()) ||
-      item.tecnico.toLowerCase().includes(tableSearch.toLowerCase()) ||
-      item.servicio.toLowerCase().includes(tableSearch.toLowerCase()) ||
-      item.dron.toLowerCase().includes(tableSearch.toLowerCase());
+    // Filtro de tabla
+    const registrosActuales = datosRegistrosAdmin.filter((item) => {
+        const matchesSearch =
+            item.id.toLowerCase().includes(tableSearch.toLowerCase()) ||
+            item.cliente.toLowerCase().includes(tableSearch.toLowerCase()) ||
+            item.piloto.toLowerCase().includes(tableSearch.toLowerCase()) ||
+            item.tecnico.toLowerCase().includes(tableSearch.toLowerCase()) ||
+            item.servicio.toLowerCase().includes(tableSearch.toLowerCase()) ||
+            item.dron.toLowerCase().includes(tableSearch.toLowerCase());
 
-    if (statusFilter === "todos") return matchesSearch;
-    if (statusFilter === "completado") return matchesSearch && item.estado.toLowerCase() === "completado";
-    if (statusFilter === "proceso") return matchesSearch && item.estado.toLowerCase() === "en proceso";
-    if (statusFilter === "alerta") return matchesSearch && item.estado.toLowerCase() === "en alerta";
+        if (statusFilter === "todos") return matchesSearch;
+        if (statusFilter === "completado") return matchesSearch && item.estado.toLowerCase() === "completado";
+        if (statusFilter === "proceso") return matchesSearch && item.estado.toLowerCase() === "en proceso";
+        if (statusFilter === "alerta") return matchesSearch && item.estado.toLowerCase() === "en alerta";
 
-    return matchesSearch;
-  });
+        return matchesSearch;
+    });
 
-  const currentChartSet = chartData["metricas"]?.[chartPeriod] || [];
-  const maxChartValue = Math.max(...currentChartSet.map((d) => d.valor), 1);
-  const chartUnit = currentChartSet[0]?.unidad || "Monto";
+    const currentChartSet = chartData["metricas"]?.[chartPeriod] || [];
+    const maxChartValue = Math.max(...currentChartSet.map((d) => d.valor), 1);
+    const chartUnit = currentChartSet[0]?.unidad || "Monto";
 
-  const yAxisTicks = [
-    Math.round(maxChartValue),
-    Math.round(maxChartValue * 0.75),
-    Math.round(maxChartValue * 0.5),
-    Math.round(maxChartValue * 0.25),
-    0,
-  ];
+    const yAxisTicks = [
+        Math.round(maxChartValue),
+        Math.round(maxChartValue * 0.75),
+        Math.round(maxChartValue * 0.5),
+        Math.round(maxChartValue * 0.25),
+        0,
+    ];
 
-  const unreadCount = notificaciones.filter((n) => n.unread).length;
+    const unreadCount = notificaciones.filter((n) => n.unread).length;
 
-  return (
-    <div
-      style={{ fontFamily: "'Roboto', sans-serif" }}
-      className="p-4 w-full mx-auto bg-white antialiased text-gray-800 font-sans overflow-x-hidden"
-    >
-      {/* BARRA SUPERIOR DE ADMINISTRACIÓN */}
-      <div className="flex flex-col items-start gap-3 mb-5 pb-4 border-b-2 border-gray-100 select-none relative">
-        <div className="w-full flex justify-between items-start gap-2">
-          <div className="text-left space-y-0.5">
-            <h1 className="text-lg font-black text-gray-900 tracking-tight font-sans">
-              Panel de Control Administrativo
-            </h1>
-            <p className="text-gray-500 text-xs font-medium tracking-wide font-sans">
-              Consola central BIODRON • Telemetría, personal, finanzas y monitoreo global
-            </p>
-          </div>
-        </div>
-
-        {/* ETIQUETA SUPER ADMIN UBICADA DEBAJO DEL PÁRRAFO DE LA CONSOLA */}
+    return (
         <div
-          style={{
-            backgroundColor: HEX_COLORS.purple100,
-            color: "#6B21A8",
-            borderRadius: "4px",
-          }}
-          className="px-2.5 py-1 border border-purple-200 flex items-center gap-1.5 shadow-xs"
+            style={{ fontFamily: "'Roboto', sans-serif" }}
+            className="p-4 w-full mx-auto bg-white antialiased text-gray-800 font-sans overflow-x-hidden"
         >
-          <span className="w-1.5 h-1.5 bg-[#6B21A8] rounded-full animate-pulse"></span>
-          <span className="text-[10px] font-bold tracking-wider font-sans">Super admin root</span>
-        </div>
-      </div>
-
-      {/* MÉTRICAS GLOBALES DE LA EMPRESA (4 CARDS DEL MISMO TAMAÑO) */}
-      <div className="grid grid-cols-2 gap-3 mb-4 text-left font-sans">
-        <div
-          style={{ borderRadius: "4px" }}
-          className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0"
-        >
-          <div className="flex justify-between items-center gap-1 mb-2">
-            <span className="text-[10px] font-bold text-gray-500 tracking-wider font-sans">
-              Clientes activos
-            </span>
-            <div
-              style={{
-                backgroundColor: HEX_COLORS.emerald100,
-                color: "#065F46",
-                borderRadius: "4px",
-              }}
-              className="p-1.5 flex items-center justify-center shrink-0"
-            >
-              <Users size={14} />
-            </div>
-          </div>
-          <p className="text-sm font-black text-gray-900 mb-0.5 font-sans truncate whitespace-nowrap">
-            48 clientes
-          </p>
-          <p className="text-[9px] text-gray-400 font-semibold font-sans ">
-            +12% respecto al mes anterior
-          </p>
-        </div>
-
-        <div
-          style={{ borderRadius: "4px" }}
-          className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0"
-        >
-          <div className="flex justify-between items-center gap-1 mb-2">
-            <span className="text-[10px] font-bold text-gray-500 tracking-wider font-sans">
-              Drones activos
-            </span>
-            <div
-              style={{
-                backgroundColor: HEX_COLORS.blue100,
-                color: "#1E40AF",
-                borderRadius: "4px",
-              }}
-              className="p-1.5 flex items-center justify-center shrink-0"
-            >
-              <UserCheck size={14} />
-            </div>
-          </div>
-          <p className="text-sm font-black text-gray-900 mb-0.5 font-sans whitespace-nowrap">
-            16 drones
-          </p>
-          <p className="text-[9px] text-gray-400 font-semibold font-sans">
-            12 operativos en misión hoy
-          </p>
-        </div>
-
-        <div
-          style={{ borderRadius: "4px" }}
-          className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0"
-        >
-          <div className="flex justify-between items-center gap-1 mb-2">
-            <span className="text-[10px] font-bold text-gray-500 tracking-wider font-sans">
-              Técnicos y soporte
-            </span>
-            <div
-              style={{
-                backgroundColor: HEX_COLORS.purple100,
-                color: "#6B21A8",
-                borderRadius: "4px",
-              }}
-              className="p-1.5 flex items-center justify-center shrink-0"
-            >
-              <Wrench size={14} />
-            </div>
-          </div>
-          <p className="text-sm font-black text-gray-900 mb-0.5 font-sans whitespace-nowrap">
-            8 técnicos
-          </p>
-          <p className="text-[9px] text-gray-400 font-semibold font-sans">
-            3 en taller técnico
-          </p>
-        </div>
-
-        <div
-          style={{ borderRadius: "4px" }}
-          className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0"
-        >
-          <div className="flex justify-between items-center gap-1 mb-2">
-            <span className="text-[10px] font-bold text-gray-500 tracking-wider font-sans">
-              Ingresos totales (Mes)
-            </span>
-            <div
-              style={{
-                backgroundColor: HEX_COLORS.amber100,
-                color: "#92400E",
-                borderRadius: "4px",
-              }}
-              className="p-1.5 flex items-center justify-center shrink-0"
-            >
-              <TrendingUp size={14} />
-            </div>
-          </div>
-          <p className="text-sm font-black text-gray-900 mb-0.5 font-sans whitespace-nowrap">
-            $38,500 USD
-          </p>
-          <p className="text-[9px] text-gray-400 font-semibold font-sans">
-            Margen operacional: 42%
-          </p>
-        </div>
-      </div>
-
-      {/* MENÚ DESPLEGABLE PRINCIPAL EN LUGAR DE PESTAÑAS */}
-      <div className="mb-4">
-        <select
-          value={activeTab}
-          onChange={(e) => setActiveTab(e.target.value)}
-          style={{
-            borderRadius: "4px",
-            borderColor: HEX_COLORS.brandGreen,
-          }}
-          className="w-full p-2.5 text-xs font-bold bg-white text-gray-800 border-2 focus:outline-none focus:ring-0 cursor-pointer font-sans"
-        >
-          <option value="metricas">Métricas y finanzas</option>
-          <option value="mapa">Mapa en vivo</option>
-          <option value="simulador">Simulador de vuelo</option>
-          <option value="flota">Flota y personal</option>
-        </select>
-      </div>
-
-      {/* CONTENIDO PESTAÑA 1: MÉTRICAS, FINANZAS Y DESGLOSE POR SERVICIOS */}
-      {activeTab === "metricas" && (
-        <div className="space-y-6 animate-in fade-in duration-200 font-sans">
-          {/* GRÁFICO 1: ANALÍTICA FINANCIERA GENERAL */}
-          <div
-            style={{ borderRadius: "4px" }}
-            className="bg-white border-2 border-gray-200 p-3 shadow-xs text-left overflow-hidden"
-          >
-            <div className="flex flex-col justify-between items-start gap-3 mb-4 pb-3 border-b border-gray-100">
-              <div className="flex items-center gap-2">
-                <BarChart3 size={18} className="text-[#0E5E6F] shrink-0" />
-                <div>
-                  <h3 className="text-xs font-black text-gray-900 tracking-wider font-sans">
-                    Analítica Financiera — Ganancias por Período
-                  </h3>
-                  <p className="text-[11px] text-gray-500 font-medium font-sans">
-                    Escala eje Y: <strong className="text-gray-700">{chartUnit}</strong>
-                  </p>
-                </div>
-              </div>
-
-              {/* Selector de escala temporal */}
-              <div
-                style={{ borderRadius: "4px" }}
-                className="bg-gray-100 p-1 flex items-center gap-1 border border-gray-200 w-full"
-              >
-                {[
-                  { id: "semana", label: "Semana" },
-                  { id: "mes", label: "Mes" },
-                  { id: "anio", label: "Año" },
-                ].map((p) => (
-                  <button
-                    key={p.id}
-                    onClick={() => setChartPeriod(p.id as any)}
-                    style={{ borderRadius: "4px" }}
-                    className={`flex-1 px-2.5 py-1.5 text-[11px] font-bold transition-all cursor-pointer font-sans ${
-                      chartPeriod === p.id
-                        ? "bg-[#0E5E6F] text-white shadow-xs"
-                        : "text-gray-500"
-                    }`}
-                  >
-                    {p.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="relative pt-6 pb-1">
-              <div className="flex h-48 w-full items-end">
-                {/* Eje Y */}
-                <div className="w-10 flex flex-col justify-between items-end pr-2 border-r border-gray-200 text-[8px] font-mono font-bold text-gray-400 h-full py-0.5 select-none shrink-0">
-                  {yAxisTicks.map((tick, i) => (
-                    <span key={i}>${tick}</span>
-                  ))}
-                </div>
-
-                {/* Área de Barras Ajustadas dentro del Contenedor */}
-                <div className="flex-1 relative flex items-end justify-around pl-1 pr-1 h-full overflow-hidden">
-                  {/* Líneas de Guía de Fondo */}
-                  <div className="absolute inset-x-0 top-0 bottom-0 flex flex-col justify-between pointer-events-none z-0 px-1">
-                    <div className="border-b border-gray-100 w-full h-0"></div>
-                    <div className="border-b border-gray-100 w-full h-0"></div>
-                    <div className="border-b border-gray-100 w-full h-0"></div>
-                    <div className="border-b border-gray-100 w-full h-0"></div>
-                    <div className="border-b border-gray-200 w-full h-0"></div>
-                  </div>
-
-                  {currentChartSet.map((item, idx) => {
-                    // Cálculo estricto del porcentaje acotado entre 5% y 100%
-                    const heightPercent = Math.min(100, Math.max(5, (item.valor / maxChartValue) * 100));
-                    const barColors = [
-                      HEX_COLORS.brandGreen,
-                      HEX_COLORS.blue100,
-                      HEX_COLORS.purple100,
-                      HEX_COLORS.emerald100,
-                      HEX_COLORS.amber100,
-                      HEX_COLORS.orange100,
-                    ];
-                    const currentColor = barColors[idx % barColors.length];
-
-                    return (
-                      <div
-                        key={idx}
-                        className="flex-1 flex flex-col items-center justify-end h-full relative group cursor-pointer z-10 px-0.5 max-w-[40px]"
-                        onMouseEnter={() => setHoveredBar(idx)}
-                        onMouseLeave={() => setHoveredBar(null)}
-                      >
-                        {/* Tooltip Emergente */}
-                        {hoveredBar === idx && (
-                          <div
-                            style={{ borderRadius: "4px" }}
-                            className="absolute -top-10 z-30 bg-gray-900 text-white px-2 py-1 text-[9px] font-mono shadow-xl whitespace-nowrap text-center animate-in fade-in duration-100 font-sans pointer-events-none"
-                          >
-                            <p className="font-bold">${item.valor} USD</p>
-                            <p className="text-gray-300 text-[8px]">{item.detalle}</p>
-                          </div>
-                        )}
-
-                        {/* Etiqueta Superior */}
-                        <span className="text-[9px] font-bold text-gray-600 mb-0.5 truncate w-full text-center font-sans">
-                          ${item.valor}
-                        </span>
-
-                        {/* Contenedor y Barra con Estilo Ajustado */}
-                        <div className="w-full h-full flex items-end justify-center">
-                          <div
-                            style={{
-                              height: `${heightPercent}%`,
-                              backgroundColor: currentColor,
-                              borderRadius: "3px 3px 0 0",
-                            }}
-                            className="w-full max-w-[14px] transition-all duration-300 hover:brightness-90 border-t border-x border-black/10"
-                          ></div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Eje X */}
-              <div className="flex pl-10 pt-1.5 border-t border-gray-200">
-                <div className="flex-1 flex justify-around px-1">
-                  {currentChartSet.map((item, idx) => (
-                    <span
-                      key={idx}
-                      className="flex-1 text-center text-[9px] font-bold text-gray-500 tracking-wider font-sans truncate max-w-[40px]"
-                    >
-                      {item.label}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* GRÁFICO 2: DESGLOSE POR TIPOS DE SERVICIO */}
-          <div
-            style={{ borderRadius: "4px" }}
-            className="bg-white border-2 border-gray-200 p-3 shadow-xs text-left"
-          >
-            <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
-              <PieChart size={18} className="text-[#0E5E6F] shrink-0" />
-              <div>
-                <h3 className="text-xs font-black text-gray-900 tracking-wider font-sans">
-                  Distribución de Ingresos por Servicio
-                </h3>
-                <p className="text-[11px] text-gray-500 font-medium font-sans">
-                  Facturación e intensidad de vuelos por tipo de misión
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-6">
-              {/* Contenedor de Progress Bars por Servicio */}
-              <div className="space-y-4">
-                {serviciosData.map((serv, index) => (
-                  <div key={index} className="space-y-1">
-                    <div className="flex flex-col items-start gap-0.5 text-xs">
-                      <span className="font-bold text-gray-800 font-sans">{serv.nombre}</span>
-                      <span className="font-mono font-black text-gray-900 text-[11px]">{serv.ingreso} ({serv.porcentaje}%)</span>
+            {/* BARRA SUPERIOR DE ADMINISTRACIÓN */}
+            <div className="flex flex-col items-start gap-3 mb-5 pb-4 border-b-2 border-gray-100 select-none relative">
+                <div className="w-full flex justify-between items-start gap-2">
+                    <div className="text-left space-y-0.5">
+                        <h1 className="text-lg font-black text-gray-900 tracking-tight font-sans">
+                            Panel de Control Administrativo
+                        </h1>
+                        <p className="text-xs text-gray-500 font-medium tracking-wide font-sans">
+                            Consola central TECNODACTYLUS. Telemetría, personal, finanzas y monitoreo global.
+                        </p>
                     </div>
-                    <div className="w-full bg-gray-100 h-3 rounded-full overflow-hidden border border-gray-200">
-                      <div
-                        className="h-full transition-all duration-500"
-                        style={{
-                          width: `${Math.min(100, serv.porcentaje)}%`,
-                          backgroundColor: serv.color,
-                        }}
-                      ></div>
-                    </div>
-                    <p className="text-[10px] text-gray-400 font-medium text-right font-sans">
-                      {serv.misiones} completados
-                    </p>
-                  </div>
-                ))}
-              </div>
+                </div>
 
-              {/* Tarjetas resumen de servicios */}
-              <div className="flex gap-3 overflow-x-auto custom-scrollbar pb-1 -mx-3 px-3">
-                {serviciosData.map((serv, index) => (
-                  <div
-                    key={index}
+                {/* ETIQUETA SUPER ADMIN UBICADA DEBAJO DEL PÁRRAFO DE LA CONSOLA */}
+                <div
                     style={{
-                      borderRadius: "4px",
-                      backgroundColor: serv.color,
-                      color: serv.textColor || "#FFFFFF",
-                    }}
-                    className="p-3 border border-black/10 flex flex-col justify-between shadow-2xs shrink-0 w-[150px]"
-                  >
-                    <div>
-                      <span className="text-[9px] font-bold block opacity-80 font-sans">
-                        Servicio {index + 1}
-                      </span>
-                      <p className="text-xs font-black leading-tight mt-1 font-sans">{serv.nombre}</p>
-                    </div>
-                    <div className="mt-3">
-                      <p className="text-base font-black font-sans">{serv.ingreso}</p>
-                      <p className="text-[10px] font-bold opacity-90 font-sans">{serv.misiones}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* CONTENIDO PESTAÑA 2: MAPA EN VIVO */}
-      {activeTab === "mapa" && (
-        <div
-          style={{ borderRadius: "4px" }}
-          className="bg-white border-2 border-gray-200 p-3 shadow-xs mb-8 text-left font-sans animate-in fade-in duration-200"
-        >
-          <div className="flex flex-col justify-between items-start gap-2 mb-4 pb-3 border-b border-gray-100">
-            <div className="flex items-center gap-2">
-              <MapPin size={18} className="text-[#0E5E6F] shrink-0" />
-              <div>
-                <h3 className="text-xs font-black text-gray-900 tracking-wider font-sans">
-                  Mapa en Vivo — Flota de Drones
-                </h3>
-                <p className="text-[11px] text-gray-500 font-medium font-sans">
-                  Ubicación satelital en tiempo real
-                </p>
-              </div>
-            </div>
-
-            <span
-              style={{
-                backgroundColor: HEX_COLORS.emerald100,
-                color: "#065F46",
-                borderRadius: "4px",
-              }}
-              className="px-2.5 py-1 text-[10px] font-extrabold flex items-center gap-1 border border-emerald-200 font-sans"
-            >
-              <span className="w-2 h-2 bg-[#065F46] rounded-full animate-ping shrink-0"></span>
-              16 drones activos en sistema
-            </span>
-          </div>
-
-          <div className="relative w-full h-64 rounded bg-gray-100 overflow-hidden border border-gray-200 group">
-            <img
-              src="src/img/drones_activos.png"
-              alt="Mapa en vivo de drones activos"
-              className="w-full h-full object-cover grayscale-[20%]"
-              onError={(e) => {
-                e.currentTarget.src =
-                  "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1200&q=80";
-              }}
-            />
-
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none"></div>
-
-            <div className="absolute top-1/4 left-1/4 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 bg-gray-900/90 text-white p-1.5 rounded border border-emerald-400 shadow-lg backdrop-blur-xs font-sans">
-              <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shrink-0"></span>
-              <div>
-                <p className="text-[9px] font-black leading-none whitespace-nowrap font-sans">Agras T40 (#DRN-101)</p>
-                <p className="text-[7px] text-gray-300 font-mono whitespace-nowrap">Piloto: C. Mendoza</p>
-              </div>
-            </div>
-
-            <div className="absolute top-1/2 left-[60%] transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 bg-gray-900/90 text-white p-1.5 rounded border border-blue-400 shadow-lg backdrop-blur-xs font-sans">
-              <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse shrink-0"></span>
-              <div>
-                <p className="text-[9px] font-black leading-none whitespace-nowrap font-sans">Matrice 300 (#DRN-204)</p>
-                <p className="text-[7px] text-gray-300 font-mono whitespace-nowrap">Piloto: A. Bermúdez</p>
-              </div>
-            </div>
-
-            <div className="absolute bottom-2 left-2 right-2 bg-white/90 backdrop-blur-md px-2.5 py-1.5 rounded border border-gray-200 text-gray-800 text-[9px] font-mono shadow-md font-sans">
-              <p className="font-bold text-gray-900 leading-snug">Coordenadas centro: 14.0723° N, 87.1921° W</p>
-              <p className="text-gray-500">Señal GPS: Excelente (18 satélites)</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* CONTENIDO PESTAÑA 3: SIMULADOR INTERACTIVO */}
-      {activeTab === "simulador" && (
-        <div
-          style={{ borderRadius: "4px" }}
-          className="bg-white border-2 border-gray-200 p-3 shadow-xs mb-8 text-left font-sans animate-in fade-in duration-200"
-        >
-          <div className="flex flex-col justify-between items-start gap-3 mb-4 pb-3 border-b border-gray-100">
-            <div className="flex items-center gap-2">
-              <Sliders size={18} className="text-[#0E5E6F] shrink-0" />
-              <div>
-                <h3 className="text-xs font-black text-gray-900 tracking-wider font-sans">
-                  Simulador de Rendimiento del Dron
-                </h3>
-                <p className="text-[11px] text-gray-500 font-medium font-sans">
-                  Ajusta los controles para simular telemetría y consumo
-                </p>
-              </div>
-            </div>
-
-            <button
-              onClick={resetSimulador}
-              style={{ borderRadius: "4px" }}
-              className="px-3 py-2 bg-gray-100 active:bg-gray-200 text-gray-700 text-xs font-bold border border-gray-300 transition-colors flex items-center justify-center gap-1.5 cursor-pointer font-sans w-full"
-            >
-              <RotateCcw size={13} />
-              Restablecer valores
-            </button>
-          </div>
-
-          <div className="bg-gray-50 border border-gray-200 p-3 rounded mb-6 grid grid-cols-1 gap-6">
-            <div>
-              <div className="flex justify-between items-center mb-1">
-                <label className="text-xs font-bold text-gray-700 flex items-center gap-1 font-sans">
-                  <Battery size={13} className="text-[#0E5E6F]" /> Batería ajustada:
-                </label>
-                <span className="text-xs font-mono font-black text-[#0E5E6F]">{simBateria}%</span>
-              </div>
-              <input
-                type="range"
-                min="5"
-                max="100"
-                value={simBateria}
-                onChange={(e) => setSimBateria(Number(e.target.value))}
-                className="w-full accent-[#0E5E6F] cursor-pointer"
-              />
-              <p className="text-[9px] text-gray-400 font-medium mt-1 font-sans">
-                Desliza para simular descarga
-              </p>
-            </div>
-
-            <div>
-              <div className="flex justify-between items-center mb-1">
-                <label className="text-xs font-bold text-gray-700 flex items-center gap-1 font-sans">
-                  <Droplet size={13} className="text-[#0E5E6F]" /> Tanque de insumos:
-                </label>
-                <span className="text-xs font-mono font-black text-[#0E5E6F]">{simCargaInsumo}%</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={simCargaInsumo}
-                onChange={(e) => setSimCargaInsumo(Number(e.target.value))}
-                className="w-full accent-[#0E5E6F] cursor-pointer"
-              />
-              <p className="text-[9px] text-gray-400 font-medium mt-1 font-sans">
-                Desliza para simular aspersión
-              </p>
-            </div>
-
-            <div>
-              <div className="flex justify-between items-center mb-1">
-                <label className="text-xs font-bold text-gray-700 flex items-center gap-1 font-sans">
-                  <Wind size={13} className="text-[#0E5E6F]" /> Viento ambiental:
-                </label>
-                <span className="text-xs font-mono font-black text-[#0E5E6F]">{simViento} km/h</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="40"
-                value={simViento}
-                onChange={(e) => setSimViento(Number(e.target.value))}
-                className="w-full accent-[#0E5E6F] cursor-pointer"
-              />
-              <p className="text-[9px] text-gray-400 font-medium mt-1 font-sans">
-                Desliza para simular ráfagas
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4">
-            <div className="bg-white border border-gray-200 p-4 rounded text-left shadow-2xs">
-              <div className="flex justify-between items-center mb-1.5">
-                <span className="text-[11px] font-bold text-gray-700 flex items-center gap-1 font-sans">
-                  <Battery size={13} className="text-[#0E5E6F]" /> Autonomía batería
-                </span>
-                <span className="text-xs font-mono font-black text-gray-900">{simBateria}%</span>
-              </div>
-              <div className="w-full bg-gray-100 h-3 rounded-full overflow-hidden mb-2 border border-gray-200">
-                <div
-                  className="h-full transition-all duration-300"
-                  style={{
-                    width: `${Math.min(100, simBateria)}%`,
-                    backgroundColor:
-                      simBateria > 50
-                        ? HEX_COLORS.brandGreen
-                        : simBateria > 20
-                        ? "#D97706"
-                        : HEX_COLORS.red,
-                  }}
-                ></div>
-              </div>
-              <p className="text-[10px] text-gray-500 font-medium font-sans">
-                Tiempo restante: <strong className="text-gray-900">{tiempoRestanteCalc} min</strong>
-              </p>
-            </div>
-
-            <div className="bg-white border border-gray-200 p-4 rounded text-left shadow-2xs">
-              <div className="flex justify-between items-center mb-1.5">
-                <span className="text-[11px] font-bold text-gray-700 flex items-center gap-1 font-sans">
-                  <Zap size={13} className="text-[#1E40AF]" /> Capacidad tanque
-                </span>
-                <span className="text-xs font-mono font-black text-gray-900">{simCargaInsumo}%</span>
-              </div>
-              <div className="w-full bg-gray-100 h-3 rounded-full overflow-hidden mb-2 border border-gray-200">
-                <div
-                  className="h-full transition-all duration-300"
-                  style={{
-                    width: `${Math.min(100, simCargaInsumo)}%`,
-                    backgroundColor: "#1E40AF",
-                  }}
-                ></div>
-              </div>
-              <p className="text-[10px] text-gray-500 font-medium font-sans">
-                Volumen disponible: <strong className="text-gray-900">{Math.round(40 * (simCargaInsumo / 100))} litros</strong>
-              </p>
-            </div>
-
-            <div className="bg-white border border-gray-200 p-4 rounded text-left shadow-2xs">
-              <div className="flex justify-between items-center mb-1.5">
-                <span className="text-[11px] font-bold text-gray-700 flex items-center gap-1 font-sans">
-                  <Activity size={13} className="text-[#6B21A8]" /> Carga térmica
-                </span>
-                <span className="text-xs font-mono font-black text-gray-900">{temperaturaEst}°C</span>
-              </div>
-              <div className="w-full bg-gray-100 h-3 rounded-full overflow-hidden mb-2 border border-gray-200">
-                <div
-                  className="h-full transition-all duration-300"
-                  style={{
-                    width: `${Math.min(100, (temperaturaEst / 50) * 100)}%`,
-                    backgroundColor: "#6B21A8",
-                  }}
-                ></div>
-              </div>
-              <p className="text-[10px] text-gray-500 font-medium font-sans">
-                Estado: <strong className="text-gray-900">{temperaturaEst > 35 ? "Caliente" : "Normal"}</strong>
-              </p>
-            </div>
-
-            <div className="bg-white border border-gray-200 p-4 rounded text-left shadow-2xs">
-              <div className="flex justify-between items-center mb-1.5">
-                <span className="text-[11px] font-bold text-gray-700 flex items-center gap-1 font-sans">
-                  <Radio size={13} className="text-[#92400E]" /> Resistencia viento
-                </span>
-                <span className="text-xs font-mono font-black text-gray-900">{simViento} km/h</span>
-              </div>
-              <div className="w-full bg-gray-100 h-3 rounded-full overflow-hidden mb-2 border border-gray-200">
-                <div
-                  className="h-full transition-all duration-300"
-                  style={{
-                    width: `${Math.min(100, (simViento / 40) * 100)}%`,
-                    backgroundColor: "#92400E",
-                  }}
-                ></div>
-              </div>
-              <p className="text-[10px] text-gray-500 font-medium font-sans">
-                Altitud: <strong className="text-gray-900">{altitudSugerida}</strong>
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* CONTENIDO PESTAÑA 4: TABLA DE PERSONAL Y FLOTA */}
-      {(activeTab === "flota" || activeTab === "metricas") && (
-        <div
-          style={{ borderRadius: "4px" }}
-          className="bg-white border-2 border-gray-200 shadow-xs text-left overflow-hidden mb-8 font-sans animate-in fade-in duration-200"
-        >
-          <div className="p-4 border-b-2 border-gray-100 bg-gray-50/50 flex flex-col justify-between items-start gap-3">
-            <div>
-              <h3 className="text-xs font-black text-gray-900 tracking-wider font-sans">
-                Control General de Asignaciones y Misiones
-              </h3>
-              <p className="text-[11px] text-gray-500 font-medium font-sans">
-                Supervisión de clientes, pilotos, técnicos y rentabilidad por servicio
-              </p>
-            </div>
-
-            <div className="flex flex-col items-stretch gap-2 w-full">
-              {/* Buscador */}
-              <div className="relative flex-1">
-                <SearchIcon
-                  size={13}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                />
-                <input
-                  type="text"
-                  value={tableSearch}
-                  onChange={(e) => setTableSearch(e.target.value)}
-                  placeholder="Buscar cliente, piloto, técnico, dron..."
-                  style={{ borderRadius: "4px" }}
-                  className="w-full pl-8 pr-3 py-2 text-xs bg-white border border-gray-300 focus:outline-none focus:border-[#0E5E6F] font-medium"
-                />
-                {tableSearch && (
-                  <button
-                    onClick={() => setTableSearch("")}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    <X size={12} />
-                  </button>
-                )}
-              </div>
-
-              {/* Menú Desplegable para Filtro de Estado */}
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                style={{
-                  borderRadius: "4px",
-                  borderColor: HEX_COLORS.brandGreen,
-                }}
-                className="w-full p-2 text-xs font-bold bg-white text-gray-800 border-2 focus:outline-none cursor-pointer font-sans"
-              >
-                <option value="todos">Todos los estados</option>
-                <option value="completado">Completados</option>
-                <option value="proceso">En proceso</option>
-                <option value="alerta">Alertas</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Tarjetas de Registros Administrador */}
-          <div className="divide-y divide-gray-100">
-            {registrosActuales.length > 0 ? (
-              registrosActuales.map((row) => (
-                <div key={row.id} className="p-3 space-y-2 hover:bg-gray-50/80 transition-colors">
-                  <div className="flex items-center justify-between gap-2">
-                    <div>
-                      <p className="font-extrabold text-gray-900 text-xs">{row.id}</p>
-                      <p className="text-[10px] text-gray-500 font-semibold">{row.cliente}</p>
-                    </div>
-                    <span
-                      style={{
-                        backgroundColor: row.tagColorBg,
-                        color: row.tagTextColor,
+                        backgroundColor: HEX_COLORS.purple100,
+                        color: "#6B21A8",
                         borderRadius: "4px",
-                      }}
-                      className="px-2 py-0.5 font-bold text-[10px] inline-block border border-black/5 shrink-0"
-                    >
-                      {row.estado}
-                    </span>
-                  </div>
-
-                  <p className="font-bold text-gray-800 text-xs">{row.servicio}</p>
-
-                  <div className="grid grid-cols-2 gap-2 text-[10px] text-gray-600 pt-1">
-                    <div>
-                      <span className="text-gray-400 block font-medium">Piloto / Técnico</span>
-                      <span className="font-semibold">{row.piloto} • {row.tecnico}</span>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-gray-400 block font-medium">Dron / Ingreso</span>
-                      <span className="font-bold text-[#0E5E6F]">{row.dron} ({row.ganancia})</span>
-                    </div>
-                  </div>
+                    }}
+                    className="px-2.5 py-1 border border-purple-200 flex items-center gap-1.5 shadow-xs"
+                >
+                    <span className="w-1.5 h-1.5 bg-[#6B21A8] rounded-full animate-pulse"></span>
+                    <span className="text-[10px] font-bold tracking-wider font-sans">Super admin root</span>
                 </div>
-              ))
-            ) : (
-              <div className="px-4 py-6 text-center text-gray-400 font-medium text-xs font-sans">
-                No hay registros que coincidan con los filtros aplicados.
-              </div>
-            )}
-          </div>
+            </div>
 
-          <div className="p-3 border-t border-gray-100 bg-gray-50/40 flex flex-col gap-2">
-            <span className="text-[11px] font-bold text-gray-400 font-sans">
-              {registrosActuales.length} operaciones registradas
-            </span>
-            <button
-              style={{
-                borderRadius: "4px",
-                backgroundColor: HEX_COLORS.brandGreen,
-              }}
-              className="px-3 py-2.5 text-white text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-[#094350] transition-colors shadow-xs cursor-pointer w-full font-sans"
-            >
-              <Download size={13} />
-              Exportar reporte administrativo
-            </button>
-          </div>
+            {/* MÉTRICAS GLOBALES DE LA EMPRESA (4 CARDS DEL MISMO TAMAÑO) */}
+            <div className="grid grid-cols-2 gap-3 mb-4 text-left font-sans">
+                <div
+                    style={{ borderRadius: "4px" }}
+                    className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0"
+                >
+                    <div className="flex justify-between items-center gap-1 mb-2">
+                        <span className="text-xs font-bold text-gray-500 tracking-wider font-sans">
+                            Clientes activos
+                        </span>
+                        <div
+                            style={{
+                                backgroundColor: HEX_COLORS.emerald100,
+                                color: "#065F46",
+                                borderRadius: "4px",
+                            }}
+                            className="p-1.5 flex items-center justify-center shrink-0"
+                        >
+                            <Users size={14} />
+                        </div>
+                    </div>
+                    <p className="text-sm font-black text-gray-900 mb-0.5 font-sans truncate whitespace-nowrap">
+                        48 clientes
+                    </p>
+                    <p className="text-xs text-gray-400 font-semibold font-sans ">
+                        +12% respecto al mes anterior
+                    </p>
+                </div>
+
+                <div
+                    style={{ borderRadius: "4px" }}
+                    className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0"
+                >
+                    <div className="flex justify-between items-center gap-1 mb-2">
+                        <span className="text-xs font-bold text-gray-500 tracking-wider font-sans">
+                            Drones activos
+                        </span>
+                        <div
+                            style={{
+                                backgroundColor: HEX_COLORS.blue100,
+                                color: "#1E40AF",
+                                borderRadius: "4px",
+                            }}
+                            className="p-1.5 flex items-center justify-center shrink-0"
+                        >
+                            <UserCheck size={14} />
+                        </div>
+                    </div>
+                    <p className="text-sm font-black text-gray-900 mb-0.5 font-sans whitespace-nowrap">
+                        16 drones
+                    </p>
+                    <p className="text-xs text-gray-400 font-semibold font-sans">
+                        12 operativos en misión hoy
+                    </p>
+                </div>
+
+                <div
+                    style={{ borderRadius: "4px" }}
+                    className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0"
+                >
+                    <div className="flex justify-between items-center gap-1 mb-2">
+                        <span className="text-xs font-bold text-gray-500 tracking-wider font-sans">
+                            Técnicos y soporte
+                        </span>
+                        <div
+                            style={{
+                                backgroundColor: HEX_COLORS.purple100,
+                                color: "#6B21A8",
+                                borderRadius: "4px",
+                            }}
+                            className="p-1.5 flex items-center justify-center shrink-0"
+                        >
+                            <Wrench size={14} />
+                        </div>
+                    </div>
+                    <p className="text-sm font-black text-gray-900 mb-0.5 font-sans whitespace-nowrap">
+                        8 técnicos
+                    </p>
+                    <p className="text-xs text-gray-400 font-semibold font-sans">
+                        3 en taller técnico
+                    </p>
+                </div>
+
+                <div
+                    style={{ borderRadius: "4px" }}
+                    className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0"
+                >
+                    <div className="flex justify-between items-center gap-1 mb-2">
+                        <span className="text-xs font-bold text-gray-500 tracking-wider font-sans">
+                            Ingresos totales (Mes)
+                        </span>
+                        <div
+                            style={{
+                                backgroundColor: HEX_COLORS.amber100,
+                                color: "#92400E",
+                                borderRadius: "4px",
+                            }}
+                            className="p-1.5 flex items-center justify-center shrink-0"
+                        >
+                            <TrendingUp size={14} />
+                        </div>
+                    </div>
+                    <p className="text-sm font-black text-gray-900 mb-0.5 font-sans whitespace-nowrap">
+                        L 38,500
+                    </p>
+                    <p className="text-xs text-gray-400 font-semibold font-sans">
+                        Margen operacional: 42%
+                    </p>
+                </div>
+            </div>
+
+            {/* MENÚ DESPLEGABLE PRINCIPAL EN LUGAR DE PESTAÑAS */}
+            <div className="mb-4">
+                <select
+                    value={activeTab}
+                    onChange={(e) => setActiveTab(e.target.value)}
+                    style={{
+                        borderRadius: "4px",
+                        borderColor: HEX_COLORS.brandGreen,
+                    }}
+                    className="w-full p-2.5 text-xs font-bold bg-white text-black border-2 border-gray-300 focus:outline-none focus:ring-0 cursor-pointer font-sans"
+                >
+                    <option value="metricas">Métricas y finanzas</option>
+                    <option value="mapa">Mapa en vivo</option>
+                    <option value="simulador">Simulador de vuelo</option>
+                    <option value="flota">Flota y personal</option>
+                </select>
+            </div>
+
+            {/* CONTENIDO PESTAÑA 1: MÉTRICAS, FINANZAS Y DESGLOSE POR SERVICIOS */}
+            {activeTab === "metricas" && (
+                <div className="space-y-6 animate-in fade-in duration-200 font-sans">
+                    {/* GRÁFICO 1: ANALÍTICA FINANCIERA GENERAL */}
+                    <div
+                        style={{ borderRadius: "4px" }}
+                        className="bg-white border-2 border-gray-200 p-3 shadow-xs text-left overflow-hidden"
+                    >
+                        <div className="flex flex-col justify-between items-start gap-3 mb-4 pb-3 border-b border-gray-100">
+                            <div className="flex items-center gap-2">
+                                <BarChart3 size={18} className="text-[#0E5E6F] shrink-0" />
+                                <div>
+                                    <h3 className="text-sm font-black text-gray-900 tracking-wider font-sans">
+                                        Analítica Financiera — Ganancias por Período
+                                    </h3>
+                                    <p className="text-xs text-gray-500 font-medium font-sans">
+                                        Escala eje Y: <strong className="text-gray-700">{chartUnit}</strong>
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Selector de escala temporal */}
+                            <div
+                                style={{ borderRadius: "4px" }}
+                                className="bg-gray-100 p-1 flex items-center gap-1 border border-gray-200 w-full"
+                            >
+                                {[
+                                    { id: "semana", label: "Semana" },
+                                    { id: "mes", label: "Mes" },
+                                    { id: "anio", label: "Año" },
+                                ].map((p) => (
+                                    <button
+                                        key={p.id}
+                                        onClick={() => setChartPeriod(p.id as any)}
+                                        style={{ borderRadius: "4px" }}
+                                        className={`flex-1 px-2.5 py-1.5 text-xs font-bold transition-all cursor-pointer font-sans ${chartPeriod === p.id
+                                                ? "bg-[#0E5E6F] text-white shadow-xs"
+                                                : "text-gray-500"
+                                            }`}
+                                    >
+                                        {p.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="relative pt-6 pb-1">
+                            <div className="flex h-48 w-full items-end">
+                                {/* Eje Y */}
+                                <div className="w-10 flex flex-col justify-between items-end pr-2 border-r border-gray-200 text-[8px] font-mono font-bold text-gray-400 h-full py-0.5 select-none shrink-0">
+                                    {yAxisTicks.map((tick, i) => (
+                                        <span key={i}>L {tick}</span>
+                                    ))}
+                                </div>
+
+                                {/* Área de Barras Ajustadas dentro del Contenedor */}
+                                <div className="flex-1 relative flex items-end justify-around pl-1 pr-1 h-full overflow-hidden">
+                                    {/* Líneas de Guía de Fondo */}
+                                    <div className="absolute inset-x-0 top-0 bottom-0 flex flex-col justify-between pointer-events-none z-0 px-1">
+                                        <div className="border-b border-gray-100 w-full h-0"></div>
+                                        <div className="border-b border-gray-100 w-full h-0"></div>
+                                        <div className="border-b border-gray-100 w-full h-0"></div>
+                                        <div className="border-b border-gray-100 w-full h-0"></div>
+                                        <div className="border-b border-gray-200 w-full h-0"></div>
+                                    </div>
+
+                                    {currentChartSet.map((item, idx) => {
+                                        // Cálculo estricto del porcentaje acotado entre 5% y 100%
+                                        const heightPercent = Math.min(100, Math.max(5, (item.valor / maxChartValue) * 100));
+                                        const barColors = [
+                                            HEX_COLORS.brandGreen,
+                                            HEX_COLORS.blue100,
+                                            HEX_COLORS.purple100,
+                                            HEX_COLORS.emerald100,
+                                            HEX_COLORS.amber100,
+                                            HEX_COLORS.orange100,
+                                        ];
+                                        const currentColor = barColors[idx % barColors.length];
+
+                                        return (
+                                            <div
+                                                key={idx}
+                                                className="flex-1 flex flex-col items-center justify-end h-full relative group cursor-pointer z-10 px-0.5 max-w-[40px]"
+                                                onMouseEnter={() => setHoveredBar(idx)}
+                                                onMouseLeave={() => setHoveredBar(null)}
+                                            >
+                                                {/* Tooltip Emergente */}
+                                                {hoveredBar === idx && (
+                                                    <div
+                                                        style={{ borderRadius: "4px" }}
+                                                        className="absolute -top-10 z-30 bg-gray-900 text-white px-2 py-1 text-[9px] font-mono shadow-xl whitespace-nowrap text-center animate-in fade-in duration-100 font-sans pointer-events-none"
+                                                    >
+                                                        <p className="font-bold">L {item.valor}</p>
+                                                        <p className="text-gray-300 text-[8px]">{item.detalle}</p>
+                                                    </div>
+                                                )}
+
+                                                {/* Etiqueta Superior */}
+                                                <span className="text-[9px] font-bold text-gray-600 mb-0.5 truncate w-full text-center font-sans">
+                                                    L {item.valor}
+                                                </span>
+
+                                                {/* Contenedor y Barra con Estilo Ajustado */}
+                                                <div className="w-full h-full flex items-end justify-center">
+                                                    <div
+                                                        style={{
+                                                            height: `${heightPercent}%`,
+                                                            backgroundColor: currentColor,
+                                                            borderRadius: "3px 3px 0 0",
+                                                        }}
+                                                        className="w-full max-w-[14px] transition-all duration-300 hover:brightness-90 border-t border-x border-black/10"
+                                                    ></div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Eje X */}
+                            <div className="flex pl-10 pt-1.5 border-t border-gray-200">
+                                <div className="flex-1 flex justify-around px-1">
+                                    {currentChartSet.map((item, idx) => (
+                                        <span
+                                            key={idx}
+                                            className="flex-1 text-center text-[9px] font-bold text-gray-500 tracking-wider font-sans truncate max-w-[40px]"
+                                        >
+                                            {item.label}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* GRÁFICO 2: DESGLOSE POR TIPOS DE SERVICIO */}
+                    <div
+                        style={{ borderRadius: "4px" }}
+                        className="bg-white border-2 border-gray-200 p-3 shadow-xs text-left"
+                    >
+                        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
+                            <PieChart size={18} className="text-[#0E5E6F] shrink-0" />
+                            <div>
+                                <h3 className="text-sm font-black text-gray-900 tracking-wider font-sans">
+                                    Distribución de Ingresos por Servicio
+                                </h3>
+                                <p className="text-xs text-gray-500 font-medium font-sans">
+                                    Facturación e intensidad de vuelos por tipo de misión
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-6">
+                            {/* Contenedor de Progress Bars por Servicio */}
+                            <div className="space-y-4">
+                                {serviciosData.map((serv, index) => (
+                                    <div key={index} className="space-y-1">
+                                        <div className="flex flex-col items-start gap-0.5 text-xs">
+                                            <span className="font-bold text-gray-800 font-sans">{serv.nombre}</span>
+                                            <span className="font-mono font-black text-gray-900 text-xs">{serv.ingreso} ({serv.porcentaje}%)</span>
+                                        </div>
+                                        <div className="w-full bg-gray-100 h-3 rounded-full overflow-hidden border border-gray-200">
+                                            <div
+                                                className="h-full transition-all duration-500"
+                                                style={{
+                                                    width: `${Math.min(100, serv.porcentaje)}%`,
+                                                    backgroundColor: serv.color,
+                                                }}
+                                            ></div>
+                                        </div>
+                                        <p className="text-xs text-gray-400 font-medium text-right font-sans">
+                                            {serv.misiones} completados
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Tarjetas resumen de servicios */}
+                            <div className="flex gap-3 overflow-x-auto custom-scrollbar pb-1 -mx-3 px-3">
+                                {serviciosData.map((serv, index) => (
+                                    <div
+                                        key={index}
+                                        style={{
+                                            borderRadius: "4px",
+                                            backgroundColor: serv.color,
+                                            color: serv.textColor || "#FFFFFF",
+                                        }}
+                                        className="p-3 border border-black/10 flex flex-col justify-between shadow-2xs shrink-0 w-[150px]"
+                                    >
+                                        <div>
+                                            <span className="text-[9px] font-bold block opacity-80 font-sans">
+                                                Servicio {index + 1}
+                                            </span>
+                                            <p className="text-xs font-black leading-tight mt-1 font-sans">{serv.nombre}</p>
+                                        </div>
+                                        <div className="mt-3">
+                                            <p className="text-base font-black font-sans">{serv.ingreso}</p>
+                                            <p className="text-xs font-bold opacity-90 font-sans">{serv.misiones}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* CONTENIDO PESTAÑA 2: MAPA EN VIVO */}
+            {activeTab === "mapa" && (
+                <div
+                    style={{ borderRadius: "4px" }}
+                    className="bg-white border-2 border-gray-200 p-3 shadow-xs mb-8 text-left font-sans animate-in fade-in duration-200"
+                >
+                    <div className="flex flex-col justify-between items-start gap-2 mb-4 pb-3 border-b border-gray-100">
+                        <div className="flex items-center gap-2">
+                            <MapPin size={18} className="text-[#0E5E6F] shrink-0" />
+                            <div>
+                                <h3 className="text-sm font-black text-gray-900 tracking-wider font-sans">
+                                    Mapa en Vivo — Flota de Drones
+                                </h3>
+                                <p className="text-xs text-gray-500 font-medium font-sans">
+                                    Ubicación satelital en tiempo real
+                                </p>
+                            </div>
+                        </div>
+
+                        <span
+                            style={{
+                                backgroundColor: HEX_COLORS.emerald100,
+                                color: "#065F46",
+                                borderRadius: "4px",
+                            }}
+                            className="px-2.5 py-1 text-xs font-extrabold flex items-center gap-1 border border-emerald-200 font-sans"
+                        >
+                            <span className="w-2 h-2 bg-[#065F46] rounded-full animate-ping shrink-0"></span>
+                            16 drones activos en sistema
+                        </span>
+                    </div>
+
+                    <div className="relative w-full h-64 rounded bg-gray-100 overflow-hidden border border-gray-200 group">
+                        <img
+                            src="src/img/drones_activos.png"
+                            alt="Mapa en vivo de drones activos"
+                            className="w-full h-full object-cover grayscale-[20%]"
+                            onError={(e) => {
+                                e.currentTarget.src =
+                                    "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1200&q=80";
+                            }}
+                        />
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none"></div>
+
+                        <div className="absolute top-1/4 left-1/4 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 bg-gray-900/90 text-white p-1.5 rounded border border-emerald-400 shadow-lg backdrop-blur-xs font-sans">
+                            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shrink-0"></span>
+                            <div>
+                                <p className="text-[9px] font-black leading-none whitespace-nowrap font-sans">Agras T40 (#DRN-101)</p>
+                                <p className="text-[7px] text-gray-300 font-mono whitespace-nowrap">Piloto: C. Mendoza</p>
+                            </div>
+                        </div>
+
+                        <div className="absolute top-1/2 left-[60%] transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-1.5 bg-gray-900/90 text-white p-1.5 rounded border border-blue-400 shadow-lg backdrop-blur-xs font-sans">
+                            <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse shrink-0"></span>
+                            <div>
+                                <p className="text-[9px] font-black leading-none whitespace-nowrap font-sans">Matrice 300 (#DRN-204)</p>
+                                <p className="text-[7px] text-gray-300 font-mono whitespace-nowrap">Piloto: A. Bermúdez</p>
+                            </div>
+                        </div>
+
+                        <div className="absolute bottom-2 left-2 right-2 bg-white/90 backdrop-blur-md px-2.5 py-1.5 rounded border border-gray-200 text-gray-800 text-[9px] font-mono shadow-md font-sans">
+                            <p className="font-bold text-gray-900 leading-snug">Coordenadas centro: 14.0723° N, 87.1921° W</p>
+                            <p className="text-xs text-gray-500">Señal GPS: Excelente (18 satélites)</p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* CONTENIDO PESTAÑA 3: SIMULADOR INTERACTIVO */}
+            {activeTab === "simulador" && (
+                <div
+                    style={{ borderRadius: "4px" }}
+                    className="bg-white border-2 border-gray-200 p-3 shadow-xs mb-8 text-left font-sans animate-in fade-in duration-200"
+                >
+                    <div className="flex flex-col justify-between items-start gap-3 mb-4 pb-3 border-b border-gray-100">
+                        <div className="flex items-center gap-2">
+                            <Sliders size={18} className="text-[#0E5E6F] shrink-0" />
+                            <div>
+                                <h3 className="text-sm font-black text-gray-900 tracking-wider font-sans">
+                                    Simulador de Rendimiento del Dron
+                                </h3>
+                                <p className="text-xs text-gray-500 font-medium font-sans">
+                                    Ajusta los controles para simular telemetría y consumo
+                                </p>
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={resetSimulador}
+                            style={{ borderRadius: "4px" }}
+                            className="px-3 py-2 bg-gray-100 active:bg-gray-200 text-gray-700 text-xs font-bold border border-gray-300 transition-colors flex items-center justify-center gap-1.5 cursor-pointer font-sans w-full"
+                        >
+                            <RotateCcw size={13} />
+                            Restablecer valores
+                        </button>
+                    </div>
+
+                    <div className="bg-gray-50 border border-gray-200 p-3 rounded mb-6 grid grid-cols-1 gap-6">
+                        <div>
+                            <div className="flex justify-between items-center mb-1">
+                                <label className="text-xs font-bold text-gray-700 flex items-center gap-1 font-sans">
+                                    <Battery size={13} className="text-[#0E5E6F]" /> Batería ajustada:
+                                </label>
+                                <span className="text-xs font-mono font-black text-[#0E5E6F]">{simBateria}%</span>
+                            </div>
+                            <input
+                                type="range"
+                                min="5"
+                                max="100"
+                                value={simBateria}
+                                onChange={(e) => setSimBateria(Number(e.target.value))}
+                                className="w-full accent-[#0E5E6F] cursor-pointer"
+                            />
+                            <p className="text-xs text-gray-400 font-medium mt-1 font-sans">
+                                Desliza para simular descarga
+                            </p>
+                        </div>
+
+                        <div>
+                            <div className="flex justify-between items-center mb-1">
+                                <label className="text-xs font-bold text-gray-700 flex items-center gap-1 font-sans">
+                                    <Droplet size={13} className="text-[#0E5E6F]" /> Tanque de insumos:
+                                </label>
+                                <span className="text-xs font-mono font-black text-[#0E5E6F]">{simCargaInsumo}%</span>
+                            </div>
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={simCargaInsumo}
+                                onChange={(e) => setSimCargaInsumo(Number(e.target.value))}
+                                className="w-full accent-[#0E5E6F] cursor-pointer"
+                            />
+                            <p className="text-xs text-gray-400 font-medium mt-1 font-sans">
+                                Desliza para simular aspersión
+                            </p>
+                        </div>
+
+                        <div>
+                            <div className="flex justify-between items-center mb-1">
+                                <label className="text-xs font-bold text-gray-700 flex items-center gap-1 font-sans">
+                                    <Wind size={13} className="text-[#0E5E6F]" /> Viento ambiental:
+                                </label>
+                                <span className="text-xs font-mono font-black text-[#0E5E6F]">{simViento} km/h</span>
+                            </div>
+                            <input
+                                type="range"
+                                min="0"
+                                max="40"
+                                value={simViento}
+                                onChange={(e) => setSimViento(Number(e.target.value))}
+                                className="w-full accent-[#0E5E6F] cursor-pointer"
+                            />
+                            <p className="text-xs text-gray-400 font-medium mt-1 font-sans">
+                                Desliza para simular ráfagas
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4">
+                        <div className="bg-white border border-gray-200 p-4 rounded text-left shadow-2xs">
+                            <div className="flex justify-between items-center mb-1.5">
+                                <span className="text-xs font-bold text-gray-700 flex items-center gap-1 font-sans">
+                                    <Battery size={13} className="text-[#0E5E6F]" /> Autonomía batería
+                                </span>
+                                <span className="text-xs font-mono font-black text-gray-900">{simBateria}%</span>
+                            </div>
+                            <div className="w-full bg-gray-100 h-3 rounded-full overflow-hidden mb-2 border border-gray-200">
+                                <div
+                                    className="h-full transition-all duration-300"
+                                    style={{
+                                        width: `${Math.min(100, simBateria)}%`,
+                                        backgroundColor:
+                                            simBateria > 50
+                                                ? HEX_COLORS.brandGreen
+                                                : simBateria > 20
+                                                    ? "#D97706"
+                                                    : HEX_COLORS.red,
+                                    }}
+                                ></div>
+                            </div>
+                            <p className="text-xs text-gray-500 font-medium font-sans">
+                                Tiempo restante: <strong className="text-gray-900">{tiempoRestanteCalc} min</strong>
+                            </p>
+                        </div>
+
+                        <div className="bg-white border border-gray-200 p-4 rounded text-left shadow-2xs">
+                            <div className="flex justify-between items-center mb-1.5">
+                                <span className="text-xs font-bold text-gray-700 flex items-center gap-1 font-sans">
+                                    <Zap size={13} className="text-[#1E40AF]" /> Capacidad tanque
+                                </span>
+                                <span className="text-xs font-mono font-black text-gray-900">{simCargaInsumo}%</span>
+                            </div>
+                            <div className="w-full bg-gray-100 h-3 rounded-full overflow-hidden mb-2 border border-gray-200">
+                                <div
+                                    className="h-full transition-all duration-300"
+                                    style={{
+                                        width: `${Math.min(100, simCargaInsumo)}%`,
+                                        backgroundColor: "#1E40AF",
+                                    }}
+                                ></div>
+                            </div>
+                            <p className="text-xs text-gray-500 font-medium font-sans">
+                                Volumen disponible: <strong className="text-gray-900">{Math.round(40 * (simCargaInsumo / 100))} litros</strong>
+                            </p>
+                        </div>
+
+                        <div className="bg-white border border-gray-200 p-4 rounded text-left shadow-2xs">
+                            <div className="flex justify-between items-center mb-1.5">
+                                <span className="text-xs font-bold text-gray-700 flex items-center gap-1 font-sans">
+                                    <Activity size={13} className="text-[#6B21A8]" /> Carga térmica
+                                </span>
+                                <span className="text-xs font-mono font-black text-gray-900">{temperaturaEst}°C</span>
+                            </div>
+                            <div className="w-full bg-gray-100 h-3 rounded-full overflow-hidden mb-2 border border-gray-200">
+                                <div
+                                    className="h-full transition-all duration-300"
+                                    style={{
+                                        width: `${Math.min(100, (temperaturaEst / 50) * 100)}%`,
+                                        backgroundColor: "#6B21A8",
+                                    }}
+                                ></div>
+                            </div>
+                            <p className="text-xs text-gray-500 font-medium font-sans">
+                                Estado: <strong className="text-gray-900">{temperaturaEst > 35 ? "Caliente" : "Normal"}</strong>
+                            </p>
+                        </div>
+
+                        <div className="bg-white border border-gray-200 p-4 rounded text-left shadow-2xs">
+                            <div className="flex justify-between items-center mb-1.5">
+                                <span className="text-xs font-bold text-gray-700 flex items-center gap-1 font-sans">
+                                    <Radio size={13} className="text-[#92400E]" /> Resistencia viento
+                                </span>
+                                <span className="text-xs font-mono font-black text-gray-900">{simViento} km/h</span>
+                            </div>
+                            <div className="w-full bg-gray-100 h-3 rounded-full overflow-hidden mb-2 border border-gray-200">
+                                <div
+                                    className="h-full transition-all duration-300"
+                                    style={{
+                                        width: `${Math.min(100, (simViento / 40) * 100)}%`,
+                                        backgroundColor: "#92400E",
+                                    }}
+                                ></div>
+                            </div>
+                            <p className="text-xs text-gray-500 font-medium font-sans">
+                                Altitud: <strong className="text-gray-900">{altitudSugerida}</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* CONTENIDO PESTAÑA 4: TABLA DE PERSONAL Y FLOTA */}
+            {(activeTab === "flota" || activeTab === "metricas") && (
+                <div
+                    style={{ borderRadius: "4px" }}
+                    className="bg-white border-2 border-gray-200 shadow-xs text-left overflow-hidden mb-8 font-sans animate-in fade-in duration-200"
+                >
+                    <div className="p-4 border-b-2 border-gray-100 bg-gray-50/50 flex flex-col justify-between items-start gap-3">
+                        <div>
+                            <h3 className="text-sm font-black text-gray-900 tracking-wider font-sans">
+                                Control General de Asignaciones y Misiones
+                            </h3>
+                            <p className="text-xs text-gray-500 font-medium font-sans">
+                                Supervisión de clientes, pilotos, técnicos y rentabilidad por servicio
+                            </p>
+                        </div>
+
+                        <div className="flex flex-col items-stretch gap-2 w-full">
+                            {/* Buscador */}
+                            <div className="relative flex-1">
+                                <SearchIcon
+                                    size={13}
+                                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                                />
+                                <input
+                                    type="text"
+                                    value={tableSearch}
+                                    onChange={(e) => setTableSearch(e.target.value)}
+                                    placeholder="Buscar cliente, piloto, técnico, dron..."
+                                    style={{ borderRadius: "4px" }}
+                                    className="w-full pl-8 pr-3 py-2 text-xs bg-white border border-gray-300 focus:outline-none focus:border-[#0E5E6F] font-medium"
+                                />
+                                {tableSearch && (
+                                    <button
+                                        onClick={() => setTableSearch("")}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                    >
+                                        <X size={12} />
+                                    </button>
+                                )}
+                            </div>
+
+                            {/* Menú Desplegable para Filtro de Estado */}
+                            <select
+                                value={statusFilter}
+                                onChange={(e) => setStatusFilter(e.target.value)}
+                                style={{
+                                    borderRadius: "4px",
+                                    borderColor: HEX_COLORS.brandGreen,
+                                }}
+                                className="w-full p-2 text-xs font-bold bg-white text-black border-2 border-gray-300 focus:outline-none cursor-pointer font-sans"
+                            >
+                                <option value="todos">Todos los estados</option>
+                                <option value="completado">Completados</option>
+                                <option value="proceso">En proceso</option>
+                                <option value="alerta">Alertas</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Tarjetas de Registros Administrador */}
+                    <div className="divide-y divide-gray-100">
+                        {registrosActuales.length > 0 ? (
+                            registrosActuales.map((row) => (
+                                <div key={row.id} className="p-3 space-y-2 hover:bg-gray-50/80 transition-colors">
+                                    <div className="flex items-center justify-between gap-2">
+                                        <div>
+                                            <p className="font-extrabold text-gray-900 text-xs">{row.id}</p>
+                                            <p className="text-xs text-gray-500 font-semibold">{row.cliente}</p>
+                                        </div>
+                                        <span
+                                            style={{
+                                                backgroundColor: row.tagColorBg,
+                                                color: row.tagTextColor,
+                                                borderRadius: "4px",
+                                            }}
+                                            className="px-2 py-0.5 font-bold text-xs inline-block border border-black/5 shrink-0"
+                                        >
+                                            {row.estado}
+                                        </span>
+                                    </div>
+
+                                    <p className="font-bold text-gray-800 text-xs">{row.servicio}</p>
+
+                                    <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 pt-1">
+                                        <div>
+                                            <span className="text-gray-400 block font-medium">Piloto / Técnico</span>
+                                            <span className="font-semibold">{row.piloto} • {row.tecnico}</span>
+                                        </div>
+                                        <div className="text-right">
+                                            <span className="text-gray-400 block font-medium">Dron / Ingreso</span>
+                                            <span className="font-bold text-[#0E5E6F]">{row.dron} ({row.ganancia})</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="px-4 py-6 text-center text-gray-400 font-medium text-xs font-sans">
+                                No hay registros que coincidan con los filtros aplicados.
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="p-3 border-t border-gray-100 bg-gray-50/40 flex flex-col gap-2">
+                        <span className="text-xs font-bold text-gray-400 font-sans">
+                            {registrosActuales.length} operaciones registradas
+                        </span>
+                        <button
+                            style={{
+                                borderRadius: "4px",
+                                backgroundColor: HEX_COLORS.brandGreen,
+                            }}
+                            className="px-3 py-2.5 text-white text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-[#094350] transition-colors shadow-xs cursor-pointer w-full font-sans"
+                        >
+                            <Download size={13} />
+                            Exportar reporte administrativo
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 // 2. Panel de precios
@@ -1446,7 +1444,7 @@ export const AdminPricesView = () => {
                     <h1 className="text-lg font-bold text-gray-900">
                         Precios y Suscripciones
                     </h1>
-                    <p className="text-gray-500 text-xs font-normal">
+                    <p className="text-xs text-gray-500 font-normal">
                         Configura planes, tarifas y drones de alta capacidad.
                     </p>
                 </div>
@@ -1457,8 +1455,8 @@ export const AdminPricesView = () => {
                 <button
                     onClick={() => setTab("subs")}
                     className={`flex-1 px-2 py-3 font-bold text-xs transition-all border-b-2 -mb-px flex items-center justify-center gap-1.5 cursor-pointer ${tab === "subs"
-                            ? "border-[#0E5E6F] text-[#0E5E6F]"
-                            : "border-transparent text-gray-500"
+                        ? "border-[#0E5E6F] text-[#0E5E6F]"
+                        : "border-transparent text-gray-500"
                         }`}
                 >
                     <Layers size={15} /> Planes
@@ -1466,8 +1464,8 @@ export const AdminPricesView = () => {
                 <button
                     onClick={() => setTab("ventas")}
                     className={`flex-1 px-2 py-3 font-bold text-xs transition-all border-b-2 -mb-px flex items-center justify-center gap-1.5 cursor-pointer ${tab === "ventas"
-                            ? "border-[#0E5E6F] text-[#0E5E6F]"
-                            : "border-transparent text-gray-500"
+                        ? "border-[#0E5E6F] text-[#0E5E6F]"
+                        : "border-transparent text-gray-500"
                         }`}
                 >
                     <ShoppingBag size={15} /> Venta de drones
@@ -1485,13 +1483,13 @@ export const AdminPricesView = () => {
                             {planes.map((plan) => (
                                 <div key={plan.id} className="p-3 space-y-2 bg-white">
                                     <div className="flex items-center justify-between">
-                                        <span className="font-bold text-xs text-gray-900">
+                                        <span className="text-xs font-bold text-gray-900">
                                             {plan.name}
                                         </span>
                                         <span
                                             className={`text-[10px] font-bold px-2 py-0.5 rounded-[4px] border ${plan.active
-                                                    ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                                                    : "border-amber-300 bg-amber-100 text-amber-800"
+                                                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                                                : "border-amber-300 bg-amber-100 text-amber-800"
                                                 }`}
                                         >
                                             {plan.active ? "Activo" : "Inactivo"}
@@ -1608,7 +1606,7 @@ export const AdminPricesView = () => {
                                 <div>
                                     <div className="flex justify-between mb-1 text-xs">
                                         <label className="font-bold text-gray-700">
-                                            Volumen Plan Básico (L.{" "}
+                                            Volumen plan básico (L.{" "}
                                             {planes
                                                 .find((p) => p.name === "Básico")
                                                 ?.price.toLocaleString()}
@@ -1633,7 +1631,7 @@ export const AdminPricesView = () => {
                                 <div>
                                     <div className="flex justify-between mb-1 text-xs">
                                         <label className="font-bold text-gray-700">
-                                            Volumen Plan Operativo (L.{" "}
+                                            Volumen plan operativo (L.{" "}
                                             {planes
                                                 .find((p) => p.name === "Operativo")
                                                 ?.price.toLocaleString()}
@@ -1658,7 +1656,7 @@ export const AdminPricesView = () => {
                                 <div>
                                     <div className="flex justify-between mb-1 text-xs">
                                         <label className="font-bold text-gray-700">
-                                            Volumen Plan Premium (L.{" "}
+                                            Volumen plan premium (L.{" "}
                                             {planes
                                                 .find((p) => p.name === "Premium")
                                                 ?.price.toLocaleString()}
@@ -1684,7 +1682,7 @@ export const AdminPricesView = () => {
                             {/* Panel de Visualización del MRR Proyectado */}
                             <div className="bg-gray-50 border-2 border-gray-100 rounded-[4px] p-5 text-center flex flex-col justify-between h-full min-h-[180px]">
                                 <div className="space-y-1">
-                                    <span className="text-[11px] font-bold text-gray-500 block">
+                                    <span className="text-xs font-bold text-gray-500 block">
                                         Ingreso mensual recurrente proyectado (MRR)
                                     </span>
                                     <span className="text-2xl font-black text-gray-900 tracking-tight block">
@@ -1745,7 +1743,7 @@ export const AdminPricesView = () => {
                 <div className="space-y-5 text-left">
                     <div className="flex flex-col justify-between items-start gap-3 mb-1">
                         <div>
-                            <h2 className="text-base font-bold text-gray-900">
+                            <h2 className="text-sm font-bold text-gray-900">
                                 Catálogo de Flota Comercial
                             </h2>
                             <p className="text-xs text-gray-500 font-normal">
@@ -1801,7 +1799,7 @@ export const AdminPricesView = () => {
                                     <div className="flex flex-col justify-between items-start gap-2">
                                         <div>
                                             <div className="flex items-center gap-1.5">
-                                                <h3 className="font-bold text-sm text-gray-900">
+                                                <h3 className="text-sm font-bold text-gray-900">
                                                     {drone.name}
                                                 </h3>
                                                 <ShieldCheck size={16} className="text-[#0E5E6F]" />
@@ -1931,7 +1929,7 @@ export const AdminPricesView = () => {
             {isPlanModalOpen && editingPlan && (
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
-                        
+
                         <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
                             <div className="flex items-center gap-2 min-w-0">
                                 <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
@@ -1957,21 +1955,19 @@ export const AdminPricesView = () => {
                         <div className="flex border-b border-gray-200 shrink-0">
                             <button
                                 onClick={() => setPlanModalTab('info')}
-                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
-                                    planModalTab === 'info'
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${planModalTab === 'info'
                                         ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                                         : 'text-gray-500 hover:text-gray-700'
-                                }`}
+                                    }`}
                             >
                                 Información
                             </button>
                             <button
                                 onClick={() => setPlanModalTab('configuracion')}
-                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
-                                    planModalTab === 'configuracion'
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${planModalTab === 'configuracion'
                                         ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                                         : 'text-gray-500 hover:text-gray-700'
-                                }`}
+                                    }`}
                             >
                                 Configuración
                             </button>
@@ -2148,7 +2144,7 @@ export const AdminPricesView = () => {
             {isDroneModalOpen && editingDrone && (
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
-                        
+
                         <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
                             <div className="flex items-center gap-2 min-w-0">
                                 <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
@@ -2174,31 +2170,28 @@ export const AdminPricesView = () => {
                         <div className="flex border-b border-gray-200 shrink-0">
                             <button
                                 onClick={() => setDroneModalTab('info')}
-                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
-                                    droneModalTab === 'info'
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${droneModalTab === 'info'
                                         ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                                         : 'text-gray-500 hover:text-gray-700'
-                                }`}
+                                    }`}
                             >
                                 Información
                             </button>
                             <button
                                 onClick={() => setDroneModalTab('especificaciones')}
-                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
-                                    droneModalTab === 'especificaciones'
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${droneModalTab === 'especificaciones'
                                         ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                                         : 'text-gray-500 hover:text-gray-700'
-                                }`}
+                                    }`}
                             >
                                 Especificaciones
                             </button>
                             <button
                                 onClick={() => setDroneModalTab('imagen')}
-                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
-                                    droneModalTab === 'imagen'
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${droneModalTab === 'imagen'
                                         ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                                         : 'text-gray-500 hover:text-gray-700'
-                                }`}
+                                    }`}
                             >
                                 Imagen
                             </button>
@@ -2215,7 +2208,7 @@ export const AdminPricesView = () => {
                                 <div className="space-y-3 text-xs">
                                     <div>
                                         <label className="text-[10px] font-bold text-gray-600 block mb-1">
-                                            Nombre / Modelo
+                                            Nombre / modelo
                                         </label>
                                         <input
                                             type="text"
@@ -2308,7 +2301,7 @@ export const AdminPricesView = () => {
                                 <div className="space-y-3 text-xs">
                                     <div>
                                         <label className="text-[10px] font-bold text-gray-600 block mb-1">
-                                            Etiquetas / Tags
+                                            Etiquetas / tags
                                         </label>
                                         <div className="flex flex-wrap gap-1.5 p-2 bg-gray-50 border border-gray-200 rounded-[4px] min-h-[40px]">
                                             {editingDrone.tags.map((tag, idx) => (
@@ -2401,13 +2394,13 @@ export const AdminPricesView = () => {
                                             Seleccionar archivo
                                         </button>
                                     </div>
-                                    
+
                                     <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
                                         <span className="text-[9px] text-gray-400 block mb-1">Imagen actual</span>
                                         <div className="flex items-center gap-2">
                                             <div className="w-12 h-12 bg-gray-200 rounded-[4px] overflow-hidden border border-gray-300 shrink-0">
-                                                <img 
-                                                    src={editingDrone.image} 
+                                                <img
+                                                    src={editingDrone.image}
                                                     alt={editingDrone.name}
                                                     className="w-full h-full object-cover"
                                                     onError={(e) => {
@@ -2448,7 +2441,7 @@ export const AdminPricesView = () => {
             {isTagModalOpen && (
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
-                        
+
                         <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
                             <div className="flex items-center gap-2 min-w-0">
                                 <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
@@ -2456,7 +2449,7 @@ export const AdminPricesView = () => {
                                 </div>
                                 <div className="min-w-0">
                                     <h3 className="text-xs font-bold text-gray-900 truncate">
-                                        Agregar Nueva Etiqueta
+                                        Agregar nueva etiqueta
                                     </h3>
                                     <p className="text-[9px] text-gray-400 truncate">
                                         Para el dron seleccionado
@@ -2785,7 +2778,7 @@ export const AdminHelpView = () => {
                     <div className="p-3 border-b border-gray-200 bg-white flex items-center justify-between gap-2 shrink-0">
                         <div className="min-w-0">
                             <h2 className="font-bold text-gray-900 text-base leading-tight capitalize truncate">Panel de Soporte</h2>
-                            <p className="text-[11px] text-gray-500 truncate">Atención a granjeros y pilotos</p>
+                            <p className="text-xs text-gray-500 truncate">Atención a granjeros y pilotos</p>
                         </div>
 
                         {/* BOTÓN NUEVA NOTA / TICKET */}
@@ -2807,7 +2800,7 @@ export const AdminHelpView = () => {
                                 placeholder="Buscar granjero o finca..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:border-[#0E5E6F] transition"
+                                className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F] transition"
                             />
                         </div>
                     </div>
@@ -2831,9 +2824,8 @@ export const AdminHelpView = () => {
                                         );
                                         setVistaMovil('chat');
                                     }}
-                                    className={`w-full p-4 flex items-center gap-3 transition text-left cursor-pointer ${
-                                        isSelected ? 'bg-white border-l-4 border-[#0E5E6F]' : 'hover:bg-gray-100/80'
-                                    }`}
+                                    className={`w-full p-4 flex items-center gap-3 transition text-left cursor-pointer ${isSelected ? 'bg-white border-l-4 border-[#0E5E6F]' : 'hover:bg-gray-100/80'
+                                        }`}
                                 >
                                     <div className="relative shrink-0">
                                         <img
@@ -2842,9 +2834,8 @@ export const AdminHelpView = () => {
                                             className="w-12 h-12 rounded-[4px] object-cover shadow-xs"
                                         />
                                         <span
-                                            className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 border-2 border-white rounded-full ${
-                                                chat.online ? 'bg-emerald-500' : 'bg-gray-400'
-                                            }`}
+                                            className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 border-2 border-white rounded-full ${chat.online ? 'bg-emerald-500' : 'bg-gray-400'
+                                                }`}
                                         ></span>
                                     </div>
 
@@ -2852,7 +2843,7 @@ export const AdminHelpView = () => {
                                         <div className="flex items-center justify-between mb-0.5">
                                             <h3 className="font-bold text-gray-900 text-sm truncate">{chat.name}</h3>
                                             {lastMsg && (
-                                                <span className="text-[11px] text-gray-400 font-medium shrink-0 ml-1">
+                                                <span className="text-xs text-gray-400 font-medium shrink-0 ml-1">
                                                     {lastMsg.time}
                                                 </span>
                                             )}
@@ -2907,11 +2898,11 @@ export const AdminHelpView = () => {
                                     {activeChat.name}
                                 </h2>
 
-                                <span className="text-[11px] text-[#0E5E6F] font-medium truncate">
+                                <span className="text-xs text-[#0E5E6F] font-medium truncate">
                                     {activeChat.role}
                                 </span>
 
-                                <div className="text-[11px] text-gray-500 leading-none">
+                                <div className="text-xs text-gray-500 leading-none">
                                     {activeChat.online ? (
                                         <span className="text-emerald-600 font-medium flex items-center gap-1">
                                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
@@ -2946,12 +2937,12 @@ export const AdminHelpView = () => {
                                         className="fixed inset-0 z-10"
                                         onClick={() => setIsHeaderMenuOpen(false)}
                                     />
-                                    <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-[4px] shadow-lg py-1 z-20 animate-fade-in">
+                                    <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-300 rounded-[4px] shadow-lg py-1 z-20 animate-fade-in">
                                         <button
                                             onClick={() => {
                                                 setIsHeaderMenuOpen(false);
                                             }}
-                                            className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
+                                            className="w-full px-3 py-2 text-xs text-black hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
                                         >
                                             <Phone size={15} className="text-[#0E5E6F]" />
                                             <span>Llamada de soporte</span>
@@ -2960,7 +2951,7 @@ export const AdminHelpView = () => {
                                             onClick={() => {
                                                 setIsHeaderMenuOpen(false);
                                             }}
-                                            className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
+                                            className="w-full px-3 py-2 text-xs text-black hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
                                         >
                                             <Video size={15} className="text-[#0E5E6F]" />
                                             <span>Videollamada taller</span>
@@ -2993,18 +2984,16 @@ export const AdminHelpView = () => {
                                     )}
 
                                     <div
-                                        className={`max-w-[80%] px-3.5 py-2.5 rounded-[4px] text-sm ${
-                                            isAdminMsg
+                                        className={`max-w-[80%] px-3.5 py-2.5 rounded-[4px] text-xs ${isAdminMsg
                                                 ? 'bg-[#0E5E6F] text-white'
                                                 : 'bg-white text-gray-800 border border-gray-100 shadow-xs'
-                                        }`}
+                                            }`}
                                     >
                                         <p className="leading-relaxed whitespace-pre-wrap">{msg.text}</p>
 
                                         <div
-                                            className={`flex items-center justify-end gap-1 mt-1 text-[10px] ${
-                                                isAdminMsg ? 'text-cyan-100' : 'text-gray-400'
-                                            }`}
+                                            className={`flex items-center justify-end gap-1 mt-1 text-[10px] ${isAdminMsg ? 'text-cyan-100' : 'text-gray-400'
+                                                }`}
                                         >
                                             <span>{msg.time}</span>
 
@@ -3044,7 +3033,7 @@ export const AdminHelpView = () => {
                             placeholder="Escribe tu mensaje..."
                             value={inputText}
                             onChange={(e) => setInputText(e.target.value)}
-                            className="flex-1 bg-gray-50 border border-gray-200 rounded-[4px] px-4 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition min-w-0"
+                            className="flex-1 bg-gray-50 border border-gray-200 rounded-[4px] px-4 py-2.5 text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition min-w-0"
                         />
 
                         <button
@@ -3111,7 +3100,7 @@ export const AdminHelpView = () => {
                                                 required
                                                 value={ticketForm.granjero}
                                                 onChange={(e) => setTicketForm({ ...ticketForm, granjero: e.target.value })}
-                                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
+                                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
                                             />
                                         </div>
 
@@ -3122,7 +3111,7 @@ export const AdminHelpView = () => {
                                             <select
                                                 value={ticketForm.categoria}
                                                 onChange={(e) => setTicketForm({ ...ticketForm, categoria: e.target.value })}
-                                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
+                                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
                                             >
                                                 <option value="Soporte Técnico Drones">Soporte técnico</option>
                                                 <option value="Falla en Telemetría">Falla de telemetría</option>
@@ -3138,7 +3127,7 @@ export const AdminHelpView = () => {
                                             <select
                                                 value={ticketForm.prioridad}
                                                 onChange={(e) => setTicketForm({ ...ticketForm, prioridad: e.target.value })}
-                                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
+                                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
                                             >
                                                 <option value="Baja">Baja</option>
                                                 <option value="Media">Media</option>
@@ -3175,11 +3164,11 @@ export const AdminHelpView = () => {
                                                 placeholder="Resumen técnico del problema o la solución..."
                                                 value={ticketForm.nota}
                                                 onChange={(e) => setTicketForm({ ...ticketForm, nota: e.target.value })}
-                                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition resize-none"
+                                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition resize-none"
                                             ></textarea>
                                         </div>
 
-                                        <div className="p-2 bg-gray-50 border border-gray-100 rounded-[4px] text-[11px] text-gray-500 space-y-0.5">
+                                        <div className="p-2 bg-gray-50 border border-gray-100 rounded-[4px] text-xs text-gray-500 space-y-0.5">
                                             <p className="truncate"><span className="font-semibold text-gray-600">Granjero:</span> {ticketForm.granjero}</p>
                                             <p className="truncate"><span className="font-semibold text-gray-600">Prioridad:</span> {ticketForm.prioridad}</p>
                                         </div>
@@ -3204,7 +3193,7 @@ export const AdminHelpView = () => {
                             ) : (
                                 /* Confirmación */
                                 <div className="py-3 text-center space-y-2.5">
-                                    <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                                    <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-[4px] flex items-center justify-center mx-auto">
                                         <CheckCircle2 size={22} />
                                     </div>
                                     <div className="space-y-0.5">
@@ -3489,620 +3478,615 @@ export const AdminTrackingView = ({ onFinish }: any) => (
 
 // ----- Historial y Reportes (Admin) -----
 export const AdminHistoryView = () => {
-  const [logs] = useState<AdminLog[]>([
-    {
-      id: 'ADM-2026-301',
-      adminId: 'USR-001',
-      adminName: 'Lic. Claudia Benítez',
-      type: 'user_management',
-      typeName: 'Actualización de Permisos y Roles',
-      targetModule: 'Módulo de Gestión de Usuarios',
-      responsible: 'Lic. Claudia Benítez',
-      date: '21 Jul 2026',
-      startTime: '08:30 AM',
-      endTime: '08:45 AM',
-      duration: '15 min',
-      affectedCount: '12 usuarios',
-      actionDetails: 'Asignación de privilegios avanzados a nuevos operadores de campo.',
-      authorizationCode: 'AUTH-9920',
-      status: 'completed',
-      securityLevel: 'Alto',
-      terminalIp: '192.168.1.45',
-      notes: 'Cambios aplicados de forma exitosa según solicitud de jefatura de operaciones.'
-    },
-    {
-      id: 'ADM-2026-300',
-      adminId: 'USR-002',
-      adminName: 'Ing. Fernando Rivas',
-      type: 'system_config',
-      typeName: 'Calibración de Parámetros Globales',
-      targetModule: 'Servidor Central de Telemetría',
-      responsible: 'Ing. Fernando Rivas',
-      date: '21 Jul 2026',
-      startTime: '07:15 AM',
-      endTime: '08:00 AM',
-      duration: '45 min',
-      affectedCount: '4 servidores',
-      actionDetails: 'Modificación de umbrales de alerta por ráfagas de viento y protocolos RTH.',
-      authorizationCode: 'AUTH-9918',
-      status: 'completed',
-      securityLevel: 'Crítico',
-      terminalIp: '192.168.1.12',
-      notes: 'Actualización de firmware del núcleo completada sin interrupciones en la red.'
-    },
-    {
-      id: 'ADM-2026-299',
-      adminId: 'USR-001',
-      adminName: 'Lic. Claudia Benítez',
-      type: 'audit_security',
-      typeName: 'Auditoría de Respaldos de Base de Datos',
-      targetModule: 'Subsistema de Respaldo Nube',
-      responsible: 'Lic. Claudia Benítez',
-      date: '20 Jul 2026',
-      startTime: '04:00 PM',
-      endTime: '04:30 PM',
-      duration: '30 min',
-      affectedCount: '1 base de datos',
-      actionDetails: 'Verificación de integridad y cifrado de los respaldos semanales.',
-      authorizationCode: 'AUTH-9905',
-      status: 'interrupted',
-      securityLevel: 'Medio',
-      terminalIp: '192.168.1.45',
-      notes: 'Pausado por latencia alta en el proveedor de nube secundario; reanudado más tarde.'
-    },
-    {
-      id: 'ADM-2026-298',
-      adminId: 'USR-003',
-      adminName: 'Lic. Patricia Solís',
-      type: 'user_management',
-      typeName: 'Revocación de Credenciales de Acceso',
-      targetModule: 'Control de Acceso Periférico',
-      responsible: 'Lic. Patricia Solís',
-      date: '20 Jul 2026',
-      startTime: '11:00 AM',
-      endTime: '11:10 AM',
-      duration: '10 min',
-      affectedCount: '3 usuarios',
-      actionDetails: 'Baja administrativa por término de contrato temporal de pilotaje.',
-      authorizationCode: 'AUTH-9899',
-      status: 'completed',
-      securityLevel: 'Alto',
-      terminalIp: '192.168.1.88',
-      notes: 'Tokens de autenticación de doble factor deshabilitados permanentemente.'
-    },
-    {
-      id: 'ADM-2026-297',
-      adminId: 'USR-002',
-      adminName: 'Ing. Fernando Rivas',
-      type: 'system_config',
-      typeName: 'Migración de Enlaces de Red Satelital',
-      targetModule: 'Pasarela de Comunicaciones RTK',
-      responsible: 'Ing. Fernando Rivas',
-      date: '19 Jul 2026',
-      startTime: '02:00 PM',
-      endTime: '03:15 PM',
-      duration: '75 min',
-      affectedCount: '8 dispositivos',
-      actionDetails: 'Cambio de proveedor de enlaces móviles principales por redundancia.',
-      authorizationCode: 'AUTH-9872',
-      status: 'failed',
-      securityLevel: 'Crítico',
-      terminalIp: '192.168.1.12',
-      notes: 'Fallo en la resolución de DNS del nuevo proveedor. Se aplicó rollback automático.'
-    },
-    {
-      id: 'ADM-2026-296',
-      adminId: 'USR-001',
-      adminName: 'Lic. Claudia Benítez',
-      type: 'audit_security',
-      typeName: 'Revisión de Bitácoras de Seguridad',
-      targetModule: 'Firewall y Control Perimetral',
-      responsible: 'Lic. Claudia Benítez',
-      date: '18 Jul 2026',
-      startTime: '09:00 AM',
-      endTime: '09:50 AM',
-      duration: '50 min',
-      affectedCount: 'Todos los nodos',
-      actionDetails: 'Inspección de intentos de acceso fallidos desde redes externas.',
-      authorizationCode: 'AUTH-9850',
-      status: 'completed',
-      securityLevel: 'Medio',
-      terminalIp: '192.168.1.45',
-      notes: 'Sin anomalías detectadas. Tráfico dentro de los parámetros normales esperados.'
-    },
-    {
-      id: 'ADM-2026-295',
-      adminId: 'USR-003',
-      adminName: 'Lic. Patricia Solís',
-      type: 'user_management',
-      typeName: 'Asignación de Políticas de Privacidad',
-      targetModule: 'Directorio Activo Corporativo',
-      responsible: 'Lic. Patricia Solís',
-      date: '17 Jul 2026',
-      startTime: '10:30 AM',
-      endTime: '11:00 AM',
-      duration: '30 min',
-      affectedCount: '25 cuentas',
-      actionDetails: 'Actualización masiva de políticas de expiración de contraseñas.',
-      authorizationCode: 'AUTH-9831',
-      status: 'completed',
-      securityLevel: 'Alto',
-      terminalIp: '192.168.1.88',
-      notes: 'Notificaciones enviadas de forma automática a los buzones corporativos.'
-    }
-  ]);
+    const [logs] = useState<AdminLog[]>([
+        {
+            id: 'ADM-2026-301',
+            adminId: 'USR-001',
+            adminName: 'Lic. Claudia Benítez',
+            type: 'user_management',
+            typeName: 'Actualización de Permisos y Roles',
+            targetModule: 'Módulo de Gestión de Usuarios',
+            responsible: 'Lic. Claudia Benítez',
+            date: '21 Jul 2026',
+            startTime: '08:30 AM',
+            endTime: '08:45 AM',
+            duration: '15 min',
+            affectedCount: '12 usuarios',
+            actionDetails: 'Asignación de privilegios avanzados a nuevos operadores de campo.',
+            authorizationCode: 'AUTH-9920',
+            status: 'completed',
+            securityLevel: 'Alto',
+            terminalIp: '192.168.1.45',
+            notes: 'Cambios aplicados de forma exitosa según solicitud de jefatura de operaciones.'
+        },
+        {
+            id: 'ADM-2026-300',
+            adminId: 'USR-002',
+            adminName: 'Ing. Fernando Rivas',
+            type: 'system_config',
+            typeName: 'Calibración de Parámetros Globales',
+            targetModule: 'Servidor Central de Telemetría',
+            responsible: 'Ing. Fernando Rivas',
+            date: '21 Jul 2026',
+            startTime: '07:15 AM',
+            endTime: '08:00 AM',
+            duration: '45 min',
+            affectedCount: '4 servidores',
+            actionDetails: 'Modificación de umbrales de alerta por ráfagas de viento y protocolos RTH.',
+            authorizationCode: 'AUTH-9918',
+            status: 'completed',
+            securityLevel: 'Crítico',
+            terminalIp: '192.168.1.12',
+            notes: 'Actualización de firmware del núcleo completada sin interrupciones en la red.'
+        },
+        {
+            id: 'ADM-2026-299',
+            adminId: 'USR-001',
+            adminName: 'Lic. Claudia Benítez',
+            type: 'audit_security',
+            typeName: 'Auditoría de Respaldos de Base de Datos',
+            targetModule: 'Subsistema de Respaldo Nube',
+            responsible: 'Lic. Claudia Benítez',
+            date: '20 Jul 2026',
+            startTime: '04:00 PM',
+            endTime: '04:30 PM',
+            duration: '30 min',
+            affectedCount: '1 base de datos',
+            actionDetails: 'Verificación de integridad y cifrado de los respaldos semanales.',
+            authorizationCode: 'AUTH-9905',
+            status: 'interrupted',
+            securityLevel: 'Medio',
+            terminalIp: '192.168.1.45',
+            notes: 'Pausado por latencia alta en el proveedor de nube secundario; reanudado más tarde.'
+        },
+        {
+            id: 'ADM-2026-298',
+            adminId: 'USR-003',
+            adminName: 'Lic. Patricia Solís',
+            type: 'user_management',
+            typeName: 'Revocación de Credenciales de Acceso',
+            targetModule: 'Control de Acceso Periférico',
+            responsible: 'Lic. Patricia Solís',
+            date: '20 Jul 2026',
+            startTime: '11:00 AM',
+            endTime: '11:10 AM',
+            duration: '10 min',
+            affectedCount: '3 usuarios',
+            actionDetails: 'Baja administrativa por término de contrato temporal de pilotaje.',
+            authorizationCode: 'AUTH-9899',
+            status: 'completed',
+            securityLevel: 'Alto',
+            terminalIp: '192.168.1.88',
+            notes: 'Tokens de autenticación de doble factor deshabilitados permanentemente.'
+        },
+        {
+            id: 'ADM-2026-297',
+            adminId: 'USR-002',
+            adminName: 'Ing. Fernando Rivas',
+            type: 'system_config',
+            typeName: 'Migración de Enlaces de Red Satelital',
+            targetModule: 'Pasarela de Comunicaciones RTK',
+            responsible: 'Ing. Fernando Rivas',
+            date: '19 Jul 2026',
+            startTime: '02:00 PM',
+            endTime: '03:15 PM',
+            duration: '75 min',
+            affectedCount: '8 dispositivos',
+            actionDetails: 'Cambio de proveedor de enlaces móviles principales por redundancia.',
+            authorizationCode: 'AUTH-9872',
+            status: 'failed',
+            securityLevel: 'Crítico',
+            terminalIp: '192.168.1.12',
+            notes: 'Fallo en la resolución de DNS del nuevo proveedor. Se aplicó rollback automático.'
+        },
+        {
+            id: 'ADM-2026-296',
+            adminId: 'USR-001',
+            adminName: 'Lic. Claudia Benítez',
+            type: 'audit_security',
+            typeName: 'Revisión de Bitácoras de Seguridad',
+            targetModule: 'Firewall y Control Perimetral',
+            responsible: 'Lic. Claudia Benítez',
+            date: '18 Jul 2026',
+            startTime: '09:00 AM',
+            endTime: '09:50 AM',
+            duration: '50 min',
+            affectedCount: 'Todos los nodos',
+            actionDetails: 'Inspección de intentos de acceso fallidos desde redes externas.',
+            authorizationCode: 'AUTH-9850',
+            status: 'completed',
+            securityLevel: 'Medio',
+            terminalIp: '192.168.1.45',
+            notes: 'Sin anomalías detectadas. Tráfico dentro de los parámetros normales esperados.'
+        },
+        {
+            id: 'ADM-2026-295',
+            adminId: 'USR-003',
+            adminName: 'Lic. Patricia Solís',
+            type: 'user_management',
+            typeName: 'Asignación de Políticas de Privacidad',
+            targetModule: 'Directorio Activo Corporativo',
+            responsible: 'Lic. Patricia Solís',
+            date: '17 Jul 2026',
+            startTime: '10:30 AM',
+            endTime: '11:00 AM',
+            duration: '30 min',
+            affectedCount: '25 cuentas',
+            actionDetails: 'Actualización masiva de políticas de expiración de contraseñas.',
+            authorizationCode: 'AUTH-9831',
+            status: 'completed',
+            securityLevel: 'Alto',
+            terminalIp: '192.168.1.88',
+            notes: 'Notificaciones enviadas de forma automática a los buzones corporativos.'
+        }
+    ]);
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [typeFilter, setTypeFilter] = useState<string>('all');
-  const [selectedLog, setSelectedLog] = useState<AdminLog | null>(null);
-  const [modalTab, setModalTab] = useState<'info' | 'detalles' | 'seguridad'>('info');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [statusFilter, setStatusFilter] = useState<string>('all');
+    const [typeFilter, setTypeFilter] = useState<string>('all');
+    const [selectedLog, setSelectedLog] = useState<AdminLog | null>(null);
+    const [modalTab, setModalTab] = useState<'info' | 'detalles' | 'seguridad'>('info');
 
-  const filteredLogs = logs.filter((l) => {
-    const matchesSearch =
-      l.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      l.typeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      l.targetModule.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      l.responsible.toLowerCase().includes(searchQuery.toLowerCase());
+    const filteredLogs = logs.filter((l) => {
+        const matchesSearch =
+            l.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            l.typeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            l.targetModule.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            l.responsible.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesStatus = statusFilter === 'all' || l.status === statusFilter;
-    const matchesType = typeFilter === 'all' || l.type === typeFilter;
+        const matchesStatus = statusFilter === 'all' || l.status === statusFilter;
+        const matchesType = typeFilter === 'all' || l.type === typeFilter;
 
-    return matchesSearch && matchesStatus && matchesType;
-  });
+        return matchesSearch && matchesStatus && matchesType;
+    });
 
-  const totalAffected = logs
-    .filter((l) => l.status === 'completed')
-    .length;
+    const totalAffected = logs
+        .filter((l) => l.status === 'completed')
+        .length;
 
-  const totalHours = (
-    logs.reduce((acc, l) => acc + parseInt(l.duration), 0) / 60
-  ).toFixed(1);
+    const totalHours = (
+        logs.reduce((acc, l) => acc + parseInt(l.duration), 0) / 60
+    ).toFixed(1);
 
-  const successRate = Math.round(
-    (logs.filter((l) => l.status === 'completed').length / logs.length) * 100
-  );
+    const successRate = Math.round(
+        (logs.filter((l) => l.status === 'completed').length / logs.length) * 100
+    );
 
-  const getStatusBadge = (status: AdminLog['status']) => {
-    switch (status) {
-      case 'completed':
-        return (
-          <span className="inline-block px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-emerald-100 text-emerald-800 shrink-0">
-            Completado
-          </span>
-        );
-      case 'interrupted':
-        return (
-          <span className="inline-block px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-amber-100 text-amber-800 shrink-0">
-            Pausado
-          </span>
-        );
-      case 'failed':
-        return (
-          <span className="inline-block px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-red-100 text-red-800 shrink-0">
-            Abortado
-          </span>
-        );
-    }
-  };
+    const getStatusBadge = (status: AdminLog['status']) => {
+        switch (status) {
+            case 'completed':
+                return (
+                    <span className="inline-block px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-emerald-100 text-emerald-800 shrink-0">
+                        Completado
+                    </span>
+                );
+            case 'interrupted':
+                return (
+                    <span className="inline-block px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-amber-100 text-amber-800 shrink-0">
+                        Pausado
+                    </span>
+                );
+            case 'failed':
+                return (
+                    <span className="inline-block px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-red-100 text-red-800 shrink-0">
+                        Abortado
+                    </span>
+                );
+        }
+    };
 
-  const getTypeBadge = (type: AdminLog['type']) => {
-    switch (type) {
-      case 'user_management':
-        return (
-          <span className="inline-block text-[11px] font-semibold text-cyan-800 bg-cyan-50 px-2 py-0.5 rounded-[4px] border border-cyan-100">
-            Gestión de usuarios
-          </span>
-        );
-      case 'system_config':
-        return (
-          <span className="inline-block text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-[4px] border border-emerald-100">
-            Configuración del sistema
-          </span>
-        );
-      case 'audit_security':
-        return (
-          <span className="inline-block text-[11px] font-semibold text-purple-800 bg-purple-50 px-2 py-0.5 rounded-[4px] border border-purple-100">
-            Auditoría de seguridad
-          </span>
-        );
-    }
-  };
+    const getTypeBadge = (type: AdminLog['type']) => {
+        switch (type) {
+            case 'user_management':
+                return (
+                    <span className="inline-block text-[11px] font-semibold text-cyan-800 bg-cyan-50 px-2 py-0.5 rounded-[4px] border border-cyan-100">
+                        Gestión de usuarios
+                    </span>
+                );
+            case 'system_config':
+                return (
+                    <span className="inline-block text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-[4px] border border-emerald-100">
+                        Configuración del sistema
+                    </span>
+                );
+            case 'audit_security':
+                return (
+                    <span className="inline-block text-[11px] font-semibold text-purple-800 bg-purple-50 px-2 py-0.5 rounded-[4px] border border-purple-100">
+                        Auditoría de seguridad
+                    </span>
+                );
+        }
+    };
 
-  return (
-    <div className="w-full h-full bg-[#f8fafc] overflow-y-auto p-3 space-y-3 font-['Roboto',sans-serif]">
+    return (
+        <div className="w-full h-full bg-[#f8fafc] overflow-y-auto p-3 space-y-3 font-['Roboto',sans-serif]">
 
-      {/* ================= ENCABEZADO Y RESUMEN ================= */}
-      <div className="flex flex-col gap-3 bg-white p-4 rounded-[4px] border border-gray-200 shadow-xs">
-        <div>
-          <h1 className="text-base font-bold text-gray-900 flex items-center gap-2 flex-wrap">
-            Panel de Auditoría
-            <span className="text-[11px] bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-[4px] border border-gray-200">
-              {logs.length} registros
-            </span>
-          </h1>
-          <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-            Cambios de configuración, gestión de accesos y auditorías de seguridad del sistema.
-          </p>
-        </div>
-
-        <button
-          onClick={() => { }}
-          className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-semibold rounded-[4px] transition cursor-pointer shadow-xs"
-        >
-          <Download size={14} />
-          <span>Exportar bitácora (CSV)</span>
-        </button>
-      </div>
-
-      {/* ================= TARJETAS DE KPIS RÁPIDOS ================= */}
-      <div className="grid grid-cols-2 gap-2.5">
-        <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
-          <div className="min-w-0">
-            <p className="text-[11px] text-gray-500 font-medium">Acciones Exitosas</p>
-            <h3 className="text-sm font-bold text-gray-900 mt-0.5">{totalAffected} <span className="text-xs font-normal text-gray-500">acc.</span></h3>
-          </div>
-          <div className="p-2 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
-            <CheckCircle2 size={16} />
-          </div>
-        </div>
-
-        <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
-          <div className="min-w-0">
-            <p className="text-[11px] text-gray-500 font-medium">Tiempo Operado</p>
-            <h3 className="text-sm font-bold text-gray-900 mt-0.5">{totalHours} <span className="text-xs font-normal text-gray-500">hrs</span></h3>
-          </div>
-          <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0">
-            <Clock size={16} />
-          </div>
-        </div>
-
-        <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
-          <div className="min-w-0">
-            <p className="text-[11px] text-gray-500 font-medium ">Tasa de Efectividad</p>
-            <h3 className="text-sm font-bold text-emerald-700 mt-0.5">{successRate}%</h3>
-          </div>
-          <div className="p-2 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
-            <Compass size={16} />
-          </div>
-        </div>
-
-        <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
-          <div className="min-w-0">
-            <p className="text-[11px] text-gray-500 font-medium">Alerta Global</p>
-            <h3 className="text-sm font-bold text-amber-700 mt-0.5">Controlado</h3>
-          </div>
-          <div className="p-2 bg-amber-50 text-amber-600 rounded-[4px] shrink-0">
-            <ShieldAlert size={16} />
-          </div>
-        </div>
-      </div>
-
-      {/* ================= FILTROS Y BÚSQUEDA ================= */}
-      <div className="flex flex-col gap-2.5 bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={15} />
-          <input
-            type="text"
-            placeholder="Buscar por ID, acción, módulo..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
-          />
-        </div>
-
-        <div className="flex flex-col gap-2 text-xs">
-          <select
-            value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
-            className="w-full px-2.5 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
-          >
-            <option value="all">Todas las categorías</option>
-            <option value="user_management">Gestión de usuarios</option>
-            <option value="system_config">Config. del sistema</option>
-            <option value="audit_security">Auditoría de seguridad</option>
-          </select>
-
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full px-2.5 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
-          >
-            <option value="all">Todos los estados</option>
-            <option value="completed">Completados</option>
-            <option value="interrupted">Pausados</option>
-            <option value="failed">Abortados</option>
-          </select>
-        </div>
-      </div>
-
-      {/* ================= LISTA DE REGISTROS (tarjetas, reemplaza la tabla de escritorio) ================= */}
-      <div className="bg-white rounded-[4px] border border-gray-200 shadow-xs overflow-hidden w-full divide-y divide-gray-100">
-        {filteredLogs.length > 0 ? (
-          filteredLogs.map((log) => (
-            <div
-              key={log.id}
-              onClick={() => {
-                setSelectedLog(log);
-                setModalTab('info');
-              }}
-              className="p-3.5 active:bg-gray-50 hover:bg-gray-50/70 transition cursor-pointer"
-            >
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <div className="min-w-0">
-                  <div className="font-bold text-gray-900 text-xs">{log.id}</div>
-                  <div className="text-[10px] text-gray-400 font-medium flex items-center gap-1 mt-0.5">
-                    <Calendar size={10} />
-                    {log.date}
-                  </div>
+            {/* ================= ENCABEZADO Y RESUMEN ================= */}
+            <div className="flex flex-col gap-3 bg-white p-4 rounded-[4px] border border-gray-200 shadow-xs">
+                <div>
+                    <h1 className="text-lg font-bold text-gray-900 flex items-center gap-2 flex-wrap">
+                        Panel de Auditoría
+                        <span className="text-xs bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-[4px] border border-gray-200">
+                            {logs.length} registros
+                        </span>
+                    </h1>
+                    <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                        Cambios de configuración, gestión de accesos y auditorías de seguridad del sistema.
+                    </p>
                 </div>
-                {getStatusBadge(log.status)}
-              </div>
-
-              <div className="font-semibold text-gray-800 truncate text-xs">
-                {log.targetModule}
-              </div>
-              <div className="mt-1">{getTypeBadge(log.type)}</div>
-
-              <div className="flex items-center justify-between gap-2 pt-2 mt-2 border-t border-gray-100">
-                <div className="min-w-0 flex-1 space-y-0.5">
-                  <div className="text-[10px] text-gray-500 font-medium flex items-center gap-1 truncate">
-                    <MapPin size={10} className="text-gray-400 shrink-0" />
-                    <span className="truncate">{log.terminalIp}</span>
-                  </div>
-                  <div className="text-[10px] text-gray-400 flex items-center gap-1 truncate">
-                    <User size={10} className="shrink-0" />
-                    <span className="truncate">{log.responsible}</span>
-                  </div>
-                </div>
-
-                <div className="text-right shrink-0">
-                  <div className="font-bold text-gray-900 text-xs">{log.duration}</div>
-                  <div className="text-[10px] text-gray-400 font-medium">{log.affectedCount}</div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-1.5 mt-2.5" onClick={(e) => e.stopPropagation()}>
-                <button
-                  onClick={() => {
-                    setSelectedLog(log);
-                    setModalTab('info');
-                  }}
-                  className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-medium rounded-[4px] transition cursor-pointer"
-                >
-                  <Eye size={13} className="text-[#0E5E6F]" />
-                  <span>Ver detalles</span>
-                </button>
 
                 <button
-                  onClick={() => { }}
-                  className="flex items-center justify-center gap-1 px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-[11px] font-medium rounded-[4px] transition cursor-pointer shadow-xs shrink-0"
-                  title="Descargar reporte PDF"
+                    onClick={() => { }}
+                    className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-semibold rounded-[4px] transition cursor-pointer shadow-xs"
                 >
-                  <Download size={13} />
-                  <span>PDF</span>
+                    <Download size={14} />
+                    <span>Exportar bitácora (CSV)</span>
                 </button>
-              </div>
             </div>
-          ))
-        ) : (
-          <div className="py-8 text-center text-gray-400 text-xs px-4">
-            No se encontraron registros administrativos con los filtros seleccionados.
-          </div>
-        )}
 
-        <div className="p-3 px-4 bg-gray-50/80 border-t border-gray-200 text-[11px] text-gray-500 text-center">
-          Mostrando {filteredLogs.length} de {logs.length} registros
+            {/* ================= TARJETAS DE KPIS RÁPIDOS ================= */}
+            <div className="grid grid-cols-2 gap-2.5">
+                <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
+                    <div className="min-w-0">
+                        <p className="text-xs text-gray-500 font-medium">Acciones Exitosas</p>
+                        <h3 className="text-sm font-bold text-gray-900 mt-0.5">{totalAffected} <span className="text-xs font-normal text-gray-500">acc.</span></h3>
+                    </div>
+                    <div className="p-2 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
+                        <CheckCircle2 size={16} />
+                    </div>
+                </div>
+
+                <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
+                    <div className="min-w-0">
+                        <p className="text-xs text-gray-500 font-medium">Tiempo Operado</p>
+                        <h3 className="text-sm font-bold text-gray-900 mt-0.5">{totalHours} <span className="text-xs font-normal text-gray-500">hrs</span></h3>
+                    </div>
+                    <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0">
+                        <Clock size={16} />
+                    </div>
+                </div>
+
+                <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
+                    <div className="min-w-0">
+                        <p className="text-xs text-gray-500 font-medium ">Tasa de Efectividad</p>
+                        <h3 className="text-sm font-bold text-emerald-700 mt-0.5">{successRate}%</h3>
+                    </div>
+                    <div className="p-2 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
+                        <Compass size={16} />
+                    </div>
+                </div>
+
+                <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
+                    <div className="min-w-0">
+                        <p className="text-xs text-gray-500 font-medium">Alerta Global</p>
+                        <h3 className="text-sm font-bold text-amber-700 mt-0.5">Controlado</h3>
+                    </div>
+                    <div className="p-2 bg-amber-50 text-amber-600 rounded-[4px] shrink-0">
+                        <ShieldAlert size={16} />
+                    </div>
+                </div>
+            </div>
+
+            {/* ================= FILTROS Y BÚSQUEDA ================= */}
+            <div className="flex flex-col gap-2.5 bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs">
+                <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={15} />
+                    <input
+                        type="text"
+                        placeholder="Buscar por ID, acción, módulo..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition"
+                    />
+                </div>
+
+                <div className="flex flex-col gap-2 text-xs">
+                    <select
+                        value={typeFilter}
+                        onChange={(e) => setTypeFilter(e.target.value)}
+                        className="w-full px-2.5 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
+                    >
+                        <option value="all">Todas las categorías</option>
+                        <option value="user_management">Gestión de usuarios</option>
+                        <option value="system_config">Config. del sistema</option>
+                        <option value="audit_security">Auditoría de seguridad</option>
+                    </select>
+
+                    <select
+                        value={statusFilter}
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                        className="w-full px-2.5 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
+                    >
+                        <option value="all">Todos los estados</option>
+                        <option value="completed">Completados</option>
+                        <option value="interrupted">Pausados</option>
+                        <option value="failed">Abortados</option>
+                    </select>
+                </div>
+            </div>
+
+            {/* ================= LISTA DE REGISTROS (tarjetas, reemplaza la tabla de escritorio) ================= */}
+            <div className="bg-white rounded-[4px] border border-gray-200 shadow-xs overflow-hidden w-full divide-y divide-gray-100">
+                {filteredLogs.length > 0 ? (
+                    filteredLogs.map((log) => (
+                        <div
+                            key={log.id}
+                            onClick={() => {
+                                setSelectedLog(log);
+                                setModalTab('info');
+                            }}
+                            className="p-3.5 active:bg-gray-50 hover:bg-gray-50/70 transition cursor-pointer"
+                        >
+                            <div className="flex items-start justify-between gap-2 mb-2">
+                                <div className="min-w-0">
+                                    <div className="font-bold text-gray-900 text-xs">{log.id}</div>
+                                    <div className="text-[10px] text-gray-400 font-medium flex items-center gap-1 mt-0.5">
+                                        <Calendar size={10} />
+                                        {log.date}
+                                    </div>
+                                </div>
+                                {getStatusBadge(log.status)}
+                            </div>
+
+                            <div className="font-semibold text-gray-800 truncate text-xs">
+                                {log.targetModule}
+                            </div>
+                            <div className="mt-1">{getTypeBadge(log.type)}</div>
+
+                            <div className="flex items-center justify-between gap-2 pt-2 mt-2 border-t border-gray-100">
+                                <div className="min-w-0 flex-1 space-y-0.5">
+                                    <div className="text-[10px] text-gray-500 font-medium flex items-center gap-1 truncate">
+                                        <MapPin size={10} className="text-gray-400 shrink-0" />
+                                        <span className="truncate">{log.terminalIp}</span>
+                                    </div>
+                                    <div className="text-[10px] text-gray-400 flex items-center gap-1 truncate">
+                                        <User size={10} className="shrink-0" />
+                                        <span className="truncate">{log.responsible}</span>
+                                    </div>
+                                </div>
+
+                                <div className="text-right shrink-0">
+                                    <div className="font-bold text-gray-900 text-xs">{log.duration}</div>
+                                    <div className="text-[10px] text-gray-400 font-medium">{log.affectedCount}</div>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-1.5 mt-2.5" onClick={(e) => e.stopPropagation()}>
+                                <button
+                                    onClick={() => {
+                                        setSelectedLog(log);
+                                        setModalTab('info');
+                                    }}
+                                    className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-medium rounded-[4px] transition cursor-pointer"
+                                >
+                                    <Eye size={13} className="text-[#0E5E6F]" />
+                                    <span>Ver detalles</span>
+                                </button>
+
+                                <button
+                                    onClick={() => { }}
+                                    className="flex items-center justify-center gap-1 px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-[11px] font-medium rounded-[4px] transition cursor-pointer shadow-xs shrink-0"
+                                    title="Descargar reporte PDF"
+                                >
+                                    <Download size={13} />
+                                    <span>PDF</span>
+                                </button>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="py-8 text-center text-gray-400 text-xs px-4">
+                        No se encontraron registros administrativos con los filtros seleccionados.
+                    </div>
+                )}
+
+                <div className="p-3 px-4 bg-gray-50/80 border-t border-gray-200 text-[11px] text-gray-500 text-center">
+                    Mostrando {filteredLogs.length} de {logs.length} registros
+                </div>
+            </div>
+
+            {/* ================= MODAL CENTRADO CON PESTAÑAS ================= */}
+            {selectedLog && (
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
+
+                        {/* Header del Modal */}
+                        <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
+                            <div className="flex items-center gap-2 min-w-0">
+                                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
+                                    {selectedLog.id}
+                                </div>
+                                <div className="min-w-0">
+                                    <h3 className="text-sm font-bold text-gray-900 truncate">
+                                        {selectedLog.typeName}
+                                    </h3>
+                                    <p className="text-[9px] text-gray-400 truncate">
+                                        {selectedLog.targetModule} • {selectedLog.date}
+                                    </p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setSelectedLog(null)}
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer shrink-0"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        {/* Pestañas */}
+                        <div className="flex border-b border-gray-200 shrink-0">
+                            <button
+                                onClick={() => setModalTab('info')}
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${modalTab === 'info'
+                                        ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                    }`}
+                            >
+                                Información
+                            </button>
+                            <button
+                                onClick={() => setModalTab('detalles')}
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${modalTab === 'detalles'
+                                        ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                    }`}
+                            >
+                                Detalles
+                            </button>
+                            <button
+                                onClick={() => setModalTab('seguridad')}
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${modalTab === 'seguridad'
+                                        ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                    }`}
+                            >
+                                Seguridad
+                            </button>
+                        </div>
+
+                        {/* Contenido del Modal según pestaña */}
+                        <div className="p-4 overflow-y-auto flex-1">
+                            {/* Pestaña 1: Información General */}
+                            {modalTab === 'info' && (
+                                <div className="space-y-2 text-xs text-gray-700">
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                            <span className="text-[9px] text-gray-400 block">Tipo</span>
+                                            <span className="font-bold text-gray-800">{selectedLog.typeName}</span>
+                                        </div>
+                                        <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                            <span className="text-[9px] text-gray-400 block">Estado</span>
+                                            <span className="font-bold text-gray-800">{selectedLog.status}</span>
+                                        </div>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block">Módulo</span>
+                                        <span className="font-bold text-gray-800">{selectedLog.targetModule}</span>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block">Responsable</span>
+                                        <span className="font-bold text-gray-800 flex items-center gap-1">
+                                            <User size={11} className="text-[#0E5E6F]" />
+                                            {selectedLog.responsible}
+                                        </span>
+                                    </div>
+                                    <div className="grid grid-cols-3 gap-2">
+                                        <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px] text-center">
+                                            <span className="text-[9px] text-gray-400 block">Duración</span>
+                                            <span className="font-bold text-gray-800 text-xs">{selectedLog.duration}</span>
+                                        </div>
+                                        <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px] text-center">
+                                            <span className="text-[9px] text-gray-400 block">Horario</span>
+                                            <span className="font-bold text-gray-800 text-[9px]">{selectedLog.startTime} - {selectedLog.endTime}</span>
+                                        </div>
+                                        <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px] text-center">
+                                            <span className="text-[9px] text-gray-400 block">Alcance</span>
+                                            <span className="font-bold text-emerald-600">{selectedLog.affectedCount}</span>
+                                        </div>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block">Terminal IP</span>
+                                        <span className="font-bold text-gray-800 flex items-center gap-1">
+                                            <MapPin size={11} className="text-[#0E5E6F]" />
+                                            {selectedLog.terminalIp}
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Pestaña 2: Detalles */}
+                            {modalTab === 'detalles' && (
+                                <div className="space-y-2 text-xs text-gray-700">
+                                    <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block mb-1">Acción ejecutada</span>
+                                        <p className="font-semibold text-gray-800">{selectedLog.actionDetails}</p>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block mb-1">Código de autorización</span>
+                                        <p className="font-mono font-bold text-gray-800">{selectedLog.authorizationCode}</p>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block mb-1">Observaciones</span>
+                                        <p className="text-[10px] italic text-gray-600 leading-relaxed">
+                                            "{selectedLog.notes || 'Sin observaciones registradas.'}"
+                                        </p>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block mb-1">Administrador</span>
+                                        <p className="font-semibold text-gray-800">{selectedLog.adminName}</p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Pestaña 3: Seguridad */}
+                            {modalTab === 'seguridad' && (
+                                <div className="space-y-2 text-xs text-gray-700">
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                                            <span className="text-[9px] text-gray-400 block mb-1">Nivel de seguridad</span>
+                                            <span className={`font-bold text-xs px-2 py-0.5 rounded-[4px] inline-block ${selectedLog.securityLevel === 'Crítico' ? 'bg-red-100 text-red-700' :
+                                                    selectedLog.securityLevel === 'Alto' ? 'bg-orange-100 text-orange-700' :
+                                                        'bg-blue-100 text-blue-700'
+                                                }`}>
+                                                {selectedLog.securityLevel}
+                                            </span>
+                                        </div>
+                                        <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                                            <span className="text-[9px] text-gray-400 block mb-1">Estado</span>
+                                            <span className={`font-bold text-xs px-2 py-0.5 rounded-[4px] inline-block ${selectedLog.status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
+                                                    selectedLog.status === 'interrupted' ? 'bg-amber-100 text-amber-800' :
+                                                        'bg-red-100 text-red-700'
+                                                }`}>
+                                                {selectedLog.status === 'completed' ? 'Completado' :
+                                                    selectedLog.status === 'interrupted' ? 'Pausado' : 'Abortado'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block mb-1">Código de autorización</span>
+                                        <p className="font-mono font-bold text-gray-800">{selectedLog.authorizationCode}</p>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block mb-1">Terminal IP</span>
+                                        <p className="font-bold text-gray-800 flex items-center gap-1">
+                                            <MapPin size={11} className="text-[#0E5E6F]" />
+                                            {selectedLog.terminalIp}
+                                        </p>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block mb-1">Elementos afectados</span>
+                                        <p className="font-bold text-gray-800">{selectedLog.affectedCount}</p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Footer del Modal */}
+                        <div className="flex flex-col gap-2 p-3 pt-2 border-t border-gray-100 shrink-0">
+                            <button
+                                onClick={() => { }}
+                                className="w-full py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-[4px] cursor-pointer border border-gray-300 flex items-center justify-center gap-1"
+                            >
+                                <FileText size={13} />
+                                <span>Descargar reporte de auditoría (JSON)</span>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setSelectedLog(null)}
+                                className="w-full py-2 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
+                            >
+                                Cerrar bitácora
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            )}
+
         </div>
-      </div>
-
-      {/* ================= MODAL CENTRADO CON PESTAÑAS ================= */}
-      {selectedLog && (
-        <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
-          <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
-            
-            {/* Header del Modal */}
-            <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
-              <div className="flex items-center gap-2 min-w-0">
-                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
-                  {selectedLog.id}
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-xs font-bold text-gray-900 truncate">
-                    {selectedLog.typeName}
-                  </h3>
-                  <p className="text-[9px] text-gray-400 truncate">
-                    {selectedLog.targetModule} • {selectedLog.date}
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => setSelectedLog(null)}
-                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer shrink-0"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Pestañas */}
-            <div className="flex border-b border-gray-200 shrink-0">
-              <button
-                onClick={() => setModalTab('info')}
-                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
-                  modalTab === 'info'
-                    ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                Información
-              </button>
-              <button
-                onClick={() => setModalTab('detalles')}
-                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
-                  modalTab === 'detalles'
-                    ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                Detalles
-              </button>
-              <button
-                onClick={() => setModalTab('seguridad')}
-                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
-                  modalTab === 'seguridad'
-                    ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                Seguridad
-              </button>
-            </div>
-
-            {/* Contenido del Modal según pestaña */}
-            <div className="p-4 overflow-y-auto flex-1">
-              {/* Pestaña 1: Información General */}
-              {modalTab === 'info' && (
-                <div className="space-y-2 text-xs text-gray-700">
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                      <span className="text-[9px] text-gray-400 block">Tipo</span>
-                      <span className="font-bold text-gray-800">{selectedLog.typeName}</span>
-                    </div>
-                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                      <span className="text-[9px] text-gray-400 block">Estado</span>
-                      <span className="font-bold text-gray-800">{selectedLog.status}</span>
-                    </div>
-                  </div>
-                  <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block">Módulo</span>
-                    <span className="font-bold text-gray-800">{selectedLog.targetModule}</span>
-                  </div>
-                  <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block">Responsable</span>
-                    <span className="font-bold text-gray-800 flex items-center gap-1">
-                      <User size={11} className="text-[#0E5E6F]" />
-                      {selectedLog.responsible}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2">
-                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px] text-center">
-                      <span className="text-[9px] text-gray-400 block">Duración</span>
-                      <span className="font-bold text-gray-800 text-xs">{selectedLog.duration}</span>
-                    </div>
-                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px] text-center">
-                      <span className="text-[9px] text-gray-400 block">Horario</span>
-                      <span className="font-bold text-gray-800 text-[9px]">{selectedLog.startTime} - {selectedLog.endTime}</span>
-                    </div>
-                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px] text-center">
-                      <span className="text-[9px] text-gray-400 block">Alcance</span>
-                      <span className="font-bold text-emerald-600">{selectedLog.affectedCount}</span>
-                    </div>
-                  </div>
-                  <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block">Terminal IP</span>
-                    <span className="font-bold text-gray-800 flex items-center gap-1">
-                      <MapPin size={11} className="text-[#0E5E6F]" />
-                      {selectedLog.terminalIp}
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {/* Pestaña 2: Detalles */}
-              {modalTab === 'detalles' && (
-                <div className="space-y-2 text-xs text-gray-700">
-                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block mb-1">Acción ejecutada</span>
-                    <p className="font-semibold text-gray-800">{selectedLog.actionDetails}</p>
-                  </div>
-                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block mb-1">Código de autorización</span>
-                    <p className="font-mono font-bold text-gray-800">{selectedLog.authorizationCode}</p>
-                  </div>
-                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block mb-1">Observaciones</span>
-                    <p className="text-[10px] italic text-gray-600 leading-relaxed">
-                      "{selectedLog.notes || 'Sin observaciones registradas.'}"
-                    </p>
-                  </div>
-                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block mb-1">Administrador</span>
-                    <p className="font-semibold text-gray-800">{selectedLog.adminName}</p>
-                  </div>
-                </div>
-              )}
-
-              {/* Pestaña 3: Seguridad */}
-              {modalTab === 'seguridad' && (
-                <div className="space-y-2 text-xs text-gray-700">
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
-                      <span className="text-[9px] text-gray-400 block mb-1">Nivel de seguridad</span>
-                      <span className={`font-bold text-xs px-2 py-0.5 rounded-[4px] inline-block ${
-                        selectedLog.securityLevel === 'Crítico' ? 'bg-red-100 text-red-700' :
-                        selectedLog.securityLevel === 'Alto' ? 'bg-orange-100 text-orange-700' :
-                        'bg-blue-100 text-blue-700'
-                      }`}>
-                        {selectedLog.securityLevel}
-                      </span>
-                    </div>
-                    <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
-                      <span className="text-[9px] text-gray-400 block mb-1">Estado</span>
-                      <span className={`font-bold text-xs px-2 py-0.5 rounded-[4px] inline-block ${
-                        selectedLog.status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
-                        selectedLog.status === 'interrupted' ? 'bg-amber-100 text-amber-800' :
-                        'bg-red-100 text-red-700'
-                      }`}>
-                        {selectedLog.status === 'completed' ? 'Completado' :
-                         selectedLog.status === 'interrupted' ? 'Pausado' : 'Abortado'}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block mb-1">Código de autorización</span>
-                    <p className="font-mono font-bold text-gray-800">{selectedLog.authorizationCode}</p>
-                  </div>
-                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block mb-1">Terminal IP</span>
-                    <p className="font-bold text-gray-800 flex items-center gap-1">
-                      <MapPin size={11} className="text-[#0E5E6F]" />
-                      {selectedLog.terminalIp}
-                    </p>
-                  </div>
-                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block mb-1">Elementos afectados</span>
-                    <p className="font-bold text-gray-800">{selectedLog.affectedCount}</p>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Footer del Modal */}
-            <div className="flex flex-col gap-2 p-3 pt-2 border-t border-gray-100 shrink-0">
-              <button
-                onClick={() => {}}
-                className="w-full py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-[4px] cursor-pointer border border-gray-300 flex items-center justify-center gap-1"
-              >
-                <FileText size={13} />
-                <span>Descargar reporte de auditoría (JSON)</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedLog(null)}
-                className="w-full py-2 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
-              >
-                Cerrar bitácora
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
-
-    </div>
-  );
+    );
 };
 
 // ----- Editor de Mapas (Admin) ----- Corregido
@@ -4152,7 +4136,7 @@ export const AdminMapsView = () => {
     };
 
     return (
-        <div 
+        <div
             className="w-full h-full min-h-0 bg-white antialiased select-none flex flex-col text-gray-800 overflow-hidden relative font-sans"
             style={{ fontFamily: "'Roboto', sans-serif" }}
         >
@@ -4181,13 +4165,13 @@ export const AdminMapsView = () => {
                     </div>
                     <div className="text-left min-w-0">
                         <div className="flex items-center gap-1.5">
-                            <h1 className="text-xs font-bold text-gray-900 tracking-tight truncate">
+                            <h1 className="text-sm font-bold text-gray-900 tracking-tight truncate">
                                 Editor de mapas
                             </h1>
                         </div>
                         <button
                             onClick={handleOpenIdModal}
-                            className="text-[10px] text-gray-500 font-medium leading-none truncate hover:text-[#0E5E6F] transition-colors cursor-pointer text-left block"
+                            className="text-xs text-gray-500 font-medium leading-none truncate hover:text-[#0E5E6F] transition-colors cursor-pointer text-left block"
                             title="Cambiar ID de misión"
                         >
                             ID: #{mappingId}
@@ -4214,7 +4198,7 @@ export const AdminMapsView = () => {
                             />
                         </svg>
                     </button>
-                    <button className="py-1 px-2.5 bg-[#0E5E6F] border-2 border-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold rounded-[4px] text-[11px] flex items-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer">
+                    <button className="py-1 px-2.5 bg-[#0E5E6F] border-2 border-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold rounded-[4px] text-xs flex items-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer">
                         <svg
                             className="w-3.5 h-3.5"
                             fill="none"
@@ -4328,11 +4312,10 @@ export const AdminMapsView = () => {
                     <div className="absolute top-3 left-3 flex flex-col gap-1 z-10 bg-white/95 backdrop-blur-xs p-1 rounded-[4px] border-2 border-gray-200 shadow-md">
                         <button
                             onClick={() => setSelectedTool("polygon")}
-                            className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${
-                                selectedTool === "polygon"
+                            className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${selectedTool === "polygon"
                                     ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
                                     : "border-transparent text-gray-600 hover:bg-gray-50"
-                            }`}
+                                }`}
                             title="Pentágono"
                         >
                             <div className="w-3 h-3 border-2 border-current rounded-xs" />
@@ -4340,11 +4323,10 @@ export const AdminMapsView = () => {
 
                         <button
                             onClick={() => setSelectedTool("octagon")}
-                            className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${
-                                selectedTool === "octagon"
+                            className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${selectedTool === "octagon"
                                     ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
                                     : "border-transparent text-gray-600 hover:bg-gray-50"
-                            }`}
+                                }`}
                             title="Octágono"
                         >
                             <div className="w-3 h-3 border-2 border-current rounded-full" />
@@ -4352,11 +4334,10 @@ export const AdminMapsView = () => {
 
                         <button
                             onClick={() => setSelectedTool("move")}
-                            className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${
-                                selectedTool === "move"
+                            className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${selectedTool === "move"
                                     ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
                                     : "border-transparent text-gray-600 hover:bg-gray-50"
-                            }`}
+                                }`}
                             title="Mover nodos"
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -4366,11 +4347,10 @@ export const AdminMapsView = () => {
 
                         <button
                             onClick={() => setSelectedTool("delete")}
-                            className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${
-                                selectedTool === "delete"
+                            className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${selectedTool === "delete"
                                     ? "border-rose-500 bg-rose-50 text-rose-700"
                                     : "border-transparent text-gray-600 hover:bg-gray-50"
-                            }`}
+                                }`}
                             title="Eliminar"
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -4435,7 +4415,7 @@ export const AdminMapsView = () => {
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
                         <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-                            <h2 className="text-xs font-bold text-gray-900 tracking-wide">
+                            <h2 className="text-sm font-bold text-gray-900 tracking-wide">
                                 Capas y Zonas del Mapa
                             </h2>
                             <button
@@ -4451,7 +4431,7 @@ export const AdminMapsView = () => {
                         <div className="flex flex-col gap-3 text-left">
                             <div>
                                 <h3 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1">
-                                    Capas del Mapa
+                                    Capas del mapa
                                 </h3>
                                 <div className="space-y-0.5 mb-1.5">
                                     {[
@@ -4461,7 +4441,7 @@ export const AdminMapsView = () => {
                                     ].map((layer) => (
                                         <label
                                             key={layer.id}
-                                            className="flex items-center gap-1.5 text-[11px] font-bold text-gray-700 cursor-pointer p-1 hover:bg-gray-50 rounded-[4px]"
+                                            className="flex items-center gap-1.5 text-xs font-bold text-gray-700 cursor-pointer p-1 hover:bg-gray-50 rounded-[4px]"
                                         >
                                             <input
                                                 type="radio"
@@ -4479,7 +4459,7 @@ export const AdminMapsView = () => {
                             <hr className="border-gray-200" />
 
                             <div className="space-y-1.5">
-                                <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                <div className="flex items-center justify-between text-xs font-bold text-gray-700">
                                     <span>Zonas</span>
                                     <input
                                         type="checkbox"
@@ -4488,7 +4468,7 @@ export const AdminMapsView = () => {
                                         className="accent-[#0E5E6F] cursor-pointer"
                                     />
                                 </div>
-                                <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                <div className="flex items-center justify-between text-xs font-bold text-gray-700">
                                     <span>Mapa NDVI</span>
                                     <input
                                         type="checkbox"
@@ -4497,7 +4477,7 @@ export const AdminMapsView = () => {
                                         className="accent-[#0E5E6F] cursor-pointer"
                                     />
                                 </div>
-                                <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                <div className="flex items-center justify-between text-xs font-bold text-gray-700">
                                     <span>Límites</span>
                                     <input
                                         type="checkbox"
@@ -4517,7 +4497,7 @@ export const AdminMapsView = () => {
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
                         <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-                            <h2 className="text-xs font-bold text-gray-900 tracking-wide">
+                            <h2 className="text-sm font-bold text-gray-900 tracking-wide">
                                 Control del Dron
                             </h2>
                             <button
@@ -4533,7 +4513,7 @@ export const AdminMapsView = () => {
                         <div className="flex flex-col gap-2.5 text-left">
                             {/* CARD ESTADO DRON */}
                             <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px] space-y-1.5 shrink-0">
-                                <div className="flex justify-between items-center text-[11px]">
+                                <div className="flex justify-between items-center text-xs">
                                     <span className="font-bold text-gray-700">
                                         Dron Agras T50
                                     </span>
@@ -4556,13 +4536,13 @@ export const AdminMapsView = () => {
 
                             <div className="shrink-0">
                                 <h3 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1.5">
-                                    Parámetros de Vuelo
+                                    Parámetros de vuelo
                                 </h3>
 
                                 <div className="space-y-3">
                                     {/* ALTITUD (#CA5116) */}
                                     <div>
-                                        <div className="flex justify-between text-[11px] font-bold text-gray-700 mb-1">
+                                        <div className="flex justify-between text-xs font-bold text-gray-700 mb-1">
                                             <span>Altitud</span>
                                             <span className="font-bold" style={{ color: "#CA5116" }}>
                                                 {altitude} m
@@ -4596,7 +4576,7 @@ export const AdminMapsView = () => {
 
                                     {/* VELOCIDAD (#2994B2) */}
                                     <div>
-                                        <div className="flex justify-between text-[11px] font-bold text-gray-700 mb-1">
+                                        <div className="flex justify-between text-xs font-bold text-gray-700 mb-1">
                                             <span>Velocidad</span>
                                             <span className="font-bold" style={{ color: "#2994B2" }}>
                                                 {speed} km/h
@@ -4630,7 +4610,7 @@ export const AdminMapsView = () => {
 
                                     {/* DOSIS QUÍMICA (#B165E0) */}
                                     <div>
-                                        <div className="flex justify-between text-[11px] font-bold text-gray-700 mb-1">
+                                        <div className="flex justify-between text-xs font-bold text-gray-700 mb-1">
                                             <span>Dosis química</span>
                                             <span className="font-bold" style={{ color: "#B165E0" }}>
                                                 {rate} L/ha
@@ -4670,7 +4650,7 @@ export const AdminMapsView = () => {
                         <div className="pt-2 space-y-1.5 border-t border-gray-100 shrink-0">
                             <button
                                 onClick={handleApproveMapping}
-                                className="w-full py-2 bg-[#0E5E6F] hover:bg-[#0a4754] border-2 border-[#0E5E6F] text-white font-bold text-[11px] rounded-[4px] flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer"
+                                className="w-full py-2 bg-[#0E5E6F] hover:bg-[#0a4754] border-2 border-[#0E5E6F] text-white font-bold text-xs rounded-[4px] flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer"
                             >
                                 <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
                                     <polygon points="5 3 19 12 5 21 5 3" />
@@ -4678,11 +4658,11 @@ export const AdminMapsView = () => {
                                 <span>Aprobar mapeo</span>
                             </button>
 
-                            <button className="w-full py-1.5 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
+                            <button className="w-full py-1.5 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
                                 Auto-dibujar zona
                             </button>
 
-                            <button className="w-full py-1.5 bg-white border-2 border-rose-200 hover:bg-rose-50 text-rose-600 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
+                            <button className="w-full py-1.5 bg-white border-2 border-rose-200 hover:bg-rose-50 text-rose-600 font-bold text-xs rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
                                 Cancelar operación
                             </button>
                         </div>
@@ -4695,7 +4675,7 @@ export const AdminMapsView = () => {
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
                         <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                            <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                            <h3 className="text-sm font-bold text-gray-900 tracking-wide">
                                 Cambiar ID de misión para mapeo
                             </h3>
                             <button
@@ -4710,8 +4690,8 @@ export const AdminMapsView = () => {
 
                         <form onSubmit={handleSaveId} className="space-y-3">
                             <div>
-                                <label className="block text-[10px] font-bold text-gray-500 mb-1">
-                                    Código / ID de la Misión
+                                <label className="block text-xs font-bold text-gray-500 mb-1">
+                                    Código / ID de la misión
                                 </label>
                                 <input
                                     type="text"
@@ -4751,12 +4731,12 @@ export const AdminMapsView = () => {
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
                         <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
-                            <div className="p-1 bg-green-100 text-green-700 rounded-[4px]">
+                            <div className="p-1 bg-emerald-100 text-emerald-700 rounded-[4px]">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
-                            <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                            <h3 className="text-sm font-bold text-gray-900 tracking-wide">
                                 Mapeo aprobado
                             </h3>
                         </div>
@@ -4765,7 +4745,7 @@ export const AdminMapsView = () => {
                             <p>
                                 La edición del mapa para la misión <span className="font-bold text-gray-800">#{mappingId}</span> ha sido aprobada.
                             </p>
-                            <div className="p-2 bg-green-50 border border-green-200 rounded-[4px] text-[11px] text-green-800 font-semibold">
+                            <div className="p-2 bg-emerald-50 border border-emerald-200 rounded-[4px] text-xs text-emerald-800 font-semibold">
                                 Estado: Aprobada por el administrador.
                             </div>
                         </div>
@@ -4867,7 +4847,7 @@ export const AdminDataView = () => {
             name: "Javier Reyes",
             companyOrDept: "Licencia AHAC A-492",
             loc: "Catacamas, Olancho",
-            email: "javier.reyes@biodron.hn",
+            email: "javier.reyes@tecnodactylus.hn",
             phone: "+504 9788-4411",
             status: "Activo",
             joinDate: "10/02/2023",
@@ -4880,7 +4860,7 @@ export const AdminDataView = () => {
             name: "María Gómez",
             companyOrDept: "Licencia AHAC A-501",
             loc: "Comayagua, Comayagua",
-            email: "maria.gomez@biodron.hn",
+            email: "maria.gomez@tecnodactylus.hn",
             phone: "+504 8765-4321",
             status: "Activo",
             joinDate: "15/11/2023",
@@ -4893,7 +4873,7 @@ export const AdminDataView = () => {
             name: "Héctor Ramírez",
             companyOrDept: "Licencia AHAC A-388",
             loc: "Choluteca, Choluteca",
-            email: "hector.ramirez@biodron.hn",
+            email: "hector.ramirez@tecnodactylus.hn",
             phone: "+504 9123-8899",
             status: "Inactivo",
             joinDate: "01/06/2022",
@@ -4922,7 +4902,7 @@ export const AdminDataView = () => {
             name: "Luis Navarro",
             companyOrDept: "Sistemas eléctricos & baterías",
             loc: "Tegucigalpa, FM",
-            email: "luis.navarro@biodron.hn",
+            email: "luis.navarro@tecnodactylus.hn",
             phone: "+504 9455-6677",
             status: "Activo",
             joinDate: "14/01/2022",
@@ -4935,7 +4915,7 @@ export const AdminDataView = () => {
             name: "Roberto Escalante",
             companyOrDept: "Mecánica estructural & motores",
             loc: "San Pedro Sula, Cortés",
-            email: "roberto.e@biodron.hn",
+            email: "roberto.e@tecnodactylus.hn",
             phone: "+504 8899-0011",
             status: "Activo",
             joinDate: "09/05/2023",
@@ -4948,7 +4928,7 @@ export const AdminDataView = () => {
             name: "Daniel Aguilar",
             companyOrDept: "Software & telemetría GCS",
             loc: "Comayagua",
-            email: "daniel.a@biodron.hn",
+            email: "daniel.a@tecnodactylus.hn",
             phone: "+504 3311-2244",
             status: "Inactivo",
             joinDate: "11/11/2024",
@@ -5058,10 +5038,10 @@ export const AdminDataView = () => {
         >
             {/* HEADER (Title Case) */}
             <div className="flex flex-col mb-4 pb-3 border-b-2 border-gray-200 text-left gap-1">
-                <h1 className="text-base font-bold text-gray-900 leading-snug">
+                <h1 className="text-lg font-bold text-gray-900 leading-snug">
                     Panel de Control e Inspección Operativa
                 </h1>
-                <p className="text-gray-500 text-[11px] font-normal leading-snug">
+                <p className="text-xs text-gray-500 font-normal leading-snug">
                     Valida cuentas de clientes, certificaciones de pilotos, técnicos de taller y aprueba reservas de servicio.
                 </p>
             </div>
@@ -5070,7 +5050,7 @@ export const AdminDataView = () => {
             <div className="grid grid-cols-2 gap-2 mb-4 text-left">
                 <div className="bg-white border-2 border-gray-200 rounded-[4px] p-2.5 shadow-xs flex items-center justify-between">
                     <div>
-                        <span className="text-[9px] font-bold text-gray-400 tracking-wider block">Clientes activos</span>
+                        <span className="text-xs font-bold text-gray-400 tracking-wider block">Clientes activos</span>
                         <span className="text-lg font-black text-gray-900">{clients.filter(c => c.status === "Activo").length}</span>
                     </div>
                     <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px]">
@@ -5080,7 +5060,7 @@ export const AdminDataView = () => {
 
                 <div className="bg-white border-2 border-gray-200 rounded-[4px] p-2.5 shadow-xs flex items-center justify-between">
                     <div>
-                        <span className="text-[9px] font-bold text-gray-400 tracking-wider block">Pilotos certificados</span>
+                        <span className="text-xs font-bold text-gray-400 tracking-wider block">Pilotos certificados</span>
                         <span className="text-lg font-black text-gray-900">{pilots.filter(p => p.status === "Activo").length}</span>
                     </div>
                     <div className="p-2 bg-blue-50 text-blue-700 rounded-[4px]">
@@ -5090,7 +5070,7 @@ export const AdminDataView = () => {
 
                 <div className="bg-white border-2 border-gray-200 rounded-[4px] p-2.5 shadow-xs flex items-center justify-between">
                     <div>
-                        <span className="text-[9px] font-bold text-gray-400 tracking-wider block">Técnicos de taller</span>
+                        <span className="text-xs font-bold text-gray-400 tracking-wider block">Técnicos de taller</span>
                         <span className="text-lg font-black text-gray-900">{techs.filter(t => t.status === "Activo").length}</span>
                     </div>
                     <div className="p-2 bg-purple-50 text-purple-700 rounded-[4px]">
@@ -5100,7 +5080,7 @@ export const AdminDataView = () => {
 
                 <div className="bg-white border-2 border-gray-200 rounded-[4px] p-2.5 shadow-xs flex items-center justify-between">
                     <div>
-                        <span className="text-[9px] font-bold text-gray-400 tracking-wider block">Solicitudes pendientes</span>
+                        <span className="text-xs font-bold text-gray-400 tracking-wider block">Solicitudes pendientes</span>
                         <span className="text-lg font-black text-amber-600">
                             {requests.filter(r => r.status === "Pendiente").length + clients.filter(c => c.status === "Pendiente").length}
                         </span>
@@ -5119,7 +5099,7 @@ export const AdminDataView = () => {
                         setActiveTab(e.target.value as UserType);
                         setStatusFilter("ALL");
                     }}
-                    className="w-full border-2 border-gray-200 rounded-[4px] px-3 py-2 text-xs bg-white text-gray-800 font-bold focus:border-[#0E5E6F] outline-none"
+                    className="w-full border-2 border-gray-300 rounded-[4px] px-3 py-2 text-xs bg-white text-black font-bold focus:border-[#0E5E6F] outline-none"
                 >
                     <option value="client">Clientes ({clients.length})</option>
                     <option value="pilot">Pilotos ({pilots.length})</option>
@@ -5145,7 +5125,7 @@ export const AdminDataView = () => {
                     <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
-                        className="w-full border-2 border-gray-200 rounded-[4px] px-2.5 py-2 text-xs bg-white text-gray-700 font-bold focus:border-[#0E5E6F] outline-none"
+                        className="w-full border-2 border-gray-300 rounded-[4px] px-2.5 py-2 text-xs bg-white text-black font-bold focus:border-[#0E5E6F] outline-none"
                     >
                         <option value="ALL">Todos los estados</option>
                         <option value="Activo">Activos</option>
@@ -5176,23 +5156,23 @@ export const AdminDataView = () => {
                                             {item.init}
                                         </div>
                                         <div className="min-w-0">
-                                            <span className="block font-bold text-gray-900 text-xs truncate">{item.name}</span>
+                                            <span className="block font-bold text-gray-900 text-xs">{item.name}</span>
                                             <span className="text-[10px] font-mono text-gray-400 font-normal">{item.id}</span>
                                         </div>
                                     </div>
                                     <span
                                         className={`shrink-0 inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-[4px] border ${item.status === "Activo"
-                                                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                                                : item.status === "Inactivo"
-                                                    ? "border-amber-300 bg-amber-100 text-amber-800"
-                                                    : "border-blue-200 bg-blue-50 text-blue-700"
+                                            ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                                            : item.status === "Inactivo"
+                                                ? "border-amber-300 bg-amber-100 text-amber-800"
+                                                : "border-blue-200 bg-blue-50 text-blue-700"
                                             }`}
                                     >
                                         {item.status}
                                     </span>
                                 </div>
 
-                                <div className="text-[11px] text-gray-600 space-y-1 pl-[42px]">
+                                <div className="text-xs text-gray-600 space-y-1 pl-[42px]">
                                     <div className="text-gray-700 font-medium">{item.companyOrDept}</div>
                                     <div className="text-gray-500">{item.loc}</div>
                                     <div className="font-mono text-gray-500">
@@ -5206,14 +5186,14 @@ export const AdminDataView = () => {
                                             setSelectedUser(item);
                                             setUserModalTab('info');
                                         }}
-                                        className="flex-1 justify-center px-2.5 py-1.5 hover:bg-gray-100 border border-gray-200 rounded-[4px] text-gray-600 hover:text-[#0E5E6F] flex items-center gap-1.5 transition-colors cursor-pointer text-[11px] font-bold"
+                                        className="flex-1 justify-center px-2.5 py-1.5 hover:bg-gray-100 border border-gray-200 rounded-[4px] text-gray-600 hover:text-[#0E5E6F] flex items-center gap-1.5 transition-colors cursor-pointer text-xs font-bold"
                                     >
                                         <Eye size={13} /> Ver
                                     </button>
 
                                     <button
                                         onClick={() => setEditingUser({ ...item })}
-                                        className="flex-1 justify-center px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold text-[11px] rounded-[4px] flex items-center gap-1.5 cursor-pointer transition-colors"
+                                        className="flex-1 justify-center px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold text-xs rounded-[4px] flex items-center gap-1.5 cursor-pointer transition-colors"
                                     >
                                         <Edit3 size={13} /> Editar
                                     </button>
@@ -5231,23 +5211,23 @@ export const AdminDataView = () => {
                                 <div className="flex items-start justify-between gap-2">
                                     <div className="min-w-0">
                                         <span className="block font-mono text-[10px] text-gray-400">{req.id}</span>
-                                        <span className="block font-bold text-gray-900 text-xs truncate">{req.clientName}</span>
+                                        <span className="block font-bold text-gray-900 text-xs">{req.clientName}</span>
                                     </div>
                                     <span
                                         className={`shrink-0 inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-[4px] border ${req.status === "Aprobada" || req.status === "Completada"
-                                                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                                                : req.status === "Rechazada"
-                                                    ? "border-red-200 bg-red-50 text-red-700"
-                                                    : req.status === "Pendiente"
-                                                        ? "border-amber-300 bg-amber-100 text-amber-800"
-                                                        : "border-blue-200 bg-blue-50 text-blue-700"
+                                            ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                                            : req.status === "Rechazada"
+                                                ? "border-red-200 bg-red-50 text-red-700"
+                                                : req.status === "Pendiente"
+                                                    ? "border-amber-300 bg-amber-100 text-amber-800"
+                                                    : "border-blue-200 bg-blue-50 text-blue-700"
                                             }`}
                                     >
                                         {req.status}
                                     </span>
                                 </div>
 
-                                <div className="text-[11px] text-gray-600 space-y-1">
+                                <div className="text-xs text-gray-600 space-y-1">
                                     <div className="font-medium text-gray-800">{req.serviceType}</div>
                                     <div className="text-gray-500">{req.location}</div>
                                     <div className="font-bold text-[#0E5E6F]">{req.areaOrUnits}</div>
@@ -5270,14 +5250,14 @@ export const AdminDataView = () => {
                                             setSelectedRequest(req);
                                             setRequestModalTab('info');
                                         }}
-                                        className="flex-1 justify-center px-2.5 py-1.5 hover:bg-gray-100 border border-gray-200 rounded-[4px] text-gray-600 hover:text-[#0E5E6F] flex items-center gap-1.5 transition-colors cursor-pointer text-[11px] font-bold"
+                                        className="flex-1 justify-center px-2.5 py-1.5 hover:bg-gray-100 border border-gray-200 rounded-[4px] text-gray-600 hover:text-[#0E5E6F] flex items-center gap-1.5 transition-colors cursor-pointer text-xs font-bold"
                                     >
                                         <Eye size={13} /> Ver
                                     </button>
 
                                     <button
                                         onClick={() => setEditingRequest({ ...req })}
-                                        className="flex-1 justify-center px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold text-[11px] rounded-[4px] flex items-center gap-1.5 cursor-pointer transition-colors"
+                                        className="flex-1 justify-center px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold text-xs rounded-[4px] flex items-center gap-1.5 cursor-pointer transition-colors"
                                     >
                                         <Edit3 size={13} /> Editar
                                     </button>
@@ -5294,7 +5274,7 @@ export const AdminDataView = () => {
             {selectedUser && (
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
-                        
+
                         {/* Header del Modal */}
                         <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
                             <div className="flex items-center gap-2 min-w-0">
@@ -5302,10 +5282,10 @@ export const AdminDataView = () => {
                                     {selectedUser.id}
                                 </div>
                                 <div className="min-w-0">
-                                    <h3 className="text-xs font-bold text-gray-900 truncate">
+                                    <h3 className="text-sm font-bold text-gray-900">
                                         {selectedUser.name}
                                     </h3>
-                                    <p className="text-[9px] text-gray-400 truncate">
+                                    <p className="text-[9px] text-gray-400">
                                         {selectedUser.companyOrDept}
                                     </p>
                                 </div>
@@ -5324,31 +5304,28 @@ export const AdminDataView = () => {
                         <div className="flex border-b border-gray-200 shrink-0">
                             <button
                                 onClick={() => setUserModalTab('info')}
-                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
-                                    userModalTab === 'info'
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${userModalTab === 'info'
                                         ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                                         : 'text-gray-500 hover:text-gray-700'
-                                }`}
+                                    }`}
                             >
                                 Información
                             </button>
                             <button
                                 onClick={() => setUserModalTab('metricas')}
-                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
-                                    userModalTab === 'metricas'
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${userModalTab === 'metricas'
                                         ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                                         : 'text-gray-500 hover:text-gray-700'
-                                }`}
+                                    }`}
                             >
                                 Métricas
                             </button>
                             <button
                                 onClick={() => setUserModalTab('detalles')}
-                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
-                                    userModalTab === 'detalles'
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${userModalTab === 'detalles'
                                         ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                                         : 'text-gray-500 hover:text-gray-700'
-                                }`}
+                                    }`}
                             >
                                 Detalles
                             </button>
@@ -5366,11 +5343,10 @@ export const AdminDataView = () => {
                                         </div>
                                         <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
                                             <span className="text-[9px] text-gray-400 block">Estado</span>
-                                            <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-[4px] ${
-                                                selectedUser.status === "Activo" ? "bg-emerald-100 text-emerald-700" :
-                                                selectedUser.status === "Inactivo" ? "bg-amber-100 text-amber-800" :
-                                                "bg-blue-100 text-blue-700"
-                                            }`}>
+                                            <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-[4px] ${selectedUser.status === "Activo" ? "bg-emerald-100 text-emerald-700" :
+                                                    selectedUser.status === "Inactivo" ? "bg-amber-100 text-amber-800" :
+                                                        "bg-blue-100 text-blue-700"
+                                                }`}>
                                                 {selectedUser.status}
                                             </span>
                                         </div>
@@ -5491,7 +5467,7 @@ export const AdminDataView = () => {
             {selectedRequest && (
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
-                        
+
                         {/* Header del Modal */}
                         <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
                             <div className="flex items-center gap-2 min-w-0">
@@ -5499,10 +5475,10 @@ export const AdminDataView = () => {
                                     {selectedRequest.id}
                                 </div>
                                 <div className="min-w-0">
-                                    <h3 className="text-xs font-bold text-gray-900 truncate">
+                                    <h3 className="text-sm font-bold text-gray-900">
                                         {selectedRequest.serviceType}
                                     </h3>
-                                    <p className="text-[9px] text-gray-400 truncate">
+                                    <p className="text-[9px] text-gray-400">
                                         {selectedRequest.clientName}
                                     </p>
                                 </div>
@@ -5521,31 +5497,28 @@ export const AdminDataView = () => {
                         <div className="flex border-b border-gray-200 shrink-0">
                             <button
                                 onClick={() => setRequestModalTab('info')}
-                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
-                                    requestModalTab === 'info'
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${requestModalTab === 'info'
                                         ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                                         : 'text-gray-500 hover:text-gray-700'
-                                }`}
+                                    }`}
                             >
                                 Información
                             </button>
                             <button
                                 onClick={() => setRequestModalTab('detalles')}
-                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
-                                    requestModalTab === 'detalles'
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${requestModalTab === 'detalles'
                                         ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                                         : 'text-gray-500 hover:text-gray-700'
-                                }`}
+                                    }`}
                             >
                                 Detalles
                             </button>
                             <button
                                 onClick={() => setRequestModalTab('gestion')}
-                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
-                                    requestModalTab === 'gestion'
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${requestModalTab === 'gestion'
                                         ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                                         : 'text-gray-500 hover:text-gray-700'
-                                }`}
+                                    }`}
                             >
                                 Gestión
                             </button>
@@ -5563,12 +5536,11 @@ export const AdminDataView = () => {
                                         </div>
                                         <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
                                             <span className="text-[9px] text-gray-400 block">Estado</span>
-                                            <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-[4px] ${
-                                                selectedRequest.status === "Aprobada" || selectedRequest.status === "Completada" ? "bg-emerald-100 text-emerald-700" :
-                                                selectedRequest.status === "Rechazada" ? "bg-red-100 text-red-700" :
-                                                selectedRequest.status === "Pendiente" ? "bg-amber-100 text-amber-800" :
-                                                "bg-blue-100 text-blue-700"
-                                            }`}>
+                                            <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-[4px] ${selectedRequest.status === "Aprobada" || selectedRequest.status === "Completada" ? "bg-emerald-100 text-emerald-700" :
+                                                    selectedRequest.status === "Rechazada" ? "bg-red-100 text-red-700" :
+                                                        selectedRequest.status === "Pendiente" ? "bg-amber-100 text-amber-800" :
+                                                            "bg-blue-100 text-blue-700"
+                                                }`}>
                                                 {selectedRequest.status}
                                             </span>
                                         </div>
@@ -5704,17 +5676,17 @@ export const AdminDataView = () => {
             {editingUser && (
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
-                        
+
                         <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
                             <div className="flex items-center gap-2 min-w-0">
                                 <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
                                     {editingUser.id}
                                 </div>
                                 <div className="min-w-0">
-                                    <h3 className="text-xs font-bold text-gray-900 truncate">
+                                    <h3 className="text-sm font-bold text-gray-900">
                                         {editingUser.name}
                                     </h3>
-                                    <p className="text-[9px] text-gray-400 truncate">
+                                    <p className="text-[9px] text-gray-400">
                                         {editingUser.companyOrDept}
                                     </p>
                                 </div>
@@ -5761,11 +5733,10 @@ export const AdminDataView = () => {
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <span className="text-gray-600">Estado actual</span>
-                                        <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-[4px] ${
-                                            editingUser.status === "Activo" ? "bg-emerald-100 text-emerald-700" :
-                                            editingUser.status === "Inactivo" ? "bg-amber-100 text-amber-800" :
-                                            "bg-blue-100 text-blue-700"
-                                        }`}>
+                                        <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-[4px] ${editingUser.status === "Activo" ? "bg-emerald-100 text-emerald-700" :
+                                                editingUser.status === "Inactivo" ? "bg-amber-100 text-amber-800" :
+                                                    "bg-blue-100 text-blue-700"
+                                            }`}>
                                             {editingUser.status}
                                         </span>
                                     </div>
@@ -5798,17 +5769,17 @@ export const AdminDataView = () => {
             {editingRequest && (
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
-                        
+
                         <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
                             <div className="flex items-center gap-2 min-w-0">
                                 <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
                                     {editingRequest.id}
                                 </div>
                                 <div className="min-w-0">
-                                    <h3 className="text-xs font-bold text-gray-900 truncate">
+                                    <h3 className="text-sm font-bold text-gray-900">
                                         {editingRequest.serviceType}
                                     </h3>
-                                    <p className="text-[9px] text-gray-400 truncate">
+                                    <p className="text-[9px] text-gray-400">
                                         {editingRequest.clientName}
                                     </p>
                                 </div>
@@ -5857,12 +5828,11 @@ export const AdminDataView = () => {
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <span className="text-gray-600">Estado actual</span>
-                                        <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-[4px] ${
-                                            editingRequest.status === "Aprobada" || editingRequest.status === "Completada" ? "bg-emerald-100 text-emerald-700" :
-                                            editingRequest.status === "Rechazada" ? "bg-red-100 text-red-700" :
-                                            editingRequest.status === "Pendiente" ? "bg-amber-100 text-amber-800" :
-                                            "bg-blue-100 text-blue-700"
-                                        }`}>
+                                        <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-[4px] ${editingRequest.status === "Aprobada" || editingRequest.status === "Completada" ? "bg-emerald-100 text-emerald-700" :
+                                                editingRequest.status === "Rechazada" ? "bg-red-100 text-red-700" :
+                                                    editingRequest.status === "Pendiente" ? "bg-amber-100 text-amber-800" :
+                                                        "bg-blue-100 text-blue-700"
+                                            }`}>
                                             {editingRequest.status}
                                         </span>
                                     </div>
@@ -5901,7 +5871,7 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
     const initialProfile = {
         initials: "AR",
         name: "Lic. Carlos Rodríguez",
-        email: "carlos.rodriguez@agroaguante.hn",
+        email: "carlos.rodriguez@tecnodactylus.hn",
         phone: "+504 9988-7766",
         password: "password123",
         avatar: "src/img/admin_perfil.png",
@@ -5971,7 +5941,7 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
             style={{ fontFamily: "'Roboto', sans-serif" }}
         >
             <div className="w-full h-full flex-1 bg-white border-2 border-gray-200 rounded-[4px] overflow-hidden flex flex-col justify-between shadow-xs">
-                
+
                 {/* CABECERA */}
                 <div className="bg-gray-50 border-b-2 border-gray-200 px-4 py-4 flex flex-col items-start gap-3">
                     <div className="flex items-center gap-3 w-full">
@@ -5995,10 +5965,10 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                         </div>
 
                         <div className="text-left min-w-0 flex-1">
-                            <h2 className="text-base text-gray-900 font-black tracking-tight normal-case leading-tight truncate">
+                            <h2 className="text-sm text-gray-900 font-black tracking-tight normal-case leading-tight">
                                 {profileData.name}
                             </h2>
-                            <p className="text-gray-500 font-semibold text-[11px] mt-0.5 truncate">
+                            <p className="text-[10px] text-gray-500 font-semibold mt-0.5">
                                 {profileData.email}
                             </p>
                         </div>
@@ -6006,13 +5976,13 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
 
                     <div className="flex flex-col items-center gap-2 w-full">
                         <span
-                            className={`w-full text-center text-[10px] font-black tracking-wider px-3 py-1 rounded-[4px] border-2 break-words whitespace-normal ${profileData.roleColor}`}
+                            className={`w-full text-center text-xs font-black tracking-wider px-3 py-1 rounded-[4px] border-2 break-words whitespace-normal ${profileData.roleColor}`}
                         >
                             {profileData.roleLabel}
                         </span>
 
                         {saveSuccess && (
-                            <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-[4px] flex items-center gap-1 animate-in fade-in duration-150">
+                            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-[4px] flex items-center gap-1 animate-in fade-in duration-150">
                                 <Check size={12} /> Actualizado
                             </span>
                         )}
@@ -6024,22 +5994,20 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                     <button
                         type="button"
                         onClick={() => setActiveProfileTab("metricas")}
-                        className={`flex-1 py-2 text-xs font-black transition-colors cursor-pointer ${
-                            activeProfileTab === "metricas"
+                        className={`flex-1 py-2 text-xs font-black transition-colors cursor-pointer ${activeProfileTab === "metricas"
                                 ? "bg-white text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
                                 : "text-gray-500 hover:text-gray-700"
-                        }`}
+                            }`}
                     >
                         Métricas
                     </button>
                     <button
                         type="button"
                         onClick={() => setActiveProfileTab("credenciales")}
-                        className={`flex-1 py-2 text-xs font-black transition-colors cursor-pointer ${
-                            activeProfileTab === "credenciales"
+                        className={`flex-1 py-2 text-xs font-black transition-colors cursor-pointer ${activeProfileTab === "credenciales"
                                 ? "bg-white text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
                                 : "text-gray-500 hover:text-gray-700"
-                        }`}
+                            }`}
                     >
                         Credenciales
                     </button>
@@ -6058,7 +6026,7 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                                     Sede principal
                                 </span>
                             </div>
-                            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
+                            <span className="text-xs text-gray-800 font-bold block break-words leading-tight mt-0.5">
                                 {profileData.location}
                             </span>
                         </div>
@@ -6073,7 +6041,7 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                                     Cobertura global
                                 </span>
                             </div>
-                            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
+                            <span className="text-xs text-gray-800 font-bold block break-words leading-tight mt-0.5">
                                 {profileData.area}
                             </span>
                         </div>
@@ -6088,7 +6056,7 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                                     Gestión activa
                                 </span>
                             </div>
-                            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5 w-full">
+                            <span className="text-xs text-gray-800 font-bold block break-words leading-tight mt-0.5">
                                 {profileData.services}
                             </span>
                         </div>
@@ -6103,7 +6071,7 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                                     Estado
                                 </span>
                             </div>
-                            <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] inline-block mt-0.5">
+                            <span className="text-xs font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] inline-block mt-0.5">
                                 {profileData.standing}
                             </span>
                         </div>
@@ -6116,7 +6084,7 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                         <div className="flex flex-col gap-2 mb-2.5 pb-2 border-b-2 border-gray-100">
                             <div className="flex items-center gap-2">
                                 <Settings size={15} className="text-[#0E5E6F]" />
-                                <h3 className="text-xs font-black text-gray-800 normal-case">
+                                <h3 className="text-sm font-black text-gray-800 normal-case">
                                     Credenciales y Datos de Contacto
                                 </h3>
                             </div>
@@ -6180,7 +6148,7 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                                     <div className="p-1.5 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
                                         <Edit2 size={14} />
                                     </div>
-                                    <h3 className="text-xs font-black text-gray-800 normal-case">
+                                    <h3 className="text-sm font-black text-gray-800 normal-case">
                                         Editar Credenciales
                                     </h3>
                                 </div>
@@ -6215,7 +6183,7 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                                                     type="button"
                                                     onClick={handleFakeUpload}
                                                     disabled={isUploading}
-                                                    className="px-2.5 py-1 text-[11px] font-bold bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-100 rounded-[4px] text-gray-700 flex items-center gap-1 cursor-pointer transition-colors active:scale-95 shadow-xs disabled:opacity-50"
+                                                    className="px-2.5 py-1 text-xs font-bold bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-100 rounded-[4px] text-gray-700 flex items-center gap-1 cursor-pointer transition-colors active:scale-95 shadow-xs disabled:opacity-50"
                                                 >
                                                     {isUploading ? (
                                                         <Loader2 size={12} className="animate-spin text-[#0E5E6F]" />
@@ -6247,7 +6215,7 @@ export const AdminProfileView = ({ onLogout }: AdminProfileViewProps) => {
                                         />
                                     </div>
                                 </div>
-                                
+
                                 <div>
                                     <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
                                         Nueva contraseña

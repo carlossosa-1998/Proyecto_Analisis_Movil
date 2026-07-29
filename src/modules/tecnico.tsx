@@ -397,7 +397,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
             {
                 id: "CFG-302",
                 fecha: "2026-07-25",
-                ubicacion: "Remoto / Consola BIODRON",
+                ubicacion: "Remoto / Consola TECNODACTYLUS",
                 objetivo: "Actualización de firmware v4.2.10 y mapa de exclusión GPS",
                 dron: "Ehang Thermal 184",
                 duracion: "45 min",
@@ -510,10 +510,10 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
             <div className="flex flex-col gap-3 mb-5 pb-4 border-b-2 border-gray-100 select-none relative">
                 <div className="flex items-start justify-between gap-2">
                     <div className="text-left space-y-0.5 min-w-0">
-                        <h1 className="text-base font-black text-gray-900 tracking-tight leading-tight">
+                        <h1 className="text-lg font-black text-gray-900 tracking-tight leading-tight">
                             Ganancias y Soporte Técnico
                         </h1>
-                        <p className="text-gray-500 text-[10px] font-medium tracking-wide leading-tight">
+                        <p className="text-gray-500 text-xs font-medium tracking-wide leading-tight">
                             Consola del Especialista • Configuración, Diagnóstico y Reparación
                         </p>
                     </div>
@@ -529,7 +529,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                     className="px-2.5 py-1 border border-emerald-300 flex items-center gap-1.5 shadow-xs w-fit"
                 >
                     <span className="w-1.5 h-1.5 bg-[#065F46] rounded-full animate-pulse"></span>
-                    <span className="text-[10px] font-bold">Técnico certificado master</span>
+                    <span className="text-xs font-bold">Técnico certificado master</span>
                 </div>
             </div>
 
@@ -540,7 +540,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                     className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between"
                 >
                     <div className="flex justify-between items-center mb-1.5">
-                        <span className="text-[9px] font-black text-gray-500">
+                        <span className="text-xs font-black text-gray-500">
                             Ganancias del mes
                         </span>
                         <div
@@ -557,7 +557,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                     <p className="text-sm font-black text-gray-900 mb-0.5">
                         L. 71,250.00
                     </p>
-                    <p className="text-[9px] text-emerald-600 font-bold">
+                    <p className="text-xs text-emerald-600 font-bold">
                         ↑ +14.5% vs anterior
                     </p>
                 </div>
@@ -567,7 +567,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                     className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between"
                 >
                     <div className="flex justify-between items-center mb-1.5">
-                        <span className="text-[9px] font-black text-gray-500">
+                        <span className="text-xs font-black text-gray-500">
                             Drones reparados
                         </span>
                         <div
@@ -584,7 +584,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                     <p className="text-sm font-black text-gray-900 mb-0.5 truncate">
                         32 Unidades
                     </p>
-                    <p className="text-[9px] text-gray-400 font-semibold truncate">
+                    <p className="text-xs text-gray-400 font-semibold truncate">
                         100% pruebas superadas
                     </p>
                 </div>
@@ -594,7 +594,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                     className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between"
                 >
                     <div className="flex justify-between items-center mb-1.5">
-                        <span className="text-[9px] font-black text-gray-500 truncate">
+                        <span className="text-xs font-black text-gray-500 truncate">
                             Tiempo promedio
                         </span>
                         <div
@@ -611,7 +611,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                     <p className="text-sm font-black text-gray-900 mb-0.5 truncate">
                         1.8 Hrs / Serv.
                     </p>
-                    <p className="text-[9px] text-gray-400 font-semibold truncate">
+                    <p className="text-xs text-gray-400 font-semibold truncate">
                         Eficiencia optimizada
                     </p>
                 </div>
@@ -621,7 +621,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                     className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between"
                 >
                     <div className="flex justify-between items-center mb-1.5">
-                        <span className="text-[9px] font-black text-gray-500 truncate">
+                        <span className="text-xs font-black text-gray-500 truncate">
                             Valor promedio
                         </span>
                         <div
@@ -638,7 +638,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                     <p className="text-sm font-black text-gray-900 mb-0.5 truncate">
                         L. 1,625 / hr
                     </p>
-                    <p className="text-[9px] text-gray-400 font-semibold truncate">
+                    <p className="text-xs text-gray-400 font-semibold truncate">
                         Tarifa certificada
                     </p>
                 </div>
@@ -650,7 +650,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                     value={activeTab}
                     onChange={(e) => setActiveTab(e.target.value)}
                     style={{ borderRadius: "4px" }}
-                    className="w-full border-2 border-gray-200 px-3 py-2 text-xs font-bold bg-white text-[#0E5E6F] focus:border-[#0E5E6F] outline-none cursor-pointer"
+                    className="w-full border-2 border-gray-200 px-3 py-2 text-xs font-bold bg-white text-black focus:border-[#0E5E6F] outline-none cursor-pointer"
                 >
                     <option value="mantenimiento">Reparación</option>
                     <option value="configuracion">Firmware</option>
@@ -668,10 +668,10 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                     <div className="flex items-center gap-2">
                         <BarChart3 size={17} className="text-[#0E5E6F] shrink-0" />
                         <div className="min-w-0">
-                            <h3 className="text-[11px] font-black text-gray-900 leading-tight">
+                            <h3 className="text-sm font-black text-gray-900 leading-tight">
                                 Desglose de Ingresos por Categoría
                             </h3>
-                            <p className="text-[10px] text-gray-500 font-medium leading-tight truncate">
+                            <p className="text-xs text-gray-500 font-medium leading-tight truncate">
                                 Escala eje Y: <strong className="text-gray-700">{chartUnit}</strong>
                             </p>
                         </div>
@@ -690,7 +690,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                                 key={p.id}
                                 onClick={() => setChartPeriod(p.id as any)}
                                 style={{ borderRadius: "4px" }}
-                                className={`px-2 py-1.5 text-[11px] font-bold transition-all ${chartPeriod === p.id
+                                className={`px-2 py-1.5 text-xs font-bold transition-all ${chartPeriod === p.id
                                         ? "bg-[#0E5E6F] text-white shadow-xs"
                                         : "text-gray-500 hover:text-gray-900"
                                     }`}
@@ -744,7 +744,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                                             {hoveredBar === idx && (
                                                 <div
                                                     style={{ borderRadius: "4px" }}
-                                                    className="absolute -top-11 z-30 bg-gray-900 text-white px-2 py-1 text-[9px] font-mono shadow-xl whitespace-nowrap text-center animate-in fade-in duration-100"
+                                                    className="absolute -top-11 z-30 bg-gray-900 text-white px-2 py-1 text-xs font-mono shadow-xl whitespace-nowrap text-center animate-in fade-in duration-100"
                                                 >
                                                     <p className="font-bold">
                                                         L. {item.valor.toLocaleString()}
@@ -794,10 +794,10 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
             >
                 <div className="p-3.5 border-b-2 border-gray-100 bg-gray-50/50 flex flex-col gap-3">
                     <div>
-                        <h3 className="text-xs font-black text-gray-900">
+                        <h3 className="text-sm font-black text-gray-900">
                             Historial de Intervenciones Técnicas
                         </h3>
-                        <p className="text-[11px] text-gray-500 font-medium">
+                        <p className="text-xs text-gray-500 font-medium">
                             Detalle de mantenimiento, piezas y honorarios (HNL)
                         </p>
                     </div>
@@ -831,7 +831,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                             value={statusFilter}
                             onChange={(e) => setStatusFilter(e.target.value)}
                             style={{ borderRadius: "4px" }}
-                            className="w-full border border-gray-300 px-3 py-2 text-xs font-bold bg-white text-[#0E5E6F] focus:border-[#0E5E6F] outline-none cursor-pointer"
+                            className="w-full border border-gray-300 px-3 py-2 text-xs font-bold bg-white text-black focus:border-[#0E5E6F] outline-none cursor-pointer"
                         >
                             <option value="todos">Todos los estados</option>
                             <option value="completado">Completados</option>
@@ -848,7 +848,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                                 <div className="flex justify-between items-start gap-2 mb-1.5">
                                     <div>
                                         <p className="font-extrabold text-gray-900 text-xs leading-tight">{row.id}</p>
-                                        <p className="text-[9px] text-gray-400 font-mono leading-none mt-0.5">{row.fecha}</p>
+                                        <p className="text-xs text-gray-400 font-mono leading-none mt-0.5">{row.fecha}</p>
                                     </div>
                                     <span
                                         style={{
@@ -856,29 +856,29 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                                             color: row.tagTextColor,
                                             borderRadius: "4px",
                                         }}
-                                        className="px-1.5 py-0.5 font-bold text-[9px] inline-block border border-black/5 shrink-0"
+                                        className="px-1.5 py-0.5 font-bold text-xs inline-block border border-black/5 shrink-0"
                                     >
                                         {row.estado}
                                     </span>
                                 </div>
 
-                                <p className="font-medium text-gray-800 text-[11px] leading-snug mb-1.5">
+                                <p className="font-medium text-gray-800 text-xs leading-snug mb-1.5">
                                     {row.objetivo}
                                 </p>
 
-                                <div className="flex items-center gap-1 text-[10px] text-gray-500 font-bold mb-1">
+                                <div className="flex items-center gap-1 text-xs text-gray-500 font-bold mb-1">
                                     <MapPin size={11} className="text-gray-400 shrink-0" />
                                     <span className="truncate">{row.ubicacion}</span>
                                     <span className="text-gray-300">•</span>
                                     <span className="shrink-0">{row.duracion}</span>
                                 </div>
 
-                                <p className="text-[9px] text-gray-500 font-mono bg-gray-100 px-1.5 py-1 rounded inline-block mb-2">
+                                <p className="text-xs text-gray-500 font-mono bg-gray-100 px-1.5 py-1 rounded inline-block mb-2">
                                     📦 {row.repuestos}
                                 </p>
 
                                 <div className="flex justify-between items-center pt-1.5 border-t border-gray-100">
-                                    <span className="font-bold text-[#0E5E6F] text-[11px] truncate">{row.dron}</span>
+                                    <span className="font-bold text-[#0E5E6F] text-xs truncate">{row.dron}</span>
                                     <span className="font-black text-emerald-700 text-xs shrink-0">{row.ganancia}</span>
                                 </div>
                             </div>
@@ -891,7 +891,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                 </div>
 
                 <div className="p-3 border-t border-gray-100 bg-gray-50/40 flex flex-col gap-2.5">
-                    <span className="text-[10px] font-bold text-gray-400 text-center">
+                    <span className="text-xs font-bold text-gray-400 text-center">
                         {registrosActuales.length} registros técnicos encontrados
                     </span>
                     <button
@@ -899,7 +899,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                             borderRadius: "4px",
                             backgroundColor: HEX_COLORS.brandGreen,
                         }}
-                        className="w-full py-2.5 text-white text-[11px] font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-transform shadow-xs"
+                        className="w-full py-2.5 text-white text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-transform shadow-xs"
                     >
                         <Download size={12} />
                         Exportar reporte financiero PDF
@@ -920,10 +920,10 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                         <ShieldCheck size={18} />
                     </div>
                     <div>
-                        <h4 className="text-xs font-black text-gray-900 leading-tight">
-                            ¿Un Dron BIODRON Requiere Asistencia Prioritaria en Campo?
+                        <h4 className="text-sm font-black text-gray-900 leading-tight">
+                            ¿Un Dron TECNODACTYLUS Requiere Asistencia Prioritaria en Campo?
                         </h4>
-                        <p className="text-[11px] text-gray-500 font-medium leading-snug">
+                        <p className="text-xs text-gray-500 font-medium leading-snug">
                             Abre la bitácora de soporte técnico para atender tickets urgentes.
                         </p>
                     </div>
@@ -1036,7 +1036,7 @@ export const TecnicoRequestView = () => {
       id: "TR-ADMIN-101",
       origin: "admin",
       requesterName: "Gerencia de operaciones",
-      requesterContact: "admin@biodron.hn",
+      requesterContact: "admin@tecnodactylus.hn",
       equipment: "Estación de carga central #2",
       issueSummary: "Inspección y certificación para temporada alta",
       location: "Taller Central Tegucigalpa",
@@ -1050,7 +1050,7 @@ export const TecnicoRequestView = () => {
       id: "TR-ADMIN-102",
       origin: "admin",
       requesterName: "Coordinación logística",
-      requesterContact: "logistica@biodron.hn",
+      requesterContact: "logistica@tecnodactylus.hn",
       equipment: "DJI Matrice 300 RTK",
       issueSummary: "Instalación y prueba de sensor multiespectral MicaSense",
       location: "Comayagua, Comayagua",
@@ -1064,7 +1064,7 @@ export const TecnicoRequestView = () => {
       id: "TR-ADMIN-103",
       origin: "admin",
       requesterName: "Supervisión de flota",
-      requesterContact: "flota@biodron.hn",
+      requesterContact: "flota@tecnodactylus.hn",
       equipment: "Flota DJI Agras T50 (3 unidades)",
       issueSummary: "Actualización de firmware de seguridad obligatorio",
       location: "Todas las sedes",
@@ -1078,7 +1078,7 @@ export const TecnicoRequestView = () => {
       id: "TR-ADMIN-104",
       origin: "admin",
       requesterName: "Dirección técnica",
-      requesterContact: "direccion.tecnica@biodron.hn",
+      requesterContact: "direccion.tecnica@tecnodactylus.hn",
       equipment: "Laboratorio de pruebas de baterías",
       issueSummary: "Reemplazo de conectores de carga rápida por desgaste",
       location: "Taller San Pedro Sula",
@@ -1092,7 +1092,7 @@ export const TecnicoRequestView = () => {
       id: "TR-ADMIN-105",
       origin: "admin",
       requesterName: "Jefatura de inventario",
-      requesterContact: "bodega@biodron.hn",
+      requesterContact: "bodega@tecnodactylus.hn",
       equipment: "Módulos RTK D-RTK 2",
       issueSummary: "Diagnóstico de 2 antenas base con error de sincronización GPS",
       location: "Tegucigalpa, FM",
@@ -1108,7 +1108,7 @@ export const TecnicoRequestView = () => {
       id: "TR-PILOT-201",
       origin: "pilot",
       requesterName: "Javier Reyes (Piloto A-492)",
-      requesterContact: "javier.reyes@biodron.hn",
+      requesterContact: "javier.reyes@tecnodactylus.hn",
       equipment: "DJI Agras T50 (HN-0104)",
       issueSummary: "Falla de sensor de obstáculos por impacto menor",
       location: "Catacamas, Olancho",
@@ -1122,7 +1122,7 @@ export const TecnicoRequestView = () => {
       id: "TR-PILOT-202",
       origin: "pilot",
       requesterName: "María Gómez (Piloto A-501)",
-      requesterContact: "maria.gomez@biodron.hn",
+      requesterContact: "maria.gomez@tecnodactylus.hn",
       equipment: "Control remoto RM700",
       issueSummary: "Pérdida intermitente de señal de video O3 Enterprise",
       location: "Choluteca, Choluteca",
@@ -1136,7 +1136,7 @@ export const TecnicoRequestView = () => {
       id: "TR-PILOT-203",
       origin: "pilot",
       requesterName: "Héctor Ramírez (Piloto A-388)",
-      requesterContact: "hector.ramirez@biodron.hn",
+      requesterContact: "hector.ramirez@tecnodactylus.hn",
       equipment: "Dron de reconocimiento Mavic 3E",
       issueSummary: "Reemplazo de hélices y calibración de IMU",
       location: "El Progreso, Yoro",
@@ -1164,7 +1164,7 @@ export const TecnicoRequestView = () => {
       id: "TR-PILOT-205",
       origin: "pilot",
       requesterName: "María Gómez (Piloto A-501)",
-      requesterContact: "maria.gomez@biodron.hn",
+      requesterContact: "maria.gomez@tecnodactylus.hn",
       equipment: "Batería DB1500 (Serie #0892)",
       issueSummary: "Celda #3 presenta desbalance de voltaje en reposo",
       location: "Choluteca, Choluteca",
@@ -1224,10 +1224,10 @@ export const TecnicoRequestView = () => {
     >
       {/* HEADER (APILADO) */}
       <div className="flex flex-col mb-5 pb-3 border-b-2 border-gray-200 text-left gap-1">
-        <h1 className="text-base font-bold text-gray-900 leading-tight">
+        <h1 className="text-lg font-bold text-gray-900 leading-tight">
           Gestión de Solicitudes Técnicas y Mantenimiento
         </h1>
-        <p className="text-gray-500 text-[11px] font-normal leading-snug">
+        <p className="text-gray-500 text-xs font-normal leading-snug">
           Atiende, diagnostica y resuelve incidentes reportados por clientes, administración y pilotos.
         </p>
       </div>
@@ -1236,7 +1236,7 @@ export const TecnicoRequestView = () => {
       <div className="grid grid-cols-2 gap-3 mb-5 text-left">
         <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
           <div className="min-w-0">
-            <span className="text-[9px] font-bold text-gray-400 tracking-wider block truncate">Clientes</span>
+            <span className="text-xs font-bold text-gray-400 tracking-wider block truncate">Clientes</span>
             <span className="text-lg font-black text-gray-900">{countByOrigin("client")}</span>
           </div>
           <div className="p-1.5 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0">
@@ -1246,7 +1246,7 @@ export const TecnicoRequestView = () => {
 
         <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
           <div className="min-w-0">
-            <span className="text-[9px] font-bold text-gray-400 tracking-wider block truncate">Pilotos</span>
+            <span className="text-xs font-bold text-gray-400 tracking-wider block truncate">Pilotos</span>
             <span className="text-lg font-black text-gray-900">{countByOrigin("pilot")}</span>
           </div>
           <div className="p-1.5 bg-blue-50 text-blue-700 rounded-[4px] shrink-0">
@@ -1256,7 +1256,7 @@ export const TecnicoRequestView = () => {
 
         <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
           <div className="min-w-0">
-            <span className="text-[9px] font-bold text-gray-400 tracking-wider block truncate">Pendientes</span>
+            <span className="text-xs font-bold text-gray-400 tracking-wider block truncate">Pendientes</span>
             <span className="text-lg font-black text-amber-600">{countPending}</span>
           </div>
           <div className="p-1.5 bg-amber-50 text-amber-700 rounded-[4px] shrink-0">
@@ -1266,7 +1266,7 @@ export const TecnicoRequestView = () => {
 
         <div className="bg-white border-2 border-gray-200 rounded-[4px] p-3 shadow-xs flex items-center justify-between">
           <div className="min-w-0">
-            <span className="text-[9px] font-bold text-gray-400 tracking-wider block truncate">En taller</span>
+            <span className="text-xs font-bold text-gray-400 tracking-wider block truncate">En taller</span>
             <span className="text-lg font-black text-purple-700">{countInProcess}</span>
           </div>
           <div className="p-1.5 bg-purple-50 text-purple-700 rounded-[4px] shrink-0">
@@ -1283,7 +1283,7 @@ export const TecnicoRequestView = () => {
             setActiveTab(e.target.value as OriginType);
             setStatusFilter("ALL");
           }}
-          className="w-full border-2 border-gray-200 rounded-[4px] px-3 py-2 text-xs bg-white text-[#0E5E6F] font-bold focus:border-[#0E5E6F] outline-none"
+          className="w-full border-2 border-gray-200 rounded-[4px] px-3 py-2 text-xs bg-white text-black font-bold focus:border-[#0E5E6F] outline-none"
         >
           <option value="client">Clientes ({countByOrigin("client")})</option>
           <option value="admin">Administradores ({countByOrigin("admin")})</option>
@@ -1308,7 +1308,7 @@ export const TecnicoRequestView = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full border-2 border-gray-200 rounded-[4px] px-2 py-2 text-xs bg-white text-gray-700 font-bold focus:border-[#0E5E6F] outline-none"
+            className="w-full border-2 border-gray-200 rounded-[4px] px-2 py-2 text-xs bg-white text-black font-bold focus:border-[#0E5E6F] outline-none"
           >
             <option value="ALL">Todos los estados</option>
             <option value="Pendiente">Pendientes</option>
@@ -1332,31 +1332,31 @@ export const TecnicoRequestView = () => {
               <div key={req.id} className="p-3.5">
                 <div className="flex justify-between items-start gap-2 mb-1.5">
                   <div className="min-w-0">
-                    <span className="block font-mono text-[10px] text-gray-600 truncate">{req.id}</span>
-                    <span className="text-[9px] text-gray-400 font-normal flex items-center gap-0.5 mt-0.5">
+                    <span className="block font-mono text-xs text-gray-600 truncate">{req.id}</span>
+                    <span className="text-xs text-gray-400 font-normal flex items-center gap-0.5 mt-0.5">
                       <Calendar size={9} /> {req.date}
                     </span>
                   </div>
                   <span
-                    className={`shrink-0 inline-block text-[9px] font-bold px-1.5 py-0.5 rounded-[3px] border ${statusClasses(req.status)}`}
+                    className={`shrink-0 inline-block text-xs font-bold px-1.5 py-0.5 rounded-[3px] border ${statusClasses(req.status)}`}
                   >
                     {req.status}
                   </span>
                 </div>
 
                 <div className="mb-1.5">
-                  <p className="font-bold text-gray-900 text-[12px] truncate">{req.requesterName}</p>
-                  <p className="text-[9px] text-gray-400 font-mono truncate">{req.requesterContact}</p>
+                  <p className="font-bold text-gray-900 text-xs truncate">{req.requesterName}</p>
+                  <p className="text-xs text-gray-400 font-mono truncate">{req.requesterContact}</p>
                 </div>
 
                 <div className="mb-1.5">
-                  <p className="text-[11px] font-semibold text-gray-800 truncate">{req.equipment}</p>
-                  <p className="text-[9px] text-gray-400 flex items-center gap-0.5 truncate">
+                  <p className="text-xs font-semibold text-gray-800 truncate">{req.equipment}</p>
+                  <p className="text-xs text-gray-400 flex items-center gap-0.5 truncate">
                     <MapPin size={9} className="shrink-0" /> <span className="truncate">{req.location}</span>
                   </p>
                 </div>
 
-                <p className="text-[11px] text-gray-700 leading-snug mb-2.5">
+                <p className="text-xs text-gray-700 leading-snug mb-2.5">
                   {req.issueSummary}
                 </p>
 
@@ -1366,7 +1366,7 @@ export const TecnicoRequestView = () => {
                       setEditingRequest({ ...req });
                       setModalTab('info');
                     }}
-                    className="flex-1 px-2 py-1.5 bg-[#0E5E6F] text-white text-[11px] font-semibold rounded-[4px] hover:bg-[#0a4754] transition-colors cursor-pointer flex items-center justify-center gap-1"
+                    className="flex-1 px-2 py-1.5 bg-[#0E5E6F] text-white text-xs font-semibold rounded-[4px] hover:bg-[#0a4754] transition-colors cursor-pointer flex items-center justify-center gap-1"
                   >
                     <Edit3 size={11} />
                     <span>Editar</span>
@@ -1396,14 +1396,14 @@ export const TecnicoRequestView = () => {
             {/* Header del Modal */}
             <div className="flex justify-between items-center border-b border-gray-100 p-3 shrink-0">
               <div className="flex items-center gap-2 min-w-0">
-                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
+                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-xs font-bold shrink-0">
                   {editingRequest.id}
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-xs font-bold text-gray-900 truncate">
+                  <h3 className="text-sm font-bold text-gray-900 truncate">
                     {editingRequest.equipment}
                   </h3>
-                  <p className="text-[9px] text-gray-400 truncate">
+                  <p className="text-xs text-gray-400 truncate">
                     {editingRequest.requesterName}
                   </p>
                 </div>
@@ -1420,7 +1420,7 @@ export const TecnicoRequestView = () => {
             <div className="flex border-b border-gray-200 shrink-0">
               <button
                 onClick={() => setModalTab('info')}
-                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                className={`flex-1 py-2 text-xs font-bold transition-colors ${
                   modalTab === 'info'
                     ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                     : 'text-gray-500 hover:text-gray-700'
@@ -1430,7 +1430,7 @@ export const TecnicoRequestView = () => {
               </button>
               <button
                 onClick={() => setModalTab('detalles')}
-                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                className={`flex-1 py-2 text-xs font-bold transition-colors ${
                   modalTab === 'detalles'
                     ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                     : 'text-gray-500 hover:text-gray-700'
@@ -1440,7 +1440,7 @@ export const TecnicoRequestView = () => {
               </button>
               <button
                 onClick={() => setModalTab('gestion')}
-                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                className={`flex-1 py-2 text-xs font-bold transition-colors ${
                   modalTab === 'gestion'
                     ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                     : 'text-gray-500 hover:text-gray-700'
@@ -1457,7 +1457,7 @@ export const TecnicoRequestView = () => {
                 <div className="space-y-2 text-xs text-gray-700">
                   <div className="grid grid-cols-2 gap-2">
                     <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                      <span className="text-[9px] text-gray-400 block">Prioridad</span>
+                      <span className="text-xs text-gray-400 block">Prioridad</span>
                       <span className={`font-bold text-xs ${
                         editingRequest.priority === "Crítica" ? "text-red-600" :
                         editingRequest.priority === "Alta" ? "text-orange-600" :
@@ -1468,34 +1468,34 @@ export const TecnicoRequestView = () => {
                       </span>
                     </div>
                     <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                      <span className="text-[9px] text-gray-400 block">Estado</span>
+                      <span className="text-xs text-gray-400 block">Estado</span>
                       <span className="font-bold text-gray-800">{editingRequest.status}</span>
                     </div>
                   </div>
                   <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block">Solicitante</span>
+                    <span className="text-xs text-gray-400 block">Solicitante</span>
                     <span className="font-bold text-gray-800">{editingRequest.requesterName}</span>
                   </div>
                   <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block">Contacto</span>
-                    <span className="font-bold text-[#0E5E6F] text-[10px]">{editingRequest.requesterContact}</span>
+                    <span className="text-xs text-gray-400 block">Contacto</span>
+                    <span className="font-bold text-[#0E5E6F] text-xs">{editingRequest.requesterContact}</span>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                      <span className="text-[9px] text-gray-400 block">Fecha</span>
+                      <span className="text-xs text-gray-400 block">Fecha</span>
                       <span className="font-bold text-gray-800">{editingRequest.date}</span>
                     </div>
                     <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                      <span className="text-[9px] text-gray-400 block">Horas estimadas</span>
+                      <span className="text-xs text-gray-400 block">Horas estimadas</span>
                       <span className="font-bold text-gray-800">{editingRequest.estimatedHours}h</span>
                     </div>
                   </div>
                   <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block">Equipo</span>
-                    <span className="font-bold text-gray-800 text-[10px]">{editingRequest.equipment}</span>
+                    <span className="text-xs text-gray-400 block">Equipo</span>
+                    <span className="font-bold text-gray-800 text-xs">{editingRequest.equipment}</span>
                   </div>
                   <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block">Ubicación</span>
+                    <span className="text-xs text-gray-400 block">Ubicación</span>
                     <span className="font-bold text-gray-800 flex items-center gap-1">
                       <MapPin size={11} className="text-[#0E5E6F]" />
                       {editingRequest.location}
@@ -1508,15 +1508,15 @@ export const TecnicoRequestView = () => {
               {modalTab === 'detalles' && (
                 <div className="space-y-2 text-xs text-gray-700">
                   <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block mb-1">Resumen del problema</span>
+                    <span className="text-xs text-gray-400 block mb-1">Resumen del problema</span>
                     <p className="font-semibold text-gray-800">{editingRequest.issueSummary}</p>
                   </div>
                   <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block mb-1">Descripción completa</span>
-                    <p className="text-[10px] text-gray-600 leading-relaxed">{editingRequest.description}</p>
+                    <span className="text-xs text-gray-400 block mb-1">Descripción completa</span>
+                    <p className="text-xs text-gray-600 leading-relaxed">{editingRequest.description}</p>
                   </div>
                   <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block mb-1">Origen</span>
+                    <span className="text-xs text-gray-400 block mb-1">Origen</span>
                     <span className={`font-bold text-xs px-2 py-0.5 rounded-[4px] ${
                       editingRequest.origin === 'client' ? 'bg-[#0E5E6F]/10 text-[#0E5E6F]' :
                       editingRequest.origin === 'admin' ? 'bg-purple-100 text-purple-700' :
@@ -1533,7 +1533,7 @@ export const TecnicoRequestView = () => {
               {modalTab === 'gestion' && (
                 <div className="space-y-3 text-xs">
                   <div>
-                    <label className="block font-bold text-gray-800 text-[11px] mb-1">Cambiar Estado:</label>
+                    <label className="block font-bold text-gray-800 text-xs mb-1">Cambiar Estado:</label>
                     <select
                       value={editingRequest.status}
                       onChange={(e) =>
@@ -1542,7 +1542,7 @@ export const TecnicoRequestView = () => {
                           status: e.target.value as RequestStatus
                         })
                       }
-                      className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-bold bg-white text-gray-800 focus:border-[#0E5E6F] outline-none cursor-pointer"
+                      className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-bold bg-white text-black focus:border-[#0E5E6F] outline-none cursor-pointer"
                     >
                       <option value="Pendiente">Pendiente</option>
                       <option value="Aceptada">Aceptada</option>
@@ -1553,7 +1553,7 @@ export const TecnicoRequestView = () => {
                   </div>
 
                   <div>
-                    <label className="block font-bold text-gray-800 text-[11px] mb-1">Cambiar Prioridad:</label>
+                    <label className="block font-bold text-gray-800 text-xs mb-1">Cambiar Prioridad:</label>
                     <select
                       value={editingRequest.priority}
                       onChange={(e) =>
@@ -1562,7 +1562,7 @@ export const TecnicoRequestView = () => {
                           priority: e.target.value as PriorityLevel
                         })
                       }
-                      className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-bold bg-white text-gray-800 focus:border-[#0E5E6F] outline-none cursor-pointer"
+                      className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-bold bg-white text-black focus:border-[#0E5E6F] outline-none cursor-pointer"
                     >
                       <option value="Baja">Baja</option>
                       <option value="Media">Media</option>
@@ -1572,7 +1572,7 @@ export const TecnicoRequestView = () => {
                   </div>
 
                   <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block mb-1">Horas estimadas actuales</span>
+                    <span className="text-xs text-gray-400 block mb-1">Horas estimadas actuales</span>
                     <span className="font-bold text-gray-800">{editingRequest.estimatedHours}h</span>
                   </div>
                 </div>
@@ -1609,12 +1609,12 @@ export const TecnicoRequestView = () => {
               <AlertTriangle size={16} /> <span>¿Confirmar eliminación?</span>
             </div>
 
-            <div className="bg-red-50/50 border border-red-100 rounded-[4px] p-2.5 space-y-1 text-[11px]">
+            <div className="bg-red-50/50 border border-red-100 rounded-[4px] p-2.5 space-y-1 text-xs">
               <p className="font-bold text-gray-900">Solicitud: <span className="text-[#0E5E6F]">{deletingRequestId}</span></p>
-              <p className="text-gray-500 text-[10px]">Esta acción eliminará permanentemente la solicitud.</p>
+              <p className="text-gray-500 text-xs">Esta acción eliminará permanentemente la solicitud.</p>
             </div>
 
-            <p className="text-[11px] text-gray-600">Esta acción no se puede deshacer y borrará la solicitud del sistema.</p>
+            <p className="text-xs text-gray-600">Esta acción no se puede deshacer y borrará la solicitud del sistema.</p>
 
             <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
               <button onClick={() => setDeletingRequestId(null)} className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer">
@@ -1716,7 +1716,7 @@ export const TecnicoSuscripcionesView = () => {
                 descripcion: "Estructura de cobros y retornos por la mediación técnica entre los requerimientos de la administración y la ejecución.",
                 caracteristicas: [
                     "Liquidación automatizada semanal por gestión de enlace.",
-                    "Acceso a la pasarela de pagos segura BIODRON.",
+                    "Acceso a la pasarela de pagos segura TECNODACTYLUS.",
                     "Comisión preferencial por ticket validado."
                 ],
                 destacado: false,
@@ -1840,7 +1840,7 @@ export const TecnicoSuscripcionesView = () => {
                 descripcion: "Programas de certificación oficial para técnicos intermediarios en sistemas agrícolas avanzados.",
                 caracteristicas: [
                     "Cursos oficiales de calibración y reparación de drones.",
-                    "Credencial oficial de Técnico Autorizado BIODRON.",
+                    "Credencial oficial de Técnico Autorizado TECNODACTYLUS.",
                     "Talleres de actualización semestrales con expertos."
                 ],
                 destacado: false,
@@ -1907,11 +1907,11 @@ export const TecnicoSuscripcionesView = () => {
                 <div className="border-b border-gray-200 pb-2.5 flex flex-col gap-1 shrink-0">
                     <Title className="text-lg font-extrabold text-gray-900 tracking-tight flex flex-col items-start gap-1.5">
                         <span>Gestión de Suscripciones y Enlace para Técnicos</span>
-                        <span className="whitespace-nowrap bg-[#0E5E6F]/10 text-[#0E5E6F] text-[10px] font-bold px-2 py-0.5 rounded-[4px] tracking-wider border border-[#0E5E6F]/20">
+                        <span className="whitespace-nowrap bg-[#0E5E6F]/10 text-[#0E5E6F] text-xs font-bold px-2 py-0.5 rounded-[4px] tracking-wider border border-[#0E5E6F]/20">
                             Técnicos Intermediarios
                         </span>
                     </Title>
-                    <Text className="text-[11px] text-gray-500 block mt-0.5">
+                    <Text className="text-xs text-gray-500 block mt-0.5">
                         Administra tu capacidad de intermediación entre administradores, clientes y pilotos, además de herramientas de diagnóstico y alianzas técnicas.
                     </Text>
                 </div>
@@ -1947,7 +1947,7 @@ export const TecnicoSuscripcionesView = () => {
                                         <div className="grid grid-cols-2 gap-1 p-1 bg-gray-100 rounded-[4px] border border-gray-200 mb-2.5">
                                             <button
                                                 onClick={() => setPaymentMethod("card")}
-                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "card"
+                                                className={`py-1.5 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "card"
                                                         ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                     }`}
@@ -1958,7 +1958,7 @@ export const TecnicoSuscripcionesView = () => {
 
                                             <button
                                                 onClick={() => setPaymentMethod("transfer")}
-                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "transfer"
+                                                className={`py-1.5 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "transfer"
                                                         ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                     }`}
@@ -1969,7 +1969,7 @@ export const TecnicoSuscripcionesView = () => {
 
                                             <button
                                                 onClick={() => setPaymentMethod("qr")}
-                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "qr"
+                                                className={`py-1.5 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "qr"
                                                         ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                     }`}
@@ -1980,13 +1980,13 @@ export const TecnicoSuscripcionesView = () => {
 
                                             <button
                                                 onClick={() => setPaymentMethod("wallet")}
-                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "wallet"
+                                                className={`py-1.5 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "wallet"
                                                         ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                     }`}
                                             >
                                                 <Wallet size={13} />
-                                                <span>Saldo BIODRON</span>
+                                                <span>Saldo TECNODACTYLUS</span>
                                             </button>
                                         </div>
 
@@ -1995,13 +1995,13 @@ export const TecnicoSuscripcionesView = () => {
                                             <div className="flex flex-col gap-3">
                                                 {/* Selector de pasarelas */}
                                                 <div>
-                                                    <span className="text-gray-700 text-[10px] block mb-1.5">Pasarela de pago:</span>
+                                                    <span className="text-gray-700 text-xs block mb-1.5">Pasarela de pago:</span>
                                                     <div className="grid grid-cols-2 gap-1.5">
                                                         {["PixelPay", "ClinPays", "Recurrente", "Pagadito"].map((gateway) => (
                                                             <button
                                                                 key={gateway}
                                                                 onClick={() => setSelectedGateway(gateway)}
-                                                                className={`py-1 px-2 rounded-[4px] text-[10px] font-bold border transition cursor-pointer active:scale-95 ${selectedGateway === gateway
+                                                                className={`py-1 px-2 rounded-[4px] text-xs font-bold border transition cursor-pointer active:scale-95 ${selectedGateway === gateway
                                                                         ? "bg-[#0E5E6F] text-white border-[#0E5E6F]"
                                                                         : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
                                                                     }`}
@@ -2017,7 +2017,7 @@ export const TecnicoSuscripcionesView = () => {
                                                         <div className="w-full max-w-[190px] aspect-[1.58/1] bg-gradient-to-tr from-slate-900 via-slate-800 to-[#0E5E6F] text-white p-2.5 rounded-[4px] shadow-sm border border-slate-700 flex flex-col justify-between">
                                                             <div className="flex justify-between items-center">
                                                                 <span className="text-[8px] font-extrabold uppercase tracking-wider text-slate-300">
-                                                                    BIODRON TÉCNICO
+                                                                    TECNODACTYLUS TÉCNICO
                                                                 </span>
                                                                 <CreditCard size={15} className="text-amber-400" />
                                                             </div>
@@ -2051,9 +2051,9 @@ export const TecnicoSuscripcionesView = () => {
                                                         </div>
                                                     </div>
 
-                                                    <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+                                                    <div className="grid grid-cols-2 gap-1.5 text-xs">
                                                         <div className="col-span-2 flex flex-col gap-0.5">
-                                                            <label className="text-gray-700 text-[10px]">
+                                                            <label className="text-gray-700 text-xs">
                                                                 Número de tarjeta
                                                             </label>
                                                             <input
@@ -2067,12 +2067,12 @@ export const TecnicoSuscripcionesView = () => {
                                                                         number: e.target.value,
                                                                     })
                                                                 }
-                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                             />
                                                         </div>
 
                                                         <div className="col-span-2 flex flex-col gap-0.5">
-                                                            <label className="text-gray-700 text-[10px]">
+                                                            <label className="text-gray-700 text-xs">
                                                                 Titular de la tarjeta
                                                             </label>
                                                             <input
@@ -2082,12 +2082,12 @@ export const TecnicoSuscripcionesView = () => {
                                                                 onChange={(e) =>
                                                                     setCardData({ ...cardData, name: e.target.value })
                                                                 }
-                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                             />
                                                         </div>
 
                                                         <div className="flex flex-col gap-0.5">
-                                                            <label className="text-gray-700 text-[10px]">
+                                                            <label className="text-gray-700 text-xs">
                                                                 Vencimiento
                                                             </label>
                                                             <input
@@ -2101,12 +2101,12 @@ export const TecnicoSuscripcionesView = () => {
                                                                         expiry: e.target.value,
                                                                     })
                                                                 }
-                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                             />
                                                         </div>
 
                                                         <div className="flex flex-col gap-0.5">
-                                                            <label className="text-gray-700 text-[10px]">
+                                                            <label className="text-gray-700 text-xs">
                                                                 CVV
                                                             </label>
                                                             <input
@@ -2117,7 +2117,7 @@ export const TecnicoSuscripcionesView = () => {
                                                                 onChange={(e) =>
                                                                     setCardData({ ...cardData, cvv: e.target.value })
                                                                 }
-                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                             />
                                                         </div>
                                                     </div>
@@ -2129,10 +2129,10 @@ export const TecnicoSuscripcionesView = () => {
                                         {paymentMethod === "transfer" && (
                                             <div className="flex flex-col gap-2 text-xs">
                                                 <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5">
-                                                    <span className="text-gray-800 text-[11px] block mb-1">
-                                                        Cuentas oficiales BIODRON
+                                                    <span className="text-gray-800 text-xs block mb-1">
+                                                        Cuentas oficiales TECNODACTYLUS
                                                     </span>
-                                                    <div className="grid grid-cols-1 gap-2 text-[10px]">
+                                                    <div className="grid grid-cols-1 gap-2 text-xs">
                                                         <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
                                                             <span className="font-bold text-[#0E5E6F] block">BAC Credomatic</span>
                                                             <span className="text-gray-600 block">Cuenta: 11-401-009823-1</span>
@@ -2154,7 +2154,7 @@ export const TecnicoSuscripcionesView = () => {
 
                                                 <div className="border border-dashed border-gray-300 rounded-[4px] p-2.5 text-center flex items-center justify-center gap-2 hover:border-[#0E5E6F] transition cursor-pointer active:scale-95 bg-gray-50/50">
                                                     <Upload size={16} className="text-[#0E5E6F]" />
-                                                    <span className="text-gray-700 text-[11px]">
+                                                    <span className="text-gray-700 text-xs">
                                                         Subir comprobante de pago
                                                     </span>
                                                 </div>
@@ -2165,13 +2165,13 @@ export const TecnicoSuscripcionesView = () => {
                                         {paymentMethod === "qr" && (
                                             <div className="flex flex-col items-center gap-3 bg-gray-50 border border-gray-200 rounded-[4px] p-3">
                                                 <div className="flex-1 w-full">
-                                                    <span className="text-gray-700 text-[10px] block mb-1.5">Generar código mediante:</span>
+                                                    <span className="text-gray-700 text-xs block mb-1.5">Generar código mediante:</span>
                                                     <div className="flex flex-wrap gap-1 mb-2">
                                                         {["PixelPay", "Banrural", "Atlántida"].map((wallet) => (
                                                             <button
                                                                 key={wallet}
                                                                 onClick={() => setSelectedQrWallet(wallet)}
-                                                                className={`py-1 px-2 rounded-[4px] text-[10px] font-bold border transition cursor-pointer active:scale-95 ${selectedQrWallet === wallet
+                                                                className={`py-1 px-2 rounded-[4px] text-xs font-bold border transition cursor-pointer active:scale-95 ${selectedQrWallet === wallet
                                                                         ? "bg-[#0E5E6F] text-white border-[#0E5E6F]"
                                                                         : "bg-white text-gray-600 border-gray-200 hover:bg-gray-100"
                                                                     }`}
@@ -2180,7 +2180,7 @@ export const TecnicoSuscripcionesView = () => {
                                                             </button>
                                                         ))}
                                                     </div>
-                                                    <span className="text-[10px] text-gray-500 leading-tight block">
+                                                    <span className="text-xs text-gray-500 leading-tight block">
                                                         Escanea este código desde la app de <strong>{selectedQrWallet}</strong> para pagar el total de {selectedPlanForCheckout.precio}.
                                                     </span>
                                                 </div>
@@ -2195,8 +2195,8 @@ export const TecnicoSuscripcionesView = () => {
                                             <div className="flex flex-col gap-2 text-xs">
                                                 <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5 flex justify-between items-center">
                                                     <div>
-                                                        <span className="text-gray-500 font-medium block text-[10px]">
-                                                            Saldo disponible BIODRON
+                                                        <span className="text-gray-500 font-medium block text-xs">
+                                                            Saldo disponible TECNODACTYLUS
                                                         </span>
                                                         <span className="text-lg font-black text-gray-900">
                                                             L{" "}
@@ -2211,7 +2211,7 @@ export const TecnicoSuscripcionesView = () => {
                                                 </div>
 
                                                 {userWalletBalance < selectedPlanForCheckout.precioNum ? (
-                                                    <div className="p-1.5 bg-red-50 border border-red-200 rounded-[4px] flex items-center gap-1.5 text-red-800 text-[11px]">
+                                                    <div className="p-1.5 bg-red-50 border border-red-200 rounded-[4px] flex items-center gap-1.5 text-red-800 text-xs">
                                                         <AlertCircle
                                                             size={14}
                                                             className="shrink-0 text-red-600"
@@ -2226,7 +2226,7 @@ export const TecnicoSuscripcionesView = () => {
                                                         </span>
                                                     </div>
                                                 ) : (
-                                                    <div className="p-1.5 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-1.5 text-emerald-800 text-[11px]">
+                                                    <div className="p-1.5 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-1.5 text-emerald-800 text-xs">
                                                         <CheckCircle2
                                                             size={14}
                                                             className="shrink-0 text-emerald-600"
@@ -2267,41 +2267,41 @@ export const TecnicoSuscripcionesView = () => {
                                     <div>
                                         <Title
                                             as="h3"
-                                            className="text-xs font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
+                                            className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
                                         >
                                             Resumen de la Orden
                                         </Title>
 
                                         <div className="bg-gray-50 p-2.5 rounded-[4px] border border-gray-200 flex flex-col gap-1 mb-2">
-                                            <span className="text-[9px] text-[#0E5E6F] bg-[#0E5E6F]/10 px-2 py-0.5 rounded-[4px] border border-[#0E5E6F]/20 w-fit">
+                                            <span className="text-xs text-[#0E5E6F] bg-[#0E5E6F]/10 px-2 py-0.5 rounded-[4px] border border-[#0E5E6F]/20 w-fit">
                                                 {selectedPlanForCheckout.etiqueta}
                                             </span>
                                             <Title
                                                 as="h2"
-                                                className="text-base font-black text-gray-900"
+                                                className="text-lg font-black text-gray-900"
                                             >
                                                 {selectedPlanForCheckout.nombre}
                                             </Title>
-                                            <Text className="text-[11px] text-gray-600 block leading-tight">
+                                            <Text className="text-xs text-gray-600 block leading-tight">
                                                 {selectedPlanForCheckout.descripcion}
                                             </Text>
                                             <div className="mt-1.5 pt-1.5 border-t border-gray-200 flex justify-between items-baseline">
-                                                <span className="text-[11px] text-gray-500">
+                                                <span className="text-xs text-gray-500">
                                                     Total a pagar:
                                                 </span>
                                                 <span className="text-lg font-black text-[#0E5E6F]">
                                                     {selectedPlanForCheckout.precio}{" "}
-                                                    <span className="text-[9px] text-gray-500 font-normal">
+                                                    <span className="text-xs text-gray-500 font-normal">
                                                         {selectedPlanForCheckout.periodo}
                                                     </span>
                                                 </span>
                                             </div>
                                         </div>
 
-                                        <Text className="text-[10px] text-gray-700 block mb-1">
+                                        <Text className="text-xs text-gray-700 block mb-1">
                                             Detalles incluidos:
                                         </Text>
-                                        <ul className="flex flex-col gap-1 text-[11px] text-gray-600">
+                                        <ul className="flex flex-col gap-1 text-xs text-gray-600">
                                             {selectedPlanForCheckout.caracteristicas.map(
                                                 (item: string, idx: number) => (
                                                     <li key={idx} className="flex items-center gap-1.5">
@@ -2316,9 +2316,9 @@ export const TecnicoSuscripcionesView = () => {
                                         </ul>
                                     </div>
 
-                                    <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-900 text-[10px]">
+                                    <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-900 text-xs">
                                         <ShieldCheck size={14} className="text-amber-600 shrink-0" />
-                                        <span>Garantía de conectividad y soporte de intermediación técnica BIODRON.</span>
+                                        <span>Garantía de conectividad y soporte de intermediación técnica TECNODACTYLUS.</span>
                                     </div>
                                 </div>
                             </div>
@@ -2332,10 +2332,10 @@ export const TecnicoSuscripcionesView = () => {
                             <div className="bg-white border-2 border-[#0E5E6F] rounded-[4px] shadow-sm overflow-hidden">
                                 <div className="bg-[#0E5E6F] px-4 py-2 flex items-center gap-2">
                                     <CheckCircle2 size={15} className="text-white shrink-0" />
-                                    <span className="text-white text-[11px] font-bold tracking-wide">
+                                    <span className="text-white text-[9px] font-bold tracking-wide">
                                         Plan Activo
                                     </span>
-                                    <span className="ml-auto text-[10px] text-white/90 bg-white/15 px-2 py-0.5 rounded-[4px] border border-white/20">
+                                    <span className="ml-auto text-xs text-white/90 bg-white/15 px-2 py-0.5 rounded-[4px] border border-white/20">
                                         Renovación automática
                                     </span>
                                 </div>
@@ -2351,7 +2351,7 @@ export const TecnicoSuscripcionesView = () => {
                                     </div>
 
                                     <div className="bg-[#0E5E6F]/5 border border-[#0E5E6F]/20 rounded-[4px] px-3.5 py-3 flex items-baseline justify-between">
-                                        <span className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">
+                                        <span className="text-xs uppercase tracking-wider text-gray-500 font-medium">
                                             Costo actual
                                         </span>
                                         <span className="text-2xl font-black text-[#0E5E6F]">
@@ -2368,7 +2368,7 @@ export const TecnicoSuscripcionesView = () => {
                                                 <Calendar size={14} className="text-[#0E5E6F]" />
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="text-[9px] uppercase text-gray-400 leading-none">
+                                                <span className="text-xs uppercase text-gray-400 leading-none">
                                                     Próximo vencimiento
                                                 </span>
                                                 <span className="text-xs font-bold text-gray-800 mt-1">
@@ -2382,7 +2382,7 @@ export const TecnicoSuscripcionesView = () => {
                                                 <CreditCard size={14} className="text-[#0E5E6F]" />
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="text-[9px] uppercase text-gray-400 leading-none">
+                                                <span className="text-xs uppercase text-gray-400 leading-none">
                                                     Método registrado
                                                 </span>
                                                 <span className="text-xs font-bold text-gray-800 mt-1">
@@ -2396,7 +2396,7 @@ export const TecnicoSuscripcionesView = () => {
                                                 <Network size={14} className="text-[#0E5E6F]" />
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="text-[9px] uppercase text-gray-400 leading-none">
+                                                <span className="text-xs uppercase text-gray-400 leading-none">
                                                     Rol de enlace
                                                 </span>
                                                 <span className="text-xs font-bold text-gray-800 mt-1">
@@ -2425,13 +2425,13 @@ export const TecnicoSuscripcionesView = () => {
 
                         <div>
                             <div className="mb-4">
-                                <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1.5">
+                                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">
                                     Categoría de servicios
                                 </label>
                                 <select
                                     value={activeTab}
                                     onChange={(e) => setActiveTab(e.target.value as TabType)}
-                                    className="w-full text-xs font-bold bg-white border-2 border-gray-200 text-gray-800 rounded-[4px] p-2.5 focus:border-[#0E5E6F] focus:outline-none shadow-xs cursor-pointer"
+                                    className="w-full text-xs font-bold bg-white border-2 border-gray-200 text-black rounded-[4px] p-2.5 focus:border-[#0E5E6F] focus:outline-none shadow-xs cursor-pointer"
                                 >
                                     <option value="gestion-solicitudes">Gestión de solicitudes</option>
                                     <option value="comisiones-intermediacion">Comisiones e intermediación</option>
@@ -2476,18 +2476,18 @@ export const TecnicoSuscripcionesView = () => {
                                                 }`}
                                         >
                                             {plan.destacado && (
-                                                <div className="bg-[#0E5E6F] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 flex items-center gap-1.5">
+                                                <div className="bg-[#0E5E6F] text-white text-xs font-bold uppercase tracking-wider px-3 py-1.5 flex items-center gap-1.5">
                                                     <Zap size={12} /> Plan Destacado
                                                 </div>
                                             )}
 
                                             <div className="p-4 flex flex-col gap-3">
                                                 <div className="flex justify-between items-start gap-2">
-                                                    <span className="bg-gray-100 text-gray-800 border border-gray-200 text-[10px] px-2 py-0.5 rounded-[4px] tracking-wider">
+                                                    <span className="bg-gray-100 text-gray-800 border border-gray-200 text-xs px-2 py-0.5 rounded-[4px] tracking-wider">
                                                         {plan.etiqueta}
                                                     </span>
                                                     {esPlanActual && (
-                                                        <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded-[4px] font-bold flex items-center gap-1 shrink-0">
+                                                        <span className="bg-emerald-100 text-emerald-800 text-xs px-2 py-0.5 rounded-[4px] font-bold flex items-center gap-1 shrink-0">
                                                             <CheckCircle2 size={11} /> Contratado
                                                         </span>
                                                     )}
@@ -2496,7 +2496,7 @@ export const TecnicoSuscripcionesView = () => {
                                                 <div>
                                                     <Title
                                                         as="h3"
-                                                        className="text-base font-extrabold text-gray-900 leading-tight"
+                                                        className="text-lg font-extrabold text-gray-900 leading-tight"
                                                     >
                                                         {plan.nombre}
                                                     </Title>
@@ -2520,7 +2520,7 @@ export const TecnicoSuscripcionesView = () => {
                                                 </div>
 
                                                 <div>
-                                                    <Text className="text-[10px] uppercase text-gray-400 tracking-wider block mb-1.5">
+                                                    <Text className="text-xs uppercase text-gray-400 tracking-wider block mb-1.5">
                                                         Incluye:
                                                     </Text>
                                                     <ul className="flex flex-col gap-1.5">
@@ -2589,13 +2589,13 @@ export const TecnicoSuscripcionesView = () => {
 
                             <div className="flex items-center gap-2 text-[#B8001F] mb-2 pr-6">
                                 <AlertCircle size={18} className="shrink-0" />
-                                <Title as="h3" className="text-xs font-extrabold text-gray-900 leading-tight">
+                                <Title as="h3" className="text-sm font-extrabold text-gray-900 leading-tight">
                                     ¿Cancelar Suscripción Actual?
                                 </Title>
                             </div>
 
-                            <Text className="text-[11px] text-[#555555] leading-normal mb-3 block">
-                                Al cancelar tu suscripción como técnico intermediario, perderás el acceso al enrutamiento prioritario de órdenes enviadas por administradores, las comisiones preferenciales y las herramientas de diagnóstico en la plataforma BIODRON.
+                            <Text className="text-xs text-[#555555] leading-normal mb-3 block">
+                                Al cancelar tu suscripción como técnico intermediario, perderás el acceso al enrutamiento prioritario de órdenes enviadas por administradores, las comisiones preferenciales y las herramientas de diagnóstico en la plataforma TECNODACTYLUS.
                             </Text>
                         </div>
 
@@ -2641,7 +2641,7 @@ export const TecnicoHistoryView = () => {
       duration: '210 min',
       componentsChecked: 'Boquillas, rotores y ESCs',
       sparePartUsed: 'Kit de sellos y filtros anti-goteo',
-      partCost: '$45.00',
+      partCost: 'L 1,125.00',
       status: 'completed',
       diagnosticScore: 98,
       workOrder: 'OT-98421',
@@ -2679,7 +2679,7 @@ export const TecnicoHistoryView = () => {
       duration: '150 min',
       componentsChecked: 'Chasis principal y amortiguadores',
       sparePartUsed: 'Conjunto de fibra de carbono inferior',
-      partCost: '$120.00',
+      partCost: 'L 3,000.00',
       status: 'completed',
       diagnosticScore: 92,
       workOrder: 'OT-98410',
@@ -2717,7 +2717,7 @@ export const TecnicoHistoryView = () => {
       duration: '90 min',
       componentsChecked: 'Bujías, aceite de motor y filtros de aire',
       sparePartUsed: 'Aceite sintético 10W-30 y bujía NGK',
-      partCost: '$35.00',
+      partCost: 'L 875.00',
       status: 'interrupted',
       diagnosticScore: 80,
       workOrder: 'OT-98382',
@@ -2755,7 +2755,7 @@ export const TecnicoHistoryView = () => {
       duration: '60 min',
       componentsChecked: 'Bombas dosificadoras y mangueras',
       sparePartUsed: 'Juego de válvulas check',
-      partCost: '$25.00',
+      partCost: 'L 625.00',
       status: 'completed',
       diagnosticScore: 96,
       workOrder: 'OT-98361',
@@ -2804,19 +2804,19 @@ export const TecnicoHistoryView = () => {
     switch (status) {
       case 'completed':
         return (
-          <span className="inline-block px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-emerald-100 text-emerald-800 shrink-0">
+          <span className="inline-block px-2 py-0.5 rounded-[4px] text-xs font-bold bg-emerald-100 text-emerald-800 shrink-0">
             Completado
           </span>
         );
       case 'interrupted':
         return (
-          <span className="inline-block px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-amber-100 text-amber-800 shrink-0">
+          <span className="inline-block px-2 py-0.5 rounded-[4px] text-xs font-bold bg-amber-100 text-amber-800 shrink-0">
             Pausado
           </span>
         );
       case 'failed':
         return (
-          <span className="inline-block px-2 py-0.5 rounded-[4px] text-[10px] font-bold bg-red-100 text-red-800 shrink-0">
+          <span className="inline-block px-2 py-0.5 rounded-[4px] text-xs font-bold bg-red-100 text-red-800 shrink-0">
             Abortado
           </span>
         );
@@ -2828,19 +2828,19 @@ export const TecnicoHistoryView = () => {
     switch (type) {
       case 'maintenance':
         return (
-          <span className="inline-block text-[11px] font-semibold text-cyan-800 bg-cyan-50 px-2 py-0.5 rounded-[4px] border border-cyan-100">
+          <span className="inline-block text-xs font-semibold text-cyan-800 bg-cyan-50 px-2 py-0.5 rounded-[4px] border border-cyan-100">
             Mantenimiento
           </span>
         );
       case 'calibration':
         return (
-          <span className="inline-block text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-[4px] border border-emerald-100">
+          <span className="inline-block text-xs font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-[4px] border border-emerald-100">
             Calibración
           </span>
         );
       case 'repair':
         return (
-          <span className="inline-block text-[11px] font-semibold text-purple-800 bg-purple-50 px-2 py-0.5 rounded-[4px] border border-purple-100">
+          <span className="inline-block text-xs font-semibold text-purple-800 bg-purple-50 px-2 py-0.5 rounded-[4px] border border-purple-100">
             Reparación
           </span>
         );
@@ -2854,14 +2854,14 @@ export const TecnicoHistoryView = () => {
       <div className="flex flex-col gap-3 bg-white p-4 rounded-[4px] border border-gray-200 shadow-xs">
         <div>
           {/* Title Case */}
-          <h1 className="text-base font-bold text-gray-900 leading-tight">
+          <h1 className="text-lg font-bold text-gray-900 leading-tight">
             Historial de Mantenimiento y Servicios Tácticos
           </h1>
-          <span className="inline-block mt-1.5 text-[10px] bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-[4px] border border-gray-200 w-fit">
+          <span className="inline-block mt-1.5 text-xs bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-[4px] border border-gray-200 w-fit">
             {flights.length} registros
           </span>
           {/* Sentence Case */}
-          <p className="text-[11px] text-gray-500 mt-1.5 leading-snug">
+          <p className="text-xs text-gray-500 mt-1.5 leading-snug">
             Registro detallado de intervenciones mecánicas, calibraciones de sensores y órdenes de taller.
           </p>
         </div>
@@ -2881,8 +2881,8 @@ export const TecnicoHistoryView = () => {
         <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
           <div className="min-w-0">
             {/* Subtítulo: Title Case */}
-            <p className="text-[10px] text-gray-500 font-medium">Equipos Intervenidos</p>
-            <h3 className="text-base font-bold text-gray-900 mt-0.5">{flights.length} <span className="text-[10px] font-normal text-gray-500">und</span></h3>
+            <p className="text-xs text-gray-500 font-medium">Equipos Intervenidos</p>
+            <h3 className="text-lg font-bold text-gray-900 mt-0.5">{flights.length} <span className="text-xs font-normal text-gray-500">und</span></h3>
           </div>
           <div className="p-2 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
             <Wrench size={16} />
@@ -2892,8 +2892,8 @@ export const TecnicoHistoryView = () => {
         <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
           <div className="min-w-0">
             {/* Subtítulo: Title Case */}
-            <p className="text-[10px] text-gray-500 font-medium">Horas de Taller</p>
-            <h3 className="text-base font-bold text-gray-900 mt-0.5">{totalHours} <span className="text-[10px] font-normal text-gray-500">hrs</span></h3>
+            <p className="text-xs text-gray-500 font-medium">Horas de Taller</p>
+            <h3 className="text-lg font-bold text-gray-900 mt-0.5">{totalHours} <span className="text-xs font-normal text-gray-500">hrs</span></h3>
           </div>
           <div className="p-2 bg-[#0E5E6F]/10 text-[#0E5E6F] rounded-[4px] shrink-0">
             <Clock size={16} />
@@ -2903,8 +2903,8 @@ export const TecnicoHistoryView = () => {
         <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
           <div className="min-w-0">
             {/* Subtítulo: Title Case */}
-            <p className="text-[10px] text-gray-500 font-medium">Efectividad Técnica</p>
-            <h3 className="text-base font-bold text-emerald-700 mt-0.5">{successRate}%</h3>
+            <p className="text-xs text-gray-500 font-medium">Efectividad Técnica</p>
+            <h3 className="text-lg font-bold text-emerald-700 mt-0.5">{successRate}%</h3>
           </div>
           <div className="p-2 bg-emerald-50 text-emerald-600 rounded-[4px] shrink-0">
             <ShieldCheck size={16} />
@@ -2914,8 +2914,8 @@ export const TecnicoHistoryView = () => {
         <div className="bg-white p-3 rounded-[4px] border border-gray-200 shadow-xs flex items-center justify-between">
           <div className="min-w-0">
             {/* Subtítulo: Title Case */}
-            <p className="text-[10px] text-gray-500 font-medium">Repuestos Registrados</p>
-            <h3 className="text-base font-bold text-gray-900 mt-0.5">5 <span className="text-[10px] font-normal text-gray-500">kits</span></h3>
+            <p className="text-xs text-gray-500 font-medium">Repuestos Registrados</p>
+            <h3 className="text-lg font-bold text-gray-900 mt-0.5">5 <span className="text-xs font-normal text-gray-500">kits</span></h3>
           </div>
           <div className="p-2 bg-cyan-50 text-cyan-600 rounded-[4px] shrink-0">
             <Compass size={16} />
@@ -2941,7 +2941,7 @@ export const TecnicoHistoryView = () => {
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="w-full px-2.5 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
+            className="w-full px-2.5 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs text-black font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
           >
             <option value="all">Todas las intervenciones</option>
             <option value="maintenance">Mantenimiento</option>
@@ -2952,7 +2952,7 @@ export const TecnicoHistoryView = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full px-2.5 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] text-gray-700 font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
+            className="w-full px-2.5 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs text-black font-medium focus:outline-none focus:border-[#0E5E6F] transition cursor-pointer"
           >
             <option value="all">Todos los estados</option>
             <option value="completed">Completados</option>
@@ -2978,7 +2978,7 @@ export const TecnicoHistoryView = () => {
                 <div className="flex justify-between items-start gap-2 mb-1.5">
                   <div className="min-w-0">
                     <div className="font-bold text-gray-900 text-xs">{flight.workOrder}</div>
-                    <div className="text-[10px] text-gray-400 font-medium flex items-center gap-1 mt-0.5">
+                    <div className="text-xs text-gray-400 font-medium flex items-center gap-1 mt-0.5">
                       <Calendar size={10} />
                       {flight.date}
                     </div>
@@ -2993,11 +2993,11 @@ export const TecnicoHistoryView = () => {
                   <div className="mt-1">{getTypeBadge(flight.type)}</div>
                 </div>
 
-                <div className="text-gray-700 font-medium text-[11px] flex items-center gap-1 mb-0.5 truncate">
+                <div className="text-gray-700 font-medium text-xs flex items-center gap-1 mb-0.5 truncate">
                   <MapPin size={11} className="text-gray-400 shrink-0" />
                   <span className="truncate">{flight.location}</span>
                 </div>
-                <div className="text-[10px] text-gray-400 flex items-center gap-1 mb-2 truncate">
+                <div className="text-xs text-gray-400 flex items-center gap-1 mb-2 truncate">
                   <User size={10} className="shrink-0" />
                   <span className="truncate">{flight.technician}</span>
                 </div>
@@ -3005,7 +3005,7 @@ export const TecnicoHistoryView = () => {
                 <div className="flex items-center justify-between pt-2 border-t border-gray-100">
                   <div>
                     <div className="font-bold text-gray-900 text-xs">{flight.duration}</div>
-                    <div className="text-[10px] text-emerald-600 font-bold mt-0.5">
+                    <div className="text-xs text-emerald-600 font-bold mt-0.5">
                       Score: {flight.diagnosticScore}%
                     </div>
                   </div>
@@ -3016,7 +3016,7 @@ export const TecnicoHistoryView = () => {
                         setSelectedFlight(flight);
                         setModalTab('info');
                       }}
-                      className="flex items-center gap-1 px-2.5 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-medium rounded-[4px] transition cursor-pointer"
+                      className="flex items-center gap-1 px-2.5 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded-[4px] transition cursor-pointer"
                       title="Ver detalles"
                     >
                       <Eye size={13} className="text-[#0E5E6F]" />
@@ -3025,7 +3025,7 @@ export const TecnicoHistoryView = () => {
 
                     <button
                       onClick={() => { }}
-                      className="flex items-center gap-1 px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-[11px] font-medium rounded-[4px] transition cursor-pointer shadow-xs"
+                      className="flex items-center gap-1 px-2.5 py-1.5 bg-[#0E5E6F] hover:bg-[#0A4754] text-white text-xs font-medium rounded-[4px] transition cursor-pointer shadow-xs"
                       title="Descargar reporte PDF"
                     >
                       <Download size={13} />
@@ -3043,7 +3043,7 @@ export const TecnicoHistoryView = () => {
         )}
 
         {/* Footer estático */}
-        <div className="p-3 px-4 bg-gray-50/80 border-t border-gray-200 text-[11px] text-gray-500 text-center">
+        <div className="p-3 px-4 bg-gray-50/80 border-t border-gray-200 text-xs text-gray-500 text-center">
           <span>Mostrando {filteredFlights.length} de {flights.length} registros</span>
         </div>
       </div>
@@ -3056,14 +3056,14 @@ export const TecnicoHistoryView = () => {
             {/* Header del Modal */}
             <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
               <div className="flex items-center gap-2 min-w-0">
-                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
+                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-xs font-bold shrink-0">
                   {selectedFlight.workOrder}
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-xs font-bold text-gray-900 truncate">
+                  <h3 className="text-sm font-bold text-gray-900 truncate">
                     {selectedFlight.typeName}
                   </h3>
-                  <p className="text-[9px] text-gray-400 truncate">
+                  <p className="text-xs text-gray-400 truncate">
                     {selectedFlight.equipmentName} • {selectedFlight.date}
                   </p>
                 </div>
@@ -3082,7 +3082,7 @@ export const TecnicoHistoryView = () => {
             <div className="flex border-b border-gray-200 shrink-0">
               <button
                 onClick={() => setModalTab('info')}
-                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                className={`flex-1 py-2 text-xs font-bold transition-colors ${
                   modalTab === 'info'
                     ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                     : 'text-gray-500 hover:text-gray-700'
@@ -3092,7 +3092,7 @@ export const TecnicoHistoryView = () => {
               </button>
               <button
                 onClick={() => setModalTab('detalles')}
-                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                className={`flex-1 py-2 text-xs font-bold transition-colors ${
                   modalTab === 'detalles'
                     ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                     : 'text-gray-500 hover:text-gray-700'
@@ -3103,7 +3103,7 @@ export const TecnicoHistoryView = () => {
               {selectedFlight.sparePartUsed && (
                 <button
                   onClick={() => setModalTab('repuestos')}
-                  className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                  className={`flex-1 py-2 text-xs font-bold transition-colors ${
                     modalTab === 'repuestos'
                       ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
                       : 'text-gray-500 hover:text-gray-700'
@@ -3121,23 +3121,23 @@ export const TecnicoHistoryView = () => {
                 <div className="space-y-2 text-xs text-gray-700">
                   <div className="grid grid-cols-2 gap-2">
                     <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                      <span className="text-[9px] text-gray-400 block">Tipo</span>
+                      <span className="text-xs text-gray-400 block">Tipo</span>
                       <span className="font-bold text-gray-800">{selectedFlight.typeName}</span>
                     </div>
                     <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                      <span className="text-[9px] text-gray-400 block">Estado</span>
+                      <span className="text-xs text-gray-400 block">Estado</span>
                       <span className="font-bold text-gray-800">{selectedFlight.status}</span>
                     </div>
                   </div>
                   <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block">Ubicación</span>
+                    <span className="text-xs text-gray-400 block">Ubicación</span>
                     <span className="font-bold text-gray-800 flex items-center gap-1">
                       <MapPin size={11} className="text-[#0E5E6F]" />
                       {selectedFlight.location}
                     </span>
                   </div>
                   <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block">Técnico</span>
+                    <span className="text-xs text-gray-400 block">Técnico</span>
                     <span className="font-bold text-gray-800 flex items-center gap-1">
                       <User size={11} className="text-[#0E5E6F]" />
                       {selectedFlight.technician}
@@ -3145,15 +3145,15 @@ export const TecnicoHistoryView = () => {
                   </div>
                   <div className="grid grid-cols-3 gap-2">
                     <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px] text-center">
-                      <span className="text-[9px] text-gray-400 block">Duración</span>
+                      <span className="text-xs text-gray-400 block">Duración</span>
                       <span className="font-bold text-gray-800 text-xs">{selectedFlight.duration}</span>
                     </div>
                     <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px] text-center">
-                      <span className="text-[9px] text-gray-400 block">Horario</span>
-                      <span className="font-bold text-gray-800 text-[9px]">{selectedFlight.startTime} - {selectedFlight.endTime}</span>
+                      <span className="text-xs text-gray-400 block">Horario</span>
+                      <span className="font-bold text-gray-800 text-xs">{selectedFlight.startTime} - {selectedFlight.endTime}</span>
                     </div>
                     <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px] text-center">
-                      <span className="text-[9px] text-gray-400 block">Score</span>
+                      <span className="text-xs text-gray-400 block">Score</span>
                       <span className="font-bold text-emerald-600">{selectedFlight.diagnosticScore}%</span>
                     </div>
                   </div>
@@ -3164,17 +3164,17 @@ export const TecnicoHistoryView = () => {
               {modalTab === 'detalles' && (
                 <div className="space-y-2 text-xs text-gray-700">
                   <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block mb-1">Componentes revisados</span>
+                    <span className="text-xs text-gray-400 block mb-1">Componentes revisados</span>
                     <p className="font-semibold text-gray-800">{selectedFlight.componentsChecked}</p>
                   </div>
                   <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block mb-1">Observaciones</span>
-                    <p className="text-[10px] italic text-gray-600 leading-relaxed">
+                    <span className="text-xs text-gray-400 block mb-1">Observaciones</span>
+                    <p className="text-xs italic text-gray-600 leading-relaxed">
                       "{selectedFlight.notes || 'Sin observaciones registradas.'}"
                     </p>
                   </div>
                   <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-400 block mb-1">Score diagnóstico</span>
+                    <span className="text-xs text-gray-400 block mb-1">Score diagnóstico</span>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div
                         className={`h-2 rounded-full ${
@@ -3185,7 +3185,7 @@ export const TecnicoHistoryView = () => {
                         style={{ width: `${selectedFlight.diagnosticScore}%` }}
                       />
                     </div>
-                    <span className="text-[10px] font-bold mt-1 block">{selectedFlight.diagnosticScore}%</span>
+                    <span className="text-xs font-bold mt-1 block">{selectedFlight.diagnosticScore}%</span>
                   </div>
                 </div>
               )}
@@ -3194,15 +3194,15 @@ export const TecnicoHistoryView = () => {
               {modalTab === 'repuestos' && selectedFlight.sparePartUsed && (
                 <div className="space-y-2 text-xs text-gray-700">
                   <div className="p-2 bg-cyan-50 border-2 border-cyan-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-500 block mb-1">Repuesto utilizado</span>
+                    <span className="text-xs text-gray-500 block mb-1">Repuesto utilizado</span>
                     <p className="font-semibold text-cyan-950">{selectedFlight.sparePartUsed}</p>
                   </div>
                   <div className="p-2 bg-cyan-50 border-2 border-cyan-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-500 block mb-1">Costo estimado</span>
+                    <span className="text-xs text-gray-500 block mb-1">Costo estimado</span>
                     <p className="font-bold text-cyan-950">{selectedFlight.partCost}</p>
                   </div>
                   <div className="p-2 bg-cyan-50 border-2 border-cyan-200 rounded-[4px]">
-                    <span className="text-[9px] text-gray-500 block mb-1">Orden de trabajo</span>
+                    <span className="text-xs text-gray-500 block mb-1">Orden de trabajo</span>
                     <p className="font-mono font-bold text-cyan-950">{selectedFlight.workOrder}</p>
                   </div>
                 </div>
@@ -3490,11 +3490,11 @@ export const TecnicoHelpView = () => {
           {/* TÍTULO Y BOTÓN DE PEDIR SOPORTE */}
           <div className="p-3 border-b border-gray-200 bg-white flex items-center justify-between gap-2 shrink-0">
             <div className="min-w-0">
-              <h2 className="font-bold text-gray-900 text-base leading-tight truncate">
+              <h2 className="font-bold text-gray-900 text-lg leading-tight truncate">
                 Soporte de Taller
               </h2>
-              <p className="text-[11px] text-gray-500 truncate">
-                Consultas técnicas & laboratorio
+              <p className="text-xs text-gray-500">
+                Consultas técnicas y laboratorio.
               </p>
             </div>
 
@@ -3520,7 +3520,7 @@ export const TecnicoHelpView = () => {
                 placeholder="Buscar especialista..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:border-[#0E5E6F] transition"
+                className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F] transition"
               />
             </div>
           </div>
@@ -3571,7 +3571,7 @@ export const TecnicoHelpView = () => {
                         {chat.name}
                       </h3>
                       {lastMsg && (
-                        <span className="text-[11px] text-gray-400 font-medium shrink-0 ml-1">
+                        <span className="text-xs text-gray-400 font-medium shrink-0 ml-1">
                           {lastMsg.time}
                         </span>
                       )}
@@ -3589,7 +3589,7 @@ export const TecnicoHelpView = () => {
 
                   {chat.unreadCount > 0 && (
                     <div className="shrink-0">
-                      <span className="bg-[#0E5E6F] text-white text-[10px] font-bold px-2 py-0.5 rounded-full block">
+                      <span className="bg-[#0E5E6F] text-white text-xs font-bold px-2 py-0.5 rounded-full block">
                         {chat.unreadCount}
                       </span>
                     </div>
@@ -3631,11 +3631,11 @@ export const TecnicoHelpView = () => {
                   {activeChat.name}
                 </h2>
 
-                <span className="text-[11px] text-[#0E5E6F] font-medium truncate">
+                <span className="text-xs text-[#0E5E6F] font-medium truncate">
                   {activeChat.role}
                 </span>
 
-                <div className="text-[11px] text-gray-500 leading-none">
+                <div className="text-xs text-gray-500 leading-none">
                   {activeChat.online ? (
                     <span className="text-emerald-600 font-medium flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
@@ -3676,7 +3676,7 @@ export const TecnicoHelpView = () => {
                         setIsHeaderMenuOpen(false);
                         // Acción de llamada
                       }}
-                      className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
+                      className="w-full px-3 py-2 text-xs text-black hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
                     >
                       <Phone size={15} className="text-[#0E5E6F]" />
                       <span>Llamada de soporte</span>
@@ -3686,7 +3686,7 @@ export const TecnicoHelpView = () => {
                         setIsHeaderMenuOpen(false);
                         // Acción de videollamada
                       }}
-                      className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
+                      className="w-full px-3 py-2 text-xs text-black hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
                     >
                       <Video size={15} className="text-[#0E5E6F]" />
                       <span>Videollamada taller</span>
@@ -3721,7 +3721,7 @@ export const TecnicoHelpView = () => {
                   )}
 
                   <div
-                    className={`max-w-[80%] px-3.5 py-2.5 rounded-[4px] text-sm ${
+                    className={`max-w-[80%] px-3.5 py-2.5 rounded-[4px] text-xs ${
                       isTecnicoMsg
                         ? 'bg-[#0E5E6F] text-white'
                         : 'bg-white text-gray-800 border border-gray-100 shadow-xs'
@@ -3732,7 +3732,7 @@ export const TecnicoHelpView = () => {
                     </p>
 
                     <div
-                      className={`flex items-center justify-end gap-1 mt-1 text-[10px] ${
+                      className={`flex items-center justify-end gap-1 mt-1 text-xs ${
                         isTecnicoMsg ? 'text-cyan-100' : 'text-gray-400'
                       }`}
                     >
@@ -3774,7 +3774,7 @@ export const TecnicoHelpView = () => {
               placeholder="Escribe tu mensaje..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              className="flex-1 bg-gray-50 border border-gray-200 rounded-[4px] px-4 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition min-w-0"
+              className="flex-1 bg-gray-50 border border-gray-200 rounded-[4px] px-4 py-2.5 text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition min-w-0"
             />
 
             <button
@@ -3803,7 +3803,7 @@ export const TecnicoHelpView = () => {
                     Solicitar Asistencia
                   </h3>
                   {!isSubmitted && (
-                    <p className="text-[10px] text-gray-500 truncate">
+                    <p className="text-xs text-gray-500 truncate">
                       Paso {modalStep} de 2
                     </p>
                   )}
@@ -3853,7 +3853,7 @@ export const TecnicoHelpView = () => {
                             equipo: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
                       >
                         <option value="DJI Mavic 3 Multispectral">
                           DJI Mavic 3
@@ -3881,7 +3881,7 @@ export const TecnicoHelpView = () => {
                             categoria: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
                       >
                         <option value="Falla mecánica / motores">
                           Falla mecánica
@@ -3911,7 +3911,7 @@ export const TecnicoHelpView = () => {
                             prioridad: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
                       >
                         <option value="Baja">Baja</option>
                         <option value="Media">Media</option>
@@ -3953,11 +3953,11 @@ export const TecnicoHelpView = () => {
                             descripcion: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition resize-none"
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition resize-none"
                       ></textarea>
                     </div>
 
-                    <div className="p-2 bg-gray-50 border border-gray-100 rounded-[4px] text-[11px] text-gray-500 space-y-0.5">
+                    <div className="p-2 bg-gray-50 border border-gray-100 rounded-[4px] text-xs text-gray-500 space-y-0.5">
                       <p className="truncate">
                         <span className="font-semibold text-gray-600">
                           Equipo:
@@ -3992,7 +3992,7 @@ export const TecnicoHelpView = () => {
               ) : (
                 /* Confirmación */
                 <div className="py-3 text-center space-y-2.5">
-                  <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                  <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-[4px] flex items-center justify-center mx-auto">
                     <CheckCircle2 size={22} />
                   </div>
                   <div className="space-y-0.5">
@@ -4030,7 +4030,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
     const initialProfile = {
         initials: "MA",
         name: "Ing. Mario Alberto Alvarado",
-        email: "mario.alvarado@agroaguante.hn",
+        email: "mario.alvarado@td.hn",
         phone: "+504 9876-5432",
         password: "password123",
         avatar: "src/img/tecnico_perfil.png",
@@ -4124,7 +4124,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                         </div>
 
                         <div className="text-left min-w-0 flex-1">
-                            <h2 className="text-base text-gray-900 font-black tracking-tight normal-case leading-tight truncate">
+                            <h2 className="text-sm text-gray-900 font-black tracking-tight normal-case leading-tight truncate">
                                 {profileData.name}
                             </h2>
                             <p className="text-gray-500 font-semibold text-[11px] mt-0.5 truncate">
@@ -4141,7 +4141,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                         </span>
 
                         {saveSuccess && (
-                            <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-[4px] flex items-center gap-1 animate-in fade-in duration-150">
+                            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-[4px] flex items-center gap-1 animate-in fade-in duration-150">
                                 <Check size={12} /> Actualizado
                             </span>
                         )}
@@ -4153,7 +4153,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                     <button
                         type="button"
                         onClick={() => setActiveProfileTab("metricas")}
-                        className={`flex-1 py-2 text-xs font-black transition-colors cursor-pointer ${
+                        className={`flex-1 py-2 text-sm font-black transition-colors cursor-pointer ${
                             activeProfileTab === "metricas"
                                 ? "bg-white text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
                                 : "text-gray-500 hover:text-gray-700"
@@ -4164,7 +4164,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                     <button
                         type="button"
                         onClick={() => setActiveProfileTab("credenciales")}
-                        className={`flex-1 py-2 text-xs font-black transition-colors cursor-pointer ${
+                        className={`flex-1 py-2 text-sm font-black transition-colors cursor-pointer ${
                             activeProfileTab === "credenciales"
                                 ? "bg-white text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
                                 : "text-gray-500 hover:text-gray-700"
@@ -4183,11 +4183,11 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                                 <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
                                     <MapPin size={14} />
                                 </div>
-                                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                <span className="text-xs font-black text-gray-400 tracking-widest block">
                                     Estación Asignada
                                 </span>
                             </div>
-                            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
+                            <span className="text-xs text-gray-800 font-bold block break-words leading-tight mt-0.5">
                                 {profileData.location}
                             </span>
                         </div>
@@ -4198,11 +4198,11 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                                 <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
                                     <Layers size={14} />
                                 </div>
-                                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                <span className="text-xs font-black text-gray-400 tracking-widest block">
                                     Área Monitoreada
                                 </span>
                             </div>
-                            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
+                            <span className="text-xs text-gray-800 font-bold block break-words leading-tight mt-0.5">
                                 {profileData.area}
                             </span>
                         </div>
@@ -4213,11 +4213,11 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                                 <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
                                     <BarChart2 size={14} />
                                 </div>
-                                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                <span className="text-xs font-black text-gray-400 tracking-widest block">
                                     Diagnósticos
                                 </span>
                             </div>
-                            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5 w-full">
+                            <span className="text-xs text-gray-800 font-bold block break-words leading-tight mt-0.5 w-full">
                                 {profileData.services}
                             </span>
                         </div>
@@ -4228,11 +4228,11 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                                 <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
                                     <CheckCircle size={14} />
                                 </div>
-                                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                <span className="text-xs font-black text-gray-400 tracking-widest block">
                                     Estado
                                 </span>
                             </div>
-                            <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] inline-block mt-0.5">
+                            <span className="text-xs font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] inline-block mt-0.5">
                                 {profileData.standing}
                             </span>
                         </div>
@@ -4245,7 +4245,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                         <div className="flex flex-col gap-2 mb-2.5 pb-2 border-b-2 border-gray-100">
                             <div className="flex items-center gap-2">
                                 <Settings size={15} className="text-[#0E5E6F]" />
-                                <h3 className="text-xs font-black text-gray-800 normal-case">
+                                <h3 className="text-sm font-black text-gray-800 normal-case">
                                     Credenciales y Datos de Contacto
                                 </h3>
                             </div>
@@ -4260,7 +4260,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
 
                         <div className="grid grid-cols-1 gap-1 text-left">
                             <div className="p-2 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-                                <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
+                                <span className="text-xs font-black text-gray-400 tracking-wider flex items-center gap-1">
                                     <Phone size={12} className="text-[#0E5E6F]" /> Teléfono
                                 </span>
                                 <p className="font-bold text-xs text-gray-800 mt-0.5">
@@ -4269,7 +4269,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                             </div>
 
                             <div className="p-2 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-                                <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
+                                <span className="text-xs font-black text-gray-400 tracking-wider flex items-center gap-1">
                                     <Mail size={12} className="text-[#0E5E6F]" /> Correo
                                 </span>
                                 <p className="font-bold text-xs text-gray-800 mt-0.5 truncate">
@@ -4282,7 +4282,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
 
                 {/* PIE DE PÁGINA */}
                 <div className="border-t-2 border-gray-200 px-4 py-2.5 bg-gray-50 flex flex-col items-stretch gap-2">
-                    <span className="text-[10px] text-gray-400 font-medium text-left truncate">
+                    <span className="text-xs text-gray-400 font-medium text-left truncate">
                         Estación Operativa Choluteca, HN
                     </span>
 
@@ -4309,7 +4309,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                                     <div className="p-1.5 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
                                         <Edit2 size={14} />
                                     </div>
-                                    <h3 className="text-xs font-black text-gray-800 normal-case">
+                                    <h3 className="text-sm font-black text-gray-800 normal-case">
                                         Editar Credenciales
                                     </h3>
                                 </div>
@@ -4325,7 +4325,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                             <form onSubmit={handleSave} className="space-y-2">
                                 {/* SELECTOR TOTALMENTE FALSO DE FOTO DE PERFIL */}
                                 <div>
-                                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1 flex items-center gap-1">
+                                    <label className="block text-xs font-black text-gray-500 tracking-wider mb-1 flex items-center gap-1">
                                         <Camera size={11} className="text-[#0E5E6F]" /> Foto de perfil
                                     </label>
 
@@ -4344,7 +4344,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                                                     type="button"
                                                     onClick={handleFakeUpload}
                                                     disabled={isUploading}
-                                                    className="px-2.5 py-1 text-[11px] font-bold bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-100 rounded-[4px] text-gray-700 flex items-center gap-1 cursor-pointer transition-colors active:scale-95 shadow-xs disabled:opacity-50"
+                                                    className="px-2.5 py-1 text-xs font-bold bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-100 rounded-[4px] text-gray-700 flex items-center gap-1 cursor-pointer transition-colors active:scale-95 shadow-xs disabled:opacity-50"
                                                 >
                                                     {isUploading ? (
                                                         <Loader2 size={12} className="animate-spin text-[#0E5E6F]" />
@@ -4353,7 +4353,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                                                     )}
                                                     {isUploading ? "Cargando..." : "Seleccionar"}
                                                 </button>
-                                                <span className="text-[10px] text-gray-500 font-semibold truncate">
+                                                <span className="text-xs text-gray-500 font-semibold truncate">
                                                     {simulatedFile || "img"}
                                                 </span>
                                             </div>
@@ -4362,7 +4362,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                                    <label className="block text-xs font-black text-gray-500 tracking-wider mb-1">
                                         Teléfono
                                     </label>
                                     <div className="relative">
@@ -4377,7 +4377,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                                    <label className="block text-xs font-black text-gray-500 tracking-wider mb-1">
                                         Nueva contraseña
                                     </label>
                                     <div className="relative">
@@ -4399,7 +4399,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                                    <label className="block text-xs font-black text-gray-500 tracking-wider mb-1">
                                         Repetir contraseña
                                     </label>
                                     <div className="relative">

@@ -749,10 +749,10 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
       {/* BARRA SUPERIOR CON NOTIFICACIONES */}
       <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-gray-100 relative">
         <div className="text-left space-y-0.5 min-w-0">
-          <h1 className="text-base font-black text-gray-900 tracking-tight leading-snug">
+          <h1 className="text-lg font-black text-gray-900 tracking-tight leading-snug">
             Servicios y Beneficios
           </h1>
-          <p className="text-gray-500 text-[10px] font-medium tracking-wide leading-snug truncate">
+          <p className="text-xs text-gray-500 font-medium tracking-wide leading-snug">
             Consola del cliente • Monitoreo operacional
           </p>
           <div className="pt-1">
@@ -778,7 +778,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
           className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
         >
           <div className="flex justify-between items-center mb-1">
-            <span className="text-[9px] font-black text-gray-500 tracking-wider">
+            <span className="text-xs font-black text-gray-500 tracking-wider">
               Ahorro De Insumos
             </span>
             <div
@@ -793,7 +793,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
             </div>
           </div>
           <p className="text-lg font-black text-gray-900 mb-0.5">35%</p>
-          <p className="text-[8px] text-gray-400 font-semibold leading-snug">Reducción de recursos</p>
+          <p className="text-xs text-gray-400 font-semibold leading-snug">Reducción de recursos</p>
         </div>
 
         <div
@@ -801,7 +801,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
           className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
         >
           <div className="flex justify-between items-center mb-1">
-            <span className="text-[9px] font-black text-gray-500 tracking-wider">
+            <span className="text-xs font-black text-gray-500 tracking-wider">
               Horas Ahorradas
             </span>
             <div
@@ -816,7 +816,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
             </div>
           </div>
           <p className="text-lg font-black text-gray-900 mb-0.5">148 hrs</p>
-          <p className="text-[8px] text-gray-400 font-semibold leading-snug">Tiempo optimizado</p>
+          <p className="text-xs text-gray-400 font-semibold leading-snug">Tiempo optimizado</p>
         </div>
 
         <div
@@ -824,7 +824,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
           className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
         >
           <div className="flex justify-between items-center mb-1">
-            <span className="text-[9px] font-black text-gray-500 tracking-wider">
+            <span className="text-xs font-black text-gray-500 tracking-wider">
               Área Atendida
             </span>
             <div
@@ -839,7 +839,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
             </div>
           </div>
           <p className="text-lg font-black text-gray-900 mb-0.5">320 Ha</p>
-          <p className="text-[8px] text-gray-400 font-semibold leading-snug">Cobertura total</p>
+          <p className="text-xs text-gray-400 font-semibold leading-snug">Cobertura total</p>
         </div>
 
         <div
@@ -847,7 +847,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
           className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
         >
           <div className="flex justify-between items-center mb-1">
-            <span className="text-[9px] font-black text-gray-500 tracking-wider">
+            <span className="text-xs font-black text-gray-500 tracking-wider">
               Casos Resueltos
             </span>
             <div
@@ -862,13 +862,13 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
             </div>
           </div>
           <p className="text-lg font-black text-gray-900 mb-0.5">12 casos</p>
-          <p className="text-[8px] text-gray-400 font-semibold leading-snug">Alertas a tiempo</p>
+          <p className="text-xs text-gray-400 font-semibold leading-snug">Alertas a tiempo</p>
         </div>
       </div>
 
       {/* SELECCIÓN DE SERVICIO */}
       <div className="mb-4">
-        <label className="block text-[10px] font-bold text-gray-500 mb-1 text-left">
+        <label className="block text-xs font-bold text-gray-500 mb-1 text-left">
           Seleccionar categoría de servicio
         </label>
         <div className="relative">
@@ -876,7 +876,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
             value={activeTab}
             onChange={(e) => setActiveTab(e.target.value)}
             style={{ borderRadius: "4px" }}
-            className="w-full pl-3 pr-8 py-2.5 text-xs font-bold text-gray-800 bg-gray-50 border border-gray-300 appearance-none focus:outline-none focus:border-[#0E5E6F] touch-manipulation cursor-pointer"
+            className="w-full pl-3 pr-8 py-2.5 text-xs font-bold text-black bg-gray-50 border border-gray-300 appearance-none focus:outline-none focus:border-[#0E5E6F] touch-manipulation cursor-pointer"
           >
             <option value="riego">Riego de precisión</option>
             <option value="busqueda">Búsqueda y rescate</option>
@@ -900,10 +900,10 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
           <div className="flex items-center gap-2">
             <BarChart3 size={16} className="text-[#0E5E6F] shrink-0" />
             <div className="min-w-0">
-              <h3 className="text-[11px] font-black text-gray-900 tracking-wider truncate">
+              <h3 className="text-sm font-black text-gray-900 tracking-wider">
                 Rendimiento — {activeTab}
               </h3>
-              <p className="text-[9px] text-gray-500 font-medium">
+              <p className="text-xs text-gray-500 font-medium">
                 Eje Y: <strong className="text-gray-700">{chartUnit}</strong>
               </p>
             </div>
@@ -923,7 +923,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
                 type="button"
                 onClick={() => setChartPeriod(p.id as any)}
                 style={{ borderRadius: "4px" }}
-                className={`flex-1 py-1 text-[10px] font-bold transition-all cursor-pointer touch-manipulation ${
+                className={`flex-1 py-1 text-xs font-bold transition-all cursor-pointer touch-manipulation ${
                   chartPeriod === p.id
                     ? "bg-[#0E5E6F] text-white shadow-xs"
                     : "text-gray-500 active:text-gray-900"
@@ -1024,10 +1024,10 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
       >
         <div className="p-3 border-b border-gray-100 bg-gray-50/50 flex flex-col gap-2.5">
           <div>
-            <h3 className="text-[11px] font-black text-gray-900 tracking-wider">
+            <h3 className="text-sm font-black text-gray-900 tracking-wider">
               Historial Operacional
             </h3>
-            <p className="text-[9px] text-gray-500 font-medium">
+            <p className="text-xs text-gray-500 font-medium">
               Listado detallado de ejecuciones de vuelos
             </p>
           </div>
@@ -1063,7 +1063,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 style={{ borderRadius: "4px" }}
-                className="w-full pl-3 pr-8 py-2 text-xs font-bold text-gray-700 bg-white border border-gray-300 appearance-none focus:outline-none focus:border-[#0E5E6F] touch-manipulation cursor-pointer"
+                className="w-full pl-3 pr-8 py-2 text-xs font-bold text-black bg-white border border-gray-300 appearance-none focus:outline-none focus:border-[#0E5E6F] touch-manipulation cursor-pointer"
               >
                 <option value="todos">Todos los estados</option>
                 <option value="completado">Completados</option>
@@ -1089,7 +1089,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <p className="font-extrabold text-gray-900 text-xs">{row.id}</p>
-                    <p className="text-[9px] text-gray-400 font-mono">{row.fecha}</p>
+                    <p className="text-xs text-gray-400 font-mono">{row.fecha}</p>
                   </div>
                   <span
                     style={{
@@ -1103,18 +1103,18 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
                   </span>
                 </div>
 
-                <p className="text-[10px] font-medium text-gray-800 leading-snug">
+                <p className="text-xs font-medium text-gray-800 leading-snug">
                   {row.objetivo}
                 </p>
 
-                <div className="flex items-center gap-1 text-[10px] font-bold text-gray-700">
+                <div className="flex items-center gap-1 text-xs font-bold text-gray-700">
                   <MapPin size={11} className="text-gray-400 shrink-0" />
                   <span className="truncate">{row.ubicacion}</span>
                 </div>
 
                 <div className="flex items-center justify-between pt-1 border-t border-gray-50">
-                  <p className="font-bold text-[#0E5E6F] text-[10px]">{row.dron}</p>
-                  <p className="text-[9px] text-gray-400">
+                  <p className="font-bold text-[#0E5E6F] text-xs">{row.dron}</p>
+                  <p className="text-xs text-gray-400">
                     {row.duracion} · {row.cobertura}
                   </p>
                 </div>
@@ -1128,7 +1128,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
         </div>
 
         <div className="p-3 border-t border-gray-100 bg-gray-50/40 flex flex-col gap-2">
-          <span className="text-[10px] font-bold text-gray-400 text-center">
+          <span className="text-xs font-bold text-gray-400 text-center">
             {registrosActuales.length} misiones encontradas
           </span>
           <button
@@ -1158,10 +1158,10 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
             <Zap size={16} />
           </div>
           <div>
-            <h4 className="text-[11px] font-black text-gray-900 leading-snug">
+            <h4 className="text-sm font-black text-gray-900 leading-snug">
               ¿Deseas Contratar Una Nueva Operación?
             </h4>
-            <p className="text-[9px] text-gray-500 font-medium leading-snug">
+            <p className="text-xs text-gray-500 font-medium leading-snug">
               Accede al catálogo para solicitar tu próxima misión
             </p>
           </div>
@@ -1255,7 +1255,7 @@ export const ClienteServiciosView = () => {
             case "En marcha":
                 return "text-purple-800 bg-purple-50 border-purple-200";
             case "Aprobado":
-                return "text-blue-800 bg-blue-200 border-blue-200";
+                return "text-blue-800 bg-blue-100 border-blue-200";
             case "En revisión":
                 return "text-amber-800 bg-amber-50 border-amber-200";
             default:
@@ -1311,7 +1311,7 @@ export const ClienteServiciosView = () => {
 
     const InputField = ({ label, type = "text", value, onChange, placeholder, required = false }: any) => (
         <div>
-            <label className="block text-[11px] font-bold text-gray-700 mb-1">{label}</label>
+            <label className="block text-xs font-bold text-gray-700 mb-1">{label}</label>
             <input
                 type={type}
                 value={value}
@@ -1379,10 +1379,10 @@ export const ClienteServiciosView = () => {
                         className="h-full overflow-y-auto touch-drag p-3 flex flex-col gap-3"
                     >
                         <div className="border-b border-gray-200 bg-white p-3 rounded-[4px] shadow-xs shrink-0">
-                            <h1 className="text-base font-black text-gray-900 tracking-tight">
+                            <h1 className="text-lg font-black text-gray-900 tracking-tight">
                                 Mis Servicios
                             </h1>
-                            <p className="text-gray-500 mt-0.5 text-[11px]">
+                            <p className="text-xs text-gray-500 mt-0.5">
                                 Gestiona tus solicitudes, monitorea las fichas técnicas y el estado de cada servicio.
                             </p>
                         </div>
@@ -1408,14 +1408,14 @@ export const ClienteServiciosView = () => {
 
                                         <div className="absolute bottom-2 left-3 right-3 flex justify-between items-end">
                                             <div>
-                                                <span className="text-white text-[10px] font-medium block opacity-90">
+                                                <span className="text-white text-xs font-medium block opacity-90">
                                                     {srv.type}
                                                 </span>
-                                                <h3 className="text-white text-xs font-bold drop-shadow">
+                                                <h3 className="text-white text-sm font-bold drop-shadow">
                                                     {srv.title}
                                                 </h3>
                                             </div>
-                                            <div className={`flex items-center gap-1 px-2 py-0.5 rounded-[4px] border text-[9px] font-bold shadow-xs bg-white/95 backdrop-blur-xs ${getStatusBadge(srv.status)}`}>
+                                            <div className={`flex items-center gap-1 px-2 py-0.5 rounded-[4px] border text-xs font-bold shadow-xs bg-white/95 backdrop-blur-xs ${getStatusBadge(srv.status)}`}>
                                                 {srv.status}
                                             </div>
                                         </div>
@@ -1425,31 +1425,31 @@ export const ClienteServiciosView = () => {
                                         <div className="flex flex-col gap-1.5">
                                             <div className="flex items-center gap-1 text-xs text-gray-500">
                                                 <MapPin size={12} className="text-[#0E5E6F] shrink-0" />
-                                                <span className="font-medium text-[11px] truncate">{srv.location}</span>
+                                                <span className="font-medium text-xs truncate">{srv.location}</span>
                                             </div>
-                                            <p className="text-[11px] text-gray-600 bg-gray-50 p-2 rounded-[4px] border border-gray-100 font-normal leading-relaxed">
+                                            <p className="text-xs text-gray-600 bg-gray-50 p-2 rounded-[4px] border border-gray-100 font-normal leading-relaxed">
                                                 {srv.notes}
                                             </p>
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-2 pt-2 border-t border-gray-100 items-center">
                                             <div>
-                                                <p className="text-[8px] text-gray-400 font-bold uppercase tracking-wider">
+                                                <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">
                                                     Fecha de operación
                                                 </p>
-                                                <p className="font-bold text-[10px] text-gray-700 flex items-center gap-1 mt-0.5">
+                                                <p className="font-bold text-xs text-gray-700 flex items-center gap-1 mt-0.5">
                                                     <Calendar size={10} className="text-gray-400" />{" "}
                                                     {srv.date}
                                                 </p>
                                             </div>
                                             {srv.missionId && (
                                                 <div className="flex flex-col items-end">
-                                                    <p className="text-[8px] text-gray-400 font-bold uppercase tracking-wider">
+                                                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">
                                                         ID de misión
                                                     </p>
                                                     <button
                                                         onClick={() => handleCopyExistingMission(srv.missionId!)}
-                                                        className="font-bold text-[#0E5E6F] text-[10px] flex items-center gap-1 mt-0.5 cursor-pointer"
+                                                        className="font-bold text-[#0E5E6F] text-xs flex items-center gap-1 mt-0.5 cursor-pointer"
                                                         title="Copiar ID"
                                                     >
                                                         {srv.missionId} <ClipboardCopy size={10} />
@@ -1466,7 +1466,7 @@ export const ClienteServiciosView = () => {
                         <div className="w-full flex flex-col shrink-0">
                             <div className="w-full min-h-[340px] bg-white border border-gray-200 rounded-[4px] shadow-xs overflow-hidden flex flex-col">
                                 <div className="px-4 py-3 border-b border-gray-100 bg-gray-50 shrink-0">
-                                    <h2 className="text-xs font-bold text-gray-800">
+                                    <h2 className="text-sm font-bold text-gray-800">
                                         Solicitar Servicio
                                     </h2>
                                     <div className="flex items-center justify-between gap-1 mt-2">
@@ -1520,10 +1520,10 @@ export const ClienteServiciosView = () => {
                                     {requestSuccess ? (
                                         <div className="py-2 text-center flex flex-col items-center justify-center gap-2.5">
                                             <CheckCircle2 size={32} className="text-emerald-500" />
-                                            <h3 className="text-xs font-bold text-gray-800">
+                                            <h3 className="text-sm font-bold text-gray-800">
                                                 Solicitud Enviada
                                             </h3>
-                                            <p className="text-[11px] text-gray-500 px-1 leading-relaxed">
+                                            <p className="text-xs text-gray-500 px-1 leading-relaxed">
                                                 El servicio para <strong>{formData.location}</strong> ha sido enviado al administrador para su revisión.
                                             </p>
                                             <button
@@ -1549,7 +1549,7 @@ export const ClienteServiciosView = () => {
                                                             placeholder="Ej. Análisis multiespectral norte"
                                                         />
                                                         <div>
-                                                            <label className="block text-[11px] font-bold text-gray-700 mb-1">Tipo de servicio</label>
+                                                            <label className="block text-xs font-bold text-gray-700 mb-1">Tipo de servicio</label>
                                                             <select
                                                                 value={formData.serviceType}
                                                                 onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
@@ -1589,16 +1589,16 @@ export const ClienteServiciosView = () => {
                                                         {formData.serviceType === "Dron con Mapeo" ? (
                                                             <div className="space-y-1.5">
                                                                 <div className="p-2 bg-blue-50 border border-blue-200 rounded-[4px] text-left">
-                                                                    <p className="text-[10px] text-blue-800 font-bold flex items-center gap-1">
+                                                                    <p className="text-xs text-blue-800 font-bold flex items-center gap-1">
                                                                         <MapPin size={11} /> Mapeo obligatorio
                                                                     </p>
-                                                                    <p className="text-[9px] text-blue-600 mt-0.5 mb-1.5 leading-tight">
+                                                                    <p className="text-xs text-blue-600 mt-0.5 mb-1.5 leading-tight">
                                                                         Abre el editor de mapas, prepara tu zona y copia el ID de la misión.
                                                                     </p>
                                                                     <button
                                                                         type="button"
                                                                         onClick={() => setActiveTab("mapas")}
-                                                                        className="w-full text-[10px] font-bold bg-blue-600 hover:bg-blue-700 text-white px-2 py-1.5 rounded-[4px] shadow-xs flex justify-center items-center gap-1 transition-colors cursor-pointer"
+                                                                        className="w-full text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white px-2 py-1.5 rounded-[4px] shadow-xs flex justify-center items-center gap-1 transition-colors cursor-pointer"
                                                                     >
                                                                         Ir al editor de mapas <ArrowRight size={11} />
                                                                     </button>
@@ -1612,7 +1612,7 @@ export const ClienteServiciosView = () => {
                                                             </div>
                                                         ) : (
                                                             <div className="p-3 bg-gray-50 border border-gray-200 rounded-[4px] text-center h-16 flex items-center justify-center">
-                                                                <p className="text-[10px] text-gray-500 font-medium">
+                                                                <p className="text-xs text-gray-500 font-medium">
                                                                     No se requiere ID de mapeo para este servicio.
                                                                 </p>
                                                             </div>
@@ -1639,26 +1639,26 @@ export const ClienteServiciosView = () => {
                                             {step === 3 && (
                                                 <div className="flex flex-col gap-3">
                                                     <div>
-                                                        <h3 className="text-[10px] font-bold text-gray-400 tracking-wider mb-1">
+                                                        <h3 className="text-xs font-bold text-gray-400 tracking-wider mb-1">
                                                             Resumen de Solicitud
                                                         </h3>
                                                         <div className="bg-gray-50 border border-gray-200 p-2.5 rounded-[4px] space-y-1.5">
                                                             <div>
-                                                                <p className="text-[8px] text-gray-500 font-bold">Servicio</p>
+                                                                <p className="text-xs text-gray-500 font-bold">Servicio</p>
                                                                 <p className="text-xs font-bold text-gray-800">{formData.serviceTitle}</p>
-                                                                <p className="text-[10px] text-[#0E5E6F] font-bold">{formData.serviceType}</p>
+                                                                <p className="text-xs text-[#0E5E6F] font-bold">{formData.serviceType}</p>
                                                             </div>
                                                             <div className="h-px bg-gray-200 w-full" />
                                                             <div>
-                                                                <p className="text-[8px] text-gray-500 font-bold">Fecha y Lugar</p>
-                                                                <p className="text-[11px] text-gray-700 font-medium">{formData.date} - {formData.location}</p>
+                                                                <p className="text-xs text-gray-500 font-bold">Fecha y Lugar</p>
+                                                                <p className="text-xs text-gray-700 font-medium">{formData.date} - {formData.location}</p>
                                                             </div>
                                                             {formData.serviceType === "Dron con Mapeo" && (
                                                                 <>
                                                                     <div className="h-px bg-gray-200 w-full" />
                                                                     <div>
-                                                                        <p className="text-[8px] text-gray-500 font-bold">ID Vinculado</p>
-                                                                        <p className="text-[11px] text-gray-700 font-mono font-bold bg-white inline-block px-1 rounded-[4px] border border-gray-200">
+                                                                        <p className="text-xs text-gray-500 font-bold">ID Vinculado</p>
+                                                                        <p className="text-xs text-gray-700 font-mono font-bold bg-white inline-block px-1 rounded-[4px] border border-gray-200">
                                                                             {formData.missionId || "No proporcionado"}
                                                                         </p>
                                                                     </div>
@@ -1722,13 +1722,13 @@ export const ClienteServiciosView = () => {
                                 </div>
                                 <div className="text-left min-w-0">
                                     <div className="flex items-center gap-1.5">
-                                        <h1 className="text-xs font-bold text-gray-900 tracking-tight truncate">
+                                        <h1 className="text-[10px] font-bold text-gray-900 tracking-tight">
                                             Editor de mapas
                                         </h1>
                                     </div>
                                     <button
                                         onClick={handleOpenIdModal}
-                                        className="text-[10px] text-gray-500 font-medium leading-none truncate hover:text-[#0E5E6F] transition-colors cursor-pointer text-left block"
+                                        className="text-[8px] text-gray-500 font-medium leading-none hover:text-[#0E5E6F] transition-colors cursor-pointer text-left block"
                                         title="Cambiar ID de misión"
                                     >
                                         ID: #{mappingId}
@@ -1755,7 +1755,7 @@ export const ClienteServiciosView = () => {
                                         />
                                     </svg>
                                 </button>
-                                <button className="py-1 px-2.5 bg-[#0E5E6F] border-2 border-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold rounded-[4px] text-[11px] flex items-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer">
+                                <button className="py-1 px-2.5 bg-[#0E5E6F] border-2 border-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold rounded-[4px] text-xs flex items-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer">
                                     <svg
                                         className="w-3.5 h-3.5"
                                         fill="none"
@@ -1976,7 +1976,7 @@ export const ClienteServiciosView = () => {
                             <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
                                 <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
                                     <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-                                        <h2 className="text-xs font-bold text-gray-900 tracking-wide uppercase">
+                                        <h2 className="text-sm font-bold text-gray-900 tracking-wide uppercase">
                                             Capas Del Mapa
                                         </h2>
                                         <button
@@ -2000,7 +2000,7 @@ export const ClienteServiciosView = () => {
                                                 <span className="text-[9px] font-bold tracking-wider text-gray-400 block">
                                                     Edición activa
                                                 </span>
-                                                <span className="text-[11px] font-bold text-gray-800 block mt-0.5 group-hover:text-[#0E5E6F]">
+                                                <span className="text-xs font-bold text-gray-800 block mt-0.5 group-hover:text-[#0E5E6F]">
                                                     ID: #{mappingId}
                                                 </span>
                                             </div>
@@ -2031,7 +2031,7 @@ export const ClienteServiciosView = () => {
                                                 ].map((layer) => (
                                                     <label
                                                         key={layer.id}
-                                                        className="flex items-center gap-1.5 text-[11px] font-bold text-gray-700 cursor-pointer p-1 hover:bg-gray-50 rounded-[4px]"
+                                                        className="flex items-center gap-1.5 text-xs font-bold text-gray-700 cursor-pointer p-1 hover:bg-gray-50 rounded-[4px]"
                                                     >
                                                         <input
                                                             type="radio"
@@ -2049,7 +2049,7 @@ export const ClienteServiciosView = () => {
                                         <hr className="border-gray-200" />
 
                                         <div className="space-y-1.5">
-                                            <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                            <div className="flex items-center justify-between text-xs font-bold text-gray-700">
                                                 <span>Zonas</span>
                                                 <input
                                                     type="checkbox"
@@ -2058,7 +2058,7 @@ export const ClienteServiciosView = () => {
                                                     className="accent-[#0E5E6F] cursor-pointer"
                                                 />
                                             </div>
-                                            <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                            <div className="flex items-center justify-between text-xs font-bold text-gray-700">
                                                 <span>Mapa NDVI</span>
                                                 <input
                                                     type="checkbox"
@@ -2067,7 +2067,7 @@ export const ClienteServiciosView = () => {
                                                     className="accent-[#0E5E6F] cursor-pointer"
                                                 />
                                             </div>
-                                            <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                            <div className="flex items-center justify-between text-xs font-bold text-gray-700">
                                                 <span>Límites</span>
                                                 <input
                                                     type="checkbox"
@@ -2087,7 +2087,7 @@ export const ClienteServiciosView = () => {
                             <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center px-3">
                                 <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-1 font-sans">
                                     <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-                                        <h2 className="text-xs font-bold text-gray-900 tracking-wide">
+                                        <h2 className="text-sm font-bold text-gray-900 tracking-wide">
                                             Control del Dron
                                         </h2>
                                         <button
@@ -2103,7 +2103,7 @@ export const ClienteServiciosView = () => {
                                     <div className="flex flex-col gap-2.5 text-left">
                                         {/* CARD ESTADO DRON */}
                                         <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px] space-y-1.5 shrink-0">
-                                            <div className="flex justify-between items-center text-[11px]">
+                                            <div className="flex justify-between items-center text-xs">
                                                 <span className="font-bold text-gray-700">
                                                     Dron Agras T50
                                                 </span>
@@ -2132,7 +2132,7 @@ export const ClienteServiciosView = () => {
                                             <div className="space-y-3">
                                                 {/* ALTITUD (#CA5116) */}
                                                 <div>
-                                                    <div className="flex justify-between text-[11px] font-bold text-gray-700 mb-1">
+                                                    <div className="flex justify-between text-xs font-bold text-gray-700 mb-1">
                                                         <span>Altitud</span>
                                                         <span className="font-bold" style={{ color: "#CA5116" }}>
                                                             {altitude} m
@@ -2166,7 +2166,7 @@ export const ClienteServiciosView = () => {
 
                                                 {/* VELOCIDAD (#2994B2) */}
                                                 <div>
-                                                    <div className="flex justify-between text-[11px] font-bold text-gray-700 mb-1">
+                                                    <div className="flex justify-between text-xs font-bold text-gray-700 mb-1">
                                                         <span>Velocidad</span>
                                                         <span className="font-bold" style={{ color: "#2994B2" }}>
                                                             {speed} km/h
@@ -2200,7 +2200,7 @@ export const ClienteServiciosView = () => {
 
                                                 {/* DOSIS QUÍMICA (#B165E0) */}
                                                 <div>
-                                                    <div className="flex justify-between text-[11px] font-bold text-gray-700 mb-1">
+                                                    <div className="flex justify-between text-xs font-bold text-gray-700 mb-1">
                                                         <span>Dosis química</span>
                                                         <span className="font-bold" style={{ color: "#B165E0" }}>
                                                             {rate} L/ha
@@ -2240,7 +2240,7 @@ export const ClienteServiciosView = () => {
                                     <div className="pt-2 space-y-1.5 border-t border-gray-100 shrink-0">
                                         <button 
                                             onClick={handleApproveMapping}
-                                            className="w-full py-2 bg-[#0E5E6F] hover:bg-[#0a4754] border-2 border-[#0E5E6F] text-white font-bold text-[11px] rounded-[4px] flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer"
+                                            className="w-full py-2 bg-[#0E5E6F] hover:bg-[#0a4754] border-2 border-[#0E5E6F] text-white font-bold text-xs rounded-[4px] flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer"
                                         >
                                             <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
                                                 <polygon points="5 3 19 12 5 21 5 3" />
@@ -2248,11 +2248,11 @@ export const ClienteServiciosView = () => {
                                             <span>Enviar edición</span>
                                         </button>
 
-                                        <button className="w-full py-1.5 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
+                                        <button className="w-full py-1.5 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
                                             Auto-dibujar zona
                                         </button>
 
-                                        <button className="w-full py-1.5 bg-white border-2 border-rose-200 hover:bg-rose-50 text-rose-600 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
+                                        <button className="w-full py-1.5 bg-white border-2 border-rose-200 hover:bg-rose-50 text-rose-600 font-bold text-xs rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
                                             Cancelar edición
                                         </button>
                                     </div>
@@ -2291,7 +2291,7 @@ export const ClienteServiciosView = () => {
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
                         <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                            <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                            <h3 className="text-sm font-bold text-gray-900 tracking-wide">
                                 Cambiar ID de Misión para Mapeo
                             </h3>
                             <button
@@ -2306,7 +2306,7 @@ export const ClienteServiciosView = () => {
 
                         <form onSubmit={handleSaveId} className="space-y-3">
                             <div>
-                                <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                                <label className="block text-xs font-bold text-gray-500 mb-1">
                                     Código / ID de la Misión
                                 </label>
                                 <input
@@ -2317,7 +2317,7 @@ export const ClienteServiciosView = () => {
                                     className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-mono font-bold text-gray-800 focus:border-[#0E5E6F] outline-none"
                                     autoFocus
                                 />
-                                <p className="text-[10px] text-gray-400 mt-1">
+                                <p className="text-xs text-gray-400 mt-1">
                                     Ingresa el código único de la misión para cargar y editar su mapa correspondiente.
                                 </p>
                             </div>
@@ -2352,7 +2352,7 @@ export const ClienteServiciosView = () => {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
-                            <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                            <h3 className="text-sm font-bold text-gray-900 tracking-wide">
                                 Mapeo Enviado a Revisión
                             </h3>
                         </div>
@@ -2361,7 +2361,7 @@ export const ClienteServiciosView = () => {
                             <p>
                                 La edición del mapa para la misión <span className="font-bold text-gray-800">#{mappingId}</span> ha sido enviada exitosamente a uno de los administradores.
                             </p>
-                            <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] text-[11px] text-amber-800 font-medium">
+                            <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] text-xs text-amber-800 font-medium">
                                 Estado: En espera de ser aprobada por el administrador.
                             </div>
                         </div>
@@ -2657,10 +2657,10 @@ export const ClienteSuscripcionesView = () => {
                     <Title className="text-lg font-extrabold text-gray-900 tracking-tight flex flex-col items-start gap-1.5">
                         <span>Gestión de Suscripciones y Servicios</span>
                         <span className="whitespace-nowrap bg-[#0E5E6F]/10 text-[#0E5E6F] text-[10px] font-bold px-2 py-0.5 rounded-[4px] tracking-wider border border-[#0E5E6F]/20">
-                            Planes BIODRON
+                            Planes TECNODACTYLUS
                         </span>
                     </Title>
-                    <Text className="text-[11px] text-gray-500 block mt-0.5">
+                    <Text className="text-xs text-gray-500 block mt-0.5">
                         Administra tu plan de monitoreo aéreo, descuentos en equipos, asistencia técnica y contratación de pilotos.
                     </Text>
                 </div>
@@ -2690,14 +2690,13 @@ export const ClienteSuscripcionesView = () => {
                         ) : (
                             <div className="grid grid-cols-1 gap-3 items-stretch">
 
-
                                 {/* FORMULARIO DE PAGO */}
                                 <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
                                     <div>
                                         <div className="grid grid-cols-2 gap-1 p-1 bg-gray-100 rounded-[4px] border border-gray-200 mb-2.5">
                                             <button
                                                 onClick={() => setPaymentMethod("card")}
-                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "card"
+                                                className={`py-1.5 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "card"
                                                         ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                     }`}
@@ -2708,7 +2707,7 @@ export const ClienteSuscripcionesView = () => {
 
                                             <button
                                                 onClick={() => setPaymentMethod("transfer")}
-                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "transfer"
+                                                className={`py-1.5 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "transfer"
                                                         ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                     }`}
@@ -2719,7 +2718,7 @@ export const ClienteSuscripcionesView = () => {
 
                                             <button
                                                 onClick={() => setPaymentMethod("qr")}
-                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "qr"
+                                                className={`py-1.5 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "qr"
                                                         ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                     }`}
@@ -2730,20 +2729,20 @@ export const ClienteSuscripcionesView = () => {
 
                                             <button
                                                 onClick={() => setPaymentMethod("wallet")}
-                                                className={`py-1.5 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "wallet"
+                                                className={`py-1.5 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer active:scale-95 ${paymentMethod === "wallet"
                                                         ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                     }`}
                                             >
                                                 <Wallet size={13} />
-                                                <span>Saldo BIODRON</span>
+                                                <span>Saldo TD</span>
                                             </button>
                                         </div>
 
                                         {paymentMethod === "card" && (
                                             <div className="flex flex-col gap-3">
                                                 <div>
-                                                    <span className="text-gray-700 text-[10px] block mb-1.5">Pasarela de pago:</span>
+                                                    <span className="text-gray-700 text-xs block mb-1.5">Pasarela de pago:</span>
                                                     <div className="grid grid-cols-2 gap-1.5">
                                                         {["PixelPay", "ClinPays", "Recurrente", "Pagadito"].map((gateway) => (
                                                             <button
@@ -2765,7 +2764,7 @@ export const ClienteSuscripcionesView = () => {
                                                         <div className="w-full max-w-[190px] aspect-[1.58/1] bg-gradient-to-tr from-slate-900 via-slate-800 to-[#0E5E6F] text-white p-2.5 rounded-[4px] shadow-sm border border-slate-700 flex flex-col justify-between">
                                                             <div className="flex justify-between items-center">
                                                                 <span className="text-[8px] font-extrabold uppercase tracking-wider text-slate-300">
-                                                                    BIODRON
+                                                                    TECNODACTYLUS
                                                                 </span>
                                                                 <CreditCard size={15} className="text-amber-400" />
                                                             </div>
@@ -2799,7 +2798,7 @@ export const ClienteSuscripcionesView = () => {
                                                         </div>
                                                     </div>
 
-                                                    <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+                                                    <div className="grid grid-cols-2 gap-1.5 text-xs">
                                                         <div className="col-span-2 flex flex-col gap-0.5">
                                                             <label className="text-gray-700 text-[10px]">
                                                                 Número de tarjeta
@@ -2815,7 +2814,7 @@ export const ClienteSuscripcionesView = () => {
                                                                         number: e.target.value,
                                                                     })
                                                                 }
-                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                             />
                                                         </div>
 
@@ -2830,7 +2829,7 @@ export const ClienteSuscripcionesView = () => {
                                                                 onChange={(e) =>
                                                                     setCardData({ ...cardData, name: e.target.value })
                                                                 }
-                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                             />
                                                         </div>
 
@@ -2849,7 +2848,7 @@ export const ClienteSuscripcionesView = () => {
                                                                         expiry: e.target.value,
                                                                     })
                                                                 }
-                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                             />
                                                         </div>
 
@@ -2865,7 +2864,7 @@ export const ClienteSuscripcionesView = () => {
                                                                 onChange={(e) =>
                                                                     setCardData({ ...cardData, cvv: e.target.value })
                                                                 }
-                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                                className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                             />
                                                         </div>
                                                     </div>
@@ -2876,8 +2875,8 @@ export const ClienteSuscripcionesView = () => {
                                         {paymentMethod === "transfer" && (
                                             <div className="flex flex-col gap-2 text-xs">
                                                 <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5">
-                                                    <span className="text-gray-800 text-[11px] block mb-1">
-                                                        Cuentas oficiales BIODRON
+                                                    <span className="text-gray-800 text-xs block mb-1">
+                                                        Cuentas oficiales TECNODACTYLUS
                                                     </span>
                                                     <div className="grid grid-cols-1 gap-2 text-[10px]">
                                                         <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
@@ -2901,7 +2900,7 @@ export const ClienteSuscripcionesView = () => {
 
                                                 <div className="border border-dashed border-gray-300 rounded-[4px] p-2.5 text-center flex items-center justify-center gap-2 hover:border-[#0E5E6F] transition cursor-pointer active:scale-95 bg-gray-50/50">
                                                     <Upload size={16} className="text-[#0E5E6F]" />
-                                                    <span className="text-gray-700 text-[11px]">
+                                                    <span className="text-gray-700 text-xs">
                                                         Subir comprobante de pago
                                                     </span>
                                                 </div>
@@ -2911,7 +2910,7 @@ export const ClienteSuscripcionesView = () => {
                                         {paymentMethod === "qr" && (
                                             <div className="flex flex-col items-center gap-3 bg-gray-50 border border-gray-200 rounded-[4px] p-3">
                                                 <div className="flex-1 w-full">
-                                                    <span className="text-gray-700 text-[10px] block mb-1.5">Generar código mediante:</span>
+                                                    <span className="text-gray-700 text-xs block mb-1.5">Generar código mediante:</span>
                                                     <div className="flex flex-wrap gap-1 mb-2">
                                                         {["PixelPay", "Banrural", "Atlántida"].map((wallet) => (
                                                             <button
@@ -2941,7 +2940,7 @@ export const ClienteSuscripcionesView = () => {
                                                 <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5 flex justify-between items-center">
                                                     <div>
                                                         <span className="text-gray-500 font-medium block text-[10px]">
-                                                            Saldo disponible BIODRON
+                                                            Saldo disponible TECNODACTYLUS
                                                         </span>
                                                         <span className="text-lg font-black text-gray-900">
                                                             L{" "}
@@ -2956,7 +2955,7 @@ export const ClienteSuscripcionesView = () => {
                                                 </div>
 
                                                 {userWalletBalance < selectedPlanForCheckout.precioNum ? (
-                                                    <div className="p-1.5 bg-red-50 border border-red-200 rounded-[4px] flex items-center gap-1.5 text-red-800 text-[11px]">
+                                                    <div className="p-1.5 bg-red-50 border border-red-200 rounded-[4px] flex items-center gap-1.5 text-red-800 text-xs">
                                                         <AlertCircle
                                                             size={14}
                                                             className="shrink-0 text-red-600"
@@ -2971,7 +2970,7 @@ export const ClienteSuscripcionesView = () => {
                                                         </span>
                                                     </div>
                                                 ) : (
-                                                    <div className="p-1.5 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-1.5 text-emerald-800 text-[11px]">
+                                                    <div className="p-1.5 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-1.5 text-emerald-800 text-xs">
                                                         <CheckCircle2
                                                             size={14}
                                                             className="shrink-0 text-emerald-600"
@@ -3011,7 +3010,7 @@ export const ClienteSuscripcionesView = () => {
                                     <div>
                                         <Title
                                             as="h3"
-                                            className="text-xs font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
+                                            className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
                                         >
                                             Resumen de la Orden
                                         </Title>
@@ -3022,15 +3021,15 @@ export const ClienteSuscripcionesView = () => {
                                             </span>
                                             <Title
                                                 as="h2"
-                                                className="text-base font-black text-gray-900"
+                                                className="text-lg font-black text-gray-900"
                                             >
                                                 {selectedPlanForCheckout.nombre}
                                             </Title>
-                                            <Text className="text-[11px] text-gray-600 block leading-tight">
+                                            <Text className="text-xs text-gray-600 block leading-tight">
                                                 {selectedPlanForCheckout.descripcion}
                                             </Text>
                                             <div className="mt-1.5 pt-1.5 border-t border-gray-200 flex justify-between items-baseline">
-                                                <span className="text-[11px] text-gray-500">
+                                                <span className="text-xs text-gray-500">
                                                     Total a pagar:
                                                 </span>
                                                 <span className="text-lg font-black text-[#0E5E6F]">
@@ -3042,10 +3041,10 @@ export const ClienteSuscripcionesView = () => {
                                             </div>
                                         </div>
 
-                                        <Text className="text-[10px] text-gray-700 block mb-1">
+                                        <Text className="text-xs text-gray-700 block mb-1">
                                             Detalles incluidos:
                                         </Text>
-                                        <ul className="flex flex-col gap-1 text-[11px] text-gray-600">
+                                        <ul className="flex flex-col gap-1 text-xs text-gray-600">
                                             {selectedPlanForCheckout.caracteristicas.map(
                                                 (item: string, idx: number) => (
                                                     <li key={idx} className="flex items-center gap-1.5">
@@ -3062,7 +3061,7 @@ export const ClienteSuscripcionesView = () => {
 
                                     <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-900 text-[10px]">
                                         <ShieldCheck size={14} className="text-amber-600 shrink-0" />
-                                        <span>Garantía de servicio y soporte de la red BIODRON.</span>
+                                        <span>Garantía de servicio y soporte de la red TECNODACTYLUS.</span>
                                     </div>
                                 </div>
                             </div>
@@ -3075,7 +3074,7 @@ export const ClienteSuscripcionesView = () => {
                             <div className="bg-white border-2 border-[#0E5E6F] rounded-[4px] shadow-sm overflow-hidden">
                                 <div className="bg-[#0E5E6F] px-4 py-2 flex items-center gap-2">
                                     <CheckCircle2 size={15} className="text-white shrink-0" />
-                                    <span className="text-white text-[11px] font-bold tracking-wide">
+                                    <span className="text-white text-xs font-bold tracking-wide">
                                         Plan Activo
                                     </span>
                                     <span className="ml-auto text-[10px] text-white/90 bg-white/15 px-2 py-0.5 rounded-[4px] border border-white/20">
@@ -3143,7 +3142,7 @@ export const ClienteSuscripcionesView = () => {
                                                     Estado operativo
                                                 </span>
                                                 <span className="text-xs font-bold text-gray-800 mt-1">
-                                                    Servicio activo BIODRON
+                                                    Servicio activo TECNODACTYLUS
                                                 </span>
                                             </div>
                                         </div>
@@ -3168,13 +3167,13 @@ export const ClienteSuscripcionesView = () => {
 
                         <div>
                             <div className="mb-4">
-                                <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1.5">
+                                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">
                                     Categoría de servicios
                                 </label>
                                 <select
                                     value={activeTab}
                                     onChange={(e) => setActiveTab(e.target.value as TabType)}
-                                    className="w-full text-xs font-bold bg-white border-2 border-gray-200 text-gray-800 rounded-[4px] p-2.5 focus:border-[#0E5E6F] focus:outline-none shadow-xs cursor-pointer"
+                                    className="w-full text-xs font-bold bg-white border-2 border-gray-300 text-black rounded-[4px] p-2.5 focus:border-[#0E5E6F] focus:outline-none shadow-xs cursor-pointer"
                                 >
                                     <option value="generales">Planes generales</option>
                                     <option value="descuentos-drones">Descuentos en drones por plan</option>
@@ -3186,17 +3185,17 @@ export const ClienteSuscripcionesView = () => {
                             <div className="mb-4">
                                 {activeTab === "generales" && (
                                     <Text className="text-xs text-gray-500 block">
-                                        Suscripciones periódicas para servicios integrales de monitoreo aéreo, aspersión y análisis con la plataforma BIODRON.
+                                        Suscripciones periódicas para servicios integrales de monitoreo aéreo, aspersión y análisis con la plataforma TECNODACTYLUS.
                                     </Text>
                                 )}
                                 {activeTab === "descuentos-drones" && (
                                     <Text className="text-xs text-gray-500 block">
-                                        Obtén un porcentaje de descuento especial en la adquisición de tu dron al suscribir cualquiera de estos planes BIODRON.
+                                        Obtén un porcentaje de descuento especial en la adquisición de tu dron al suscribir cualquiera de estos planes TECNODACTYLUS.
                                     </Text>
                                 )}
                                 {activeTab === "asistencia-tecnica" && (
                                     <Text className="text-xs text-gray-500 block">
-                                        Planes dedicados de mantenimiento preventivo, reparaciones en campo y respaldo técnico integral BIODRON.
+                                        Planes dedicados de mantenimiento preventivo, reparaciones en campo y respaldo técnico integral TECNODACTYLUS.
                                     </Text>
                                 )}
                                 {activeTab === "contratacion-piloto" && (
@@ -3239,7 +3238,7 @@ export const ClienteSuscripcionesView = () => {
                                                 <div>
                                                     <Title
                                                         as="h3"
-                                                        className="text-base font-extrabold text-gray-900 leading-tight"
+                                                        className="text-sm font-extrabold text-gray-900 leading-tight"
                                                     >
                                                         {plan.nombre}
                                                     </Title>
@@ -3332,12 +3331,12 @@ export const ClienteSuscripcionesView = () => {
 
                             <div className="flex items-center gap-2 text-[#B8001F] mb-2 pr-6">
                                 <AlertCircle size={18} className="shrink-0" />
-                                <Title as="h3" className="text-xs font-extrabold text-gray-900 leading-tight">
+                                <Title as="h3" className="text-sm font-extrabold text-gray-900 leading-tight">
                                     ¿Cancelar Suscripción Actual?
                                 </Title>
                             </div>
 
-                            <Text className="text-[11px] text-[#555555] leading-normal mb-3 block">
+                            <Text className="text-xs text-[#555555] leading-normal mb-3 block">
                                 Al cancelar tu suscripción, perderás la prioridad en el despacho de drones, asistencia técnica acelerada y los beneficios de análisis de datos a partir de la próxima fecha de corte.
                             </Text>
                         </div>
@@ -3380,7 +3379,7 @@ export const ClienteDronView = ({
     const [isPilotModalOpen, setIsPilotModalOpen] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [pilotFormData, setPilotFormData] = useState({
-        email: "carlos.mendoza@agrodrone.hn",
+        email: "carlos.mendoza@tecnodactylus.hn",
         password: "password123",
         ahacCode: "AHAC-PIL-2026-88",
     });
@@ -3444,6 +3443,7 @@ export const ClienteDronView = ({
     ];
 
     const catalogoDrones: Drone[] = [
+        // --- DRONES EXISTENTES (se mantienen igual) ---
         {
             id: "micro-1",
             nombre: "BioScout Micro II",
@@ -3588,6 +3588,373 @@ export const ClienteDronView = ({
                 "Sensor": "Telemetría Industrial",
             },
         },
+
+        // --- NUEVOS DRONES AGREGADOS DESDE 1.txt ---
+        // MICRO (todos <250g, compra directa)
+        {
+            id: "micro-3",
+            nombre: "Cheerson CX-10",
+            etiqueta: "Micro Dron / Juguete",
+            categoria: "micro",
+            imagen: "src/img/Cheerson_CX-10.jfif",
+            precio: "L 1,000",
+            descripcion: "Uno de los cuadricópteros más pequeños del mundo. Cabe en la palma de la mano e impresiona por su agilidad en espacios cerrados.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "5 min",
+                "Velocidad máxima": "15 km/h",
+                "Alcance": "30 m",
+                "Resistencia al viento": "3 m/s",
+                "Sensor": "Giroscopio 6 ejes",
+            },
+        },
+        {
+            id: "micro-4",
+            nombre: "DJI Tello",
+            etiqueta: "Micro Dron Educativo",
+            categoria: "micro",
+            imagen: "src/img/DJI_Tello.jfif",
+            precio: "L 5,300",
+            descripcion: "Diseñado con la tecnología de estabilidad de DJI y procesador Intel. Es ideal para aprender programación en Scratch y Python mientras vuelas.",
+            destacado: true,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "13 min",
+                "Velocidad máxima": "28 km/h",
+                "Alcance": "100 m",
+                "Resistencia al viento": "8 m/s",
+                "Sensor": "Visión + Barómetro",
+            },
+        },
+        {
+            id: "micro-5",
+            nombre: "Holy Stone HS210",
+            etiqueta: "Micro Dron de Entrenamiento",
+            categoria: "micro",
+            imagen: "src/img/Holy_Stone_HS210.jfif",
+            precio: "L 1,300",
+            descripcion: "Diseñado para niños y principiantes. Incluye protectores de hélice en 360 grados para tolerar choques constantes contra paredes o muebles.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "7 min por batería (incluye 3 baterías)",
+                "Velocidad máxima": "18 km/h",
+                "Alcance": "50 m",
+                "Resistencia al viento": "5 m/s",
+                "Sensor": "Giroscopio 6 ejes",
+            },
+        },
+        {
+            id: "micro-6",
+            nombre: "Eachine E010",
+            etiqueta: "Micro Dron / Base para FPV",
+            categoria: "micro",
+            imagen: "src/img/Eachine_E010.jfif",
+            precio: "L 900",
+            descripcion: "Dron resistente con hélices dentro de ductos de protección. Es famoso en la comunidad hacker para montarle micro cámaras FPV.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "5 min",
+                "Velocidad máxima": "15 km/h",
+                "Alcance": "30 m",
+                "Resistencia al viento": "3 m/s",
+                "Sensor": "Giroscopio 6 ejes",
+            },
+        },
+        {
+            id: "micro-7",
+            nombre: "Potensic A20",
+            etiqueta: "Micro Dron para Niños",
+            categoria: "micro",
+            imagen: "src/img/Potensic_A20.jfif",
+            precio: "L 1,200",
+            descripcion: "Mantiene la altura automáticamente gracias a su sensor barométrico interno, lo que facilita enormemente el pilotaje de entrada.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "6 min por batería",
+                "Velocidad máxima": "20 km/h",
+                "Alcance": "40 m",
+                "Resistencia al viento": "4 m/s",
+                "Sensor": "Barómetro + Giroscopio",
+            },
+        },
+
+        // MINI (todos <250g, compra directa)
+        {
+            id: "mini-3",
+            nombre: "DJI Mini 4 Pro",
+            etiqueta: "Mini Dron Profesional (<250g)",
+            categoria: "mini",
+            imagen: "src/img/DJI_Mini_4_Pro.jfif",
+            precio: "L 49,995",
+            descripcion: "El mini dron más avanzado del mercado. Posee esquivo de obstáculos en todas direcciones y calidad de video cinematográfica.",
+            destacado: true,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "45 min (con Batería Plus)",
+                "Velocidad máxima": "58 km/h",
+                "Alcance": "20 km (Transmisión O4)",
+                "Resistencia al viento": "10.7 m/s",
+                "Sensor": "Sensores omnidireccionales",
+            },
+        },
+        {
+            id: "mini-4",
+            nombre: "DJI Mini 2 SE",
+            etiqueta: "Mini Dron de Entrada",
+            categoria: "mini",
+            imagen: "src/img/DJI_Mini_2_SE.jfif",
+            precio: "L 11,500",
+            descripcion: "La mejor opción en cuanto a relación calidad-precio para iniciarse en la fotografía y video aéreo.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "31 min",
+                "Velocidad máxima": "57 km/h",
+                "Alcance": "10 km (OcuSync 2.0)",
+                "Resistencia al viento": "8.5 m/s",
+                "Sensor": "Sensores descendentes",
+            },
+        },
+        {
+            id: "mini-5",
+            nombre: "DJI Mini 3",
+            etiqueta: "Mini Dron Recreativo",
+            categoria: "mini",
+            imagen: "src/img/DJI_Mini_3.jfif",
+            precio: "L 16,000",
+            descripcion: "Diseñado con un estabilizador que rota 90° para capturar tomas verticales nativas optimizadas para TikTok e Instagram.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "38 min",
+                "Velocidad máxima": "57 km/h",
+                "Alcance": "10 km",
+                "Resistencia al viento": "8.5 m/s",
+                "Sensor": "Sensores descendentes",
+            },
+        },
+        {
+            id: "mini-6",
+            nombre: "Autel EVO Nano+",
+            etiqueta: "Mini Dron Avanzado",
+            categoria: "mini",
+            imagen: "src/img/Autel_EVO_Nano+.jfif",
+            precio: "L 24,000",
+            descripcion: "Alternativa de gama alta al DJI Mini con un sensor RYYB que capta más luz en entornos nocturnos o con sombras marcadas.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "28 min",
+                "Velocidad máxima": "68 km/h",
+                "Alcance": "10 km",
+                "Resistencia al viento": "8 m/s",
+                "Sensor": "RYYB 1/1.28\"",
+            },
+        },
+        {
+            id: "mini-7",
+            nombre: "FIMI X8 Mini V2",
+            etiqueta: "Mini Dron Económico",
+            categoria: "mini",
+            imagen: "src/img/FIMI_X8_Mini_V2.jfif",
+            precio: "L 10,000",
+            descripcion: "Dron plegable del ecosistema Xiaomi que ofrece video 4K y buena resistencia al viento por un precio contenido.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "31 min",
+                "Velocidad máxima": "58 km/h",
+                "Alcance": "9 km",
+                "Resistencia al viento": "10 m/s",
+                "Sensor": "Sensores descendentes",
+            },
+        },
+
+        // --- DRONES CON PESO > 250g (requieren piloto) ---
+        {
+            id: "pequeno-3",
+            nombre: "DJI Air 3",
+            etiqueta: "Dron Mediano Semi-profesional",
+            categoria: "pequeno",
+            imagen: "src/img/DJI_Air_3.jfif",
+            precio: "L 53,000",
+            descripcion: "Incorpora dos cámaras principales (gran angular y teleobjetivo 3x) con sensores de idéntica calidad para variar encuadres.",
+            destacado: true,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "46 min",
+                "Velocidad máxima": "75 km/h",
+                "Alcance": "20 km",
+                "Resistencia al viento": "12 m/s",
+                "Sensor": "Dual 1/1.3\" CMOS",
+            },
+        },
+        {
+            id: "pequeno-4",
+            nombre: "DJI Avata 2",
+            etiqueta: "Dron FPV / Cinewhoop",
+            categoria: "pequeno",
+            imagen: "src/img/DJI_Avata_2.jfif",
+            precio: "L 28,000",
+            descripcion: "Dron de vuelo inmersivo en primera persona (se vuela con gafas FPV). Posee protectores de hélices integrados para maniobras arriesgadas.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "23 min",
+                "Velocidad máxima": "60 km/h",
+                "Alcance": "13 km",
+                "Resistencia al viento": "8 m/s",
+                "Sensor": "Ultra gran angular 1/1.3\"",
+            },
+        },
+        {
+            id: "pequeno-5",
+            nombre: "DJI Mavic Air 2S",
+            etiqueta: "Dron Mediano Fotográfico",
+            categoria: "pequeno",
+            imagen: "src/img/DJI_Mavic_Air_2S.jfif",
+            precio: "L 26,000",
+            descripcion: "Referente fotográfico que equipa un sensor masivo de 1 pulgada, ideal para lograr alto rango dinámico en video 5.4K.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "31 min",
+                "Velocidad máxima": "68 km/h",
+                "Alcance": "12 km",
+                "Resistencia al viento": "8.5 m/s",
+                "Sensor": "CMOS 1\"",
+            },
+        },
+        {
+            id: "pequeno-6",
+            nombre: "Autel EVO Lite+",
+            etiqueta: "Dron Mediano Nocturno",
+            categoria: "pequeno",
+            imagen: "src/img/Autel_EVO_Lite+.jfif",
+            precio: "L 35,000",
+            descripcion: "Diseñado con apertura variable f/2.8-f/11 para ajustar la entrada de luz y algoritmos avanzados para tomas nocturnas impecables.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "40 min",
+                "Velocidad máxima": "72 km/h",
+                "Alcance": "12 km",
+                "Resistencia al viento": "10 m/s",
+                "Sensor": "1\" CMOS",
+            },
+        },
+        {
+            id: "pequeno-7",
+            nombre: "Skydio 2+",
+            etiqueta: "Dron Mediano Autónomo",
+            categoria: "pequeno",
+            imagen: "src/img/Skydio_2+.jfif",
+            precio: "L 32,000",
+            descripcion: "Líder en esquivo de obstáculos y seguimiento autónomo utilizando 6 cámaras de visión 360° para grabar deportes de acción.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "27 min",
+                "Velocidad máxima": "60 km/h",
+                "Alcance": "6 km",
+                "Resistencia al viento": "8 m/s",
+                "Sensor": "Sony 1/2.3\"",
+            },
+        },
+        {
+            id: "grande-3",
+            nombre: "DJI Mavic 3 Pro",
+            etiqueta: "Dron Profesional / Cine",
+            categoria: "grande",
+            imagen: "src/img/DJI_Mavic_3_Pro.jfif",
+            precio: "L 128,500",
+            descripcion: "El estándar en producción comercial. Incorpora tres lentes Hasselblad para cubrir desde ángulos amplios hasta telefoto.",
+            destacado: true,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "43 min",
+                "Velocidad máxima": "75 km/h",
+                "Alcance": "15 km",
+                "Resistencia al viento": "12 m/s",
+                "Sensor": "Triple Hasselblad",
+            },
+        },
+        {
+            id: "grande-4",
+            nombre: "Autel EVO II Pro V3",
+            etiqueta: "Dron Profesional / Topografía",
+            categoria: "grande",
+            imagen: "src/img/Autel_EVO_II_Pro_V3.jfif",
+            precio: "L 80,300",
+            descripcion: "Herramienta utilizada en mapeo y fotogrametría técnica. No aplica restricciones de zona de vuelo geofencing.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "40 min",
+                "Velocidad máxima": "72 km/h",
+                "Alcance": "15 km",
+                "Resistencia al viento": "12 m/s",
+                "Sensor": "1\" CMOS",
+            },
+        },
+        {
+            id: "grande-5",
+            nombre: "DJI Inspire 3",
+            etiqueta: "Dron Cinematográfico (Cine)",
+            categoria: "grande",
+            imagen: "src/img/DJI_Inspire_3.jfif",
+            precio: "L 441,800",
+            descripcion: "Sistema de cine aéreo Full-Frame para producciones cinematográficas. Soporta lentes intercambiables y doble control para piloto y camarógrafo.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "No aplica",
+                "Tiempo de vuelo": "28 min",
+                "Velocidad máxima": "94 km/h",
+                "Alcance": "15 km",
+                "Resistencia al viento": "12 m/s",
+                "Sensor": "Zenmuse X9-8K Full-Frame",
+            },
+        },
+        {
+            id: "grande-6",
+            nombre: "DJI Matrice 350 RTK",
+            etiqueta: "Dron Industrial / Búsqueda y Rescate",
+            categoria: "grande",
+            imagen: "src/img/DJI_Matrice_350_RTK.jfif",
+            precio: "L 450,000",
+            descripcion: "Plataforma industrial resistente al agua e intemperie (IP55). Diseñado para inspección de torres eléctricas, emergencias y seguridad.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "Hasta 2.7 kg",
+                "Tiempo de vuelo": "55 min",
+                "Velocidad máxima": "83 km/h",
+                "Alcance": "20 km",
+                "Resistencia al viento": "15 m/s",
+                "Sensor": "RTK + Sensores múltiples",
+            },
+        },
+        {
+            id: "grande-7",
+            nombre: "DJI Agras T40",
+            etiqueta: "Mega Dron Agrícola",
+            categoria: "grande",
+            imagen: "src/img/DJI_Agras_T40.jfif",
+            precio: "L 500,000",
+            descripcion: "Dron industrial gigante utilizado para fumigación, siembra y dispersión de fertilizantes en cultivos a gran escala.",
+            destacado: false,
+            especificaciones: {
+                "Capacidad de carga": "40 L (líquidos) / 50 kg (sólidos)",
+                "Tiempo de vuelo": "10 min por tanque",
+                "Velocidad máxima": "50 km/h",
+                "Alcance": "7 km",
+                "Resistencia al viento": "12 m/s",
+                "Sensor": "Radar + Sensores de flujo",
+            },
+        },
     ];
 
     const dronesFiltrados = catalogoDrones.filter(d => d.categoria === selectedCategory);
@@ -3602,7 +3969,7 @@ export const ClienteDronView = ({
         setIsPilotModalOpen(false);
         setIsSubmitted(false);
         setPilotFormData({
-            email: "carlos.mendoza@agrodrone.hn",
+            email: "carlos.mendoza@tecnodactylus.hn",
             password: "password123",
             ahacCode: "AHAC-PIL-2026-88",
         });
@@ -3665,7 +4032,7 @@ export const ClienteDronView = ({
                                 Catálogo oficial
                             </span>
                         </Title>
-                        <Text className="text-[11px] text-gray-500 mt-1 block">
+                        <Text className="text-xs text-gray-500 mt-1 block">
                             Supervisa tu flota actual de aeronaves o explora el catálogo homologado para operar dentro de la plataforma.
                         </Text>
                     </div>
@@ -3685,7 +4052,7 @@ export const ClienteDronView = ({
                         <button
                             onClick={() => setActiveMainTab("mis-drones")}
                             style={{ borderRadius: "4px 4px 0 0", fontFamily: "'Roboto', sans-serif" }}
-                            className={`flex-1 pb-3 px-2 font-bold text-[11px] transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                            className={`flex-1 pb-3 px-2 font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                                 activeMainTab === "mis-drones"
                                     ? "text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
                                     : "text-gray-500 hover:text-gray-800"
@@ -3698,7 +4065,7 @@ export const ClienteDronView = ({
                         <button
                             onClick={() => setActiveMainTab("comprar")}
                             style={{ borderRadius: "4px 4px 0 0", fontFamily: "'Roboto', sans-serif" }}
-                            className={`flex-1 pb-3 px-2 font-bold text-[11px] transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                            className={`flex-1 pb-3 px-2 font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                                 activeMainTab === "comprar"
                                     ? "text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
                                     : "text-gray-500 hover:text-gray-800"
@@ -3741,7 +4108,7 @@ export const ClienteDronView = ({
                                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 p-1 bg-gray-100 rounded-[4px] border border-gray-200 mb-2.5">
                                         <button
                                             onClick={() => setPaymentMethod("card")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "card"
+                                            className={`py-1 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "card"
                                                     ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                 }`}
@@ -3752,7 +4119,7 @@ export const ClienteDronView = ({
 
                                         <button
                                             onClick={() => setPaymentMethod("transfer")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "transfer"
+                                            className={`py-1 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "transfer"
                                                     ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                 }`}
@@ -3763,7 +4130,7 @@ export const ClienteDronView = ({
 
                                         <button
                                             onClick={() => setPaymentMethod("qr")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "qr"
+                                            className={`py-1 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "qr"
                                                     ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                 }`}
@@ -3774,13 +4141,13 @@ export const ClienteDronView = ({
 
                                         <button
                                             onClick={() => setPaymentMethod("wallet")}
-                                            className={`py-1 px-2 rounded-[4px] text-[11px] flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "wallet"
+                                            className={`py-1 px-2 rounded-[4px] text-xs flex items-center justify-center gap-1 transition cursor-pointer ${paymentMethod === "wallet"
                                                     ? "bg-[#0E5E6F] text-white shadow-xs font-bold"
                                                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/60"
                                                 }`}
                                         >
                                             <Wallet size={13} />
-                                            <span>Saldo BIODRON</span>
+                                            <span>Saldo TD</span>
                                         </button>
                                     </div>
 
@@ -3788,7 +4155,7 @@ export const ClienteDronView = ({
                                     {paymentMethod === "card" && (
                                         <div className="flex flex-col gap-3">
                                             <div>
-                                                <span className="text-gray-700 text-[10px] block mb-1.5">Pasarela de pago:</span>
+                                                <span className="text-gray-700 text-xs block mb-1.5">Pasarela de pago:</span>
                                                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
                                                     {["PixelPay", "ClinPays", "Recurrente", "Pagadito"].map((gateway) => (
                                                         <button
@@ -3810,7 +4177,7 @@ export const ClienteDronView = ({
                                                     <div className="w-full max-w-[190px] aspect-[1.58/1] bg-gradient-to-tr from-slate-900 via-slate-800 to-[#0E5E6F] text-white p-2.5 rounded-[4px] shadow-sm border border-slate-700 flex flex-col justify-between">
                                                         <div className="flex justify-between items-center">
                                                             <span className="text-[8px] font-extrabold uppercase tracking-wider text-slate-300">
-                                                                BIODRON
+                                                                TECNODACTYLUS
                                                             </span>
                                                             <CreditCard size={15} className="text-amber-400" />
                                                         </div>
@@ -3844,7 +4211,7 @@ export const ClienteDronView = ({
                                                     </div>
                                                 </div>
 
-                                                <div className="sm:col-span-7 grid grid-cols-2 gap-1.5 text-[11px]">
+                                                <div className="sm:col-span-7 grid grid-cols-2 gap-1.5 text-xs">
                                                     <div className="col-span-2 flex flex-col gap-0.5">
                                                         <label className="text-gray-700 text-[10px]">Número de tarjeta</label>
                                                         <input
@@ -3853,7 +4220,7 @@ export const ClienteDronView = ({
                                                             placeholder="4000 0000 0000 0000"
                                                             value={cardData.number}
                                                             onChange={(e) => setCardData({ ...cardData, number: e.target.value }) }
-                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                         />
                                                     </div>
 
@@ -3864,7 +4231,7 @@ export const ClienteDronView = ({
                                                             placeholder="Nombre impreso"
                                                             value={cardData.name}
                                                             onChange={(e) => setCardData({ ...cardData, name: e.target.value }) }
-                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                         />
                                                     </div>
 
@@ -3876,7 +4243,7 @@ export const ClienteDronView = ({
                                                             placeholder="MM/AA"
                                                             value={cardData.expiry}
                                                             onChange={(e) => setCardData({ ...cardData, expiry: e.target.value }) }
-                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                         />
                                                     </div>
 
@@ -3888,7 +4255,7 @@ export const ClienteDronView = ({
                                                             placeholder="123"
                                                             value={cardData.cvv}
                                                             onChange={(e) => setCardData({ ...cardData, cvv: e.target.value }) }
-                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-[11px] focus:outline-none focus:border-[#0E5E6F]"
+                                                            className="p-1 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F]"
                                                         />
                                                     </div>
                                                 </div>
@@ -3900,7 +4267,7 @@ export const ClienteDronView = ({
                                     {paymentMethod === "transfer" && (
                                         <div className="flex flex-col gap-2 text-xs">
                                             <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5">
-                                                <span className="text-gray-800 text-[11px] block mb-1">Cuentas oficiales BIODRON</span>
+                                                <span className="text-gray-800 text-xs block mb-1">Cuentas oficiales TECNODACTYLUS</span>
                                                 <div className="grid grid-cols-1 gap-2 text-[10px]">
                                                     <div className="p-1.5 bg-white border border-gray-200 rounded-[4px]">
                                                         <span className="font-bold text-[#0E5E6F] block">BAC Credomatic</span>
@@ -3922,7 +4289,7 @@ export const ClienteDronView = ({
                                             </div>
                                             <div className="border border-dashed border-gray-300 rounded-[4px] p-2.5 text-center flex items-center justify-center gap-2 hover:border-[#0E5E6F] transition cursor-pointer bg-gray-50/50">
                                                 <Upload size={16} className="text-[#0E5E6F]" />
-                                                <span className="text-gray-700 text-[11px]">Subir comprobante de pago</span>
+                                                <span className="text-gray-700 text-xs">Subir comprobante de pago</span>
                                             </div>
                                         </div>
                                     )}
@@ -3931,7 +4298,7 @@ export const ClienteDronView = ({
                                     {paymentMethod === "qr" && (
                                         <div className="flex flex-col items-center gap-3 bg-gray-50 border border-gray-200 rounded-[4px] p-3">
                                             <div className="flex-1 w-full">
-                                                <span className="text-gray-700 text-[10px] block mb-1.5">Generar código mediante:</span>
+                                                <span className="text-gray-700 text-xs block mb-1.5">Generar código mediante:</span>
                                                 <div className="flex flex-wrap gap-1 mb-2">
                                                     {["PixelPay", "Banrural", "Atlántida"].map((wallet) => (
                                                         <button
@@ -3950,7 +4317,7 @@ export const ClienteDronView = ({
                                                     Escanea este código desde la app de <strong>{selectedQrWallet}</strong> para pagar el total de {selectedDroneForCheckout.precio}.
                                                 </span>
                                             </div>
-                                            <div className="shrink-0 p-2 bg-white border border-gray-200 rounded-lg shadow-sm flex items-center justify-center">
+                                            <div className="shrink-0 p-2 bg-white border border-gray-200 rounded-[4px] shadow-sm flex items-center justify-center">
                                                 <QrCode size={64} className="text-gray-800" />
                                             </div>
                                         </div>
@@ -3962,7 +4329,7 @@ export const ClienteDronView = ({
                                             <div className="bg-gray-50 border border-gray-200 rounded-[4px] p-2.5 flex justify-between items-center">
                                                 <div>
                                                     <span className="text-gray-500 font-medium block text-[10px]">
-                                                        Saldo disponible BIODRON
+                                                        Saldo disponible TECNODACTYLUS
                                                     </span>
                                                     <span className="text-lg font-black text-gray-900">
                                                         L {userWalletBalance.toLocaleString("es-HN", { minimumFractionDigits: 2 })}
@@ -3974,14 +4341,14 @@ export const ClienteDronView = ({
                                             </div>
 
                                             {userWalletBalance < getPrecioNum(selectedDroneForCheckout.precio) ? (
-                                                <div className="p-1.5 bg-red-50 border border-red-200 rounded-[4px] flex items-center gap-1.5 text-red-800 text-[11px]">
+                                                <div className="p-1.5 bg-red-50 border border-red-200 rounded-[4px] flex items-center gap-1.5 text-red-800 text-xs">
                                                     <AlertCircle size={14} className="shrink-0 text-red-600" />
                                                     <span>
                                                         Saldo insuficiente. Faltan L {(getPrecioNum(selectedDroneForCheckout.precio) - userWalletBalance).toLocaleString("es-HN")}.
                                                     </span>
                                                 </div>
                                             ) : (
-                                                <div className="p-1.5 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-1.5 text-emerald-800 text-[11px]">
+                                                <div className="p-1.5 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-1.5 text-emerald-800 text-xs">
                                                     <CheckCircle2 size={14} className="shrink-0 text-emerald-600" />
                                                     <span>Saldo suficiente para procesar la transacción.</span>
                                                 </div>
@@ -4016,7 +4383,7 @@ export const ClienteDronView = ({
                                 <div>
                                     <Title
                                         as="h3"
-                                        className="text-xs font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
+                                        className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
                                     >
                                         Resumen de la Orden
                                     </Title>
@@ -4032,19 +4399,19 @@ export const ClienteDronView = ({
                                                 </span>
                                                 <Title
                                                     as="h2"
-                                                    className="text-base font-black text-gray-900 leading-tight"
+                                                    className="text-lg font-black text-gray-900 leading-tight"
                                                 >
                                                     {selectedDroneForCheckout.nombre}
                                                 </Title>
                                             </div>
                                         </div>
                                         
-                                        <Text className="text-[11px] text-gray-600 block leading-tight mb-2">
+                                        <Text className="text-xs text-gray-600 block leading-tight mb-2">
                                             {selectedDroneForCheckout.descripcion}
                                         </Text>
                                         
                                         <div className="mt-1.5 pt-1.5 border-t border-gray-200 flex justify-between items-baseline">
-                                            <span className="text-[11px] text-gray-500">
+                                            <span className="text-xs text-gray-500">
                                                 Total a pagar:
                                             </span>
                                             <span className="text-lg font-black text-[#0E5E6F]">
@@ -4053,10 +4420,10 @@ export const ClienteDronView = ({
                                         </div>
                                     </div>
 
-                                    <Text className="text-[10px] text-gray-700 block mb-1 font-bold">
+                                    <Text className="text-xs text-gray-700 block mb-1 font-bold">
                                         Especificaciones del equipo:
                                     </Text>
-                                    <ul className="flex flex-col gap-1 text-[11px] text-gray-600">
+                                    <ul className="flex flex-col gap-1 text-xs text-gray-600">
                                         {Object.entries(selectedDroneForCheckout.especificaciones).map(
                                             ([key, val]: any, idx: number) => (
                                                 <li key={idx} className="flex items-center gap-1.5">
@@ -4073,7 +4440,7 @@ export const ClienteDronView = ({
 
                                 <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-900 text-[10px]">
                                     <ShieldCheck size={14} className="text-amber-600 shrink-0" />
-                                    <span>Garantía de hardware y soporte comercial de la red BIODRON.</span>
+                                    <span>Garantía de hardware y soporte comercial de la red TECNODACTYLUS.</span>
                                 </div>
                             </div>
                         </div>
@@ -4089,7 +4456,7 @@ export const ClienteDronView = ({
                                 className="bg-gray-50 border-2 border-dashed border-gray-200 p-10 text-center flex flex-col items-center justify-center"
                             >
                                 <Plane className="w-12 h-12 text-gray-300 mb-2" />
-                                <h3 className="font-bold text-gray-700 text-sm">No tienes drones vinculados a tu cuenta</h3>
+                                <h3 className="text-sm font-bold text-gray-700">No tienes drones vinculados a tu cuenta</h3>
                                 <p className="text-xs text-gray-400 mt-1 max-w-sm">
                                     Puedes adquirir unidades micro autorizadas o solicitar la conversión a Piloto para adquirir aeronaves de mayor escala.
                                 </p>
@@ -4136,8 +4503,8 @@ export const ClienteDronView = ({
 
                                         <div className="p-4 flex flex-col gap-3">
                                             <div>
-                                                <h3 className="font-extrabold text-gray-900 text-base leading-tight">{drone.nombre}</h3>
-                                                <p className="text-[11px] text-gray-400 font-mono mt-0.5">N/S: {drone.numeroSerie}</p>
+                                                <h3 className="text-lg font-extrabold text-gray-900 leading-tight">{drone.nombre}</h3>
+                                                <p className="text-xs text-gray-400 font-mono mt-0.5">N/S: {drone.numeroSerie}</p>
                                             </div>
 
                                             {/* BATERÍA COMO BARRA DE PROGRESO */}
@@ -4205,7 +4572,7 @@ export const ClienteDronView = ({
                     <div className="space-y-6">
                         <div>
                             <div className="mb-6">
-                                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-1.5">
+                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">
                                     Categoría de dron
                                 </label>
                                 <div className="relative flex items-center gap-2">
@@ -4223,7 +4590,7 @@ export const ClienteDronView = ({
                                             value={selectedCategory}
                                             onChange={(e) => setSelectedCategory(e.target.value as any)}
                                             style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                            className="w-full appearance-none bg-white border-2 border-gray-200 text-gray-900 font-bold text-[12px] py-2.5 pl-3 pr-9 cursor-pointer outline-none focus:border-[#0E5E6F] transition-all"
+                                            className="w-full appearance-none bg-white border-2 border-gray-300 text-black font-bold text-xs py-2.5 pl-3 pr-9 cursor-pointer outline-none focus:border-[#0E5E6F] transition-all"
                                         >
                                             <option value="micro">Micro drones</option>
                                             <option value="mini">Mini drones</option>
@@ -4276,7 +4643,7 @@ export const ClienteDronView = ({
                                     </div>
                                     <div>
                                         <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                                            <Title as="h3" className="font-bold text-sm text-amber-950">
+                                            <Title as="h3" className="text-sm font-bold text-amber-950">
                                                 Restricción de Compra: Requiere Cuenta de Piloto
                                             </Title>
                                             <span 
@@ -4352,7 +4719,7 @@ export const ClienteDronView = ({
 
                                     <div className="p-4 flex flex-col gap-3">
                                         <div>
-                                            <Title as="h3" className="text-base font-extrabold text-gray-900 leading-tight">
+                                            <Title as="h3" className="text-sm font-extrabold text-gray-900 leading-tight">
                                                 {drone.nombre}
                                             </Title>
                                             <Text className="text-xs text-gray-600 line-clamp-2 font-medium leading-relaxed block mt-1">
@@ -4382,15 +4749,15 @@ export const ClienteDronView = ({
                                         >
                                             <div className="flex flex-col items-center text-center gap-0.5">
                                                 <span className="font-medium text-gray-400 text-[9px] leading-tight">Carga</span>
-                                                <span className="font-bold text-gray-800 text-[11px] leading-tight">{drone.especificaciones["Capacidad de carga"]}</span>
+                                                <span className="font-bold text-gray-800 text-xs leading-tight">{drone.especificaciones["Capacidad de carga"]}</span>
                                             </div>
                                             <div className="flex flex-col items-center text-center gap-0.5 border-x border-gray-200">
                                                 <span className="font-medium text-gray-400 text-[9px] leading-tight">T. vuelo</span>
-                                                <span className="font-bold text-gray-800 text-[11px] leading-tight">{drone.especificaciones["Tiempo de vuelo"]}</span>
+                                                <span className="font-bold text-gray-800 text-xs leading-tight">{drone.especificaciones["Tiempo de vuelo"]}</span>
                                             </div>
                                             <div className="flex flex-col items-center text-center gap-0.5">
                                                 <span className="font-medium text-gray-400 text-[9px] leading-tight">Vel. máx</span>
-                                                <span className="font-bold text-gray-800 text-[11px] leading-tight">{drone.especificaciones["Velocidad máxima"]}</span>
+                                                <span className="font-bold text-gray-800 text-xs leading-tight">{drone.especificaciones["Velocidad máxima"]}</span>
                                             </div>
                                         </div>
 
@@ -4445,7 +4812,7 @@ export const ClienteDronView = ({
                         <div className="flex items-center justify-between border-b border-gray-100 pb-2">
                             <div className="flex items-center gap-1.5">
                                 <Headphones className="text-[#0E5E6F]" size={16} />
-                                <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                                <h3 className="text-sm font-bold text-gray-900 tracking-wide">
                                     Solicitud de Ayuda Técnica
                                 </h3>
                             </div>
@@ -4474,7 +4841,7 @@ export const ClienteDronView = ({
                                 </div>
 
                                 <div>
-                                    <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                                    <label className="block text-xs font-bold text-gray-500 mb-1">
                                         Razón de la Petición
                                     </label>
                                     <textarea
@@ -4510,7 +4877,7 @@ export const ClienteDronView = ({
                                     <div className="p-1 bg-emerald-100 text-emerald-700 rounded-[4px] shrink-0">
                                         <CheckCircle2 size={16} />
                                     </div>
-                                    <span className="text-[11px] font-bold text-emerald-800">
+                                    <span className="text-xs font-bold text-emerald-800">
                                         ¡Solicitud Enviada Exitosamente!
                                     </span>
                                 </div>
@@ -4545,7 +4912,7 @@ export const ClienteDronView = ({
                                     {selectedDrone.categoria}
                                 </div>
                                 <div className="min-w-0">
-                                    <h3 className="text-xs font-bold text-gray-900 truncate">
+                                    <h3 className="text-sm font-bold text-gray-900 truncate">
                                         {selectedDrone.nombre}
                                     </h3>
                                     <p className="text-[9px] text-gray-400 truncate">
@@ -4640,7 +5007,7 @@ export const ClienteDronView = ({
                                                     <span className="text-[8px] text-gray-400 font-bold truncate">
                                                         {clave}
                                                     </span>
-                                                    <span className="text-[11px] font-bold text-gray-800 truncate">
+                                                    <span className="text-xs font-bold text-gray-800 truncate">
                                                         {valor}
                                                     </span>
                                                 </div>
@@ -4701,7 +5068,7 @@ export const ClienteDronView = ({
                         <div className="flex justify-between items-center border-b border-gray-100 pb-2">
                             <div className="flex items-center gap-1.5">
                                 <Award className="text-amber-600" size={16} />
-                                <h3 className="text-xs font-bold text-gray-900 tracking-wide uppercase">
+                                <h3 className="text-sm font-bold text-gray-900 tracking-wide uppercase">
                                     Solicitud De Cuenta De Piloto
                                 </h3>
                             </div>
@@ -4715,12 +5082,12 @@ export const ClienteDronView = ({
 
                         {!isSubmitted ? (
                             <form onSubmit={handlePilotSubmit} className="space-y-3">
-                                <p className="text-[11px] text-gray-600 font-normal leading-tight">
+                                <p className="text-xs text-gray-600 font-normal leading-tight">
                                     Para adquirir aeronaves de mayor categoría, ingresa tus credenciales y tu <strong className="text-gray-800">Código de la AHAC</strong> (Agencia Hondureña de Aeronáutica Civil).
                                 </p>
 
                                 <div>
-                                    <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                                    <label className="block text-xs font-bold text-gray-500 mb-1">
                                         Correo Electrónico
                                     </label>
                                     <input
@@ -4734,7 +5101,7 @@ export const ClienteDronView = ({
                                 </div>
 
                                 <div>
-                                    <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                                    <label className="block text-xs font-bold text-gray-500 mb-1">
                                         Contraseña
                                     </label>
                                     <input
@@ -4748,7 +5115,7 @@ export const ClienteDronView = ({
                                 </div>
 
                                 <div>
-                                    <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                                    <label className="block text-xs font-bold text-gray-500 mb-1">
                                         Código o Licencia AHAC
                                     </label>
                                     <input
@@ -4784,7 +5151,7 @@ export const ClienteDronView = ({
                                     <div className="p-1 bg-emerald-100 text-emerald-700 rounded-[4px] shrink-0">
                                         <CheckCircle2 size={16} />
                                     </div>
-                                    <span className="text-[11px] font-bold text-emerald-800">
+                                    <span className="text-xs font-bold text-emerald-800">
                                         ¡Solicitud Enviada Exitosamente!
                                     </span>
                                 </div>
@@ -4962,7 +5329,7 @@ export const ClienteHistoryView = () => {
           <h1 className="text-lg font-black text-gray-900 tracking-tight">
             Historial de Reportes y Actividad
           </h1>
-          <p className="text-gray-500 text-[11px] font-medium tracking-wide">
+          <p className="text-xs text-gray-500 font-medium tracking-wide">
             Registro consolidado de misiones de vuelo, equipos desplegados, áreas intervenidas y compras.
           </p>
         </div>
@@ -4986,7 +5353,7 @@ export const ClienteHistoryView = () => {
           className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between"
         >
           <div className="flex justify-between items-center mb-2">
-            <span className="text-[10px] font-black text-gray-500 tracking-wider">
+            <span className="text-xs font-black text-gray-500 tracking-wider">
               Misiones Totales
             </span>
             <div
@@ -5000,8 +5367,8 @@ export const ClienteHistoryView = () => {
               <Plane size={14} />
             </div>
           </div>
-          <p className="text-sm font-black text-gray-900 mb-0.5 whitespace-nowrap">24 Operaciones</p>
-          <p className="text-[9px] text-gray-400 font-semibold">Registros consolidados</p>
+          <p className="text-sm font-black text-gray-900 mb-0.5">24 Operaciones</p>
+          <p className="text-xs text-gray-400 font-semibold">Registros consolidados</p>
         </div>
 
         <div
@@ -5009,7 +5376,7 @@ export const ClienteHistoryView = () => {
           className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between"
         >
           <div className="flex justify-between items-center mb-2">
-            <span className="text-[10px] font-black text-gray-500 tracking-wider">
+            <span className="text-xs font-black text-gray-500 tracking-wider">
               Área Cubierta
             </span>
             <div
@@ -5023,8 +5390,8 @@ export const ClienteHistoryView = () => {
               <MapPin size={14} />
             </div>
           </div>
-          <p className="text-sm font-black text-gray-900 mb-0.5 whitespace-nowrap">187.5 Ha</p>
-          <p className="text-[9px] text-gray-400 font-semibold">Superficie analizada</p>
+          <p className="text-sm font-black text-gray-900 mb-0.5">187.5 Ha</p>
+          <p className="text-xs text-gray-400 font-semibold">Superficie analizada</p>
         </div>
 
         <div
@@ -5032,7 +5399,7 @@ export const ClienteHistoryView = () => {
           className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between"
         >
           <div className="flex justify-between items-center mb-2">
-            <span className="text-[10px] font-black text-gray-500 tracking-wider">
+            <span className="text-xs font-black text-gray-500 tracking-wider">
               Reportes
             </span>
             <div
@@ -5046,8 +5413,8 @@ export const ClienteHistoryView = () => {
               <FileText size={14} />
             </div>
           </div>
-          <p className="text-sm font-black text-gray-900 mb-0.5 whitespace-nowrap">19 Archivos</p>
-          <p className="text-[9px] text-gray-400 font-semibold">Documentos PDF listos</p>
+          <p className="text-sm font-black text-gray-900 mb-0.5">19 Archivos</p>
+          <p className="text-xs text-gray-400 font-semibold">Documentos PDF listos</p>
         </div>
 
         <div
@@ -5055,7 +5422,7 @@ export const ClienteHistoryView = () => {
           className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between"
         >
           <div className="flex justify-between items-center mb-2">
-            <span className="text-[10px] font-black text-gray-500 tracking-wider">
+            <span className="text-xs font-black text-gray-500 tracking-wider">
               Suscripción
             </span>
             <div
@@ -5069,8 +5436,8 @@ export const ClienteHistoryView = () => {
               <CreditCard size={14} />
             </div>
           </div>
-          <p className="text-sm font-black text-gray-900 mb-0.5 whitespace-nowrap">Corporativo</p>
-          <p className="text-[9px] text-gray-400 font-semibold">Plan de cobertura total</p>
+          <p className="text-sm font-black text-gray-900 mb-0.5">Corporativo</p>
+          <p className="text-xs text-gray-400 font-semibold">Plan de cobertura total</p>
         </div>
       </div>
 
@@ -5144,10 +5511,10 @@ export const ClienteHistoryView = () => {
                 <Plane size={16} />
               </div>
               <div className="min-w-0">
-                <h2 className="text-xs font-black text-gray-900 tracking-wider">
+                <h2 className="text-sm font-black text-gray-900 tracking-wider">
                   Misiones Operacionales
                 </h2>
-                <p className="text-[10px] text-gray-500 font-medium">
+                <p className="text-xs text-gray-500 font-medium">
                   Superficies, equipos y reportes técnicos.
                 </p>
               </div>
@@ -5202,7 +5569,7 @@ export const ClienteHistoryView = () => {
                       {vuelo.ubicacion}
                     </h3>
 
-                    <div className="flex flex-col gap-0.5 mt-1 text-[11px] text-gray-600">
+                    <div className="flex flex-col gap-0.5 mt-1 text-xs text-gray-600">
                       <span className="font-bold text-[#0E5E6F]">
                         {vuelo.servicio}
                       </span>
@@ -5250,7 +5617,7 @@ export const ClienteHistoryView = () => {
                       </button>
                     </div>
                   ) : (
-                    <span className="text-[11px] text-gray-400 italic font-medium">
+                    <span className="text-xs text-gray-400 italic font-medium">
                       Procesando informe...
                     </span>
                   )}
@@ -5280,10 +5647,10 @@ export const ClienteHistoryView = () => {
                 <CreditCard size={16} />
               </div>
               <div className="min-w-0">
-                <h2 className="text-xs font-black text-gray-900 tracking-wider">
+                <h2 className="text-sm font-black text-gray-900 tracking-wider">
                   Compras, Planes y Pagos
                 </h2>
-                <p className="text-[10px] text-gray-500 font-medium">
+                <p className="text-xs text-gray-500 font-medium">
                   Comprobantes de suscripciones y servicios.
                 </p>
               </div>
@@ -5337,7 +5704,7 @@ export const ClienteHistoryView = () => {
                     <h3 className="text-xs font-bold text-gray-900 mt-1">
                       {compra.concepto}
                     </h3>
-                    <p className="text-[11px] text-gray-500 font-medium">
+                    <p className="text-xs text-gray-500 font-medium">
                       <strong>Método:</strong> {compra.metodoPago}
                     </p>
                   </div>
@@ -5388,10 +5755,10 @@ export const ClienteHistoryView = () => {
             <ShieldCheck size={20} className="text-cyan-400" />
           </div>
           <div>
-            <h3 className="text-xs font-black text-white tracking-wider">
+            <h3 className="text-sm font-black text-white tracking-wider">
               ¿Requieres un Informe Técnico Oficial o Auditoría?
             </h3>
-            <p className="text-[11px] text-gray-300 mt-0.5 font-medium">
+            <p className="text-xs text-gray-300 mt-0.5 font-medium">
               Generamos reportes detallados y firmados para certificaciones, cumplimiento normativo y seguros.
             </p>
           </div>
@@ -5414,7 +5781,7 @@ export const ClienteHistoryView = () => {
         <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
           <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
             <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-              <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+              <h3 className="text-sm font-bold text-gray-900 tracking-wide">
                 Detalles del Vuelo {selectedVuelo.id}
               </h3>
               <button
@@ -5437,7 +5804,7 @@ export const ClienteHistoryView = () => {
 
               {selectedVuelo.detallesTecnicos && (
                 <div className="mt-3 p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px] space-y-1">
-                  <p className="font-bold text-gray-900 border-b pb-1 mb-1 text-[11px]">
+                  <p className="font-bold text-gray-900 border-b pb-1 mb-1 text-xs">
                     Parámetros de Telemetría y Misión
                   </p>
                   <p className="text-[10px]"><strong>Altura promedio:</strong> {selectedVuelo.detallesTecnicos.alturaPromedio}</p>
@@ -5466,7 +5833,7 @@ export const ClienteHistoryView = () => {
         <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
             <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-              <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+              <h3 className="text-sm font-bold text-gray-900 tracking-wide">
                 Comprobante de Pago {selectedFactura.id}
               </h3>
               <button
@@ -5802,10 +6169,10 @@ export const ClienteHelpView = () => {
           {/* TÍTULO Y BOTÓN DE PEDIR AYUDA */}
           <div className="p-3 border-b border-gray-200 bg-white flex items-center justify-between gap-2 shrink-0">
             <div className="min-w-0">
-              <h2 className="font-bold text-gray-900 text-base leading-tight truncate">
+              <h2 className="font-bold text-gray-900 text-lg leading-tight truncate">
                 Soporte y Ayuda
               </h2>
-              <p className="text-[11px] text-gray-500 truncate">
+              <p className="text-xs text-gray-500 truncate">
                 Canal directo de asistencia
               </p>
             </div>
@@ -5832,7 +6199,7 @@ export const ClienteHelpView = () => {
                 placeholder="Buscar conversación..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:border-[#0E5E6F] transition"
+                className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:border-[#0E5E6F] transition"
               />
             </div>
           </div>
@@ -5883,7 +6250,7 @@ export const ClienteHelpView = () => {
                         {chat.name}
                       </h3>
                       {lastMsg && (
-                        <span className="text-[11px] text-gray-400 font-medium shrink-0 ml-1">
+                        <span className="text-xs text-gray-400 font-medium shrink-0 ml-1">
                           {lastMsg.time}
                         </span>
                       )}
@@ -5942,11 +6309,11 @@ export const ClienteHelpView = () => {
                   {activeChat.name}
                 </h2>
 
-                <span className="text-[11px] text-[#0E5E6F] font-medium truncate">
+                <span className="text-xs text-[#0E5E6F] font-medium truncate">
                   {activeChat.role}
                 </span>
 
-                <div className="text-[11px] text-gray-500 leading-none">
+                <div className="text-xs text-gray-500 leading-none">
                   {activeChat.online ? (
                     <span className="text-emerald-600 font-medium flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
@@ -5980,17 +6347,17 @@ export const ClienteHelpView = () => {
                     className="fixed inset-0 z-10"
                     onClick={() => setIsHeaderMenuOpen(false)}
                   />
-                  <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-[4px] shadow-lg py-1 z-20 animate-fade-in">
+                  <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-300 rounded-[4px] shadow-lg py-1 z-20 animate-fade-in">
                     <button
                       onClick={() => setIsHeaderMenuOpen(false)}
-                      className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
+                      className="w-full px-3 py-2 text-xs text-black hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
                     >
                       <Phone size={15} className="text-[#0E5E6F]" />
                       <span>Llamar a soporte</span>
                     </button>
                     <button
                       onClick={() => setIsHeaderMenuOpen(false)}
-                      className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
+                      className="w-full px-3 py-2 text-xs text-black hover:bg-gray-50 flex items-center gap-2.5 transition cursor-pointer"
                     >
                       <Video size={15} className="text-[#0E5E6F]" />
                       <span>Videollamada</span>
@@ -6025,7 +6392,7 @@ export const ClienteHelpView = () => {
                   )}
 
                   <div
-                    className={`max-w-[80%] px-3.5 py-2.5 rounded-[4px] text-sm ${
+                    className={`max-w-[80%] px-3.5 py-2.5 rounded-[4px] text-xs ${
                       isGranjeroMsg
                         ? 'bg-[#0E5E6F] text-white'
                         : 'bg-white text-gray-800 border border-gray-100 shadow-xs'
@@ -6078,7 +6445,7 @@ export const ClienteHelpView = () => {
               placeholder="Escribe tu mensaje..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              className="flex-1 bg-gray-50 border border-gray-200 rounded-[4px] px-4 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition min-w-0"
+              className="flex-1 bg-gray-50 border border-gray-200 rounded-[4px] px-4 py-2.5 text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition min-w-0"
             />
 
             <button
@@ -6103,7 +6470,7 @@ export const ClienteHelpView = () => {
                   <HelpCircle size={16} />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-gray-900 text-sm truncate leading-tight">
+                  <h3 className="text-sm font-bold text-gray-900 truncate leading-tight">
                     Solicitar Asistencia
                   </h3>
                   {!isSubmitted && (
@@ -6157,7 +6524,7 @@ export const ClienteHelpView = () => {
                             categoria: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
                       >
                         <option value="Incidencia técnica">Falla en dron</option>
                         <option value="Error en telemetría">
@@ -6180,7 +6547,7 @@ export const ClienteHelpView = () => {
                             prioridad: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition truncate"
                       >
                         <option value="Baja">Baja</option>
                         <option value="Media">Media</option>
@@ -6222,11 +6589,11 @@ export const ClienteHelpView = () => {
                             mensaje: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition resize-none"
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-[4px] text-xs focus:outline-none focus:bg-white focus:border-[#0E5E6F] transition resize-none"
                       ></textarea>
                     </div>
 
-                    <div className="p-2 bg-gray-50 border border-gray-100 rounded-[4px] text-[11px] text-gray-500 space-y-0.5">
+                    <div className="p-2 bg-gray-50 border border-gray-100 rounded-[4px] text-xs text-gray-500 space-y-0.5">
                       <p className="truncate">
                         <span className="font-semibold text-gray-600">
                           Categoría:
@@ -6261,7 +6628,7 @@ export const ClienteHelpView = () => {
               ) : (
                 /* Confirmación */
                 <div className="py-3 text-center space-y-2.5">
-                  <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                  <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-[4px] flex items-center justify-center mx-auto">
                     <CheckCircle2 size={22} />
                   </div>
                   <div className="space-y-0.5">
@@ -6299,7 +6666,7 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
   const [profileData, setProfileData] = useState({
     initials: "MA",
     name: "Mario Alberto Ica",
-    email: "mario.ica@agroaguante.hn",
+    email: "mario.ica@tecnodactylus.hn",
     phone: "+504 9788-4411",
     avatar: "src/img/granjero_perfil.png",
     avatarBg: "bg-[#0E5E6F] text-white",
@@ -6333,7 +6700,7 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
 
   // Datos para el modal de Piloto AHAC
   const [pilotForm, setPilotForm] = useState({
-    email: "piloto.mario@agroaguante.hn",
+    email: "piloto.mario@tecnodactylus.hn",
     password: "password123",
     ahacCode: "AHAC-2026-8891",
   });
@@ -6411,10 +6778,10 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
             </div>
 
             <div className="text-left min-w-0 flex-1">
-              <h2 className="text-base text-gray-900 font-black tracking-tight normal-case leading-tight truncate">
+              <h2 className="text-lg text-gray-900 font-black tracking-tight normal-case leading-tight">
                 {profileData.name}
               </h2>
-              <p className="text-gray-500 font-semibold text-[11px] mt-0.5 truncate">
+              <p className="text-xs text-gray-500 font-semibold mt-0.5">
                 {profileData.email}
               </p>
             </div>
@@ -6434,7 +6801,7 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
             </button>
 
             {saveSuccess && (
-              <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-[4px] flex items-center gap-1 animate-in fade-in duration-150">
+              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-[4px] flex items-center gap-1 animate-in fade-in duration-150">
                 <CheckCircle size={12} /> Actualizado
               </span>
             )}
@@ -6480,7 +6847,7 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
                   Base regional
                 </span>
               </div>
-              <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
+              <span className="text-xs text-gray-800 font-bold block break-words leading-tight mt-0.5">
                 {profileData.location}
               </span>
             </div>
@@ -6495,7 +6862,7 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
                   Extensión
                 </span>
               </div>
-              <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
+              <span className="text-xs text-gray-800 font-bold block break-words leading-tight mt-0.5">
                 {profileData.area}
               </span>
             </div>
@@ -6510,7 +6877,7 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
                   Actividad
                 </span>
               </div>
-              <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5 w-full">
+              <span className="text-xs text-gray-800 font-bold block break-words leading-tight mt-0.5">
                 {profileData.services}
               </span>
             </div>
@@ -6538,7 +6905,7 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
             <div className="flex flex-col gap-2 mb-2.5 pb-2 border-b-2 border-gray-100">
               <div className="flex items-center gap-2">
                 <Settings size={15} className="text-[#0E5E6F]" />
-                <h3 className="text-xs font-black text-gray-800 normal-case">
+                <h3 className="text-sm font-black text-gray-800 normal-case">
                   Credenciales y Datos de Contacto
                 </h3>
               </div>
@@ -6565,7 +6932,7 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
                 <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
                   <Mail size={12} className="text-[#0E5E6F]" /> Correo
                 </span>
-                <p className="font-bold text-xs text-gray-800 mt-0.5 truncate">
+                <p className="font-bold text-xs text-gray-800 mt-0.5">
                   {profileData.email}
                 </p>
               </div>
@@ -6575,7 +6942,7 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
 
         {/* PIE DE PÁGINA */}
         <div className="border-t-2 border-gray-200 px-4 py-2.5 bg-gray-50 flex flex-col items-stretch gap-2">
-          <span className="text-[10px] text-gray-400 font-medium text-left truncate">
+          <span className="text-xs text-gray-400 font-medium text-left">
             Base Olanchito, Yoro
           </span>
 
@@ -6602,7 +6969,7 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
                   <div className="p-1.5 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
                     <Edit2 size={14} />
                   </div>
-                  <h3 className="text-xs font-black text-gray-800 normal-case">
+                  <h3 className="text-sm font-black text-gray-800 normal-case">
                     Editar Credenciales
                   </h3>
                 </div>
@@ -6636,7 +7003,7 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
                           type="button"
                           onClick={handleFakeUpload}
                           disabled={isUploading}
-                          className="px-2.5 py-1 text-[11px] font-bold bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-100 rounded-[4px] text-gray-700 flex items-center gap-1 cursor-pointer transition-colors active:scale-95 shadow-xs disabled:opacity-50"
+                          className="px-2.5 py-1 text-xs font-bold bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-100 rounded-[4px] text-gray-700 flex items-center gap-1 cursor-pointer transition-colors active:scale-95 shadow-xs disabled:opacity-50"
                         >
                           {isUploading ? (
                             <Loader2 size={12} className="animate-spin text-[#0E5E6F]" />
@@ -6748,10 +7115,10 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
                         <Plane size={14} />
                       </div>
                       <div className="min-w-0">
-                        <h3 className="text-xs font-black text-gray-800 normal-case leading-tight truncate">
+                        <h3 className="text-sm font-black text-gray-800 normal-case leading-tight">
                           Cambiar a Piloto
                         </h3>
-                        <p className="text-[9px] text-gray-500 font-medium truncate">
+                        <p className="text-[9px] text-gray-500 font-medium">
                           Agencia Hondureña de Aeronáutica Civil
                         </p>
                       </div>
@@ -6845,7 +7212,7 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
                   </div>
 
                   <div className="space-y-1">
-                    <h4 className="text-xs font-black text-gray-900 leading-tight">
+                    <h4 className="text-sm font-black text-gray-900 leading-tight">
                       ¡Solicitud Enviada Exitosamente!
                     </h4>
                     <p className="text-[10px] font-medium text-gray-600 leading-tight px-1">
