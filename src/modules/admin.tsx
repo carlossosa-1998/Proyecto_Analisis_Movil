@@ -526,119 +526,6 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({ onNavigate }
               Consola central BIODRON • Telemetría, personal, finanzas y monitoreo global
             </p>
           </div>
-
-          {/* CAMPANA DE NOTIFICACIONES CON POPUP FLOTANTE NATIVO EN LA ESQUINA SUPERIOR DERECHA */}
-          <div className="relative shrink-0">
-            <button
-              type="button"
-              onClick={() => setShowNotifications(!showNotifications)}
-              style={{ borderRadius: "4px" }}
-              className="relative p-2.5 bg-white border border-gray-200 hover:border-gray-300 active:scale-95 transition-all shadow-md flex items-center justify-center cursor-pointer touch-manipulation"
-            >
-              <Bell size={18} className="text-gray-700" />
-              {unreadCount > 0 && (
-                <span
-                  style={{ backgroundColor: HEX_COLORS.red, borderRadius: "4px" }}
-                  className="absolute -top-1 -right-1 px-1.5 py-0.5 text-[9px] text-white font-black shadow-xs"
-                >
-                  {unreadCount}
-                </span>
-              )}
-            </button>
-
-            {/* POPUP MODAL */}
-            {showNotifications && (
-              <>
-                {/* BACKDROP TRANSPARENTE QUE CIERRA AL TOCAR AFUERA */}
-                <div
-                  className="fixed inset-0 z-40 bg-black/20"
-                  onClick={() => setShowNotifications(false)}
-                />
-
-                {/* CARD COMPACTO MODAL */}
-                <div
-                  onTouchStart={handleTouchStartModal}
-                  onTouchMove={handleTouchMoveModal}
-                  onTouchEnd={handleTouchEndModal}
-                  style={{
-                    transform: `translateY(${dragY}px)`,
-                    transition: isDraggingModal.current ? "none" : "transform 0.2s cubic-bezier(0,0,0.2,1)",
-                  }}
-                  className="absolute top-12 right-0 z-50 bg-white border-2 border-gray-300 rounded-[4px] w-66 max-w-[calc(100vw-2rem)] shadow-2xl flex flex-col text-left origin-top-right animate-in zoom-in-95 duration-150"
-                >
-                  {/* Píldora táctil indicadora */}
-                  <div className="flex justify-center pt-2 pb-1 cursor-grab active:cursor-grabbing">
-                    <div className="w-8 h-1 bg-gray-300 rounded-full" />
-                  </div>
-
-                  <div className="p-2.5 space-y-2">
-                    {/* Encabezado */}
-                    <div className="flex items-center justify-between pb-1.5 border-b-2 border-gray-100">
-                      <div className="flex items-center gap-1.5">
-                        <div className="p-1 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
-                          <Bell size={12} />
-                        </div>
-                        <h3 className="text-xs font-black text-gray-800 normal-case font-sans">
-                          Notificaciones
-                        </h3>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setShowNotifications(false)}
-                        className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer touch-manipulation"
-                      >
-                        <X size={13} />
-                      </button>
-                    </div>
-
-                    {/* Lista de Notificaciones compacta sin barras de scroll */}
-                    <div className="space-y-1.5 max-h-60 overflow-hidden">
-                      {notificaciones.map((n) => (
-                        <div
-                          key={n.id}
-                          className={`p-2 border rounded-[4px] text-xs transition-colors ${
-                            n.unread ? "bg-gray-50/90 border-gray-200" : "bg-white border-gray-100"
-                          }`}
-                        >
-                          <div className="flex justify-between items-start gap-1 mb-1">
-                            <span
-                              style={{
-                                backgroundColor: n.colorBg,
-                                color: n.textColor,
-                              }}
-                              className="px-1.5 py-0.5 text-[8px] font-extrabold flex items-center gap-1 tracking-wider rounded-[4px] truncate"
-                            >
-                              {n.icono}
-                              <span className="truncate">{n.titulo}</span>
-                            </span>
-                            <span className="text-[8px] font-mono font-medium text-gray-400 shrink-0">
-                              {n.tiempo}
-                            </span>
-                          </div>
-                          <p className="text-gray-700 font-medium text-[10px] leading-snug">
-                            {n.detalle}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Pie del modal */}
-                    <div className="pt-1.5 border-t border-gray-100 text-center">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setNotificaciones(notificaciones.map((n) => ({ ...n, unread: false })));
-                        }}
-                        className="w-full py-1 px-2 bg-white border border-gray-200 hover:border-gray-300 text-[#0E5E6F] font-bold rounded-[4px] text-[10px] transition-colors active:scale-95 shadow-xs cursor-pointer touch-manipulation"
-                      >
-                        Marcar todas como leídas
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
         </div>
 
         {/* ETIQUETA SUPER ADMIN UBICADA DEBAJO DEL PÁRRAFO DE LA CONSOLA */}
@@ -1467,20 +1354,23 @@ export const AdminPricesView = () => {
     const mrrTotal = mrrBasico + mrrOperativo + mrrPremium;
 
     // -------------------------------------------------------------
-    // ESTADOS PARA MODALES
+    // ESTADOS PARA MODALES (con tabs)
     // -------------------------------------------------------------
     const [isPlanModalOpen, setIsPlanModalOpen] = useState<boolean>(false);
     const [editingPlan, setEditingPlan] = useState<Plan | null>(null);
+    const [planModalTab, setPlanModalTab] = useState<'info' | 'configuracion'>('info');
 
     const [isDroneModalOpen, setIsDroneModalOpen] = useState<boolean>(false);
     const [editingDrone, setEditingDrone] = useState<DroneSale | null>(null);
+    const [droneModalTab, setDroneModalTab] = useState<'info' | 'especificaciones' | 'imagen'>('info');
 
-    // Estado para Modal de Etiquetas
     const [isTagModalOpen, setIsTagModalOpen] = useState<boolean>(false);
     const [selectedDroneIdForTag, setSelectedDroneIdForTag] = useState<number | null>(null);
     const [newTagInput, setNewTagInput] = useState<string>("");
 
-    const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
+    // Modal de confirmación de guardado
+    const [isSaveConfirmModalOpen, setIsSaveConfirmModalOpen] = useState<boolean>(false);
+    const [saveMessage, setSaveMessage] = useState<string>("");
 
     // Handlers para Planes
     const handleSavePlan = (plan: Plan) => {
@@ -1491,7 +1381,11 @@ export const AdminPricesView = () => {
         }
         setEditingPlan(null);
         setIsPlanModalOpen(false);
-        setHasUnsavedChanges(true);
+        setSaveMessage("Plan guardado exitosamente");
+        setIsSaveConfirmModalOpen(true);
+        setTimeout(() => {
+            setIsSaveConfirmModalOpen(false);
+        }, 2000);
     };
 
     // Handlers para Drones
@@ -1505,7 +1399,11 @@ export const AdminPricesView = () => {
         }
         setEditingDrone(null);
         setIsDroneModalOpen(false);
-        setHasUnsavedChanges(true);
+        setSaveMessage("Dron guardado exitosamente");
+        setIsSaveConfirmModalOpen(true);
+        setTimeout(() => {
+            setIsSaveConfirmModalOpen(false);
+        }, 2000);
     };
 
     // Handler para abrir modal de Tag
@@ -1530,7 +1428,11 @@ export const AdminPricesView = () => {
         setIsTagModalOpen(false);
         setNewTagInput("");
         setSelectedDroneIdForTag(null);
-        setHasUnsavedChanges(true);
+        setSaveMessage("Etiqueta agregada exitosamente");
+        setIsSaveConfirmModalOpen(true);
+        setTimeout(() => {
+            setIsSaveConfirmModalOpen(false);
+        }, 2000);
     };
 
     return (
@@ -1550,7 +1452,7 @@ export const AdminPricesView = () => {
                 </div>
             </div>
 
-            {/* TABS SELECTORAS (ancho completo, mitad y mitad) */}
+            {/* TABS SELECTORAS */}
             <div className="flex border-b-2 border-gray-200 mb-6">
                 <button
                     onClick={() => setTab("subs")}
@@ -1579,7 +1481,6 @@ export const AdminPricesView = () => {
                 <div className="space-y-8">
                     {/* TABLA DE PLANES COMPACTA */}
                     <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xs overflow-hidden flex flex-col text-left">
-                        {/* VISTA DE TARJETAS (patrón móvil, reemplaza a la tabla de escritorio) */}
                         <div className="divide-y divide-gray-200">
                             {planes.map((plan) => (
                                 <div key={plan.id} className="p-3 space-y-2 bg-white">
@@ -1616,7 +1517,6 @@ export const AdminPricesView = () => {
                                                                 p.id === plan.id ? { ...p, price: val } : p,
                                                             ),
                                                         );
-                                                        setHasUnsavedChanges(true);
                                                     }}
                                                     className="border border-gray-200 rounded-[4px] px-2 py-0.5 text-xs font-mono w-full focus:border-[#0E5E6F] focus:outline-none font-bold text-gray-800"
                                                 />
@@ -1636,7 +1536,6 @@ export const AdminPricesView = () => {
                                                             p.id === plan.id ? { ...p, cycle: val } : p,
                                                         ),
                                                     );
-                                                    setHasUnsavedChanges(true);
                                                 }}
                                                 className="border border-gray-200 rounded-[4px] px-2 py-0.5 text-xs focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-700 font-normal w-full"
                                             >
@@ -1664,6 +1563,7 @@ export const AdminPricesView = () => {
                                         <button
                                             onClick={() => {
                                                 setEditingPlan(plan);
+                                                setPlanModalTab('info');
                                                 setIsPlanModalOpen(true);
                                             }}
                                             className="px-2.5 py-1 active:bg-gray-100 border border-gray-200 rounded-[4px] text-xs font-bold text-gray-700 flex items-center gap-1.5 cursor-pointer"
@@ -1687,6 +1587,7 @@ export const AdminPricesView = () => {
                                         area: "20 ha",
                                         active: true,
                                     });
+                                    setPlanModalTab('info');
                                     setIsPlanModalOpen(true);
                                 }}
                                 className="w-full justify-center py-2.5 px-3 bg-[#0E5E6F] text-white text-xs font-bold rounded-[4px] flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer"
@@ -1863,6 +1764,7 @@ export const AdminPricesView = () => {
                                     tags: ["Carga"],
                                     capacity: "500 lbs",
                                 });
+                                setDroneModalTab('info');
                                 setIsDroneModalOpen(true);
                             }}
                             className="w-full justify-center py-2.5 px-3 bg-[#0E5E6F] text-white text-xs font-bold rounded-[4px] flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer"
@@ -1948,7 +1850,6 @@ export const AdminPricesView = () => {
                                                                 d.id === drone.id ? { ...d, price: val } : d,
                                                             ),
                                                         );
-                                                        setHasUnsavedChanges(true);
                                                     }}
                                                     className="border border-gray-200 rounded-[4px] px-2 py-0.5 text-xs font-mono w-28 focus:border-[#0E5E6F] focus:outline-none bg-white font-bold text-[#0E5E6F]"
                                                 />
@@ -1970,7 +1871,6 @@ export const AdminPricesView = () => {
                                                                 d.id === drone.id ? { ...d, stock: val } : d,
                                                             ),
                                                         );
-                                                        setHasUnsavedChanges(true);
                                                     }}
                                                     className="border border-gray-200 rounded-[4px] px-2 py-0.5 text-xs font-mono w-14 text-center focus:border-[#0E5E6F] focus:outline-none bg-white font-bold text-gray-800"
                                                 />
@@ -1985,6 +1885,7 @@ export const AdminPricesView = () => {
                                         <button
                                             onClick={() => {
                                                 setEditingDrone(drone);
+                                                setDroneModalTab('info');
                                                 setIsDroneModalOpen(true);
                                             }}
                                             className="text-xs text-[#0E5E6F] font-bold active:underline flex items-center gap-1 cursor-pointer"
@@ -1999,56 +1900,80 @@ export const AdminPricesView = () => {
                 </div>
             )}
 
-            {/* BARRA FLOTANTE DE CAMBIOS PENDIENTES (snackbar de ancho completo) */}
-            {hasUnsavedChanges && (
-                <div className="fixed inset-x-0 bottom-0 z-20 p-3">
-                    <div className="bg-gray-900 border-2 border-gray-800 text-white rounded-[4px] shadow-lg p-3 flex flex-col gap-3">
-                        <div className="flex items-center gap-2 text-amber-400">
-                            <AlertCircle size={16} className="shrink-0" />
-                            <span className="text-xs text-gray-200 font-bold">
-                                Modificaciones sin guardar
-                            </span>
+            {/* ============================================================ */}
+            {/* MODAL DE CONFIRMACIÓN DE GUARDADO (border-radius: 4px) */}
+            {/* ============================================================ */}
+            {isSaveConfirmModalOpen && (
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+                    <div className="bg-emerald-50 border-2 border-emerald-500 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-5 flex flex-col items-center gap-3">
+                        <div className="p-3 bg-emerald-500 rounded-[4px] text-white">
+                            <CheckCircle2 size={28} />
                         </div>
-                        <div className="flex items-center gap-2">
-                            <button
-                                onClick={() => setHasUnsavedChanges(false)}
-                                className="flex-1 py-2 px-3 text-xs font-bold rounded-[4px] border border-gray-700 text-gray-300 cursor-pointer"
-                            >
-                                Descartar
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setHasUnsavedChanges(false);
-                                    alert("¡Cambios guardados exitosamente!");
-                                }}
-                                className="flex-1 py-2 px-3 bg-[#0E5E6F] text-white text-xs font-bold rounded-[4px] flex items-center justify-center gap-1 transition-all active:scale-95 cursor-pointer"
-                            >
-                                <Save size={13} /> Guardar cambios
-                            </button>
-                        </div>
+                        <h3 className="text-sm font-bold text-emerald-900 text-center">
+                            ¡{saveMessage}!
+                        </h3>
+                        <p className="text-xs text-emerald-700 text-center">
+                            Los cambios han sido aplicados correctamente.
+                        </p>
+                        <button
+                            onClick={() => setIsSaveConfirmModalOpen(false)}
+                            className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-[4px] transition shadow-xs cursor-pointer"
+                        >
+                            Entendido
+                        </button>
                     </div>
                 </div>
             )}
 
-            {/* MODAL 1: EDITAR / CREAR PLAN (bottom sheet) */}
+            {/* ============================================================ */}
+            {/* MODAL DE PLAN CON PESTAÑAS */}
+            {/* ============================================================ */}
             {isPlanModalOpen && editingPlan && (
-                <div className="fixed inset-0 z-50 bg-black/40 flex items-end justify-center">
-                    <div className="bg-white border-t-2 border-gray-200 rounded-t-2xl shadow-xl w-full max-h-[88vh] flex flex-col overflow-hidden text-left animate-in slide-in-from-bottom duration-200">
-                        <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-1 shrink-0"></div>
-                        <div className="flex justify-between items-center px-4 py-3 border-b-2 border-gray-100 bg-gray-50 shrink-0">
-                            <div className="flex items-center gap-2">
-                                <Layers className="text-[#0E5E6F]" size={18} />
-                                <h3 className="text-sm font-bold text-gray-900">
-                                    {editingPlan.id
-                                        ? "Editar Plan de Suscripción"
-                                        : "Crear Nuevo Plan"}
-                                </h3>
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
+                        
+                        <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
+                            <div className="flex items-center gap-2 min-w-0">
+                                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
+                                    {editingPlan.id ? `#${editingPlan.id}` : 'Nuevo'}
+                                </div>
+                                <div className="min-w-0">
+                                    <h3 className="text-xs font-bold text-gray-900 truncate">
+                                        {editingPlan.name || 'Nuevo Plan'}
+                                    </h3>
+                                    <p className="text-[9px] text-gray-400 truncate">
+                                        {editingPlan.cycle} · {editingPlan.flights} vuelos
+                                    </p>
+                                </div>
                             </div>
                             <button
                                 onClick={() => setIsPlanModalOpen(false)}
-                                className="p-1 text-gray-400 rounded-[4px] cursor-pointer"
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer shrink-0"
                             >
-                                <X size={18} />
+                                <X size={16} />
+                            </button>
+                        </div>
+
+                        <div className="flex border-b border-gray-200 shrink-0">
+                            <button
+                                onClick={() => setPlanModalTab('info')}
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                                    planModalTab === 'info'
+                                        ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                            >
+                                Información
+                            </button>
+                            <button
+                                onClick={() => setPlanModalTab('configuracion')}
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                                    planModalTab === 'configuracion'
+                                        ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                            >
+                                Configuración
                             </button>
                         </div>
 
@@ -2057,155 +1982,225 @@ export const AdminPricesView = () => {
                                 e.preventDefault();
                                 handleSavePlan(editingPlan);
                             }}
-                            className="p-4 space-y-4 overflow-y-auto custom-scrollbar flex-1"
+                            className="p-4 overflow-y-auto flex-1"
                         >
-                            <div className="grid grid-cols-1 gap-4">
-                                <div>
-                                    <label className="text-xs font-bold text-gray-700 block mb-1">
-                                        Nombre del plan
-                                    </label>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={editingPlan.name}
-                                        onChange={(e) =>
-                                            setEditingPlan({ ...editingPlan, name: e.target.value })
-                                        }
-                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="text-xs font-bold text-gray-700 block mb-1">
-                                        Precio (L.)
-                                    </label>
-                                    <input
-                                        type="number"
-                                        required
-                                        value={editingPlan.price}
-                                        onChange={(e) =>
-                                            setEditingPlan({
-                                                ...editingPlan,
-                                                price: Number(e.target.value),
-                                            })
-                                        }
-                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs font-mono text-gray-800 font-bold"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="text-xs font-bold text-gray-700 block mb-1">
-                                        Ciclo de facturación
-                                    </label>
-                                    <select
-                                        value={editingPlan.cycle}
-                                        onChange={(e) =>
-                                            setEditingPlan({
-                                                ...editingPlan,
-                                                cycle: e.target.value as Plan["cycle"],
-                                            })
-                                        }
-                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal bg-white"
-                                    >
-                                        <option value="Mensual">Mensual</option>
-                                        <option value="Anual">Anual</option>
-                                        <option value="Trimestral">Trimestral</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label className="text-xs font-bold text-gray-700 block mb-1">
-                                        Vuelos incluidos
-                                    </label>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={editingPlan.flights}
-                                        onChange={(e) =>
-                                            setEditingPlan({
-                                                ...editingPlan,
-                                                flights: e.target.value,
-                                            })
-                                        }
-                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="text-xs font-bold text-gray-700 block mb-1">
-                                        Cobertura máxima (área)
-                                    </label>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={editingPlan.area}
-                                        onChange={(e) =>
-                                            setEditingPlan({ ...editingPlan, area: e.target.value })
-                                        }
-                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
-                                    />
-                                </div>
-
-                                {/* SWITCH DE ESTADO DENTRO DEL MODAL */}
-                                <div className="pt-2">
-                                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                            {planModalTab === 'info' && (
+                                <div className="space-y-3 text-xs">
+                                    <div>
+                                        <label className="text-[10px] font-bold text-gray-600 block mb-1">
+                                            Nombre del plan
+                                        </label>
                                         <input
-                                            type="checkbox"
-                                            checked={editingPlan.active}
+                                            type="text"
+                                            required
+                                            value={editingPlan.name}
+                                            onChange={(e) =>
+                                                setEditingPlan({ ...editingPlan, name: e.target.value })
+                                            }
+                                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                            placeholder="Ej. Plan Premium"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="text-[10px] font-bold text-gray-600 block mb-1">
+                                            Precio (L.)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            required
+                                            value={editingPlan.price}
                                             onChange={(e) =>
                                                 setEditingPlan({
                                                     ...editingPlan,
-                                                    active: e.target.checked,
+                                                    price: Number(e.target.value),
                                                 })
                                             }
-                                            className="accent-[#0E5E6F] w-4 h-4 cursor-pointer"
+                                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs font-mono text-gray-800 font-bold"
+                                            placeholder="0"
                                         />
-                                        <span className="text-xs font-bold text-gray-800">
-                                            Plan activo
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
+                                    </div>
 
-                            <div className="flex items-center gap-2 pt-4 border-t border-gray-100">
+                                    <div>
+                                        <label className="text-[10px] font-bold text-gray-600 block mb-1">
+                                            Ciclo de facturación
+                                        </label>
+                                        <select
+                                            value={editingPlan.cycle}
+                                            onChange={(e) =>
+                                                setEditingPlan({
+                                                    ...editingPlan,
+                                                    cycle: e.target.value as Plan["cycle"],
+                                                })
+                                            }
+                                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal bg-white"
+                                        >
+                                            <option value="Mensual">Mensual</option>
+                                            <option value="Anual">Anual</option>
+                                            <option value="Trimestral">Trimestral</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            )}
+
+                            {planModalTab === 'configuracion' && (
+                                <div className="space-y-3 text-xs">
+                                    <div>
+                                        <label className="text-[10px] font-bold text-gray-600 block mb-1">
+                                            Vuelos incluidos
+                                        </label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={editingPlan.flights}
+                                            onChange={(e) =>
+                                                setEditingPlan({
+                                                    ...editingPlan,
+                                                    flights: e.target.value,
+                                                })
+                                            }
+                                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                            placeholder="Ej. 10"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="text-[10px] font-bold text-gray-600 block mb-1">
+                                            Cobertura máxima (área)
+                                        </label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={editingPlan.area}
+                                            onChange={(e) =>
+                                                setEditingPlan({ ...editingPlan, area: e.target.value })
+                                            }
+                                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                            placeholder="Ej. 50 ha"
+                                        />
+                                    </div>
+
+                                    <div className="pt-2">
+                                        <label className="flex items-center gap-2 cursor-pointer select-none">
+                                            <input
+                                                type="checkbox"
+                                                checked={editingPlan.active}
+                                                onChange={(e) =>
+                                                    setEditingPlan({
+                                                        ...editingPlan,
+                                                        active: e.target.checked,
+                                                    })
+                                                }
+                                                className="accent-[#0E5E6F] w-4 h-4 cursor-pointer"
+                                            />
+                                            <span className="text-xs font-bold text-gray-800">
+                                                Plan activo
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block mb-1">Resumen</span>
+                                        <div className="space-y-1 text-[10px] text-gray-700">
+                                            <div className="flex justify-between">
+                                                <span>Precio:</span>
+                                                <span className="font-bold text-[#0E5E6F]">L. {editingPlan.price.toLocaleString()}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span>Ciclo:</span>
+                                                <span className="font-bold">{editingPlan.cycle}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span>Estado:</span>
+                                                <span className={`font-bold ${editingPlan.active ? 'text-emerald-600' : 'text-amber-600'}`}>
+                                                    {editingPlan.active ? 'Activo' : 'Inactivo'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="flex gap-2 pt-3 mt-3 border-t border-gray-100">
                                 <button
                                     type="button"
                                     onClick={() => setIsPlanModalOpen(false)}
-                                    className="flex-1 px-3 py-2.5 text-xs font-bold text-gray-600 border border-gray-200 rounded-[4px] cursor-pointer"
+                                    className="flex-1 px-3 py-2 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
                                 >
                                     Cancelar
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex-1 px-4 py-2.5 bg-[#0E5E6F] text-white text-xs font-bold rounded-[4px] shadow-xs cursor-pointer"
+                                    className="flex-1 px-3 py-2 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
                                 >
-                                    Guardar plan
+                                    Guardar
                                 </button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             )}
 
-            {/* MODAL 2: EDITAR / CREAR DRON (bottom sheet) */}
+            {/* ============================================================ */}
+            {/* MODAL DE DRON CON PESTAÑAS */}
+            {/* ============================================================ */}
             {isDroneModalOpen && editingDrone && (
-                <div className="fixed inset-0 z-50 bg-black/40 flex items-end justify-center">
-                    <div className="bg-white border-t-2 border-gray-200 rounded-t-2xl shadow-xl w-full max-h-[88vh] flex flex-col overflow-hidden text-left animate-in slide-in-from-bottom duration-200">
-                        <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-1 shrink-0"></div>
-                        <div className="flex justify-between items-center px-4 py-3 border-b-2 border-gray-100 bg-gray-50 shrink-0">
-                            <div className="flex items-center gap-2">
-                                <Package className="text-[#0E5E6F]" size={18} />
-                                <h3 className="text-sm font-bold text-gray-900">
-                                    {editingDrone.id
-                                        ? "Editar Dron Comercial"
-                                        : "Agregar Nuevo Dron"}
-                                </h3>
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
+                        
+                        <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
+                            <div className="flex items-center gap-2 min-w-0">
+                                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
+                                    {editingDrone.id ? `#${editingDrone.id}` : 'Nuevo'}
+                                </div>
+                                <div className="min-w-0">
+                                    <h3 className="text-xs font-bold text-gray-900 truncate">
+                                        {editingDrone.name || 'Nuevo Dron'}
+                                    </h3>
+                                    <p className="text-[9px] text-gray-400 truncate">
+                                        {editingDrone.model || 'Modelo'}
+                                    </p>
+                                </div>
                             </div>
                             <button
                                 onClick={() => setIsDroneModalOpen(false)}
-                                className="p-1 text-gray-400 rounded-[4px] cursor-pointer"
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer shrink-0"
                             >
-                                <X size={18} />
+                                <X size={16} />
+                            </button>
+                        </div>
+
+                        <div className="flex border-b border-gray-200 shrink-0">
+                            <button
+                                onClick={() => setDroneModalTab('info')}
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                                    droneModalTab === 'info'
+                                        ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                            >
+                                Información
+                            </button>
+                            <button
+                                onClick={() => setDroneModalTab('especificaciones')}
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                                    droneModalTab === 'especificaciones'
+                                        ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                            >
+                                Especificaciones
+                            </button>
+                            <button
+                                onClick={() => setDroneModalTab('imagen')}
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                                    droneModalTab === 'imagen'
+                                        ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                            >
+                                Imagen
                             </button>
                         </div>
 
@@ -2214,182 +2209,308 @@ export const AdminPricesView = () => {
                                 e.preventDefault();
                                 handleSaveDrone(editingDrone);
                             }}
-                            className="p-4 space-y-4 overflow-y-auto custom-scrollbar flex-1"
+                            className="p-4 overflow-y-auto flex-1"
                         >
-                            <div className="grid grid-cols-1 gap-4">
-                                <div>
-                                    <label className="text-xs font-bold text-gray-700 block mb-1">
-                                        Nombre / Modelo
-                                    </label>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={editingDrone.name}
-                                        onChange={(e) =>
-                                            setEditingDrone({ ...editingDrone, name: e.target.value })
-                                        }
-                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
-                                    />
-                                </div>
+                            {droneModalTab === 'info' && (
+                                <div className="space-y-3 text-xs">
+                                    <div>
+                                        <label className="text-[10px] font-bold text-gray-600 block mb-1">
+                                            Nombre / Modelo
+                                        </label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={editingDrone.name}
+                                            onChange={(e) =>
+                                                setEditingDrone({ ...editingDrone, name: e.target.value })
+                                            }
+                                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                            placeholder="Ej. DJI FlyCart 30"
+                                        />
+                                    </div>
 
-                                <div>
-                                    <label className="text-xs font-bold text-gray-700 block mb-1">
-                                        Submodelo o descripción
-                                    </label>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={editingDrone.model}
-                                        onChange={(e) =>
-                                            setEditingDrone({ ...editingDrone, model: e.target.value })
-                                        }
-                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
-                                    />
-                                </div>
+                                    <div>
+                                        <label className="text-[10px] font-bold text-gray-600 block mb-1">
+                                            Submodelo o descripción
+                                        </label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={editingDrone.model}
+                                            onChange={(e) =>
+                                                setEditingDrone({ ...editingDrone, model: e.target.value })
+                                            }
+                                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                            placeholder="Ej. Transporte de Carga Pesada"
+                                        />
+                                    </div>
 
-                                <div>
-                                    <label className="text-xs font-bold text-gray-700 block mb-1">
-                                        Precio (L.)
-                                    </label>
-                                    <input
-                                        type="number"
-                                        required
-                                        value={editingDrone.price}
-                                        onChange={(e) =>
-                                            setEditingDrone({
-                                                ...editingDrone,
-                                                price: Number(e.target.value),
-                                            })
-                                        }
-                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs font-mono text-gray-800 font-bold"
-                                    />
-                                </div>
+                                    <div>
+                                        <label className="text-[10px] font-bold text-gray-600 block mb-1">
+                                            Precio (L.)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            required
+                                            value={editingDrone.price}
+                                            onChange={(e) =>
+                                                setEditingDrone({
+                                                    ...editingDrone,
+                                                    price: Number(e.target.value),
+                                                })
+                                            }
+                                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs font-mono text-gray-800 font-bold"
+                                            placeholder="0"
+                                        />
+                                    </div>
 
-                                <div>
-                                    <label className="text-xs font-bold text-gray-700 block mb-1">
-                                        Stock inicial
-                                    </label>
-                                    <input
-                                        type="number"
-                                        required
-                                        value={editingDrone.stock}
-                                        onChange={(e) =>
-                                            setEditingDrone({
-                                                ...editingDrone,
-                                                stock: Number(e.target.value),
-                                            })
-                                        }
-                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
-                                    />
-                                </div>
+                                    <div>
+                                        <label className="text-[10px] font-bold text-gray-600 block mb-1">
+                                            Stock inicial
+                                        </label>
+                                        <input
+                                            type="number"
+                                            required
+                                            value={editingDrone.stock}
+                                            onChange={(e) =>
+                                                setEditingDrone({
+                                                    ...editingDrone,
+                                                    stock: Number(e.target.value),
+                                                })
+                                            }
+                                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                            placeholder="1"
+                                        />
+                                    </div>
 
-                                <div>
-                                    <label className="text-xs font-bold text-gray-700 block mb-1">
-                                        Capacidad máxima de carga
-                                    </label>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={editingDrone.capacity}
-                                        onChange={(e) =>
-                                            setEditingDrone({
-                                                ...editingDrone,
-                                                capacity: e.target.value,
-                                            })
-                                        }
-                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
-                                    />
-                                </div>
-
-                                {/* SECCIÓN SIMULADA PARA SUBIR IMAGEN */}
-                                <div>
-                                    <label className="text-xs font-bold text-gray-700 block mb-1">
-                                        Imagen del dron
-                                    </label>
-                                    <div className="border-2 border-dashed border-gray-300 rounded-[4px] p-4 text-center cursor-pointer transition-colors bg-gray-50 flex flex-col items-center gap-1.5">
-                                        <UploadCloud size={24} className="text-gray-400" />
-                                        <span className="text-xs font-bold text-[#0E5E6F]">
-                                            Cargar imagen del dron
-                                        </span>
-                                        <span className="text-[10px] text-gray-400 font-normal">
-                                            Formatos permitidos: PNG, JPG o WEBP (Máx. 5MB)
-                                        </span>
+                                    <div>
+                                        <label className="text-[10px] font-bold text-gray-600 block mb-1">
+                                            Capacidad máxima de carga
+                                        </label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={editingDrone.capacity}
+                                            onChange={(e) =>
+                                                setEditingDrone({
+                                                    ...editingDrone,
+                                                    capacity: e.target.value,
+                                                })
+                                            }
+                                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                            placeholder="Ej. 500 lbs"
+                                        />
                                     </div>
                                 </div>
-                            </div>
+                            )}
 
-                            <div className="flex items-center gap-2 pt-4 border-t border-gray-100">
+                            {droneModalTab === 'especificaciones' && (
+                                <div className="space-y-3 text-xs">
+                                    <div>
+                                        <label className="text-[10px] font-bold text-gray-600 block mb-1">
+                                            Etiquetas / Tags
+                                        </label>
+                                        <div className="flex flex-wrap gap-1.5 p-2 bg-gray-50 border border-gray-200 rounded-[4px] min-h-[40px]">
+                                            {editingDrone.tags.map((tag, idx) => (
+                                                <span
+                                                    key={idx}
+                                                    className="bg-[#0E5E6F]/10 text-[#0E5E6F] text-[10px] font-bold px-2 py-0.5 rounded-[4px] flex items-center gap-1"
+                                                >
+                                                    {tag}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setEditingDrone({
+                                                                ...editingDrone,
+                                                                tags: editingDrone.tags.filter((_, i) => i !== idx)
+                                                            });
+                                                        }}
+                                                        className="text-gray-400 hover:text-red-500"
+                                                    >
+                                                        <X size={12} />
+                                                    </button>
+                                                </span>
+                                            ))}
+                                            {editingDrone.tags.length === 0 && (
+                                                <span className="text-[10px] text-gray-400">Sin etiquetas</span>
+                                            )}
+                                        </div>
+                                        <div className="flex gap-2 mt-1.5">
+                                            <input
+                                                type="text"
+                                                placeholder="Nueva etiqueta..."
+                                                value={newTagInput}
+                                                onChange={(e) => setNewTagInput(e.target.value)}
+                                                className="flex-1 px-3 py-1.5 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    if (newTagInput.trim()) {
+                                                        setEditingDrone({
+                                                            ...editingDrone,
+                                                            tags: [...editingDrone.tags, newTagInput.trim()]
+                                                        });
+                                                        setNewTagInput("");
+                                                    }
+                                                }}
+                                                className="px-3 py-1.5 bg-[#0E5E6F] text-white text-xs font-bold rounded-[4px] hover:bg-[#0a4754] cursor-pointer"
+                                            >
+                                                Agregar
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block mb-1">Resumen</span>
+                                        <div className="space-y-1 text-[10px] text-gray-700">
+                                            <div className="flex justify-between">
+                                                <span>Modelo:</span>
+                                                <span className="font-bold">{editingDrone.model || '—'}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span>Capacidad:</span>
+                                                <span className="font-bold">{editingDrone.capacity || '—'}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span>Stock:</span>
+                                                <span className="font-bold">{editingDrone.stock} uds</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {droneModalTab === 'imagen' && (
+                                <div className="space-y-3 text-xs">
+                                    <div className="border-2 border-dashed border-gray-300 rounded-[4px] p-6 text-center cursor-pointer transition-colors bg-gray-50 hover:bg-gray-100 flex flex-col items-center gap-2">
+                                        <UploadCloud size={32} className="text-gray-400" />
+                                        <span className="text-xs font-bold text-[#0E5E6F]">
+                                            Haz clic para subir imagen
+                                        </span>
+                                        <span className="text-[10px] text-gray-400 font-normal text-center">
+                                            Arrastra o selecciona una imagen del dron
+                                        </span>
+                                        <span className="text-[9px] text-gray-400 font-normal">
+                                            Formatos: PNG, JPG, WEBP (Máx. 5MB)
+                                        </span>
+                                        <button
+                                            type="button"
+                                            className="mt-2 px-4 py-1.5 bg-[#0E5E6F] text-white text-xs font-bold rounded-[4px] hover:bg-[#0a4754] cursor-pointer"
+                                        >
+                                            Seleccionar archivo
+                                        </button>
+                                    </div>
+                                    
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block mb-1">Imagen actual</span>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-12 h-12 bg-gray-200 rounded-[4px] overflow-hidden border border-gray-300 shrink-0">
+                                                <img 
+                                                    src={editingDrone.image} 
+                                                    alt={editingDrone.name}
+                                                    className="w-full h-full object-cover"
+                                                    onError={(e) => {
+                                                        e.currentTarget.src = "https://via.placeholder.com/50x50?text=No+Image";
+                                                    }}
+                                                />
+                                            </div>
+                                            <span className="text-[10px] text-gray-500 truncate">{editingDrone.name || 'Sin imagen'}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="flex gap-2 pt-3 mt-3 border-t border-gray-100">
                                 <button
                                     type="button"
                                     onClick={() => setIsDroneModalOpen(false)}
-                                    className="flex-1 px-3 py-2.5 text-xs font-bold text-gray-600 border border-gray-200 rounded-[4px] cursor-pointer"
+                                    className="flex-1 px-3 py-2 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
                                 >
                                     Cancelar
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex-1 px-4 py-2.5 bg-[#0E5E6F] text-white text-xs font-bold rounded-[4px] shadow-xs cursor-pointer"
+                                    className="flex-1 px-3 py-2 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
                                 >
-                                    Guardar dron
+                                    Guardar
                                 </button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             )}
 
-            {/* MODAL 3: AGREGAR NUEVA ETIQUETA / TAG (bottom sheet) */}
+            {/* ============================================================ */}
+            {/* MODAL DE TAGS */}
+            {/* ============================================================ */}
             {isTagModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/40 flex items-end justify-center">
-                    <div className="bg-white border-t-2 border-gray-200 rounded-t-2xl shadow-xl w-full overflow-hidden text-left animate-in slide-in-from-bottom duration-200">
-                        <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-1"></div>
-                        <div className="flex justify-between items-center px-4 py-3 border-b-2 border-gray-100 bg-gray-50">
-                            <div className="flex items-center gap-2">
-                                <TagIcon className="text-[#0E5E6F]" size={16} />
-                                <h3 className="text-xs font-bold text-gray-900">
-                                    Agregar Nueva Etiqueta
-                                </h3>
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
+                        
+                        <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
+                            <div className="flex items-center gap-2 min-w-0">
+                                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
+                                    Tag
+                                </div>
+                                <div className="min-w-0">
+                                    <h3 className="text-xs font-bold text-gray-900 truncate">
+                                        Agregar Nueva Etiqueta
+                                    </h3>
+                                    <p className="text-[9px] text-gray-400 truncate">
+                                        Para el dron seleccionado
+                                    </p>
+                                </div>
                             </div>
                             <button
                                 onClick={() => setIsTagModalOpen(false)}
-                                className="p-1 text-gray-400 rounded-[4px] cursor-pointer"
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer shrink-0"
                             >
                                 <X size={16} />
                             </button>
                         </div>
 
-                        <form onSubmit={handleSaveTag} className="p-4 space-y-3">
-                            <div>
-                                <label className="text-xs font-bold text-gray-700 block mb-1">
-                                    Etiqueta o característica
-                                </label>
-                                <input
-                                    type="text"
-                                    required
-                                    placeholder="Ej. Batería inteligente, IP67..."
-                                    value={newTagInput}
-                                    onChange={(e) => setNewTagInput(e.target.value)}
-                                    className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
-                                    autoFocus
-                                />
+                        <form onSubmit={handleSaveTag} className="p-4 overflow-y-auto flex-1">
+                            <div className="space-y-3 text-xs">
+                                <div>
+                                    <label className="text-[10px] font-bold text-gray-600 block mb-1">
+                                        Etiqueta o característica
+                                    </label>
+                                    <input
+                                        type="text"
+                                        required
+                                        placeholder="Ej. Batería inteligente, IP67..."
+                                        value={newTagInput}
+                                        onChange={(e) => setNewTagInput(e.target.value)}
+                                        className="w-full px-3 py-2 border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] outline-none text-xs text-gray-800 font-normal"
+                                        autoFocus
+                                    />
+                                </div>
+
+                                <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                    <span className="text-[9px] text-gray-400 block mb-1">Información</span>
+                                    <p className="text-[10px] text-gray-600">Las etiquetas ayudan a clasificar y filtrar los drones en el catálogo comercial.</p>
+                                </div>
                             </div>
 
-                            <div className="flex items-center gap-2 pt-2 border-t border-gray-100">
+                            <div className="flex gap-2 pt-3 mt-3 border-t border-gray-100">
                                 <button
                                     type="button"
                                     onClick={() => setIsTagModalOpen(false)}
-                                    className="flex-1 px-3 py-2.5 text-xs font-bold text-gray-600 border border-gray-200 rounded-[4px] cursor-pointer"
+                                    className="flex-1 px-3 py-2 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
                                 >
                                     Cancelar
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex-1 px-3.5 py-2.5 bg-[#0E5E6F] text-white text-xs font-bold rounded-[4px] shadow-xs cursor-pointer"
+                                    className="flex-1 px-3 py-2 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
                                 >
-                                    Agregar etiqueta
+                                    Agregar
                                 </button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             )}
@@ -3515,6 +3636,7 @@ export const AdminHistoryView = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [selectedLog, setSelectedLog] = useState<AdminLog | null>(null);
+  const [modalTab, setModalTab] = useState<'info' | 'detalles' | 'seguridad'>('info');
 
   const filteredLogs = logs.filter((l) => {
     const matchesSearch =
@@ -3700,7 +3822,10 @@ export const AdminHistoryView = () => {
           filteredLogs.map((log) => (
             <div
               key={log.id}
-              onClick={() => setSelectedLog(log)}
+              onClick={() => {
+                setSelectedLog(log);
+                setModalTab('info');
+              }}
               className="p-3.5 active:bg-gray-50 hover:bg-gray-50/70 transition cursor-pointer"
             >
               <div className="flex items-start justify-between gap-2 mb-2">
@@ -3739,7 +3864,10 @@ export const AdminHistoryView = () => {
 
               <div className="flex items-center gap-1.5 mt-2.5" onClick={(e) => e.stopPropagation()}>
                 <button
-                  onClick={() => setSelectedLog(log)}
+                  onClick={() => {
+                    setSelectedLog(log);
+                    setModalTab('info');
+                  }}
                   className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-medium rounded-[4px] transition cursor-pointer"
                 >
                   <Eye size={13} className="text-[#0E5E6F]" />
@@ -3768,117 +3896,202 @@ export const AdminHistoryView = () => {
         </div>
       </div>
 
-      {/* ================= BOTTOM SHEET DETALLADO DE ACCIÓN ================= */}
+      {/* ================= MODAL CENTRADO CON PESTAÑAS ================= */}
       {selectedLog && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-end justify-center z-50 animate-fade-in">
-          <div className="bg-white w-full rounded-t-2xl shadow-2xl overflow-hidden border-t border-gray-200 flex flex-col max-h-[88%]">
-
-            {/* Manija del bottom sheet */}
-            <div className="flex justify-center pt-2.5 pb-1 shrink-0">
-              <span className="w-10 h-1.5 bg-gray-300 rounded-full"></span>
-            </div>
-
-            <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between shrink-0 gap-2">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="p-2 bg-[#0E5E6F] text-white rounded-[4px] font-bold text-xs shrink-0">
+        <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
+          <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
+            
+            {/* Header del Modal */}
+            <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
                   {selectedLog.id}
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-gray-900 text-sm leading-tight truncate">
+                  <h3 className="text-xs font-bold text-gray-900 truncate">
                     {selectedLog.typeName}
                   </h3>
-                  <p className="text-[11px] text-gray-500 truncate">
+                  <p className="text-[9px] text-gray-400 truncate">
                     {selectedLog.targetModule} • {selectedLog.date}
                   </p>
                 </div>
               </div>
-
               <button
                 onClick={() => setSelectedLog(null)}
-                className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-[4px] transition cursor-pointer shrink-0"
+                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer shrink-0"
               >
-                <X size={18} />
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
 
-            <div className="p-4 overflow-y-auto space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-3 p-3 bg-gray-50 rounded-[4px] border border-gray-200">
-                <div>
-                  <span className="text-gray-400 text-[10px] font-semibold uppercase block">Terminal IP</span>
-                  <span className="font-bold text-gray-800 flex items-center gap-1 mt-0.5">
-                    <MapPin size={12} className="text-[#0E5E6F]" />
-                    {selectedLog.terminalIp}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-gray-400 text-[10px] font-semibold uppercase block">Responsable a cargo</span>
-                  <span className="font-semibold text-gray-800 flex items-center gap-1 mt-0.5">
-                    <User size={12} className="text-[#0E5E6F]" />
-                    {selectedLog.responsible}
-                  </span>
-                </div>
-              </div>
+            {/* Pestañas */}
+            <div className="flex border-b border-gray-200 shrink-0">
+              <button
+                onClick={() => setModalTab('info')}
+                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                  modalTab === 'info'
+                    ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Información
+              </button>
+              <button
+                onClick={() => setModalTab('detalles')}
+                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                  modalTab === 'detalles'
+                    ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Detalles
+              </button>
+              <button
+                onClick={() => setModalTab('seguridad')}
+                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                  modalTab === 'seguridad'
+                    ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Seguridad
+              </button>
+            </div>
 
-              <div className="grid grid-cols-3 gap-2">
-                <div className="p-2.5 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
-                  <span className="text-gray-400 text-[10px] uppercase font-semibold block">Duración</span>
-                  <span className="font-bold text-gray-900 text-sm">{selectedLog.duration}</span>
-                  <span className="text-[9px] text-gray-400 block">{selectedLog.startTime} - {selectedLog.endTime}</span>
-                </div>
-
-                <div className="p-2.5 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
-                  <span className="text-gray-400 text-[10px] uppercase font-semibold block">Alcance</span>
-                  <span className="font-bold text-emerald-700 text-sm">{selectedLog.affectedCount}</span>
-                  <span className="text-[9px] text-gray-400 block">Elementos afectados</span>
-                </div>
-
-                <div className="p-2.5 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
-                  <span className="text-gray-400 text-[10px] uppercase font-semibold block">Seguridad</span>
-                  <span className="font-bold text-gray-900 text-sm">{selectedLog.securityLevel}</span>
-                  <span className="text-[9px] text-gray-400 block">Nivel de autorización</span>
-                </div>
-              </div>
-
-              {selectedLog.authorizationCode && (
-                <div className="p-3 bg-cyan-50/60 border border-cyan-100 rounded-[4px]">
-                  <h4 className="font-bold text-cyan-950 text-xs mb-1 flex items-center gap-1.5">
-                    Detalles de Autorización y Protocolo
-                  </h4>
-                  <div className="grid grid-cols-2 gap-2 text-xs text-cyan-900 mt-2">
-                    <div>
-                      <span className="text-gray-500 text-[10px] block">Código de autorización:</span>
-                      <span className="font-semibold">{selectedLog.authorizationCode}</span>
+            {/* Contenido del Modal según pestaña */}
+            <div className="p-4 overflow-y-auto flex-1">
+              {/* Pestaña 1: Información General */}
+              {modalTab === 'info' && (
+                <div className="space-y-2 text-xs text-gray-700">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                      <span className="text-[9px] text-gray-400 block">Tipo</span>
+                      <span className="font-bold text-gray-800">{selectedLog.typeName}</span>
                     </div>
-                    <div>
-                      <span className="text-gray-500 text-[10px] block">Acción ejecutada:</span>
-                      <span className="font-semibold">{selectedLog.actionDetails}</span>
+                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                      <span className="text-[9px] text-gray-400 block">Estado</span>
+                      <span className="font-bold text-gray-800">{selectedLog.status}</span>
                     </div>
+                  </div>
+                  <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block">Módulo</span>
+                    <span className="font-bold text-gray-800">{selectedLog.targetModule}</span>
+                  </div>
+                  <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block">Responsable</span>
+                    <span className="font-bold text-gray-800 flex items-center gap-1">
+                      <User size={11} className="text-[#0E5E6F]" />
+                      {selectedLog.responsible}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px] text-center">
+                      <span className="text-[9px] text-gray-400 block">Duración</span>
+                      <span className="font-bold text-gray-800 text-xs">{selectedLog.duration}</span>
+                    </div>
+                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px] text-center">
+                      <span className="text-[9px] text-gray-400 block">Horario</span>
+                      <span className="font-bold text-gray-800 text-[9px]">{selectedLog.startTime} - {selectedLog.endTime}</span>
+                    </div>
+                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px] text-center">
+                      <span className="text-[9px] text-gray-400 block">Alcance</span>
+                      <span className="font-bold text-emerald-600">{selectedLog.affectedCount}</span>
+                    </div>
+                  </div>
+                  <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block">Terminal IP</span>
+                    <span className="font-bold text-gray-800 flex items-center gap-1">
+                      <MapPin size={11} className="text-[#0E5E6F]" />
+                      {selectedLog.terminalIp}
+                    </span>
                   </div>
                 </div>
               )}
 
-              <div className="p-3 bg-gray-50 rounded-[4px] border border-gray-200">
-                <span className="text-gray-400 text-[10px] font-semibold uppercase block mb-1">
-                  Observaciones de la bitácora
-                </span>
-                <p className="text-gray-700 leading-relaxed italic">
-                  "{selectedLog.notes || 'Sin observaciones registradas.'}"
-                </p>
-              </div>
+              {/* Pestaña 2: Detalles */}
+              {modalTab === 'detalles' && (
+                <div className="space-y-2 text-xs text-gray-700">
+                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block mb-1">Acción ejecutada</span>
+                    <p className="font-semibold text-gray-800">{selectedLog.actionDetails}</p>
+                  </div>
+                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block mb-1">Código de autorización</span>
+                    <p className="font-mono font-bold text-gray-800">{selectedLog.authorizationCode}</p>
+                  </div>
+                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block mb-1">Observaciones</span>
+                    <p className="text-[10px] italic text-gray-600 leading-relaxed">
+                      "{selectedLog.notes || 'Sin observaciones registradas.'}"
+                    </p>
+                  </div>
+                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block mb-1">Administrador</span>
+                    <p className="font-semibold text-gray-800">{selectedLog.adminName}</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Pestaña 3: Seguridad */}
+              {modalTab === 'seguridad' && (
+                <div className="space-y-2 text-xs text-gray-700">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                      <span className="text-[9px] text-gray-400 block mb-1">Nivel de seguridad</span>
+                      <span className={`font-bold text-xs px-2 py-0.5 rounded-[4px] inline-block ${
+                        selectedLog.securityLevel === 'Crítico' ? 'bg-red-100 text-red-700' :
+                        selectedLog.securityLevel === 'Alto' ? 'bg-orange-100 text-orange-700' :
+                        'bg-blue-100 text-blue-700'
+                      }`}>
+                        {selectedLog.securityLevel}
+                      </span>
+                    </div>
+                    <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                      <span className="text-[9px] text-gray-400 block mb-1">Estado</span>
+                      <span className={`font-bold text-xs px-2 py-0.5 rounded-[4px] inline-block ${
+                        selectedLog.status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
+                        selectedLog.status === 'interrupted' ? 'bg-amber-100 text-amber-800' :
+                        'bg-red-100 text-red-700'
+                      }`}>
+                        {selectedLog.status === 'completed' ? 'Completado' :
+                         selectedLog.status === 'interrupted' ? 'Pausado' : 'Abortado'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block mb-1">Código de autorización</span>
+                    <p className="font-mono font-bold text-gray-800">{selectedLog.authorizationCode}</p>
+                  </div>
+                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block mb-1">Terminal IP</span>
+                    <p className="font-bold text-gray-800 flex items-center gap-1">
+                      <MapPin size={11} className="text-[#0E5E6F]" />
+                      {selectedLog.terminalIp}
+                    </p>
+                  </div>
+                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block mb-1">Elementos afectados</span>
+                    <p className="font-bold text-gray-800">{selectedLog.affectedCount}</p>
+                  </div>
+                </div>
+              )}
             </div>
 
-            <div className="p-3 px-4 bg-gray-50 border-t border-gray-200 flex flex-col gap-2 shrink-0">
+            {/* Footer del Modal */}
+            <div className="flex flex-col gap-2 p-3 pt-2 border-t border-gray-100 shrink-0">
               <button
-                onClick={() => { }}
-                className="flex items-center justify-center gap-1 text-[11px] font-bold text-[#0E5E6F] hover:underline cursor-pointer"
+                onClick={() => {}}
+                className="w-full py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-[4px] cursor-pointer border border-gray-300 flex items-center justify-center gap-1"
               >
                 <FileText size={13} />
                 <span>Descargar reporte de auditoría (JSON)</span>
               </button>
-
               <button
+                type="button"
                 onClick={() => setSelectedLog(null)}
-                className="w-full px-3.5 py-2 bg-[#0E5E6F] text-white font-semibold text-xs rounded-[4px] hover:bg-[#0A4754] transition cursor-pointer"
+                className="w-full py-2 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
               >
                 Cerrar bitácora
               </button>
@@ -4587,6 +4800,10 @@ export const AdminDataView = () => {
     const [editingUser, setEditingUser] = useState<UserAccount | null>(null);
     const [editingRequest, setEditingRequest] = useState<ServiceRequest | null>(null);
 
+    // Modal Tabs
+    const [userModalTab, setUserModalTab] = useState<'info' | 'metricas' | 'detalles'>('info');
+    const [requestModalTab, setRequestModalTab] = useState<'info' | 'detalles' | 'gestion'>('info');
+
     // DATA STORES
     const [clients, setClients] = useState<UserAccount[]>([
         {
@@ -4849,7 +5066,7 @@ export const AdminDataView = () => {
                 </p>
             </div>
 
-            {/* METRIC CARDS SUMMARY (Titles Title Case / labels Sentence Case) */}
+            {/* METRIC CARDS SUMMARY */}
             <div className="grid grid-cols-2 gap-2 mb-4 text-left">
                 <div className="bg-white border-2 border-gray-200 rounded-[4px] p-2.5 shadow-xs flex items-center justify-between">
                     <div>
@@ -4911,7 +5128,7 @@ export const AdminDataView = () => {
                 </select>
             </div>
 
-            {/* CONTROLES DE BÚSQUEDA Y FILTRADO — apilados y a ancho completo */}
+            {/* CONTROLES DE BÚSQUEDA Y FILTRADO */}
             <div className="flex flex-col gap-2 mb-3">
                 <div className="relative w-full">
                     <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -4944,7 +5161,7 @@ export const AdminDataView = () => {
                 </div>
             </div>
 
-            {/* LISTA PRINCIPAL — tarjetas apiladas en vez de tabla (patrón táctil móvil) */}
+            {/* LISTA PRINCIPAL — tarjetas apiladas */}
             <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xs overflow-hidden flex flex-col text-left">
                 {/* LISTA: CLIENTES, PILOTOS Y TÉCNICOS */}
                 {activeTab !== "requests" && (
@@ -4985,7 +5202,10 @@ export const AdminDataView = () => {
 
                                 <div className="flex items-center gap-2 pl-[42px] pt-0.5">
                                     <button
-                                        onClick={() => setSelectedUser(item)}
+                                        onClick={() => {
+                                            setSelectedUser(item);
+                                            setUserModalTab('info');
+                                        }}
                                         className="flex-1 justify-center px-2.5 py-1.5 hover:bg-gray-100 border border-gray-200 rounded-[4px] text-gray-600 hover:text-[#0E5E6F] flex items-center gap-1.5 transition-colors cursor-pointer text-[11px] font-bold"
                                     >
                                         <Eye size={13} /> Ver
@@ -5046,7 +5266,10 @@ export const AdminDataView = () => {
 
                                 <div className="flex items-center gap-2 pt-0.5">
                                     <button
-                                        onClick={() => setSelectedRequest(req)}
+                                        onClick={() => {
+                                            setSelectedRequest(req);
+                                            setRequestModalTab('info');
+                                        }}
                                         className="flex-1 justify-center px-2.5 py-1.5 hover:bg-gray-100 border border-gray-200 rounded-[4px] text-gray-600 hover:text-[#0E5E6F] flex items-center gap-1.5 transition-colors cursor-pointer text-[11px] font-bold"
                                     >
                                         <Eye size={13} /> Ver
@@ -5065,194 +5288,448 @@ export const AdminDataView = () => {
                 )}
             </div>
 
-            {/* MODAL 1: FICHA DE DETALLE DE USUARIO (Title Case en títulos / Sentence Case en cuerpo) */}
+            {/* ============================================================ */}
+            {/* MODAL DE USUARIO CON PESTAÑAS */}
+            {/* ============================================================ */}
             {selectedUser && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-end justify-center">
-                    <div className="bg-white border-t-2 border-gray-200 rounded-t-[16px] shadow-xl w-full max-h-[85vh] overflow-hidden text-left flex flex-col">
-                        <div className="flex justify-center pt-2 pb-1 shrink-0">
-                            <div className="w-10 h-1 rounded-full bg-gray-300" />
-                        </div>
-                        <div className="flex justify-between items-center px-5 py-3 border-b-2 border-gray-100 bg-gray-50 shrink-0">
-                            <div className="flex items-center gap-2">
-                                <Users className="text-[#0E5E6F]" size={18} />
-                                <h3 className="text-sm font-bold text-gray-900">
-                                    Ficha de Registro Operativo
-                                </h3>
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
+                        
+                        {/* Header del Modal */}
+                        <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
+                            <div className="flex items-center gap-2 min-w-0">
+                                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
+                                    {selectedUser.id}
+                                </div>
+                                <div className="min-w-0">
+                                    <h3 className="text-xs font-bold text-gray-900 truncate">
+                                        {selectedUser.name}
+                                    </h3>
+                                    <p className="text-[9px] text-gray-400 truncate">
+                                        {selectedUser.companyOrDept}
+                                    </p>
+                                </div>
                             </div>
                             <button
                                 onClick={() => setSelectedUser(null)}
-                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer shrink-0"
                             >
-                                <X size={18} />
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
                             </button>
                         </div>
 
-                        <div className="p-5 space-y-4 text-xs overflow-y-auto">
-                            <div className="flex items-start justify-between border-b pb-3 border-gray-100">
-                                <div>
-                                    <h4 className="text-base font-bold text-gray-900">{selectedUser.name}</h4>
-                                    <p className="text-gray-500 font-medium">{selectedUser.companyOrDept}</p>
-                                    <span className="font-mono text-[10px] text-gray-400">{selectedUser.id}</span>
-                                </div>
-                                <span
-                                    className={`inline-flex items-center text-[10px] font-bold px-2.5 py-0.5 rounded-[4px] border ${selectedUser.status === "Activo"
-                                            ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                                            : selectedUser.status === "Inactivo"
-                                                ? "border-amber-300 bg-amber-100 text-amber-800"
-                                                : "border-blue-200 bg-blue-50 text-blue-700"
-                                        }`}
-                                >
-                                    {selectedUser.status}
-                                </span>
-                            </div>
+                        {/* Pestañas */}
+                        <div className="flex border-b border-gray-200 shrink-0">
+                            <button
+                                onClick={() => setUserModalTab('info')}
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                                    userModalTab === 'info'
+                                        ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                            >
+                                Información
+                            </button>
+                            <button
+                                onClick={() => setUserModalTab('metricas')}
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                                    userModalTab === 'metricas'
+                                        ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                            >
+                                Métricas
+                            </button>
+                            <button
+                                onClick={() => setUserModalTab('detalles')}
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                                    userModalTab === 'detalles'
+                                        ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                            >
+                                Detalles
+                            </button>
+                        </div>
 
-                            <div className="grid grid-cols-1 gap-2.5 text-gray-700">
-                                <div className="flex items-center gap-2">
-                                    <MapPin size={14} className="text-gray-400" />
-                                    <span>{selectedUser.loc}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <Calendar size={14} className="text-gray-400" />
-                                    <span>Registro: {selectedUser.joinDate}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <Mail size={14} className="text-gray-400" />
-                                    <span className="font-mono">{selectedUser.email}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <Phone size={14} className="text-gray-400" />
-                                    <span className="font-mono">{selectedUser.phone}</span>
-                                </div>
-                            </div>
-
-                            <div className="bg-gray-50 p-3 rounded-[4px] border border-gray-200">
-                                <span className="font-bold text-gray-700 block mb-1">Métricas en plataforma:</span>
-                                <div className="flex gap-4 text-gray-800 font-mono font-bold">
-                                    {selectedUser.stats.totalServices !== undefined && (
-                                        <div>Servicios contratados: <span className="text-[#0E5E6F]">{selectedUser.stats.totalServices}</span></div>
-                                    )}
-                                    {selectedUser.stats.completedFlights !== undefined && (
-                                        <div>Horas o vuelos: <span className="text-blue-700">{selectedUser.stats.completedFlights}</span></div>
-                                    )}
-                                    {selectedUser.stats.inspectionsDone !== undefined && (
-                                        <div>Mantenimientos: <span className="text-purple-700">{selectedUser.stats.inspectionsDone}</span></div>
-                                    )}
-                                </div>
-                            </div>
-
-                            {selectedUser.detailsList && (
-                                <div className="space-y-1">
-                                    <span className="font-bold text-gray-700 block">Observaciones y licencias:</span>
-                                    <ul className="list-disc list-inside text-gray-600 space-y-0.5 pl-1">
-                                        {selectedUser.detailsList.map((item, i) => (
-                                            <li key={i}>{item}</li>
-                                        ))}
-                                    </ul>
+                        {/* Contenido del Modal según pestaña */}
+                        <div className="p-4 overflow-y-auto flex-1">
+                            {/* Pestaña 1: Información General */}
+                            {userModalTab === 'info' && (
+                                <div className="space-y-2 text-xs text-gray-700">
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                            <span className="text-[9px] text-gray-400 block">Código</span>
+                                            <span className="font-bold text-gray-800 font-mono">{selectedUser.id}</span>
+                                        </div>
+                                        <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                            <span className="text-[9px] text-gray-400 block">Estado</span>
+                                            <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-[4px] ${
+                                                selectedUser.status === "Activo" ? "bg-emerald-100 text-emerald-700" :
+                                                selectedUser.status === "Inactivo" ? "bg-amber-100 text-amber-800" :
+                                                "bg-blue-100 text-blue-700"
+                                            }`}>
+                                                {selectedUser.status}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block">Nombre / Razón Social</span>
+                                        <span className="font-bold text-gray-900">{selectedUser.name}</span>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block">Departamento / Especialidad</span>
+                                        <span className="font-bold text-gray-800">{selectedUser.companyOrDept}</span>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block">Ubicación</span>
+                                        <span className="font-bold text-gray-800 flex items-center gap-1">
+                                            <MapPin size={11} className="text-[#0E5E6F]" />
+                                            {selectedUser.loc}
+                                        </span>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                            <span className="text-[9px] text-gray-400 block">Email</span>
+                                            <span className="font-bold text-[#0E5E6F] text-[10px]">{selectedUser.email}</span>
+                                        </div>
+                                        <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                            <span className="text-[9px] text-gray-400 block">Teléfono</span>
+                                            <span className="font-bold text-gray-800 font-mono text-[10px]">{selectedUser.phone}</span>
+                                        </div>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block">Fecha de registro</span>
+                                        <span className="font-bold text-gray-800">{selectedUser.joinDate}</span>
+                                    </div>
                                 </div>
                             )}
 
-                            <div className="flex justify-end pt-3 pb-2 border-t border-gray-100">
-                                <button
-                                    onClick={() => setSelectedUser(null)}
-                                    className="w-full py-2.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer"
-                                >
-                                    Cerrar ficha
-                                </button>
-                            </div>
+                            {/* Pestaña 2: Métricas */}
+                            {userModalTab === 'metricas' && (
+                                <div className="space-y-2 text-xs text-gray-700">
+                                    <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block mb-2">Métricas en plataforma</span>
+                                        <div className="space-y-1.5">
+                                            {selectedUser.stats.totalServices !== undefined && (
+                                                <div className="flex justify-between items-center border-b border-gray-100 pb-1">
+                                                    <span className="text-gray-600">Servicios contratados</span>
+                                                    <span className="font-bold text-[#0E5E6F]">{selectedUser.stats.totalServices}</span>
+                                                </div>
+                                            )}
+                                            {selectedUser.stats.completedFlights !== undefined && (
+                                                <div className="flex justify-between items-center border-b border-gray-100 pb-1">
+                                                    <span className="text-gray-600">Horas / Vuelos completados</span>
+                                                    <span className="font-bold text-blue-700">{selectedUser.stats.completedFlights}</span>
+                                                </div>
+                                            )}
+                                            {selectedUser.stats.rating !== undefined && (
+                                                <div className="flex justify-between items-center border-b border-gray-100 pb-1">
+                                                    <span className="text-gray-600">Calificación promedio</span>
+                                                    <span className="font-bold text-amber-600">{selectedUser.stats.rating} ★</span>
+                                                </div>
+                                            )}
+                                            {selectedUser.stats.inspectionsDone !== undefined && (
+                                                <div className="flex justify-between items-center border-b border-gray-100 pb-1">
+                                                    <span className="text-gray-600">Mantenimientos realizados</span>
+                                                    <span className="font-bold text-purple-700">{selectedUser.stats.inspectionsDone}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Pestaña 3: Detalles */}
+                            {userModalTab === 'detalles' && selectedUser.detailsList && (
+                                <div className="space-y-2 text-xs text-gray-700">
+                                    <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block mb-2">Observaciones y licencias</span>
+                                        <ul className="space-y-1.5">
+                                            {selectedUser.detailsList.map((item, i) => (
+                                                <li key={i} className="flex items-start gap-1.5 text-[10px] text-gray-700">
+                                                    <span className="text-[#0E5E6F]">•</span>
+                                                    <span>{item}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+                            )}
                         </div>
+
+                        {/* Footer del Modal */}
+                        <div className="flex gap-2 p-3 pt-2 border-t border-gray-100 shrink-0">
+                            <button
+                                onClick={() => setSelectedUser(null)}
+                                className="flex-1 px-3 py-2 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
+                            >
+                                Cerrar
+                            </button>
+                            <button
+                                onClick={() => {
+                                    const userCopy = { ...selectedUser };
+                                    setEditingUser(userCopy);
+                                    setSelectedUser(null);
+                                }}
+                                className="flex-1 px-3 py-2 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs flex items-center justify-center gap-1"
+                            >
+                                <Edit3 size={12} />
+                                <span>Editar</span>
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             )}
 
-            {/* MODAL 2: DETALLE DE SOLICITUD DE SERVICIO */}
+            {/* ============================================================ */}
+            {/* MODAL DE SOLICITUD CON PESTAÑAS */}
+            {/* ============================================================ */}
             {selectedRequest && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-end justify-center">
-                    <div className="bg-white border-t-2 border-gray-200 rounded-t-[16px] shadow-xl w-full max-h-[85vh] overflow-hidden text-left flex flex-col">
-                        <div className="flex justify-center pt-2 pb-1 shrink-0">
-                            <div className="w-10 h-1 rounded-full bg-gray-300" />
-                        </div>
-                        <div className="flex justify-between items-center px-5 py-3 border-b-2 border-gray-100 bg-gray-50 shrink-0">
-                            <div className="flex items-center gap-2">
-                                <FileText className="text-[#0E5E6F]" size={18} />
-                                <h3 className="text-sm font-bold text-gray-900">
-                                    Detalle de la Reserva #{selectedRequest.id}
-                                </h3>
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
+                        
+                        {/* Header del Modal */}
+                        <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
+                            <div className="flex items-center gap-2 min-w-0">
+                                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
+                                    {selectedRequest.id}
+                                </div>
+                                <div className="min-w-0">
+                                    <h3 className="text-xs font-bold text-gray-900 truncate">
+                                        {selectedRequest.serviceType}
+                                    </h3>
+                                    <p className="text-[9px] text-gray-400 truncate">
+                                        {selectedRequest.clientName}
+                                    </p>
+                                </div>
                             </div>
                             <button
                                 onClick={() => setSelectedRequest(null)}
-                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer shrink-0"
                             >
-                                <X size={18} />
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
                             </button>
                         </div>
 
-                        <div className="p-5 space-y-3 text-xs overflow-y-auto">
-                            <div className="bg-gray-50 p-3 rounded-[4px] border border-gray-200 space-y-1">
-                                <div className="flex justify-between">
-                                    <span className="text-gray-500 font-bold">Cliente:</span>
-                                    <span className="font-bold text-gray-900">{selectedRequest.clientName}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-gray-500 font-bold">Servicio:</span>
-                                    <span className="text-gray-800">{selectedRequest.serviceType}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-gray-500 font-bold">Cobertura:</span>
-                                    <span className="text-gray-800">{selectedRequest.areaOrUnits}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-gray-500 font-bold">Ubicación:</span>
-                                    <span className="text-gray-800">{selectedRequest.location}</span>
-                                </div>
-                            </div>
-
-                            <div className="flex justify-between items-center p-2.5 bg-[#0E5E6F]/5 border border-[#0E5E6F]/20 rounded-[4px]">
-                                <span className="font-bold text-gray-700">Monto total estimado:</span>
-                                <span className="font-mono font-black text-[#0E5E6F] text-sm">
-                                    L. {selectedRequest.totalPrice.toLocaleString()}
-                                </span>
-                            </div>
-
-                            <div className="flex justify-end pt-3 pb-2 border-t border-gray-100">
-                                <button
-                                    onClick={() => setSelectedRequest(null)}
-                                    className="w-full py-2.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
-                                >
-                                    Cerrar
-                                </button>
-                            </div>
+                        {/* Pestañas */}
+                        <div className="flex border-b border-gray-200 shrink-0">
+                            <button
+                                onClick={() => setRequestModalTab('info')}
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                                    requestModalTab === 'info'
+                                        ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                            >
+                                Información
+                            </button>
+                            <button
+                                onClick={() => setRequestModalTab('detalles')}
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                                    requestModalTab === 'detalles'
+                                        ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                            >
+                                Detalles
+                            </button>
+                            <button
+                                onClick={() => setRequestModalTab('gestion')}
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                                    requestModalTab === 'gestion'
+                                        ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                            >
+                                Gestión
+                            </button>
                         </div>
+
+                        {/* Contenido del Modal según pestaña */}
+                        <div className="p-4 overflow-y-auto flex-1">
+                            {/* Pestaña 1: Información General */}
+                            {requestModalTab === 'info' && (
+                                <div className="space-y-2 text-xs text-gray-700">
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                            <span className="text-[9px] text-gray-400 block">Código</span>
+                                            <span className="font-bold text-gray-800 font-mono">{selectedRequest.id}</span>
+                                        </div>
+                                        <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                            <span className="text-[9px] text-gray-400 block">Estado</span>
+                                            <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-[4px] ${
+                                                selectedRequest.status === "Aprobada" || selectedRequest.status === "Completada" ? "bg-emerald-100 text-emerald-700" :
+                                                selectedRequest.status === "Rechazada" ? "bg-red-100 text-red-700" :
+                                                selectedRequest.status === "Pendiente" ? "bg-amber-100 text-amber-800" :
+                                                "bg-blue-100 text-blue-700"
+                                            }`}>
+                                                {selectedRequest.status}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block">Cliente</span>
+                                        <span className="font-bold text-gray-900">{selectedRequest.clientName}</span>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block">Tipo de servicio</span>
+                                        <span className="font-bold text-gray-800">{selectedRequest.serviceType}</span>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block">Cobertura / Unidades</span>
+                                        <span className="font-bold text-[#0E5E6F]">{selectedRequest.areaOrUnits}</span>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                            <span className="text-[9px] text-gray-400 block">Ubicación</span>
+                                            <span className="font-bold text-gray-800 flex items-center gap-1">
+                                                <MapPin size={11} className="text-[#0E5E6F]" />
+                                                {selectedRequest.location}
+                                            </span>
+                                        </div>
+                                        <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                            <span className="text-[9px] text-gray-400 block">Fecha</span>
+                                            <span className="font-bold text-gray-800">{selectedRequest.date}</span>
+                                        </div>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block">Piloto asignado</span>
+                                        <span className={`font-bold ${selectedRequest.assignedPilot === "Sin asignar" ? "text-red-600" : "text-gray-800"}`}>
+                                            {selectedRequest.assignedPilot}
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Pestaña 2: Detalles */}
+                            {requestModalTab === 'detalles' && (
+                                <div className="space-y-2 text-xs text-gray-700">
+                                    <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block mb-1">Monto total estimado</span>
+                                        <span className="text-lg font-black text-[#0E5E6F]">
+                                            L. {selectedRequest.totalPrice.toLocaleString()}
+                                        </span>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block mb-1">Detalles de la solicitud</span>
+                                        <div className="space-y-1">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-gray-600">Servicio</span>
+                                                <span className="font-bold text-gray-800">{selectedRequest.serviceType}</span>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-gray-600">Cobertura</span>
+                                                <span className="font-bold text-gray-800">{selectedRequest.areaOrUnits}</span>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-gray-600">Ubicación</span>
+                                                <span className="font-bold text-gray-800">{selectedRequest.location}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block mb-1">Asignación</span>
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-gray-600">Piloto</span>
+                                            <span className={`font-bold ${selectedRequest.assignedPilot === "Sin asignar" ? "text-red-600" : "text-gray-800"}`}>
+                                                {selectedRequest.assignedPilot}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Pestaña 3: Gestión */}
+                            {requestModalTab === 'gestion' && (
+                                <div className="space-y-3 text-xs">
+                                    <div>
+                                        <label className="block font-bold text-gray-800 text-[11px] mb-1">Cambiar estado de la solicitud:</label>
+                                        <select
+                                            value={selectedRequest.status}
+                                            onChange={(e) =>
+                                                setSelectedRequest({
+                                                    ...selectedRequest,
+                                                    status: e.target.value as "Pendiente" | "Aprobada" | "Rechazada" | "En proceso" | "Completada"
+                                                })
+                                            }
+                                            className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-bold bg-white text-gray-800 focus:border-[#0E5E6F] outline-none cursor-pointer"
+                                        >
+                                            <option value="Pendiente">Pendiente</option>
+                                            <option value="Aprobada">Aprobada</option>
+                                            <option value="Rechazada">Rechazada</option>
+                                            <option value="En proceso">En proceso</option>
+                                            <option value="Completada">Completada</option>
+                                        </select>
+                                    </div>
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block mb-1">Información de gestión</span>
+                                        <p className="text-[10px] text-gray-600">Cambia el estado de la solicitud para actualizar su progreso en el sistema.</p>
+                                    </div>
+                                    <div className="flex gap-2 pt-2 border-t border-gray-100">
+                                        <button
+                                            onClick={() => {
+                                                const requestCopy = { ...selectedRequest };
+                                                setEditingRequest(requestCopy);
+                                                setSelectedRequest(null);
+                                            }}
+                                            className="flex-1 px-3 py-2 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs flex items-center justify-center gap-1"
+                                        >
+                                            <Edit3 size={12} />
+                                            <span>Editar</span>
+                                        </button>
+                                        <button
+                                            onClick={() => setSelectedRequest(null)}
+                                            className="flex-1 px-3 py-2 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
+                                        >
+                                            Cerrar
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
                     </div>
                 </div>
             )}
 
-            {/* MODAL 3: EDITAR ESTADO DE USUARIO (CLIENTE / PILOTO / TÉCNICO) */}
+            {/* ============================================================ */}
+            {/* MODAL DE EDICIÓN DE USUARIO (CON PESTAÑAS) */}
+            {/* ============================================================ */}
             {editingUser && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-end justify-center">
-                    <div className="bg-white border-t-2 border-gray-200 rounded-t-[16px] shadow-xl w-full max-h-[85vh] overflow-hidden text-left flex flex-col">
-                        <div className="flex justify-center pt-2 pb-1 shrink-0">
-                            <div className="w-10 h-1 rounded-full bg-gray-300" />
-                        </div>
-                        <div className="flex justify-between items-center px-5 py-3 border-b-2 border-gray-100 bg-gray-50 shrink-0">
-                            <h3 className="text-sm font-bold text-gray-900">
-                                Gestor de Estado de Usuario
-                            </h3>
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
+                        
+                        <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
+                            <div className="flex items-center gap-2 min-w-0">
+                                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
+                                    {editingUser.id}
+                                </div>
+                                <div className="min-w-0">
+                                    <h3 className="text-xs font-bold text-gray-900 truncate">
+                                        {editingUser.name}
+                                    </h3>
+                                    <p className="text-[9px] text-gray-400 truncate">
+                                        {editingUser.companyOrDept}
+                                    </p>
+                                </div>
+                            </div>
                             <button
                                 onClick={() => setEditingUser(null)}
-                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer shrink-0"
                             >
-                                <X size={18} />
+                                <X size={16} />
                             </button>
                         </div>
 
-                        <div className="p-5 space-y-4 text-xs overflow-y-auto">
-                            <div>
-                                <p className="font-bold text-gray-900 text-sm">{editingUser.name}</p>
-                                <p className="text-gray-500 text-[11px] font-mono">{editingUser.id}</p>
-                            </div>
-
+                        <div className="p-4 overflow-y-auto flex-1 space-y-3 text-xs">
                             <div className="space-y-1.5">
-                                <label className="block font-bold text-gray-700">
+                                <label className="block font-bold text-gray-700 text-[11px]">
                                     Seleccionar el nuevo estado del registro:
                                 </label>
                                 <select
@@ -5263,7 +5740,7 @@ export const AdminDataView = () => {
                                             status: e.target.value as "Activo" | "Inactivo" | "Pendiente"
                                         })
                                     }
-                                    className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-bold bg-white text-gray-800 focus:border-[#0E5E6F] outline-none"
+                                    className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-bold bg-white text-gray-800 focus:border-[#0E5E6F] outline-none cursor-pointer"
                                 >
                                     <option value="Activo">Activo</option>
                                     <option value="Inactivo">Inactivo</option>
@@ -5271,52 +5748,82 @@ export const AdminDataView = () => {
                                 </select>
                             </div>
 
-                            <div className="flex gap-2 pt-3 pb-2 border-t border-gray-100">
+                            <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                <span className="text-[9px] text-gray-400 block mb-1">Información del usuario</span>
+                                <div className="space-y-1">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-gray-600">Nombre</span>
+                                        <span className="font-bold text-gray-800">{editingUser.name}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-gray-600">Código</span>
+                                        <span className="font-bold text-gray-800 font-mono">{editingUser.id}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-gray-600">Estado actual</span>
+                                        <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-[4px] ${
+                                            editingUser.status === "Activo" ? "bg-emerald-100 text-emerald-700" :
+                                            editingUser.status === "Inactivo" ? "bg-amber-100 text-amber-800" :
+                                            "bg-blue-100 text-blue-700"
+                                        }`}>
+                                            {editingUser.status}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-2 pt-2 border-t border-gray-100">
                                 <button
                                     onClick={() => setEditingUser(null)}
-                                    className="flex-1 py-2.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
+                                    className="flex-1 px-3 py-2 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
                                 >
                                     Cancelar
                                 </button>
                                 <button
                                     onClick={handleSaveUserStatus}
-                                    className="flex-1 py-2.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer"
+                                    className="flex-1 px-3 py-2 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
                                 >
-                                    Guardar cambios
+                                    Guardar
                                 </button>
                             </div>
                         </div>
+
                     </div>
                 </div>
             )}
 
-            {/* MODAL 4: EDITAR ESTADO DE SOLICITUD DE SERVICIO */}
+            {/* ============================================================ */}
+            {/* MODAL DE EDICIÓN DE SOLICITUD (CON PESTAÑAS) */}
+            {/* ============================================================ */}
             {editingRequest && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-end justify-center">
-                    <div className="bg-white border-t-2 border-gray-200 rounded-t-[16px] shadow-xl w-full max-h-[85vh] overflow-hidden text-left flex flex-col">
-                        <div className="flex justify-center pt-2 pb-1 shrink-0">
-                            <div className="w-10 h-1 rounded-full bg-gray-300" />
-                        </div>
-                        <div className="flex justify-between items-center px-5 py-3 border-b-2 border-gray-100 bg-gray-50 shrink-0">
-                            <h3 className="text-sm font-bold text-gray-900">
-                                Gestor de Estado de Solicitud
-                            </h3>
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
+                        
+                        <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
+                            <div className="flex items-center gap-2 min-w-0">
+                                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
+                                    {editingRequest.id}
+                                </div>
+                                <div className="min-w-0">
+                                    <h3 className="text-xs font-bold text-gray-900 truncate">
+                                        {editingRequest.serviceType}
+                                    </h3>
+                                    <p className="text-[9px] text-gray-400 truncate">
+                                        {editingRequest.clientName}
+                                    </p>
+                                </div>
+                            </div>
                             <button
                                 onClick={() => setEditingRequest(null)}
-                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer shrink-0"
                             >
-                                <X size={18} />
+                                <X size={16} />
                             </button>
                         </div>
 
-                        <div className="p-5 space-y-4 text-xs overflow-y-auto">
-                            <div>
-                                <p className="font-bold text-gray-900 text-sm">{editingRequest.serviceType}</p>
-                                <p className="text-gray-500 text-[11px] font-mono">{editingRequest.id} - {editingRequest.clientName}</p>
-                            </div>
-
+                        <div className="p-4 overflow-y-auto flex-1 space-y-3 text-xs">
                             <div className="space-y-1.5">
-                                <label className="block font-bold text-gray-700">
+                                <label className="block font-bold text-gray-700 text-[11px]">
                                     Cambiar estado de la solicitud:
                                 </label>
                                 <select
@@ -5327,31 +5834,57 @@ export const AdminDataView = () => {
                                             status: e.target.value as "Pendiente" | "Aprobada" | "Rechazada" | "En proceso" | "Completada"
                                         })
                                     }
-                                    className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-bold bg-white text-gray-800 focus:border-[#0E5E6F] outline-none"
+                                    className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-bold bg-white text-gray-800 focus:border-[#0E5E6F] outline-none cursor-pointer"
                                 >
                                     <option value="Pendiente">Pendiente</option>
                                     <option value="Aprobada">Aprobada</option>
-                                    <option value="Rechazada">Rechazadas</option>
+                                    <option value="Rechazada">Rechazada</option>
                                     <option value="En proceso">En proceso</option>
                                     <option value="Completada">Completada</option>
                                 </select>
                             </div>
 
-                            <div className="flex gap-2 pt-3 pb-2 border-t border-gray-100">
+                            <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                <span className="text-[9px] text-gray-400 block mb-1">Información de la solicitud</span>
+                                <div className="space-y-1">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-gray-600">Cliente</span>
+                                        <span className="font-bold text-gray-800">{editingRequest.clientName}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-gray-600">Servicio</span>
+                                        <span className="font-bold text-gray-800">{editingRequest.serviceType}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-gray-600">Estado actual</span>
+                                        <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-[4px] ${
+                                            editingRequest.status === "Aprobada" || editingRequest.status === "Completada" ? "bg-emerald-100 text-emerald-700" :
+                                            editingRequest.status === "Rechazada" ? "bg-red-100 text-red-700" :
+                                            editingRequest.status === "Pendiente" ? "bg-amber-100 text-amber-800" :
+                                            "bg-blue-100 text-blue-700"
+                                        }`}>
+                                            {editingRequest.status}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-2 pt-2 border-t border-gray-100">
                                 <button
                                     onClick={() => setEditingRequest(null)}
-                                    className="flex-1 py-2.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
+                                    className="flex-1 px-3 py-2 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
                                 >
                                     Cancelar
                                 </button>
                                 <button
                                     onClick={handleSaveRequestStatus}
-                                    className="flex-1 py-2.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer"
+                                    className="flex-1 px-3 py-2 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
                                 >
-                                    Guardar cambios
+                                    Guardar
                                 </button>
                             </div>
                         </div>
+
                     </div>
                 </div>
             )}

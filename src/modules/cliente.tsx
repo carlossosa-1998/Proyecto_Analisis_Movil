@@ -769,119 +769,6 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
             </div>
           </div>
         </div>
-
-        {/* BOTÓN DE NOTIFICACIONES */}
-        <div className="relative shrink-0 mt-0.5">
-          <button
-            type="button"
-            onClick={() => setShowNotifications(!showNotifications)}
-            style={{ borderRadius: "4px" }}
-            className="relative p-2.5 bg-white border border-gray-200 hover:border-gray-300 active:scale-95 transition-all shadow-md flex items-center justify-center cursor-pointer touch-manipulation"
-          >
-            <Bell size={18} className="text-gray-700" />
-            {unreadCount > 0 && (
-              <span
-                style={{ backgroundColor: HEX_COLORS.red, borderRadius: "4px" }}
-                className="absolute -top-1 -right-1 px-1.5 py-0.5 text-[9px] text-white font-black shadow-xs"
-              >
-                {unreadCount}
-              </span>
-            )}
-          </button>
-
-          {/* POPUP MODAL QUE NACE DIRECTAMENTE DEL BOTÓN DE NOTIFICACIONES */}
-          {showNotifications && (
-            <>
-              {/* BACKDROP TRANSPARENTE QUE CIERRA AL TOCAR AFUERA */}
-              <div
-                className="fixed inset-0 z-40 bg-black/20"
-                onClick={() => setShowNotifications(false)}
-              />
-
-              {/* CARD COMPACTO: w-65 Y max-w-[calc(100vw-2rem)] EVITA SALIRSE POR LA IZQUIERDA */}
-              <div
-                onTouchStart={handleTouchStartModal}
-                onTouchMove={handleTouchMoveModal}
-                onTouchEnd={handleTouchEndModal}
-                style={{
-                  transform: `translateY(${dragY}px)`,
-                  transition: isDraggingModal.current ? "none" : "transform 0.2s cubic-bezier(0,0,0.2,1)",
-                }}
-                className="absolute top-12 right-0 z-50 bg-white border-2 border-gray-300 rounded-[4px] w-66 max-w-[calc(100vw-2rem)] shadow-2xl flex flex-col text-left origin-top-right animate-in zoom-in-95 duration-150"
-              >
-                {/* Píldora táctil indicadora */}
-                <div className="flex justify-center pt-2 pb-1 cursor-grab active:cursor-grabbing">
-                  <div className="w-8 h-1 bg-gray-300 rounded-full" />
-                </div>
-
-                <div className="p-2.5 space-y-2">
-                  {/* Encabezado */}
-                  <div className="flex items-center justify-between pb-1.5 border-b-2 border-gray-100">
-                    <div className="flex items-center gap-1.5">
-                      <div className="p-1 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
-                        <Bell size={12} />
-                      </div>
-                      <h3 className="text-xs font-black text-gray-800 normal-case">
-                        Notificaciones
-                      </h3>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setShowNotifications(false)}
-                      className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer touch-manipulation"
-                    >
-                      <X size={13} />
-                    </button>
-                  </div>
-
-                  {/* Lista de Notificaciones compacta sin barras de scroll */}
-                  <div className="space-y-1.5 max-h-60 overflow-hidden">
-                    {notificaciones.map((n) => (
-                      <div
-                        key={n.id}
-                        className={`p-2 border rounded-[4px] text-xs transition-colors ${
-                          n.unread ? "bg-gray-50/90 border-gray-200" : "bg-white border-gray-100"
-                        }`}
-                      >
-                        <div className="flex justify-between items-start gap-1 mb-1">
-                          <span
-                            style={{
-                              backgroundColor: n.colorBg,
-                              color: n.textColor,
-                            }}
-                            className="px-1.5 py-0.5 text-[8px] font-extrabold flex items-center gap-1 tracking-wider rounded-[4px] truncate"
-                          >
-                            {n.icono}
-                            <span className="truncate">{n.titulo}</span>
-                          </span>
-                          <span className="text-[8px] font-mono font-medium text-gray-400 shrink-0">
-                            {n.tiempo}
-                          </span>
-                        </div>
-                        <p className="text-gray-700 font-medium text-[10px] leading-snug">
-                          {n.detalle}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Pie del modal */}
-                  <div className="pt-1.5 border-t border-gray-100 text-center">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setNotificaciones(notificaciones.map((n) => ({ ...n, unread: false })));
-                      }}
-                      className="w-full py-1 px-2 bg-white border border-gray-200 hover:border-gray-300 text-[#0E5E6F] font-bold rounded-[4px] text-[10px] transition-colors active:scale-95 shadow-xs cursor-pointer touch-manipulation"
-                    >
-                      Marcar todas como leídas
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
       </div>
 
       {/* MÉTRICAS SUMMARY */}
@@ -3521,6 +3408,9 @@ export const ClienteDronView = ({
         cvv: "",
     });
 
+    // ---------------- ESTADO PARA PESTAÑAS EN MODAL DE FICHA TÉCNICA ----------------
+    const [droneModalTab, setDroneModalTab] = useState<'info' | 'especificaciones'>('info');
+
     const userWalletBalance = 3200;
 
     const getPrecioNum = (precioStr: string) => parseInt(precioStr.replace(/[^0-9]/g, ""), 10);
@@ -4527,7 +4417,10 @@ export const ClienteDronView = ({
                                             )}
 
                                             <button
-                                                onClick={() => setSelectedDrone(drone)}
+                                                onClick={() => {
+                                                    setSelectedDrone(drone);
+                                                    setDroneModalTab('info');
+                                                }}
                                                 style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
                                                 className="w-full py-2.5 px-4 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold transition border border-gray-200 flex items-center justify-center gap-1.5 cursor-pointer"
                                             >
@@ -4544,7 +4437,7 @@ export const ClienteDronView = ({
             )}
 
             {/* ============================================================ */}
-            {/* MODAL DE SOLICITUD DE AYUDA TÉCNICA (DISEÑO 1.TXT) */}
+            {/* MODAL DE SOLICITUD DE AYUDA TÉCNICA */}
             {/* ============================================================ */}
             {supportDrone && (
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 font-sans">
@@ -4639,92 +4532,144 @@ export const ClienteDronView = ({
             )}
 
             {/* ============================================================ */}
-            {/* MODAL DE FICHA TÉCNICA (DISEÑO 1.TXT) */}
+            {/* MODAL DE FICHA TÉCNICA CON PESTAÑAS */}
             {/* ============================================================ */}
             {selectedDrone && (
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 font-sans">
-                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3">
-                        <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                            <div className="flex items-center gap-1.5 min-w-0">
-                                <Title as="h2" className="text-xs font-bold text-gray-900 tracking-wide uppercase truncate">
-                                    {selectedDrone.nombre}
-                                </Title>
-                                <span className="text-[9px] font-bold text-[#0E5E6F] bg-[#0E5E6F]/10 px-1.5 py-0.2 rounded-[4px] border border-[#0E5E6F]/20 shrink-0">
-                                    {selectedDrone.etiqueta}
-                                </span>
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
+                        
+                        {/* Header del Modal */}
+                        <div className="flex justify-between items-center border-b border-gray-100 p-3 shrink-0">
+                            <div className="flex items-center gap-2 min-w-0">
+                                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
+                                    {selectedDrone.categoria}
+                                </div>
+                                <div className="min-w-0">
+                                    <h3 className="text-xs font-bold text-gray-900 truncate">
+                                        {selectedDrone.nombre}
+                                    </h3>
+                                    <p className="text-[9px] text-gray-400 truncate">
+                                        {selectedDrone.etiqueta}
+                                    </p>
+                                </div>
                             </div>
                             <button
                                 onClick={() => setSelectedDrone(null)}
-                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer shrink-0"
                             >
                                 <X size={16} />
                             </button>
                         </div>
 
-                        <div className="space-y-3">
-                            <div className="border-2 border-gray-200 rounded-[4px] overflow-hidden bg-gray-50">
-                                <div className="relative w-full h-36 bg-gray-100">
-                                    <img
-                                        src={selectedDrone.imagen}
-                                        alt={selectedDrone.nombre}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                                <div className="p-2.5 bg-white border-t border-gray-200">
-                                    <span className="text-[9px] text-gray-400 font-bold block uppercase tracking-wider">
-                                        Precio Comercial
-                                    </span>
-                                    <span className="text-lg font-black text-[#0E5E6F] block mb-1">
-                                        {selectedDrone.precio}
-                                    </span>
-                                    <p className="text-[11px] text-gray-600 leading-tight">
-                                        {selectedDrone.descripcion}
-                                    </p>
-                                </div>
-                            </div>
+                        {/* Pestañas */}
+                        <div className="flex border-b border-gray-200 shrink-0">
+                            <button
+                                onClick={() => setDroneModalTab('info')}
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                                    droneModalTab === 'info'
+                                        ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                            >
+                                Información
+                            </button>
+                            <button
+                                onClick={() => setDroneModalTab('especificaciones')}
+                                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                                    droneModalTab === 'especificaciones'
+                                        ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                            >
+                                Especificaciones
+                            </button>
+                        </div>
 
-                            <div>
-                                <h3 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1.5 uppercase">
-                                    Especificaciones Técnicas
-                                </h3>
-                                <div className="grid grid-cols-2 gap-1.5">
-                                    {Object.entries(selectedDrone.especificaciones).map(
-                                        ([clave, valor]: any) => (
-                                            <div
-                                                key={clave}
-                                                className="p-1.5 bg-gray-50 border border-gray-200 rounded-[4px] flex flex-col justify-center"
-                                            >
-                                                <span className="text-[8px] text-gray-400 font-bold truncate">
-                                                    {clave}
-                                                </span>
-                                                <span className="text-[10px] font-bold text-gray-800 truncate">
-                                                    {valor}
-                                                </span>
-                                            </div>
-                                        ),
+                        {/* Contenido del Modal según pestaña */}
+                        <div className="p-4 overflow-y-auto flex-1">
+                            {/* Pestaña 1: Información General */}
+                            {droneModalTab === 'info' && (
+                                <div className="space-y-2 text-xs text-gray-700">
+                                    <div className="border-2 border-gray-200 rounded-[4px] overflow-hidden bg-gray-50">
+                                        <div className="relative w-full h-32 bg-gray-100">
+                                            <img
+                                                src={selectedDrone.imagen}
+                                                alt={selectedDrone.nombre}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block">Categoría</span>
+                                        <span className="font-bold text-gray-800 capitalize">{selectedDrone.categoria}</span>
+                                    </div>
+                                    
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block">Precio Comercial</span>
+                                        <span className="text-lg font-black text-[#0E5E6F]">{selectedDrone.precio}</span>
+                                    </div>
+                                    
+                                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                                        <span className="text-[9px] text-gray-400 block">Descripción</span>
+                                        <p className="text-[10px] text-gray-600 leading-relaxed">{selectedDrone.descripcion}</p>
+                                    </div>
+
+                                    {selectedCategory !== "micro" && (
+                                        <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-800 text-[10px] font-medium">
+                                            <ShieldAlert size={14} className="shrink-0 text-amber-600" />
+                                            <span>Requiere Cuenta de Piloto verificada para la compra.</span>
+                                        </div>
                                     )}
                                 </div>
-                            </div>
+                            )}
 
-                            {selectedCategory !== "micro" && (
-                                <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-800 text-[10px] font-medium">
-                                    <ShieldAlert size={14} className="shrink-0 text-amber-600" />
-                                    <span>Requiere Cuenta de Piloto verificada para la compra.</span>
+                            {/* Pestaña 2: Especificaciones Técnicas */}
+                            {droneModalTab === 'especificaciones' && (
+                                <div className="space-y-2 text-xs text-gray-700">
+                                    <h3 className="text-[10px] font-bold tracking-widest text-gray-400 block mb-2 uppercase">
+                                        Especificaciones Técnicas
+                                    </h3>
+                                    <div className="grid grid-cols-2 gap-1.5">
+                                        {Object.entries(selectedDrone.especificaciones).map(
+                                            ([clave, valor]: any) => (
+                                                <div
+                                                    key={clave}
+                                                    className="p-2 bg-gray-50 border border-gray-200 rounded-[4px] flex flex-col"
+                                                >
+                                                    <span className="text-[8px] text-gray-400 font-bold truncate">
+                                                        {clave}
+                                                    </span>
+                                                    <span className="text-[11px] font-bold text-gray-800 truncate">
+                                                        {valor}
+                                                    </span>
+                                                </div>
+                                            ),
+                                        )}
+                                    </div>
+
+                                    {selectedCategory !== "micro" && (
+                                        <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-800 text-[10px] font-medium mt-3">
+                                            <ShieldAlert size={14} className="shrink-0 text-amber-600" />
+                                            <span>Requiere Cuenta de Piloto verificada para la compra.</span>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>
 
-                        <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                        {/* Footer del Modal */}
+                        <div className="flex gap-2 p-3 pt-2 border-t border-gray-100 shrink-0">
                             <button
                                 onClick={() => setSelectedDrone(null)}
-                                className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
+                                className="flex-1 px-3 py-2 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
                             >
                                 Cerrar
                             </button>
                             {selectedCategory === "micro" ? (
                                 <button
                                     onClick={() => iniciarCompra(selectedDrone)}
-                                    className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs flex items-center gap-1"
+                                    className="flex-1 px-3 py-2 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs flex items-center justify-center gap-1"
                                 >
                                     <ShoppingBag size={12} />
                                     <span>Comprar</span>
@@ -4735,19 +4680,20 @@ export const ClienteDronView = ({
                                         setSelectedDrone(null);
                                         setIsPilotModalOpen(true);
                                     }}
-                                    className="px-4 py-1.5 bg-amber-600 text-white font-bold text-xs rounded-[4px] hover:bg-amber-700 cursor-pointer shadow-xs flex items-center gap-1"
+                                    className="flex-1 px-3 py-2 bg-amber-600 text-white font-bold text-xs rounded-[4px] hover:bg-amber-700 cursor-pointer shadow-xs flex items-center justify-center gap-1"
                                 >
                                     <Lock size={12} />
-                                    <span>Requiere cuenta Piloto</span>
+                                    <span>Requiere Piloto</span>
                                 </button>
                             )}
                         </div>
+
                     </div>
                 </div>
             )}
 
             {/* ============================================================ */}
-            {/* MODAL DE CAMBIO A CUENTA PILOTO (DISEÑO 1.TXT) */}
+            {/* MODAL DE CAMBIO A CUENTA PILOTO */}
             {/* ============================================================ */}
             {isPilotModalOpen && (
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 font-sans">

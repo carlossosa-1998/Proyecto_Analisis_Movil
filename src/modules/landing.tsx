@@ -400,7 +400,7 @@ export const LandingView = ({
                         }}
                     />
                     <Title className="text-base font-bold text-[#0E5E6F] tracking-tight uppercase truncate">
-                        BioDron
+                        TECNODACTYLUS
                     </Title>
                 </div>
 
@@ -598,8 +598,8 @@ export const LandingView = ({
                                         }}
                                     />
                                     <div className="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-gray-950 via-gray-900/40 to-transparent">
-                                        <span className="text-[9px] font-bold text-[#0E5E6F] uppercase tracking-widest bg-white/90 px-2 py-0.5 rounded-[4px] w-max mb-1">
-                                            App Móvil
+                                        <span className="text-[9px] font-bold text-[#0E5E6F] tracking-widest bg-white/90 px-2 py-0.5 rounded-[4px] w-max mb-1">
+                                            Plataforma Web
                                         </span>
                                         <Title
                                             as="h3"
@@ -1133,10 +1133,10 @@ export const AuthView = ({
             {step !== "success" && (
                 <div className="sticky top-0 z-10 bg-gray-50/95 backdrop-blur border-b-2 border-gray-200 px-4 py-3 flex items-center justify-between gap-2 shrink-0">
                     <div className="min-w-0">
-                        <Title className="text-sm text-[#0E5E6F] font-black tracking-tight mb-0">
-                            BIODRON
+                        <Title className="text-[13px] text-[#0E5E6F] font-black tracking-tight mb-0">
+                            TECNODACTYLUS
                         </Title>
-                        <Text className="text-[9px] text-gray-500 font-bold tracking-wide block">
+                        <Text className="text-[10px] text-gray-500 font-bold tracking-wide block">
                             Acceso al sistema
                         </Text>
                     </div>
@@ -1193,7 +1193,7 @@ export const AuthView = ({
 
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-3 text-white z-10 pointer-events-none">
                         <span className="text-[8px] font-bold uppercase tracking-wider text-[#0E5E6F] bg-white px-1.5 py-0.5 rounded-[4px] w-fit mb-0.5 shadow-sm">
-                            BIODRON
+                            TECNODACTYLUS
                         </span>
                         <p className="text-[9px] text-gray-200 font-medium leading-snug">
                             Plataforma de gestión e infraestructura de vuelo autónomo.
@@ -1285,8 +1285,8 @@ export const AuthView = ({
 
                 {/* REGISTRO PASO 1, PASO 2 Y PASO 3 */}
                 {step === "register" && (
-                    <div className="w-full max-w-[320px] mx-auto space-y-2.5 animate-in fade-in duration-150">
-                        <div className="flex items-center justify-between border-b border-gray-100 pb-1.5 h-[28px]">
+                    <div className="w-full max-w-[320px] mx-auto space-y-2 animate-in fade-in duration-150">
+                        <div className="flex items-center justify-between border-b border-gray-100 pb-1 h-[28px]">
                             <span className="text-xs font-bold text-gray-700">
                                 {regSubStep === 1 && "Paso 1: Credenciales"}
                                 {regSubStep === 2 && "Paso 2: Datos de perfil"}
@@ -1350,7 +1350,7 @@ export const AuthView = ({
                                     <label className="text-[10px] font-bold text-gray-500 tracking-wider block mb-1 text-left">
                                         Selecciona tu rol
                                     </label>
-                                    <div className="grid grid-cols-2 gap-1 bg-gray-100 p-0.5 rounded-[4px] border border-gray-200">
+                                    <div className="grid grid-cols-2 gap-1.5 bg-gray-100 p-0.5 rounded-[4px] border border-gray-200">
                                         {(
                                             [
                                                 { key: "cliente", label: "Cliente" },
@@ -1378,8 +1378,7 @@ export const AuthView = ({
                                 <div className="grid grid-cols-2 gap-2">
                                     <WireframeInput label="Nombre" placeholder="Nombre" />
                                     <WireframeInput label="Apellido" placeholder="Apellido" />
-                                </div>
-
+                                    
                                 <WireframeInput
                                     label="Teléfono"
                                     placeholder="+504 9999-0000"
@@ -1388,7 +1387,7 @@ export const AuthView = ({
                                 {/* CAMPO SEGÚN ROL */}
                                 {selectedRole === "cliente" && (
                                     <WireframeInput
-                                        label="Identificación (DNI / RTN)"
+                                        label="DNI / RTN"
                                         placeholder="0801-1990-00000"
                                     />
                                 )}
@@ -1409,10 +1408,12 @@ export const AuthView = ({
 
                                 {selectedRole === "tecnico" && (
                                     <WireframeInput
-                                        label="Identificación (DNI / RTN)"
+                                        label="DNI / RTN"
                                         placeholder="0801-1990-00000"
                                     />
                                 )}
+                                </div>
+
                             </div>
                         )}
 

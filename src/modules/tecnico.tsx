@@ -517,119 +517,6 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                             Consola del Especialista • Configuración, Diagnóstico y Reparación
                         </p>
                     </div>
-
-                    {/* CAMPANA Y CONTENEDOR DE NOTIFICACIONES */}
-        <div className="relative shrink-0 mt-0.5">
-          <button
-            type="button"
-            onClick={() => setShowNotifications(!showNotifications)}
-            style={{ borderRadius: "4px" }}
-            className="relative p-2.5 bg-white border border-gray-200 hover:border-gray-300 active:scale-95 transition-all shadow-md flex items-center justify-center cursor-pointer touch-manipulation"
-          >
-            <Bell size={18} className="text-gray-700" />
-            {unreadCount > 0 && (
-              <span
-                style={{ backgroundColor: HEX_COLORS.red, borderRadius: "4px" }}
-                className="absolute -top-1 -right-1 px-1.5 py-0.5 text-[9px] text-white font-black shadow-xs"
-              >
-                {unreadCount}
-              </span>
-            )}
-          </button>
-
-                        {/* POPUP MODAL/CARD QUE NACE DEL BOTÓN DE NOTIFICACIONES */}
-                        {showNotifications && (
-                            <>
-                                {/* BACKDROP TRANSPARENTE QUE CIERRA AL TOCAR AFUERA */}
-                                <div
-                                    className="fixed inset-0 z-40 bg-black/20"
-                                    onClick={() => setShowNotifications(false)}
-                                />
-
-                                {/* CARD COMPACTO ADAPTADO DE 1.TXT */}
-                                <div
-                                    onTouchStart={handleTouchStartModal}
-                                    onTouchMove={handleTouchMoveModal}
-                                    onTouchEnd={handleTouchEndModal}
-                                    style={{
-                                        transform: `translateY(${dragY}px)`,
-                                        transition: isDraggingModal.current ? "none" : "transform 0.2s cubic-bezier(0,0,0.2,1)",
-                                    }}
-                                    className="absolute top-12 right-0 z-50 bg-white border-2 border-gray-300 rounded-[4px] w-66 max-w-[calc(100vw-2rem)] shadow-2xl flex flex-col text-left origin-top-right animate-in zoom-in-95 duration-150"
-                                >
-                                    {/* Píldora táctil indicadora */}
-                                    <div className="flex justify-center pt-2 pb-1 cursor-grab active:cursor-grabbing">
-                                        <div className="w-8 h-1 bg-gray-300 rounded-full" />
-                                    </div>
-
-                                    <div className="p-2.5 space-y-2">
-                                        {/* Encabezado */}
-                                        <div className="flex items-center justify-between pb-1.5 border-b-2 border-gray-100">
-                                            <div className="flex items-center gap-1.5">
-                                                <div className="p-1 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
-                                                    <Bell size={12} />
-                                                </div>
-                                                <h3 className="text-xs font-black text-gray-800 normal-case">
-                                                    Notificaciones
-                                                </h3>
-                                            </div>
-                                            <button
-                                                type="button"
-                                                onClick={() => setShowNotifications(false)}
-                                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer touch-manipulation"
-                                            >
-                                                <X size={13} />
-                                            </button>
-                                        </div>
-
-                                        {/* Lista de Notificaciones compacta */}
-                                        <div className="space-y-1.5 max-h-60 overflow-hidden">
-                                            {notificaciones.map((n) => (
-                                                <div
-                                                    key={n.id}
-                                                    className={`p-2 border rounded-[4px] text-xs transition-colors ${
-                                                        n.unread ? "bg-gray-50/90 border-gray-200" : "bg-white border-gray-100"
-                                                    }`}
-                                                >
-                                                    <div className="flex justify-between items-start gap-1 mb-1">
-                                                        <span
-                                                            style={{
-                                                                backgroundColor: n.colorBg,
-                                                                color: n.textColor,
-                                                            }}
-                                                            className="px-1.5 py-0.5 text-[8px] font-extrabold flex items-center gap-1 tracking-wider rounded-[4px] truncate"
-                                                        >
-                                                            {n.icono}
-                                                            <span className="truncate">{n.titulo}</span>
-                                                        </span>
-                                                        <span className="text-[8px] font-mono font-medium text-gray-400 shrink-0">
-                                                            {n.tiempo}
-                                                        </span>
-                                                    </div>
-                                                    <p className="text-gray-700 font-medium text-[10px] leading-snug">
-                                                        {n.detalle}
-                                                    </p>
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        {/* Pie del modal */}
-                                        <div className="pt-1.5 border-t border-gray-100 text-center">
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    setNotificaciones(notificaciones.map((n) => ({ ...n, unread: false })));
-                                                }}
-                                                className="w-full py-1 px-2 bg-white border border-gray-200 hover:border-gray-300 text-[#0E5E6F] font-bold rounded-[4px] text-[10px] transition-colors active:scale-95 shadow-xs cursor-pointer touch-manipulation"
-                                            >
-                                                Marcar todas como leídas
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </>
-                        )}
-                    </div>
                 </div>
 
                 {/* Badge Nivel Técnico */}
@@ -1068,6 +955,7 @@ export const TecnicoRequestView = () => {
   // Modals
   const [editingRequest, setEditingRequest] = useState<TechRequest | null>(null);
   const [deletingRequestId, setDeletingRequestId] = useState<string | null>(null);
+  const [modalTab, setModalTab] = useState<'info' | 'detalles' | 'gestion'>('info');
 
   // DATA STORE
   const [requests, setRequests] = useState<TechRequest[]>([
@@ -1474,7 +1362,10 @@ export const TecnicoRequestView = () => {
 
                 <div className="flex items-center gap-1.5 pt-2 border-t border-gray-100">
                   <button
-                    onClick={() => setEditingRequest({ ...req })}
+                    onClick={() => {
+                      setEditingRequest({ ...req });
+                      setModalTab('info');
+                    }}
                     className="flex-1 px-2 py-1.5 bg-[#0E5E6F] text-white text-[11px] font-semibold rounded-[4px] hover:bg-[#0a4754] transition-colors cursor-pointer flex items-center justify-center gap-1"
                   >
                     <Edit3 size={11} />
@@ -1495,26 +1386,27 @@ export const TecnicoRequestView = () => {
         )}
       </div>
 
-      {/* BOTTOM SHEET EDITAR / DETALLE */}
+      {/* =========================================================
+          MODAL DE EDICIÓN CON PESTAÑAS
+          ========================================================= */}
       {editingRequest && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center">
-          <div
-            className="absolute inset-0 bg-black/40 backdrop-blur-xs animate-in fade-in duration-150"
-            onClick={() => setEditingRequest(null)}
-          ></div>
-
-          <div
-            style={{ borderRadius: "12px 12px 0 0" }}
-            className="relative bg-white border-t-2 border-gray-200 shadow-xl w-full max-h-[88vh] overflow-hidden text-left animate-in slide-in-from-bottom duration-200 flex flex-col"
-          >
-            <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mt-2.5"></div>
-
-            <div className="flex justify-between items-center px-4 py-2.5 border-b-2 border-gray-100 bg-gray-50 shrink-0">
+        <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
+            
+            {/* Header del Modal */}
+            <div className="flex justify-between items-center border-b border-gray-100 p-3 shrink-0">
               <div className="flex items-center gap-2 min-w-0">
-                <Wrench className="text-[#0E5E6F] shrink-0" size={16} />
-                <h3 className="text-xs font-bold text-gray-900 truncate">
-                  Editar solicitud #{editingRequest.id}
-                </h3>
+                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
+                  {editingRequest.id}
+                </div>
+                <div className="min-w-0">
+                  <h3 className="text-xs font-bold text-gray-900 truncate">
+                    {editingRequest.equipment}
+                  </h3>
+                  <p className="text-[9px] text-gray-400 truncate">
+                    {editingRequest.requesterName}
+                  </p>
+                </div>
               </div>
               <button
                 onClick={() => setEditingRequest(null)}
@@ -1524,114 +1416,212 @@ export const TecnicoRequestView = () => {
               </button>
             </div>
 
-            <div className="p-4 space-y-3 text-xs overflow-y-auto custom-scrollbar">
-              <div className="border-b pb-2 border-gray-100">
-                <h4 className="text-sm font-bold text-gray-900">{editingRequest.equipment}</h4>
-                <p className="text-gray-500 font-medium">Solicitante: {editingRequest.requesterName}</p>
-                <span className="font-mono text-[10px] text-gray-400 block mt-0.5">{editingRequest.requesterContact}</span>
-              </div>
-
-              <div className="grid grid-cols-1 gap-2 text-gray-700 bg-gray-50 p-2.5 rounded-[4px] border border-gray-200 text-[11px]">
-                <div className="flex items-center gap-1.5">
-                  <MapPin size={12} className="text-gray-400 shrink-0" />
-                  <span className="truncate">Lugar: <strong>{editingRequest.location}</strong></span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Calendar size={12} className="text-gray-400 shrink-0" />
-                  <span>Fecha: <strong>{editingRequest.date}</strong></span>
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <span className="font-bold text-gray-700 block text-[11px]">Descripción del reporte:</span>
-                <p className="text-gray-600 bg-gray-50 p-2.5 rounded-[4px] border border-gray-200 leading-relaxed text-[11px]">
-                  {editingRequest.description}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 gap-2.5 pt-1">
-                <div className="space-y-1">
-                  <label className="block font-bold text-gray-700 text-[11px]">Estado:</label>
-                  <select
-                    value={editingRequest.status}
-                    onChange={(e) =>
-                      setEditingRequest({
-                        ...editingRequest,
-                        status: e.target.value as RequestStatus
-                      })
-                    }
-                    className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-bold bg-white text-gray-800 focus:border-[#0E5E6F] outline-none"
-                  >
-                    <option value="Pendiente">Pendiente</option>
-                    <option value="Aceptada">Aceptada</option>
-                    <option value="En diagnóstico">En diagnóstico</option>
-                    <option value="Rechazada">Rechazadas</option>
-                    <option value="Completada">Completada</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="block font-bold text-gray-700 text-[11px]">Prioridad:</label>
-                  <select
-                    value={editingRequest.priority}
-                    onChange={(e) =>
-                      setEditingRequest({
-                        ...editingRequest,
-                        priority: e.target.value as PriorityLevel
-                      })
-                    }
-                    className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-bold bg-white text-gray-800 focus:border-[#0E5E6F] outline-none"
-                  >
-                    <option value="Baja">Baja</option>
-                    <option value="Media">Media</option>
-                    <option value="Alta">Alta</option>
-                    <option value="Crítica">Crítica</option>
-                  </select>
-                </div>
-              </div>
+            {/* Pestañas */}
+            <div className="flex border-b border-gray-200 shrink-0">
+              <button
+                onClick={() => setModalTab('info')}
+                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                  modalTab === 'info'
+                    ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Información
+              </button>
+              <button
+                onClick={() => setModalTab('detalles')}
+                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                  modalTab === 'detalles'
+                    ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Detalles
+              </button>
+              <button
+                onClick={() => setModalTab('gestion')}
+                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                  modalTab === 'gestion'
+                    ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Gestión
+              </button>
             </div>
 
-            <div className="flex gap-2 p-4 pt-3 border-t border-gray-100 shrink-0">
+            {/* Contenido del Modal según pestaña */}
+            <div className="p-4 overflow-y-auto flex-1">
+              {/* Pestaña 1: Información General */}
+              {modalTab === 'info' && (
+                <div className="space-y-2 text-xs text-gray-700">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                      <span className="text-[9px] text-gray-400 block">Prioridad</span>
+                      <span className={`font-bold text-xs ${
+                        editingRequest.priority === "Crítica" ? "text-red-600" :
+                        editingRequest.priority === "Alta" ? "text-orange-600" :
+                        editingRequest.priority === "Media" ? "text-amber-600" :
+                        "text-gray-600"
+                      }`}>
+                        {editingRequest.priority}
+                      </span>
+                    </div>
+                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                      <span className="text-[9px] text-gray-400 block">Estado</span>
+                      <span className="font-bold text-gray-800">{editingRequest.status}</span>
+                    </div>
+                  </div>
+                  <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block">Solicitante</span>
+                    <span className="font-bold text-gray-800">{editingRequest.requesterName}</span>
+                  </div>
+                  <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block">Contacto</span>
+                    <span className="font-bold text-[#0E5E6F] text-[10px]">{editingRequest.requesterContact}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                      <span className="text-[9px] text-gray-400 block">Fecha</span>
+                      <span className="font-bold text-gray-800">{editingRequest.date}</span>
+                    </div>
+                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                      <span className="text-[9px] text-gray-400 block">Horas estimadas</span>
+                      <span className="font-bold text-gray-800">{editingRequest.estimatedHours}h</span>
+                    </div>
+                  </div>
+                  <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block">Equipo</span>
+                    <span className="font-bold text-gray-800 text-[10px]">{editingRequest.equipment}</span>
+                  </div>
+                  <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block">Ubicación</span>
+                    <span className="font-bold text-gray-800 flex items-center gap-1">
+                      <MapPin size={11} className="text-[#0E5E6F]" />
+                      {editingRequest.location}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Pestaña 2: Detalles */}
+              {modalTab === 'detalles' && (
+                <div className="space-y-2 text-xs text-gray-700">
+                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block mb-1">Resumen del problema</span>
+                    <p className="font-semibold text-gray-800">{editingRequest.issueSummary}</p>
+                  </div>
+                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block mb-1">Descripción completa</span>
+                    <p className="text-[10px] text-gray-600 leading-relaxed">{editingRequest.description}</p>
+                  </div>
+                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block mb-1">Origen</span>
+                    <span className={`font-bold text-xs px-2 py-0.5 rounded-[4px] ${
+                      editingRequest.origin === 'client' ? 'bg-[#0E5E6F]/10 text-[#0E5E6F]' :
+                      editingRequest.origin === 'admin' ? 'bg-purple-100 text-purple-700' :
+                      'bg-blue-100 text-blue-700'
+                    }`}>
+                      {editingRequest.origin === 'client' ? 'Cliente' :
+                       editingRequest.origin === 'admin' ? 'Administrador' : 'Piloto'}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Pestaña 3: Gestión */}
+              {modalTab === 'gestion' && (
+                <div className="space-y-3 text-xs">
+                  <div>
+                    <label className="block font-bold text-gray-800 text-[11px] mb-1">Cambiar Estado:</label>
+                    <select
+                      value={editingRequest.status}
+                      onChange={(e) =>
+                        setEditingRequest({
+                          ...editingRequest,
+                          status: e.target.value as RequestStatus
+                        })
+                      }
+                      className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-bold bg-white text-gray-800 focus:border-[#0E5E6F] outline-none cursor-pointer"
+                    >
+                      <option value="Pendiente">Pendiente</option>
+                      <option value="Aceptada">Aceptada</option>
+                      <option value="En diagnóstico">En diagnóstico</option>
+                      <option value="Rechazada">Rechazada</option>
+                      <option value="Completada">Completada</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-gray-800 text-[11px] mb-1">Cambiar Prioridad:</label>
+                    <select
+                      value={editingRequest.priority}
+                      onChange={(e) =>
+                        setEditingRequest({
+                          ...editingRequest,
+                          priority: e.target.value as PriorityLevel
+                        })
+                      }
+                      className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-bold bg-white text-gray-800 focus:border-[#0E5E6F] outline-none cursor-pointer"
+                    >
+                      <option value="Baja">Baja</option>
+                      <option value="Media">Media</option>
+                      <option value="Alta">Alta</option>
+                      <option value="Crítica">Crítica</option>
+                    </select>
+                  </div>
+
+                  <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block mb-1">Horas estimadas actuales</span>
+                    <span className="font-bold text-gray-800">{editingRequest.estimatedHours}h</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Footer del Modal */}
+            <div className="flex gap-2 p-3 pt-2 border-t border-gray-100 shrink-0">
               <button
                 onClick={() => setEditingRequest(null)}
-                className="flex-1 px-3 py-2.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
+                className="flex-1 px-3 py-2 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleSaveEditedRequest}
-                className="flex-1 px-3 py-2.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer"
+                className="flex-1 px-3 py-2 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
               >
                 Guardar
               </button>
             </div>
+
           </div>
         </div>
       )}
 
-      {/* MODAL ELIMINAR (diálogo breve, se mantiene centrado) */}
+      {/* =========================================================
+          MODAL ELIMINAR (ESTILOS APLICADOS DESDE 1.TXT)
+          ========================================================= */}
       {deletingRequestId && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border-2 border-gray-200 rounded-[4px] shadow-xl w-full max-w-xs overflow-hidden text-left p-4 space-y-3">
-            <div className="flex items-center gap-2 text-red-600 font-bold text-xs">
-              <AlertTriangle size={16} />
-              <span>¿Eliminar solicitud?</span>
+        <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
+            <div className="flex items-center gap-2 border-b border-gray-100 pb-2 text-red-600 font-bold text-xs">
+              <AlertTriangle size={16} /> <span>¿Confirmar eliminación?</span>
             </div>
-            <p className="text-[11px] text-gray-600">
-              Se eliminará el registro <strong>{deletingRequestId}</strong>.
-            </p>
+
+            <div className="bg-red-50/50 border border-red-100 rounded-[4px] p-2.5 space-y-1 text-[11px]">
+              <p className="font-bold text-gray-900">Solicitud: <span className="text-[#0E5E6F]">{deletingRequestId}</span></p>
+              <p className="text-gray-500 text-[10px]">Esta acción eliminará permanentemente la solicitud.</p>
+            </div>
+
+            <p className="text-[11px] text-gray-600">Esta acción no se puede deshacer y borrará la solicitud del sistema.</p>
+
             <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
-              <button
-                onClick={() => setDeletingRequestId(null)}
-                className="px-2.5 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
-              >
+              <button onClick={() => setDeletingRequestId(null)} className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer">
                 Cancelar
               </button>
-              <button
-                onClick={() => handleDeleteRequest(deletingRequestId)}
-                className="px-2.5 py-1.5 bg-red-600 text-white font-bold text-xs rounded-[4px] hover:bg-red-700 cursor-pointer"
-              >
-                Eliminar
+              <button onClick={() => handleDeleteRequest(deletingRequestId)} className="px-4 py-1.5 bg-red-600 text-white font-bold text-xs rounded-[4px] hover:bg-red-700 cursor-pointer shadow-xs">
+                Eliminar Solicitud
               </button>
             </div>
           </div>
@@ -2778,6 +2768,7 @@ export const TecnicoHistoryView = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [selectedFlight, setSelectedFlight] = useState<TechnicianLog | null>(null);
+  const [modalTab, setModalTab] = useState<'info' | 'detalles' | 'repuestos'>('info');
 
   // Filtrado dinámico
   const filteredFlights = flights.filter((f) => {
@@ -2979,7 +2970,10 @@ export const TecnicoHistoryView = () => {
               <div
                 key={flight.id}
                 className="p-3.5 active:bg-gray-50/80 transition cursor-pointer"
-                onClick={() => setSelectedFlight(flight)}
+                onClick={() => {
+                  setSelectedFlight(flight);
+                  setModalTab('info');
+                }}
               >
                 <div className="flex justify-between items-start gap-2 mb-1.5">
                   <div className="min-w-0">
@@ -3018,7 +3012,10 @@ export const TecnicoHistoryView = () => {
 
                   <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
                     <button
-                      onClick={() => setSelectedFlight(flight)}
+                      onClick={() => {
+                        setSelectedFlight(flight);
+                        setModalTab('info');
+                      }}
                       className="flex items-center gap-1 px-2.5 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-medium rounded-[4px] transition cursor-pointer"
                       title="Ver detalles"
                     >
@@ -3051,126 +3048,174 @@ export const TecnicoHistoryView = () => {
         </div>
       </div>
 
-      {/* ================= BOTTOM SHEET DETALLADO DE INTERVENCIÓN ================= */}
+      {/* ================= MODAL CENTRADO CON PESTAÑAS ================= */}
       {selectedFlight && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center">
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-xs animate-in fade-in duration-150"
-            onClick={() => setSelectedFlight(null)}
-          ></div>
-
-          <div
-            style={{ borderRadius: "12px 12px 0 0" }}
-            className="relative bg-white w-full shadow-2xl overflow-hidden border-t-2 border-gray-200 flex flex-col max-h-[88vh] animate-in slide-in-from-bottom duration-200"
-          >
-            <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mt-2.5 shrink-0"></div>
-
-            {/* Modal Header */}
-            <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between shrink-0 gap-2">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="p-2 bg-[#0E5E6F] text-white rounded-[4px] font-bold text-xs shrink-0">
+        <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
+          <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left font-sans flex flex-col max-h-[90vh]">
+            
+            {/* Header del Modal */}
+            <div className="flex items-center justify-between border-b border-gray-100 p-3 shrink-0">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="p-1.5 bg-[#0E5E6F] text-white rounded-[4px] text-[9px] font-bold shrink-0">
                   {selectedFlight.workOrder}
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-gray-900 text-sm leading-tight truncate">
+                  <h3 className="text-xs font-bold text-gray-900 truncate">
                     {selectedFlight.typeName}
                   </h3>
-                  <p className="text-[11px] text-gray-500 truncate">
+                  <p className="text-[9px] text-gray-400 truncate">
                     {selectedFlight.equipmentName} • {selectedFlight.date}
                   </p>
                 </div>
               </div>
-
               <button
                 onClick={() => setSelectedFlight(null)}
-                className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-[4px] transition cursor-pointer shrink-0"
+                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer shrink-0"
               >
-                <X size={18} />
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
 
-            {/* Modal Content */}
-            <div className="p-4 overflow-y-auto custom-scrollbar space-y-4 text-xs">
-              <div className="grid grid-cols-1 gap-3 p-3 bg-gray-50 rounded-[4px] border border-gray-200">
-                <div>
-                  <span className="text-gray-400 text-[10px] font-semibold uppercase block">Ubicación de taller</span>
-                  <span className="font-bold text-gray-800 flex items-center gap-1 mt-0.5">
-                    <MapPin size={12} className="text-[#0E5E6F] shrink-0" />
-                    {selectedFlight.location}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-gray-400 text-[10px] font-semibold uppercase block">Técnico responsable</span>
-                  <span className="font-semibold text-gray-800 flex items-center gap-1 mt-0.5">
-                    <User size={12} className="text-[#0E5E6F] shrink-0" />
-                    {selectedFlight.technician}
-                  </span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-2">
-                <div className="p-2 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
-                  <span className="text-gray-400 text-[9px] uppercase font-semibold block">Duración</span>
-                  <span className="font-bold text-gray-900 text-xs">{selectedFlight.duration}</span>
-                  <span className="text-[8px] text-gray-400 block leading-tight mt-0.5">{selectedFlight.startTime} - {selectedFlight.endTime}</span>
-                </div>
-
-                <div className="p-2 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
-                  <span className="text-gray-400 text-[9px] uppercase font-semibold block">Componentes</span>
-                  <span className="font-bold text-emerald-700 text-xs">Revisados</span>
-                  <span className="text-[8px] text-gray-400 block leading-tight mt-0.5">{selectedFlight.componentsChecked}</span>
-                </div>
-
-                <div className="p-2 bg-gray-50 rounded-[4px] border border-gray-200 text-center">
-                  <span className="text-gray-400 text-[9px] uppercase font-semibold block">Diagnóstico</span>
-                  <span className="font-bold text-gray-900 text-xs">{selectedFlight.diagnosticScore}%</span>
-                  <span className="text-[8px] text-gray-400 block leading-tight mt-0.5">Salud del equipo</span>
-                </div>
-              </div>
-
+            {/* Pestañas */}
+            <div className="flex border-b border-gray-200 shrink-0">
+              <button
+                onClick={() => setModalTab('info')}
+                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                  modalTab === 'info'
+                    ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Información
+              </button>
+              <button
+                onClick={() => setModalTab('detalles')}
+                className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                  modalTab === 'detalles'
+                    ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Detalles Técnicos
+              </button>
               {selectedFlight.sparePartUsed && (
-                <div className="p-3 bg-cyan-50/60 border border-cyan-100 rounded-[4px]">
-                  <h4 className="font-bold text-cyan-950 text-xs mb-1 flex items-center gap-1.5">
-                    Detalles de Repuestos y Costos
-                  </h4>
-                  <div className="grid grid-cols-1 gap-2 text-xs text-cyan-900 mt-2">
-                    <div>
-                      <span className="text-gray-500 text-[10px] block">Pieza / insumo instalado:</span>
-                      <span className="font-semibold">{selectedFlight.sparePartUsed}</span>
+                <button
+                  onClick={() => setModalTab('repuestos')}
+                  className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
+                    modalTab === 'repuestos'
+                      ? 'text-[#0E5E6F] border-b-2 border-[#0E5E6F]'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  Repuestos
+                </button>
+              )}
+            </div>
+
+            {/* Contenido del Modal según pestaña */}
+            <div className="p-4 overflow-y-auto flex-1">
+              {/* Pestaña 1: Información General */}
+              {modalTab === 'info' && (
+                <div className="space-y-2 text-xs text-gray-700">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                      <span className="text-[9px] text-gray-400 block">Tipo</span>
+                      <span className="font-bold text-gray-800">{selectedFlight.typeName}</span>
                     </div>
-                    <div>
-                      <span className="text-gray-500 text-[10px] block">Costo estimado:</span>
-                      <span className="font-semibold">{selectedFlight.partCost}</span>
+                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                      <span className="text-[9px] text-gray-400 block">Estado</span>
+                      <span className="font-bold text-gray-800">{selectedFlight.status}</span>
+                    </div>
+                  </div>
+                  <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block">Ubicación</span>
+                    <span className="font-bold text-gray-800 flex items-center gap-1">
+                      <MapPin size={11} className="text-[#0E5E6F]" />
+                      {selectedFlight.location}
+                    </span>
+                  </div>
+                  <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block">Técnico</span>
+                    <span className="font-bold text-gray-800 flex items-center gap-1">
+                      <User size={11} className="text-[#0E5E6F]" />
+                      {selectedFlight.technician}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px] text-center">
+                      <span className="text-[9px] text-gray-400 block">Duración</span>
+                      <span className="font-bold text-gray-800 text-xs">{selectedFlight.duration}</span>
+                    </div>
+                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px] text-center">
+                      <span className="text-[9px] text-gray-400 block">Horario</span>
+                      <span className="font-bold text-gray-800 text-[9px]">{selectedFlight.startTime} - {selectedFlight.endTime}</span>
+                    </div>
+                    <div className="p-2 bg-gray-50 border border-gray-200 rounded-[4px] text-center">
+                      <span className="text-[9px] text-gray-400 block">Score</span>
+                      <span className="font-bold text-emerald-600">{selectedFlight.diagnosticScore}%</span>
                     </div>
                   </div>
                 </div>
               )}
 
-              <div className="p-3 bg-gray-50 rounded-[4px] border border-gray-200">
-                <span className="text-gray-400 text-[10px] font-semibold uppercase block mb-1">
-                  Observaciones de la intervención
-                </span>
-                <p className="text-gray-700 leading-relaxed italic">
-                  "{selectedFlight.notes || 'Sin observaciones registradas.'}"
-                </p>
-              </div>
+              {/* Pestaña 2: Detalles Técnicos */}
+              {modalTab === 'detalles' && (
+                <div className="space-y-2 text-xs text-gray-700">
+                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block mb-1">Componentes revisados</span>
+                    <p className="font-semibold text-gray-800">{selectedFlight.componentsChecked}</p>
+                  </div>
+                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block mb-1">Observaciones</span>
+                    <p className="text-[10px] italic text-gray-600 leading-relaxed">
+                      "{selectedFlight.notes || 'Sin observaciones registradas.'}"
+                    </p>
+                  </div>
+                  <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-400 block mb-1">Score diagnóstico</span>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className={`h-2 rounded-full ${
+                          selectedFlight.diagnosticScore >= 80 ? 'bg-emerald-500' :
+                          selectedFlight.diagnosticScore >= 60 ? 'bg-amber-500' :
+                          'bg-red-500'
+                        }`}
+                        style={{ width: `${selectedFlight.diagnosticScore}%` }}
+                      />
+                    </div>
+                    <span className="text-[10px] font-bold mt-1 block">{selectedFlight.diagnosticScore}%</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Pestaña 3: Repuestos */}
+              {modalTab === 'repuestos' && selectedFlight.sparePartUsed && (
+                <div className="space-y-2 text-xs text-gray-700">
+                  <div className="p-2 bg-cyan-50 border-2 border-cyan-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-500 block mb-1">Repuesto utilizado</span>
+                    <p className="font-semibold text-cyan-950">{selectedFlight.sparePartUsed}</p>
+                  </div>
+                  <div className="p-2 bg-cyan-50 border-2 border-cyan-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-500 block mb-1">Costo estimado</span>
+                    <p className="font-bold text-cyan-950">{selectedFlight.partCost}</p>
+                  </div>
+                  <div className="p-2 bg-cyan-50 border-2 border-cyan-200 rounded-[4px]">
+                    <span className="text-[9px] text-gray-500 block mb-1">Orden de trabajo</span>
+                    <p className="font-mono font-bold text-cyan-950">{selectedFlight.workOrder}</p>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Modal Footer */}
-            <div className="p-4 bg-gray-50 border-t border-gray-200 flex flex-col gap-2 shrink-0">
+            {/* Footer del Modal */}
+            <div className="flex flex-col gap-2 p-3 pt-2 border-t border-gray-100 shrink-0">
               <button
                 onClick={() => setSelectedFlight(null)}
-                className="w-full px-3.5 py-2.5 bg-[#0E5E6F] text-white font-semibold text-xs rounded-[4px] hover:bg-[#0A4754] transition cursor-pointer"
+                className="w-full py-2 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
               >
                 Cerrar bitácora
-              </button>
-
-              <button
-                onClick={() => { }}
-                className="w-full flex items-center justify-center gap-1 text-[11px] font-bold text-[#0E5E6F] py-1 cursor-pointer"
-              >
-                <Download size={13} />
-                <span>Descargar historial de taller</span>
               </button>
             </div>
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
     LayoutDashboard,
     DollarSign,
@@ -9,7 +9,11 @@ import {
     User,
     Menu,
     X,
-    LucideIcon
+    LucideIcon,
+    Bell,
+    CheckCircle2,
+    ShieldCheck,
+    CreditCard
 } from 'lucide-react';
 import adminPerfilImg from '../../../img/admin_perfil.png';
 
@@ -28,6 +32,94 @@ interface MenuItem {
 
 export const AdminLayout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [showNotifications, setShowNotifications] = useState<boolean>(false);
+    const [dragY, setDragY] = useState<number>(0);
+    const touchStartY = useRef<number>(0);
+    const isDraggingModal = useRef<boolean>(false);
+
+    // Paleta de colores Hexadecimales
+    const HEX_COLORS = {
+        brandGreen: "#0E5E6F",
+        emerald100: "#D1FAE5",
+        red: "#B8001F",
+        amber100: "#FEF3C7",
+        blue100: "#DBEAFE",
+        orange100: "#FFEDD5",
+        purple100: "#F3E8FF",
+    };
+
+    // Notificaciones
+    const [notificaciones, setNotificaciones] = useState([
+        {
+            id: 1,
+            tipo: "aprobacion",
+            titulo: "Nuevo registro de vuelo",
+            detalle: "Se ha completado la misión #FL-2026-089 en Parcela B - Catacamas.",
+            tiempo: "Hace 10 min",
+            colorBg: HEX_COLORS.emerald100,
+            textColor: "#065F46",
+            icono: <CheckCircle2 size={13} />,
+            unread: true,
+        },
+        {
+            id: 2,
+            tipo: "suscripcion",
+            titulo: "Suscripción actualizada",
+            detalle: "El cliente Carlos Sosa ha actualizado su plan a VIP Corporativo.",
+            tiempo: "Hace 2 horas",
+            colorBg: HEX_COLORS.blue100,
+            textColor: "#1E40AF",
+            icono: <CreditCard size={13} />,
+            unread: true,
+        },
+        {
+            id: 3,
+            tipo: "soporte",
+            titulo: "Ticket de soporte resuelto",
+            detalle: "Ticket #TK-302: 'Calibración de cámara NDVI' ha sido resuelto exitosamente.",
+            tiempo: "Hace 5 horas",
+            colorBg: HEX_COLORS.purple100,
+            textColor: "#6B21A8",
+            icono: <HelpCircle size={13} />,
+            unread: true,
+        },
+        {
+            id: 4,
+            tipo: "alerta",
+            titulo: "Mantenimiento programado",
+            detalle: "Mantenimiento del sistema programado para el 01 de agosto a las 02:00 AM.",
+            tiempo: "Ayer, 03:20 PM",
+            colorBg: HEX_COLORS.amber100,
+            textColor: "#92400E",
+            icono: <ShieldCheck size={13} />,
+            unread: false,
+        },
+    ]);
+
+    // Manejadores para el gesto táctil de cierre rápido del modal
+    const handleTouchStartModal = (e: React.TouchEvent) => {
+        touchStartY.current = e.touches[0].clientY;
+        isDraggingModal.current = true;
+    };
+
+    const handleTouchMoveModal = (e: React.TouchEvent) => {
+        if (!isDraggingModal.current) return;
+        const currentY = e.touches[0].clientY;
+        const deltaY = currentY - touchStartY.current;
+        if (deltaY > 0) {
+            setDragY(deltaY);
+        }
+    };
+
+    const handleTouchEndModal = () => {
+        isDraggingModal.current = false;
+        if (dragY > 50) {
+            setShowNotifications(false);
+        }
+        setDragY(0);
+    };
+
+    const unreadCount = notificaciones.filter((n) => n.unread).length;
 
     // Menú completo del Sidebar Lateral
     const sidebarMenuItems: MenuItem[] = [
@@ -72,23 +164,127 @@ export const AdminLayout: React.FC<LayoutProps> = ({ children, currentView, onNa
                 {/* Centro: Nombre de la Empresa */}
                 <div className="text-center">
                     <h1 className="text-sm text-[#0E5E6F] font-black uppercase tracking-tight leading-none">
-                        BIODRON
+                        TECNODACTYLUS
                     </h1>
-                    <span className="text-[8px] text-slate-400 font-bold tracking-widest block mt-0.5">
+                    <span className="text-[10px] text-slate-400 font-bold tracking-widest block mt-0.5">
                         Panel Administrador
                     </span>
                 </div>
 
-                {/* Lado Derecho: Foto de Perfil */}
-                <div 
-                    onClick={() => onNavigate('admin-profile')}
-                    className="w-8 h-8 rounded-[4px] overflow-hidden border border-slate-300 shrink-0 bg-slate-200 cursor-pointer active:scale-95 transition-transform"
-                >
-                    <img
-                        src={adminPerfilImg}
-                        alt="Foto Perfil"
-                        className="w-full h-full object-cover"
-                    />
+                {/* Lado Derecho: Botón de Notificaciones + Foto de Perfil */}
+                <div className="flex items-center gap-2">
+                    {/* BOTÓN DE NOTIFICACIONES */}
+                    <div className="relative">
+                        <button
+                            type="button"
+                            onClick={() => setShowNotifications(!showNotifications)}
+                            style={{ borderRadius: "4px" }}
+                            className="relative p-1.5 bg-white border border-gray-200 hover:border-gray-300 active:scale-95 transition-all shadow-md flex items-center justify-center cursor-pointer touch-manipulation"
+                        >
+                            <Bell size={18} className="text-gray-700" />
+                            {unreadCount > 0 && (
+                                <span
+                                    style={{ backgroundColor: HEX_COLORS.red, borderRadius: "4px" }}
+                                    className="absolute -top-1 -right-1 px-1.5 py-0.5 text-[9px] text-white font-black shadow-xs"
+                                >
+                                    {unreadCount}
+                                </span>
+                            )}
+                        </button>
+
+                        {/* POPUP MODAL QUE NACE DIRECTAMENTE DEL BOTÓN DE NOTIFICACIONES */}
+                        {showNotifications && (
+                            <>
+                                {/* BACKDROP TRANSPARENTE QUE CIERRA AL TOCAR AFUERA */}
+                                <div
+                                    className="fixed inset-0 z-40 bg-black/20"
+                                    onClick={() => setShowNotifications(false)}
+                                />
+
+                                {/* CARD COMPACTO: w-65 Y max-w-[calc(100vw-2rem)] EVITA SALIRSE POR LA IZQUIERDA */}
+                                <div
+                                    onTouchStart={handleTouchStartModal}
+                                    onTouchMove={handleTouchMoveModal}
+                                    onTouchEnd={handleTouchEndModal}
+                                    style={{
+                                        transform: `translateY(${dragY}px)`,
+                                        transition: isDraggingModal.current ? "none" : "transform 0.2s cubic-bezier(0,0,0.2,1)",
+                                    }}
+                                    className="absolute top-12 right-0 z-50 bg-white border-2 border-gray-300 rounded-[4px] w-66 max-w-[calc(100vw-2rem)] shadow-2xl flex flex-col text-left origin-top-right animate-in zoom-in-95 duration-150"
+                                >
+                                    {/* Píldora táctil indicadora */}
+                                    <div className="flex justify-center pt-2 pb-1 cursor-grab active:cursor-grabbing">
+                                        <div className="w-8 h-1 bg-gray-300 rounded-full" />
+                                    </div>
+
+                                    <div className="p-2.5 space-y-2">
+                                        {/* Encabezado */}
+                                        <div className="flex items-center justify-between pb-1.5 border-b-2 border-gray-100">
+                                            <div className="flex items-center gap-1.5">
+                                                <div className="p-1 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
+                                                    <Bell size={12} />
+                                                </div>
+                                                <h3 className="text-xs font-black text-gray-800 normal-case">
+                                                    Notificaciones
+                                                </h3>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowNotifications(false)}
+                                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer touch-manipulation"
+                                            >
+                                                <X size={13} />
+                                            </button>
+                                        </div>
+
+                                        {/* Lista de Notificaciones compacta sin barras de scroll */}
+                                        <div className="space-y-1.5 max-h-60 overflow-hidden">
+                                            {notificaciones.map((n) => (
+                                                <div
+                                                    key={n.id}
+                                                    className={`p-2 border rounded-[4px] text-xs transition-colors ${
+                                                        n.unread ? "bg-gray-50/90 border-gray-200" : "bg-white border-gray-100"
+                                                    }`}
+                                                >
+                                                    <div className="flex justify-between items-start gap-1 mb-1">
+                                                        <span
+                                                            style={{
+                                                                backgroundColor: n.colorBg,
+                                                                color: n.textColor,
+                                                            }}
+                                                            className="px-1.5 py-0.5 text-[8px] font-extrabold flex items-center gap-1 tracking-wider rounded-[4px] truncate"
+                                                        >
+                                                            {n.icono}
+                                                            <span className="truncate">{n.titulo}</span>
+                                                        </span>
+                                                        <span className="text-[8px] font-mono font-medium text-gray-400 shrink-0">
+                                                            {n.tiempo}
+                                                        </span>
+                                                    </div>
+                                                    <p className="text-gray-700 font-medium text-[10px] leading-snug">
+                                                        {n.detalle}
+                                                    </p>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Pie del modal */}
+                                        <div className="pt-1.5 border-t border-gray-100 text-center">
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setNotificaciones(notificaciones.map((n) => ({ ...n, unread: false })));
+                                                }}
+                                                className="w-full py-1 px-2 bg-white border border-gray-200 hover:border-gray-300 text-[#0E5E6F] font-bold rounded-[4px] text-[10px] transition-colors active:scale-95 shadow-xs cursor-pointer touch-manipulation"
+                                            >
+                                                Marcar todas como leídas
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </div>
             </header>
 
@@ -147,7 +343,7 @@ export const AdminLayout: React.FC<LayoutProps> = ({ children, currentView, onNa
                         {/* Pie del Sidebar */}
                         <div className="text-center pt-2 border-t border-slate-100">
                             <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
-                                BioDron System v1.0
+                                TECNODACTYLUS System v1.0
                             </span>
                         </div>
                     </aside>
