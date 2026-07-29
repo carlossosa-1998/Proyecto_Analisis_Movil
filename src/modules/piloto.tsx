@@ -170,6 +170,64 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
   const [statusFilter, setStatusFilter] = useState<string>("todos");
   const [hoveredBar, setHoveredBar] = useState<number | null>(null);
 
+  // Estados para simular el gesto táctil de deslizar (swipe down) en el modal
+  const [dragY, setDragY] = useState<number>(0);
+  const touchStartY = useRef<number>(0);
+  const isDraggingModal = useRef<boolean>(false);
+
+  // Refs y estados para el desplazamiento/arrastre con Mouse (Mouse Drag / Swipe)
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isMouseDown = useRef<boolean>(false);
+  const startX = useRef<number>(0);
+  const startY = useRef<number>(0);
+  const scrollLeft = useRef<number>(0);
+  const scrollTop = useRef<number>(0);
+
+  // Manejadores para scroll con mouse (drag tracking)
+  const handleMouseDown = (e: React.MouseEvent) => {
+    // Si se hace click en select, input u otros controles, no interferir con el drag
+    const target = e.target as HTMLElement;
+    if (["INPUT", "SELECT", "BUTTON", "OPTION", "A"].includes(target.tagName)) return;
+
+    isMouseDown.current = true;
+    if (containerRef.current) {
+      startX.current = e.pageX - containerRef.current.offsetLeft;
+      startY.current = e.pageY - containerRef.current.offsetTop;
+      scrollLeft.current = containerRef.current.scrollLeft;
+      scrollTop.current = containerRef.current.scrollTop;
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isMouseDown.current || !containerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - containerRef.current.offsetLeft;
+    const y = e.pageY - containerRef.current.offsetTop;
+    const walkX = x - startX.current;
+    const walkY = y - startY.current;
+    containerRef.current.scrollLeft = scrollLeft.current - walkX;
+    containerRef.current.scrollTop = scrollTop.current - walkY;
+  };
+
+  const handleMouseUpOrLeave = () => {
+    isMouseDown.current = false;
+  };
+
+  // Manejador para el desplazamiento por teclado (flechas direccionales)
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!containerRef.current) return;
+    const scrollAmount = 40;
+    if (e.key === "ArrowUp") {
+      containerRef.current.scrollTop -= scrollAmount;
+    } else if (e.key === "ArrowDown") {
+      containerRef.current.scrollTop += scrollAmount;
+    } else if (e.key === "ArrowLeft") {
+      containerRef.current.scrollLeft -= scrollAmount;
+    } else if (e.key === "ArrowRight") {
+      containerRef.current.scrollLeft += scrollAmount;
+    }
+  };
+
   // Paleta de colores Hexadecimales requerida
   const HEX_COLORS = {
     brandGreen: "#0E5E6F",
@@ -228,6 +286,29 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
       unread: false,
     },
   ]);
+
+  // Manejadores para el gesto táctil de cierre rápido del modal
+  const handleTouchStartModal = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+    isDraggingModal.current = true;
+  };
+
+  const handleTouchMoveModal = (e: React.TouchEvent) => {
+    if (!isDraggingModal.current) return;
+    const currentY = e.touches[0].clientY;
+    const deltaY = currentY - touchStartY.current;
+    if (deltaY > 0) {
+      setDragY(deltaY);
+    }
+  };
+
+  const handleTouchEndModal = () => {
+    isDraggingModal.current = false;
+    if (dragY > 50) {
+      setShowNotifications(false);
+    }
+    setDragY(0);
+  };
 
   const handleNavigate = (view: string) => {
     if (typeof onNavigate === "function") {
@@ -777,152 +858,199 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
   const unreadCount = notificaciones.filter((n) => n.unread).length;
 
   return (
-    <div style={{ fontFamily: "'Roboto', sans-serif" }} className="p-4 max-w-full mx-auto bg-white antialiased text-gray-800">
+    <div
+      ref={containerRef}
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUpOrLeave}
+      onMouseLeave={handleMouseUpOrLeave}
+      style={{
+        fontFamily: "'Roboto', sans-serif",
+        WebkitOverflowScrolling: "touch",
+      }}
+      className="p-3 mx-auto bg-white antialiased text-gray-800 select-none max-w-md min-h-screen relative overflow-y-auto outline-none cursor-grab active:cursor-grabbing"
+    >
+      {/* ESTILOS CSS: OCULTAN BARRAS DE SCROLL MANTENIENDO EL SCROLL NATIVO TÁCTIL Y EL SCROLL POR MOUSE/TECLADO */}
+      <style>{`
+        * {
+          -ms-overflow-style: none !important;
+          scrollbar-width: none !important;
+          -webkit-tap-highlight-color: transparent;
+        }
+        *::-webkit-scrollbar {
+          display: none !important;
+          width: 0 !important;
+          height: 0 !important;
+        }
+      `}</style>
 
-      {/* BARRA SUPERIOR */}
-      <div className="flex flex-col gap-3 mb-4 pb-3 border-b-2 border-gray-100 select-none">
-        <div className="text-left space-y-0.5">
-          <h1 className="text-lg font-black text-gray-900 tracking-tight">
+      {/* BARRA SUPERIOR CON NOTIFICACIONES */}
+      <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-gray-100 relative">
+        <div className="text-left space-y-0.5 min-w-0">
+          <h1 className="text-base font-black text-gray-900 tracking-tight leading-snug">
             Panel de Control del Piloto
           </h1>
-          <p className="text-gray-500 text-[11px] font-medium tracking-wide">
+          <p className="text-gray-500 text-[10px] font-medium tracking-wide leading-snug">
             Centro de control de vuelo • Telemetría, hobby y operaciones comerciales
           </p>
+          <div className="pt-1">
+            <div
+              style={{
+                backgroundColor: HEX_COLORS.emerald100,
+                color: "#065F46",
+                borderRadius: "4px",
+              }}
+              className="px-2.5 py-0.5 border border-emerald-300 flex items-center gap-1.5 shadow-xs w-fit"
+            >
+              <span className="w-1.5 h-1.5 bg-[#065F46] rounded-full animate-pulse"></span>
+              <span className="text-[9px] font-bold tracking-wider">Piloto verificado</span>
+            </div>
+          </div>
         </div>
 
-        <div className="flex items-center justify-between gap-3 w-full">
-          {/* Badge Piloto Verificado */}
-          <div
-            style={{
-              backgroundColor: HEX_COLORS.emerald100,
-              color: "#065F46",
-              borderRadius: "4px",
-            }}
-            className="px-2.5 py-1 border border-emerald-300 flex items-center gap-1.5 shadow-xs"
+        {/* BOTÓN DE NOTIFICACIONES */}
+        <div className="relative shrink-0 mt-0.5">
+          <button
+            type="button"
+            onClick={() => setShowNotifications(!showNotifications)}
+            style={{ borderRadius: "4px" }}
+            className="relative p-2.5 bg-white border border-gray-200 hover:border-gray-300 active:scale-95 transition-all shadow-md flex items-center justify-center cursor-pointer touch-manipulation"
           >
-            <span className="w-1.5 h-1.5 bg-[#065F46] rounded-full animate-pulse"></span>
-            <span className="text-[10px] font-bold tracking-wider whitespace-nowrap">Piloto verificado</span>
-          </div>
+            <Bell size={18} className="text-gray-700" />
+            {unreadCount > 0 && (
+              <span
+                style={{ backgroundColor: HEX_COLORS.red, borderRadius: "4px" }}
+                className="absolute -top-1 -right-1 px-1.5 py-0.5 text-[9px] text-white font-black shadow-xs"
+              >
+                {unreadCount}
+              </span>
+            )}
+          </button>
 
-          {/* CAMPANA Y DROPDOWN DE NOTIFICACIONES */}
-          <div className="relative shrink-0">
-            <button
-              onClick={() => setShowNotifications(!showNotifications)}
-              style={{ borderRadius: "4px" }}
-              className="relative p-2 bg-white border-2 border-gray-200 hover:border-gray-300 transition-colors shadow-xs active:scale-95 flex items-center justify-center"
-            >
-              <Bell size={18} className="text-gray-600" />
-              {unreadCount > 0 && (
-                <span
-                  style={{
-                    backgroundColor: HEX_COLORS.red,
-                    borderRadius: "4px",
-                  }}
-                  className="absolute -top-1 -right-1 px-1 py-0.2 text-[9px] text-white font-black shadow-xs"
-                >
-                  {unreadCount}
-                </span>
-              )}
-            </button>
+          {/* POPUP MODAL QUE NACE DIRECTAMENTE DEL BOTÓN DE NOTIFICACIONES */}
+          {showNotifications && (
+            <>
+              {/* BACKDROP TRANSPARENTE QUE CIERRA AL TOCAR AFUERA */}
+              <div
+                className="fixed inset-0 z-40 bg-black/20"
+                onClick={() => setShowNotifications(false)}
+              />
 
-            {/* PANEL DE NOTIFICACIONES: bottom sheet en móvil */}
-            {showNotifications && (
-              <>
-                <div
-                  onClick={() => setShowNotifications(false)}
-                  className="fixed inset-0 bg-black/40 z-40"
-                />
-                <div
-                  style={{ borderRadius: "16px 16px 0 0" }}
-                  className="fixed left-0 right-0 bottom-0 z-50 bg-white border-t-2 border-gray-300 max-h-[75vh] p-4 text-left shadow-xl overflow-y-auto animate-in fade-in duration-150"
-                >
-                  <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto -mt-1 mb-2" />
+              {/* CARD COMPACTO */}
+              <div
+                onTouchStart={handleTouchStartModal}
+                onTouchMove={handleTouchMoveModal}
+                onTouchEnd={handleTouchEndModal}
+                style={{
+                  transform: `translateY(${dragY}px)`,
+                  transition: isDraggingModal.current ? "none" : "transform 0.2s cubic-bezier(0,0,0.2,1)",
+                }}
+                className="absolute top-12 right-0 z-50 bg-white border-2 border-gray-300 rounded-[4px] w-66 max-w-[calc(100vw-2rem)] shadow-2xl flex flex-col text-left origin-top-right animate-in zoom-in-95 duration-150"
+              >
+                {/* Píldora táctil indicadora */}
+                <div className="flex justify-center pt-2 pb-1 cursor-grab active:cursor-grabbing">
+                  <div className="w-8 h-1 bg-gray-300 rounded-full" />
+                </div>
 
-                  <div className="flex justify-between items-center pb-2.5 mb-2.5 border-b border-gray-100">
-                    <div className="flex items-center gap-2">
-                      <Bell size={15} className="text-gray-700" />
-                      <h3 className="text-xs font-black text-gray-900 tracking-wider">
-                        Centro de notificaciones
+                <div className="p-2.5 space-y-2">
+                  {/* Encabezado */}
+                  <div className="flex items-center justify-between pb-1.5 border-b-2 border-gray-100">
+                    <div className="flex items-center gap-1.5">
+                      <div className="p-1 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
+                        <Bell size={12} />
+                      </div>
+                      <h3 className="text-xs font-black text-gray-800 normal-case">
+                        Notificaciones
                       </h3>
                     </div>
                     <button
+                      type="button"
                       onClick={() => setShowNotifications(false)}
-                      className="text-gray-400 hover:text-gray-600 p-1"
+                      className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer touch-manipulation"
                     >
-                      <X size={14} />
+                      <X size={13} />
                     </button>
                   </div>
 
-                  <div className="space-y-2 pr-1">
+                  {/* Lista de Notificaciones compacta sin barras de scroll */}
+                  <div className="space-y-1.5 max-h-60 overflow-hidden">
                     {notificaciones.map((n) => (
                       <div
                         key={n.id}
-                        style={{ borderRadius: "4px" }}
-                        className={`p-2.5 border text-xs transition-colors ${
-                          n.unread ? "bg-gray-50 border-gray-200" : "bg-white border-gray-100"
+                        className={`p-2 border rounded-[4px] text-xs transition-colors ${
+                          n.unread ? "bg-gray-50/90 border-gray-200" : "bg-white border-gray-100"
                         }`}
                       >
-                        <div className="flex justify-between items-start gap-2 mb-1">
+                        <div className="flex justify-between items-start gap-1 mb-1">
                           <span
                             style={{
                               backgroundColor: n.colorBg,
                               color: n.textColor,
-                              borderRadius: "4px",
                             }}
-                            className="px-2 py-0.5 text-[9px] font-bold flex items-center gap-1"
+                            className="px-1.5 py-0.5 text-[8px] font-extrabold flex items-center gap-1 tracking-wider rounded-[4px] truncate"
                           >
                             {n.icono}
-                            {n.titulo}
+                            <span className="truncate">{n.titulo}</span>
                           </span>
-                          <span className="text-[9px] font-mono text-gray-400">{n.tiempo}</span>
+                          <span className="text-[8px] font-mono font-medium text-gray-400 shrink-0">
+                            {n.tiempo}
+                          </span>
                         </div>
-                        <p className="text-gray-700 font-medium text-[11px] leading-snug">
+                        <p className="text-gray-700 font-medium text-[10px] leading-snug">
                           {n.detalle}
                         </p>
                       </div>
                     ))}
                   </div>
 
-                  <div className="pt-2.5 mt-2.5 border-t border-gray-100 text-center pb-1">
+                  {/* Pie del modal */}
+                  <div className="pt-1.5 border-t border-gray-100 text-center">
                     <button
+                      type="button"
                       onClick={() => {
                         setNotificaciones(notificaciones.map((n) => ({ ...n, unread: false })));
                       }}
-                      className="text-[11px] font-bold text-[#0E5E6F] hover:underline"
+                      className="w-full py-1 px-2 bg-white border border-gray-200 hover:border-gray-300 text-[#0E5E6F] font-bold rounded-[4px] text-[10px] transition-colors active:scale-95 shadow-xs cursor-pointer touch-manipulation"
                     >
                       Marcar todas como leídas
                     </button>
                   </div>
                 </div>
-              </>
-            )}
-          </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
       {/* DIVISIÓN PRINCIPAL EN PESTAÑAS: USO PERSONAL VS SERVICIOS A TERCEROS */}
-      <div className="mb-4 bg-gray-100 p-1.5 rounded flex items-center gap-2 border border-gray-200">
+      <div className="mb-4 bg-gray-100 p-1 rounded flex items-center gap-1.5 border border-gray-200">
         <button
+          type="button"
           onClick={() => handleMainModeChange("personal")}
           style={{
             backgroundColor: mainMode === "personal" ? HEX_COLORS.brandGreen : "transparent",
             color: mainMode === "personal" ? "#FFFFFF" : "#4B5563",
+            borderRadius: "4px",
           }}
-          className="flex-1 py-2.5 px-2 rounded text-[11px] font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer min-w-0"
+          className="flex-1 py-2 px-2 text-[10px] font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer touch-manipulation min-w-0"
         >
-          <User size={15} className="shrink-0" />
+          <User size={13} className="shrink-0" />
           <span className="truncate">Uso personal</span>
         </button>
 
         <button
+          type="button"
           onClick={() => handleMainModeChange("trabajo")}
           style={{
             backgroundColor: mainMode === "trabajo" ? HEX_COLORS.brandGreen : "transparent",
             color: mainMode === "trabajo" ? "#FFFFFF" : "#4B5563",
+            borderRadius: "4px",
           }}
-          className="flex-1 py-2.5 px-2 rounded text-[11px] font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer min-w-0"
+          className="flex-1 py-2 px-2 text-[10px] font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer touch-manipulation min-w-0"
         >
-          <Briefcase size={15} className="shrink-0" />
+          <Briefcase size={13} className="shrink-0" />
           <span className="truncate">Terceros</span>
         </button>
       </div>
@@ -930,174 +1058,251 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
       {/* MÉTRICAS SUMMARY ADAPTADAS AL MODO SELECCIONADO */}
       {mainMode === "personal" ? (
         /* Métricas Uso Personal (Hobbies, FPV, Fotos, Hogar) */
-        <div className="grid grid-cols-2 gap-3 mb-4 text-left">
-          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
-            <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[10px] font-bold text-gray-500 tracking-wider">Horas de vuelo hobby</span>
-              <div style={{ backgroundColor: HEX_COLORS.emerald100, color: "#065F46", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
-                <Clock size={14} />
+        <div className="grid grid-cols-2 gap-2 mb-4 text-left">
+          <div
+            style={{ borderRadius: "4px" }}
+            className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
+          >
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-[9px] font-black text-gray-500 tracking-wider">
+                Horas Vuelo Hobby
+              </span>
+              <div
+                style={{
+                  backgroundColor: HEX_COLORS.emerald100,
+                  color: "#065F46",
+                  borderRadius: "4px",
+                }}
+                className="p-1 flex items-center justify-center"
+              >
+                <Clock size={13} />
               </div>
             </div>
-            <p className="text-lg font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">84.5 hrs</p>
-            <p className="text-[9px] text-gray-400 font-semibold truncate">Tiempo de vuelo acumulado</p>
+            <p className="text-lg font-black text-gray-900 mb-0.5">84.5 hrs</p>
+            <p className="text-[8px] text-gray-400 font-semibold leading-snug">Tiempo acumulado</p>
           </div>
 
-          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
-            <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[10px] font-bold text-gray-500 tracking-wider">Metraje y fotos HD</span>
-              <div style={{ backgroundColor: HEX_COLORS.blue100, color: "#1E40AF", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
-                <Camera size={14} />
+          <div
+            style={{ borderRadius: "4px" }}
+            className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
+          >
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-[9px] font-black text-gray-500 tracking-wider">
+                Metraje Y Fotos
+              </span>
+              <div
+                style={{
+                  backgroundColor: HEX_COLORS.blue100,
+                  color: "#1E40AF",
+                  borderRadius: "4px",
+                }}
+                className="p-1 flex items-center justify-center"
+              >
+                <Camera size={13} />
               </div>
             </div>
-            <p className="text-lg font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">1,240 items</p>
-            <p className="text-[9px] text-gray-400 font-semibold truncate">Capturas en la nube</p>
+            <p className="text-lg font-black text-gray-900 mb-0.5">1,240 items</p>
+            <p className="text-[8px] text-gray-400 font-semibold leading-snug">Capturas en la nube</p>
           </div>
 
-          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
-            <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[10px] font-bold text-gray-500 tracking-wider">Distancia explorada</span>
-              <div style={{ backgroundColor: HEX_COLORS.purple100, color: "#6B21A8", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
-                <Compass size={14} />
+          <div
+            style={{ borderRadius: "4px" }}
+            className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
+          >
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-[9px] font-black text-gray-500 tracking-wider">
+                Distancia Explorada
+              </span>
+              <div
+                style={{
+                  backgroundColor: HEX_COLORS.purple100,
+                  color: "#6B21A8",
+                  borderRadius: "4px",
+                }}
+                className="p-1 flex items-center justify-center"
+              >
+                <Compass size={13} />
               </div>
             </div>
-            <p className="text-lg font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">480 km</p>
-            <p className="text-[9px] text-gray-400 font-semibold truncate">Rutas de ocio</p>
+            <p className="text-lg font-black text-gray-900 mb-0.5">480 km</p>
+            <p className="text-[8px] text-gray-400 font-semibold leading-snug">Rutas de ocio</p>
           </div>
 
-          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
-            <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[10px] font-bold text-gray-500 tracking-wider">Drones en hangar</span>
-              <div style={{ backgroundColor: HEX_COLORS.amber100, color: "#92400E", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
-                <Radio size={14} />
+          <div
+            style={{ borderRadius: "4px" }}
+            className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
+          >
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-[9px] font-black text-gray-500 tracking-wider">
+                Drones En Hangar
+              </span>
+              <div
+                style={{
+                  backgroundColor: HEX_COLORS.amber100,
+                  color: "#92400E",
+                  borderRadius: "4px",
+                }}
+                className="p-1 flex items-center justify-center"
+              >
+                <Radio size={13} />
               </div>
             </div>
-            <p className="text-lg font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">4 unidades</p>
-            <p className="text-[9px] text-gray-400 font-semibold truncate">Mavic 3, FPV, Mini 4, Inspire</p>
+            <p className="text-lg font-black text-gray-900 mb-0.5">4 unidades</p>
+            <p className="text-[8px] text-gray-400 font-semibold leading-snug">Mavic 3, FPV, Mini, Inspire</p>
           </div>
         </div>
       ) : (
         /* Métricas Trabajo Comercial / Terceros */
-        <div className="grid grid-cols-2 gap-3 mb-4 text-left">
-          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
-            <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[10px] font-bold text-gray-500 tracking-wider truncate">Facturación mensual</span>
-              <div style={{ backgroundColor: HEX_COLORS.emerald100, color: "#065F46", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
-                <DollarSign size={14} />
+        <div className="grid grid-cols-2 gap-2 mb-4 text-left">
+          <div
+            style={{ borderRadius: "4px" }}
+            className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
+          >
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-[9px] font-black text-gray-500 tracking-wider">
+                Facturación Mensual
+              </span>
+              <div
+                style={{
+                  backgroundColor: HEX_COLORS.emerald100,
+                  color: "#065F46",
+                  borderRadius: "4px",
+                }}
+                className="p-1 flex items-center justify-center"
+              >
+                <DollarSign size={13} />
               </div>
             </div>
-            <p className="text-lg font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">L551,250</p>
-            <p className="text-[9px] text-gray-400 font-semibold truncate">Ingresos de este mes</p>
+            <p className="text-lg font-black text-gray-900 mb-0.5">L551,250</p>
+            <p className="text-[8px] text-gray-400 font-semibold leading-snug">Ingresos de este mes</p>
           </div>
 
-          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
-            <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[10px] font-bold text-gray-500 tracking-wider truncate">Contratos activos</span>
-              <div style={{ backgroundColor: HEX_COLORS.blue100, color: "#1E40AF", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
-                <FileText size={14} />
+          <div
+            style={{ borderRadius: "4px" }}
+            className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
+          >
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-[9px] font-black text-gray-500 tracking-wider">
+                Contratos Activos
+              </span>
+              <div
+                style={{
+                  backgroundColor: HEX_COLORS.blue100,
+                  color: "#1E40AF",
+                  borderRadius: "4px",
+                }}
+                className="p-1 flex items-center justify-center"
+              >
+                <FileText size={13} />
               </div>
             </div>
-            <p className="text-lg font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">14 clientes</p>
-            <p className="text-[9px] text-gray-400 font-semibold truncate">Empresas vigentes</p>
+            <p className="text-lg font-black text-gray-900 mb-0.5">14 clientes</p>
+            <p className="text-[8px] text-gray-400 font-semibold leading-snug">Empresas vigentes</p>
           </div>
 
-          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
-            <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[10px] font-bold text-gray-500 tracking-wider truncate">Horas comerciales</span>
-              <div style={{ backgroundColor: HEX_COLORS.purple100, color: "#6B21A8", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
-                <TrendingUp size={14} />
+          <div
+            style={{ borderRadius: "4px" }}
+            className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
+          >
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-[9px] font-black text-gray-500 tracking-wider">
+                Horas Comerciales
+              </span>
+              <div
+                style={{
+                  backgroundColor: HEX_COLORS.purple100,
+                  color: "#6B21A8",
+                  borderRadius: "4px",
+                }}
+                className="p-1 flex items-center justify-center"
+              >
+                <TrendingUp size={13} />
               </div>
             </div>
-            <p className="text-lg font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">195 hrs</p>
-            <p className="text-[9px] text-gray-400 font-semibold truncate">Vuelo facturado</p>
+            <p className="text-lg font-black text-gray-900 mb-0.5">195 hrs</p>
+            <p className="text-[8px] text-gray-400 font-semibold leading-snug">Vuelo facturado</p>
           </div>
 
-          <div style={{ borderRadius: "4px" }} className="bg-white border-2 border-gray-200 p-3 shadow-xs flex flex-col justify-between min-w-0">
-            <div className="flex justify-between items-center gap-1 mb-2">
-              <span className="text-[10px] font-bold text-gray-500 tracking-wider truncate">Reputación</span>
-              <div style={{ backgroundColor: HEX_COLORS.amber100, color: "#92400E", borderRadius: "4px" }} className="p-1.5 flex items-center justify-center shrink-0">
-                <Award size={14} />
+          <div
+            style={{ borderRadius: "4px" }}
+            className="bg-white border border-gray-200 p-2.5 shadow-xs flex flex-col justify-between"
+          >
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-[9px] font-black text-gray-500 tracking-wider">
+                Reputación
+              </span>
+              <div
+                style={{
+                  backgroundColor: HEX_COLORS.amber100,
+                  color: "#92400E",
+                  borderRadius: "4px",
+                }}
+                className="p-1 flex items-center justify-center"
+              >
+                <Award size={13} />
               </div>
             </div>
-            <p className="text-lg font-black text-gray-900 mb-0.5 truncate whitespace-nowrap">4.9 / 5.0</p>
-            <p className="text-[9px] text-gray-400 font-semibold truncate">Calificación de clientes</p>
+            <p className="text-lg font-black text-gray-900 mb-0.5">4.9 / 5.0</p>
+            <p className="text-[8px] text-gray-400 font-semibold leading-snug">Calificación general</p>
           </div>
         </div>
       )}
 
-      {/* PESTAÑAS SECUNDARIAS: carrusel horizontal táctil */}
-      <div className="mb-4 flex gap-2 overflow-x-auto pb-1 select-none custom-scrollbar">
-        {mainMode === "personal"
-          ? [
-              { id: "fotografia", label: "Fotografía", icon: <Camera size={13} /> },
-              { id: "inspeccion_hogar", label: "Inspección hogar", icon: <Home size={13} /> },
-              { id: "carreras_fpv", label: "Carreras FPV", icon: <Sliders size={13} /> },
-              { id: "videografia", label: "Videografía", icon: <Film size={13} /> },
-              { id: "exploracion", label: "Exploración", icon: <Compass size={13} /> },
-            ].map((tab) => {
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  style={{
-                    borderRadius: "4px",
-                    backgroundColor: isActive ? HEX_COLORS.brandGreen : "#FFFFFF",
-                    color: isActive ? "#FFFFFF" : "#4B5563",
-                    borderColor: isActive ? HEX_COLORS.brandGreen : "#E5E7EB",
-                  }}
-                  className="shrink-0 px-3 py-2 text-[11px] font-bold flex items-center justify-center gap-1.5 border-2 transition-all cursor-pointer whitespace-nowrap"
-                >
-                  <span className={isActive ? "text-white" : "text-gray-400"}>{tab.icon}</span>
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })
-          : [
-              { id: "comercial_agri", label: "Agronomía", icon: <Radio size={13} /> },
-              { id: "inspeccion_industrial", label: "Inspección industrial", icon: <ShieldCheck size={13} /> },
-              { id: "audiovisual_pro", label: "Audiovisual pro", icon: <Video size={13} /> },
-              { id: "topografia_3d", label: "Topografía 3D", icon: <Compass size={13} /> },
-              { id: "seguridad_vigilancia", label: "Vigilancia", icon: <Zap size={13} /> },
-            ].map((tab) => {
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  style={{
-                    borderRadius: "4px",
-                    backgroundColor: isActive ? HEX_COLORS.brandGreen : "#FFFFFF",
-                    color: isActive ? "#FFFFFF" : "#4B5563",
-                    borderColor: isActive ? HEX_COLORS.brandGreen : "#E5E7EB",
-                  }}
-                  className="shrink-0 px-3 py-2 text-[11px] font-bold flex items-center justify-center gap-1.5 border-2 transition-all cursor-pointer whitespace-nowrap"
-                >
-                  <span className={isActive ? "text-white" : "text-gray-400"}>{tab.icon}</span>
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
+      {/* SELECCIÓN DE CATEGORÍA DE SERVICIO */}
+      <div className="mb-4">
+        <label className="block text-[10px] font-bold text-gray-500 mb-1 text-left">
+          Seleccionar categoría de servicio
+        </label>
+        <div className="relative">
+          <select
+            value={activeTab}
+            onChange={(e) => setActiveTab(e.target.value)}
+            style={{ borderRadius: "4px" }}
+            className="w-full pl-3 pr-8 py-2.5 text-xs font-bold text-gray-800 bg-gray-50 border border-gray-300 appearance-none focus:outline-none focus:border-[#0E5E6F] touch-manipulation cursor-pointer"
+          >
+            {mainMode === "personal" ? (
+              <>
+                <option value="fotografia">Fotografía</option>
+                <option value="inspeccion_hogar">Inspección hogar</option>
+                <option value="carreras_fpv">Carreras FPV</option>
+                <option value="videografia">Videografía</option>
+                <option value="exploracion">Exploración</option>
+              </>
+            ) : (
+              <>
+                <option value="comercial_agri">Agronomía</option>
+                <option value="inspeccion_industrial">Inspección industrial</option>
+                <option value="audiovisual_pro">Audiovisual pro</option>
+                <option value="topografia_3d">Topografía 3D</option>
+                <option value="seguridad_vigilancia">Vigilancia</option>
+              </>
+            )}
+          </select>
+          <ChevronDown
+            size={16}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+          />
+        </div>
       </div>
 
-      {/* GRÁFICO MEJORADO DE RENDIMIENTO */}
+      {/* GRÁFICO SUPERIOR */}
       <div
         style={{ borderRadius: "4px" }}
-        className="bg-white border-2 border-gray-200 p-4 shadow-xs mb-6 text-left"
+        className="bg-white border border-gray-200 p-3 shadow-xs mb-5 text-left"
       >
-        <div className="flex flex-col gap-3 mb-4 pb-3 border-b border-gray-100">
+        <div className="flex flex-col gap-2.5 mb-3 pb-2 border-b border-gray-100">
           <div className="flex items-center gap-2">
-            <BarChart3 size={18} className="text-[#0E5E6F] shrink-0" />
+            <BarChart3 size={16} className="text-[#0E5E6F] shrink-0" />
             <div className="min-w-0">
-              <h3 className="text-xs font-black text-gray-900 tracking-wider capitalize truncate">
+              <h3 className="text-[11px] font-black text-gray-900 tracking-wider capitalize truncate">
                 {mainMode === "personal" ? "Actividad personal" : "Telemetría comercial"} — {activeTab.replace("_", " ")}
               </h3>
-              <p className="text-[11px] text-gray-500 font-medium">
-                Métrica eje Y: <strong className="text-gray-700">{chartUnit}</strong>
+              <p className="text-[9px] text-gray-500 font-medium">
+                Eje Y: <strong className="text-gray-700">{chartUnit}</strong>
               </p>
             </div>
           </div>
 
-          {/* Selector de escala temporal */}
           <div
             style={{ borderRadius: "4px" }}
             className="bg-gray-100 p-1 flex items-center gap-1 border border-gray-200 w-full"
@@ -1109,12 +1314,13 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             ].map((p) => (
               <button
                 key={p.id}
+                type="button"
                 onClick={() => setChartPeriod(p.id as any)}
                 style={{ borderRadius: "4px" }}
-                className={`flex-1 px-2.5 py-1.5 text-[11px] font-bold transition-all cursor-pointer ${
+                className={`flex-1 py-1 text-[10px] font-bold transition-all cursor-pointer touch-manipulation ${
                   chartPeriod === p.id
                     ? "bg-[#0E5E6F] text-white shadow-xs"
-                    : "text-gray-500 hover:text-gray-900"
+                    : "text-gray-500 active:text-gray-900"
                 }`}
               >
                 {p.label}
@@ -1123,24 +1329,21 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
           </div>
         </div>
 
-        {/* CONTENEDOR DEL GRÁFICO */}
-        <div className="relative pt-4 pb-2 pr-1">
-          <div className="flex h-44">
-            {/* EJE Y */}
-            <div className="w-9 flex flex-col justify-between items-end pr-2 border-r-2 border-gray-300 text-[9px] font-mono font-bold text-gray-400 py-1 select-none">
+        <div className="relative pt-2 pb-1">
+          <div className="flex h-36 w-full">
+            <div className="w-6 flex flex-col justify-between items-end pr-1 border-r border-gray-300 text-[8px] font-mono font-bold text-gray-400 py-1 select-none shrink-0">
               {yAxisTicks.map((tick, i) => (
                 <span key={i}>{tick}</span>
               ))}
             </div>
 
-            {/* BARRAS Y LÍNEAS DE FONDO */}
-            <div className="flex-1 relative flex items-end justify-between pl-2 pr-1 h-full">
-              <div className="absolute inset-x-0 top-0 bottom-0 flex flex-col justify-between pointer-events-none z-0 px-1">
+            <div className="flex-1 relative flex items-end justify-between pl-1 pr-1 h-full">
+              <div className="absolute inset-x-0 top-0 bottom-0 flex flex-col justify-between pointer-events-none z-0">
                 <div className="border-b border-gray-100 w-full h-0"></div>
                 <div className="border-b border-gray-100 w-full h-0"></div>
                 <div className="border-b border-gray-100 w-full h-0"></div>
                 <div className="border-b border-gray-100 w-full h-0"></div>
-                <div className="border-b-2 border-gray-300 w-full h-0"></div>
+                <div className="border-b border-gray-300 w-full h-0"></div>
               </div>
 
               {currentChartSet.length > 0 ? (
@@ -1160,16 +1363,14 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
                   return (
                     <div
                       key={idx}
-                      className="flex-1 flex flex-col items-center justify-end h-full relative group cursor-pointer z-10 px-0.5"
+                      className="flex-1 flex flex-col items-center justify-end h-full relative z-10 px-0.5 touch-manipulation cursor-pointer"
+                      onTouchStart={() => setHoveredBar(idx)}
                       onClick={() => setHoveredBar(hoveredBar === idx ? null : idx)}
-                      onMouseEnter={() => setHoveredBar(idx)}
-                      onMouseLeave={() => setHoveredBar(null)}
                     >
-                      {/* Tooltip Hover/Tap */}
                       {hoveredBar === idx && (
                         <div
                           style={{ borderRadius: "4px" }}
-                          className="absolute -top-11 z-30 bg-gray-900 text-white px-2 py-1 text-[9px] font-mono shadow-xl whitespace-nowrap text-center animate-in fade-in duration-100"
+                          className="absolute -top-10 z-30 bg-gray-900 text-white px-2 py-0.5 text-[9px] font-mono shadow-xl whitespace-nowrap text-center animate-in fade-in duration-100"
                         >
                           <p className="font-bold">
                             {item.valor} {chartUnit}
@@ -1178,7 +1379,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
                         </div>
                       )}
 
-                      <span className="text-[9px] font-black text-gray-700 mb-1 opacity-80 group-hover:opacity-100">
+                      <span className="text-[8px] font-black text-gray-700 mb-0.5">
                         {item.valor}
                       </span>
 
@@ -1188,7 +1389,7 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
                           backgroundColor: currentColor,
                           borderRadius: "4px 4px 0 0",
                         }}
-                        className="w-full transition-all duration-300 hover:brightness-90 border-t border-x border-black/10"
+                        className="w-full max-w-[12px] sm:max-w-[18px] transition-all duration-300 border-t border-x border-black/10"
                       ></div>
                     </div>
                   );
@@ -1201,13 +1402,12 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             </div>
           </div>
 
-          {/* EJE X */}
-          <div className="flex pl-9 pt-2 border-t-2 border-gray-300">
+          <div className="flex pl-6 pt-1 border-t border-gray-300">
             <div className="flex-1 flex justify-between px-1">
               {currentChartSet.map((item, idx) => (
                 <span
                   key={idx}
-                  className="flex-1 text-center text-[9px] font-bold text-gray-500 tracking-wider truncate px-0.5"
+                  className="flex-1 text-center text-[8px] font-bold text-gray-500 tracking-tight"
                 >
                   {item.label}
                 </span>
@@ -1217,81 +1417,79 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
         </div>
       </div>
 
-      {/* LISTADO DE REGISTROS DE VUELO (tarjetas en vez de tabla) */}
+      {/* TABLA / HISTORIAL DE MISIONES */}
       <div
         style={{ borderRadius: "4px" }}
-        className="bg-white border-2 border-gray-200 shadow-xs text-left overflow-hidden mb-6"
+        className="bg-white border border-gray-200 shadow-xs text-left overflow-hidden mb-5"
       >
-        <div className="p-3 border-b-2 border-gray-100 bg-gray-50/50 flex flex-col gap-3">
+        <div className="p-3 border-b border-gray-100 bg-gray-50/50 flex flex-col gap-2.5">
           <div>
-            <h3 className="text-xs font-black text-gray-900 tracking-wider capitalize">
+            <h3 className="text-[11px] font-black text-gray-900 tracking-wider capitalize">
               {mainMode === "personal" ? "Bitácora personal de vuelos" : "Registro de operaciones comerciales"} — {activeTab.replace("_", " ")}
             </h3>
-            <p className="text-[11px] text-gray-500 font-medium">
+            <p className="text-[9px] text-gray-500 font-medium">
               Telemetría y detalle de misiones ejecutadas
             </p>
           </div>
 
           <div className="flex flex-col gap-2 w-full">
-            {/* Buscador */}
             <div className="relative w-full">
               <SearchIcon
                 size={13}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
               />
               <input
                 type="text"
                 value={tableSearch}
                 onChange={(e) => setTableSearch(e.target.value)}
-                placeholder="Buscar por ID, lugar, dron..."
+                placeholder="Buscar ID, lugar, dron..."
                 style={{ borderRadius: "4px" }}
-                className="w-full pl-8 pr-3 py-2 text-xs bg-white border border-gray-300 focus:outline-none focus:border-[#0E5E6F] font-medium"
+                className="w-full pl-7 pr-7 py-2 text-xs bg-white border border-gray-300 focus:outline-none focus:border-[#0E5E6F] font-medium touch-manipulation"
               />
               {tableSearch && (
                 <button
+                  type="button"
                   onClick={() => setTableSearch("")}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  style={{ borderRadius: "4px" }}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 p-0.5 cursor-pointer touch-manipulation"
                 >
                   <X size={12} />
                 </button>
               )}
             </div>
 
-            {/* Chips Filtros: scroll horizontal táctil */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 custom-scrollbar">
-              {[
-                { id: "todos", label: "Todos" },
-                { id: "completado", label: "Completados" },
-                { id: "proceso", label: "En proceso" },
-                { id: "alerta", label: "Alertas" },
-              ].map((f) => (
-                <button
-                  key={f.id}
-                  onClick={() => setStatusFilter(f.id)}
-                  style={{
-                    borderRadius: "4px",
-                    backgroundColor: statusFilter === f.id ? HEX_COLORS.brandGreen : "#FFFFFF",
-                    color: statusFilter === f.id ? "#FFFFFF" : "#0E5E6F",
-                    borderColor: HEX_COLORS.brandGreen,
-                  }}
-                  className="shrink-0 px-2.5 py-1.5 text-[11px] font-bold border transition-all hover:opacity-90 active:scale-95 whitespace-nowrap cursor-pointer"
-                >
-                  {f.label}
-                </button>
-              ))}
+            <div className="relative w-full">
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                style={{ borderRadius: "4px" }}
+                className="w-full pl-3 pr-8 py-2 text-xs font-bold text-gray-700 bg-white border border-gray-300 appearance-none focus:outline-none focus:border-[#0E5E6F] touch-manipulation cursor-pointer"
+              >
+                <option value="todos">Todos los estados</option>
+                <option value="completado">Completados</option>
+                <option value="proceso">En proceso</option>
+                <option value="alerta">Alertas</option>
+              </select>
+              <ChevronDown
+                size={14}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+              />
             </div>
           </div>
         </div>
 
-        {/* Tarjetas de registros (reemplaza la tabla en escritorio) */}
-        <div className="divide-y divide-gray-100">
+        {/* Lista adaptada sin barras de scroll */}
+        <div className="divide-y divide-gray-100 max-h-80 overflow-hidden">
           {registrosActuales.length > 0 ? (
             registrosActuales.map((row) => (
-              <div key={row.id} className="p-3 space-y-2 hover:bg-gray-50/80 transition-colors">
-                <div className="flex items-center justify-between gap-2">
-                  <div>
+              <div
+                key={row.id}
+                className="p-3 flex flex-col gap-1.5 active:bg-gray-100 transition-colors touch-manipulation"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
                     <p className="font-extrabold text-gray-900 text-xs">{row.id}</p>
-                    <p className="text-[10px] text-gray-400 font-mono">{row.fecha}</p>
+                    <p className="text-[9px] text-gray-400 font-mono">{row.fecha}</p>
                   </div>
                   <span
                     style={{
@@ -1299,25 +1497,25 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
                       color: row.tagTextColor,
                       borderRadius: "4px",
                     }}
-                    className="px-2 py-0.5 font-bold text-[10px] inline-block border border-black/5 shrink-0"
+                    className="px-2 py-0.5 font-bold text-[9px] inline-block border border-black/5 shrink-0"
                   >
                     {row.estado}
                   </span>
                 </div>
 
-                <span className="flex items-center gap-1 font-bold text-gray-700 text-xs">
-                  <MapPin size={12} className="text-gray-400 shrink-0" />
-                  {row.ubicacion}
-                </span>
-
-                <p className="font-medium text-gray-800 text-[11px] leading-snug">
+                <p className="text-[10px] font-medium text-gray-800 leading-snug">
                   {row.objetivo}
                 </p>
 
-                <div className="flex items-center justify-between pt-1 border-t border-gray-100">
-                  <p className="font-bold text-[#0E5E6F] text-xs">{row.dron}</p>
-                  <p className="text-[10px] text-gray-400 text-right">
-                    {row.duracion} • {row.cobertura}
+                <div className="flex items-center gap-1 text-[10px] font-bold text-gray-700">
+                  <MapPin size={11} className="text-gray-400 shrink-0" />
+                  <span className="truncate">{row.ubicacion}</span>
+                </div>
+
+                <div className="flex items-center justify-between pt-1 border-t border-gray-50">
+                  <p className="font-bold text-[#0E5E6F] text-[10px]">{row.dron}</p>
+                  <p className="text-[9px] text-gray-400">
+                    {row.duracion} · {row.cobertura}
                   </p>
                 </div>
               </div>
@@ -1330,15 +1528,16 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
         </div>
 
         <div className="p-3 border-t border-gray-100 bg-gray-50/40 flex flex-col gap-2">
-          <span className="text-[11px] font-bold text-gray-400">
+          <span className="text-[10px] font-bold text-gray-400 text-center">
             {registrosActuales.length} vuelos registrados
           </span>
           <button
+            type="button"
             style={{
               borderRadius: "4px",
               backgroundColor: HEX_COLORS.brandGreen,
             }}
-            className="px-3 py-2.5 text-white text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-[#094350] transition-colors shadow-xs cursor-pointer w-full"
+            className="w-full py-2.5 text-white text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-transform shadow-xs cursor-pointer touch-manipulation"
           >
             <Download size={13} />
             Exportar bitácora PDF
@@ -1346,25 +1545,25 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
         </div>
       </div>
 
-      {/* BANNER INFERIOR ACCIONABLE */}
+      {/* BANNER INFERIOR */}
       <div
         style={{ borderRadius: "4px" }}
-        className="border-2 border-gray-200 p-4 bg-gradient-to-r from-gray-50 via-white to-gray-50 flex flex-col justify-between items-start gap-3 text-left shadow-xs"
+        className="border border-gray-200 p-3.5 bg-gradient-to-r from-gray-50 via-white to-gray-50 flex flex-col items-stretch gap-3 text-left shadow-xs mb-4"
       >
-        <div className="flex items-start gap-3">
+        <div className="flex items-center gap-2.5">
           <div
             style={{ borderRadius: "4px", backgroundColor: HEX_COLORS.orange100 }}
-            className="p-2.5 text-orange-800 shrink-0 border border-orange-200"
+            className="p-2 text-orange-800 shrink-0 border border-orange-200"
           >
-            <Zap size={18} />
+            <Zap size={16} />
           </div>
           <div>
-            <h4 className="text-sm font-black text-gray-900">
+            <h4 className="text-[11px] font-black text-gray-900 leading-snug">
               {mainMode === "personal"
                 ? "¿Quieres registrar un nuevo dron personal o comprar insumos?"
                 : "¿Deseas registrar un nuevo servicio comercial en la plataforma BIODRON?"}
             </h4>
-            <p className="text-xs text-gray-500 font-medium">
+            <p className="text-[9px] text-gray-500 font-medium leading-snug">
               {mainMode === "personal"
                 ? "Explora el catálogo de accesorios, baterías y repuestos para tus equipos."
                 : "Publica tus tarifas y disponibilidad para recibir contrataciones de clientes."}
@@ -1379,9 +1578,9 @@ export const PilotoDashboardView: React.FC<PilotoDashboardProps> = ({ onNavigate
             borderRadius: "4px",
             backgroundColor: HEX_COLORS.brandGreen,
           }}
-          className="px-6 py-2.5 text-white text-xs font-bold tracking-wider hover:bg-[#094350] transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 cursor-pointer w-full"
+          className="w-full py-2.5 text-white text-xs font-bold tracking-wider active:scale-95 transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation"
         >
-          <span>{mainMode === "personal" ? "Explorar catálogo o tienda" : "Publicar oferta comercial"}</span>
+          <span>Ir al catálogo</span>
           <ChevronRight size={14} />
         </button>
       </div>
@@ -1660,7 +1859,7 @@ export const PilotoMisionesView = () => {
         prev.map((m) => m.id === currentActiveMission.id ? { ...m, status: "Completada" } : m)
       );
     }
-    addLog("🚨 PROTOCOLO RTH: El dron retorna a la base", "red");
+    addLog("PROTOCOLO RTH: El dron retorna a la base", "red");
   };
 
   // -------------------------------------------------------------
@@ -1715,7 +1914,7 @@ export const PilotoMisionesView = () => {
               mainSection === "en_curso" ? "bg-[#0E5E6F] text-white shadow-xs" : "text-gray-600 hover:text-gray-900"
             }`}
           >
-            Misión en curso
+            En curso
             {activeMissions.length > 0 && (
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             )}
@@ -1906,13 +2105,12 @@ export const PilotoMisionesView = () => {
                     <span className="text-gray-400 text-[9px] uppercase">Viento:</span>
                     <span className="font-bold text-yellow-400 text-[11px]">{telemetry.wind}km/h</span>
                   </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-[4px] shrink-0 aspect-square ${isRthActive ? "bg-red-500 animate-ping" : "bg-green-400 animate-pulse"}`}></span>
-                  <span className="text-green-400 text-[10px] font-bold uppercase tracking-wider font-mono">
-                    {isRthActive ? "RTH ACTIVO" : `${currentActiveMission?.droneAssigned || "Dron"} Conectado`}
-                  </span>
+                  <div className="flex items-center gap-1">
+                    <span className={`w-2 h-2 rounded-[4px] shrink-0 aspect-square ${isRthActive ? "bg-red-500 animate-ping" : "bg-green-400 animate-pulse"}`}></span>
+                    <span className="text-green-400 text-[10px] font-bold uppercase tracking-wider font-mono">
+                      {isRthActive ? "RTH ACTIVO" : `${currentActiveMission?.droneAssigned || "Dron"} Conectado`}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -2077,20 +2275,18 @@ export const PilotoMisionesView = () => {
       )}
 
       {/* =========================================================
-          BOTTOM SHEETS CON INFORMACIÓN DETALLADA DE LA MISIÓN
+          MODALES CENTRADOS CON DISEÑO DE 1.TXT
           ========================================================= */}
 
-      {/* BOTTOM SHEET DETALLES Y EDICIÓN DE ESTADO */}
+      {/* MODAL DETALLES Y EDICIÓN DE ESTADO */}
       {editingMission && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
-          <div className="bg-white border-t-2 border-gray-200 rounded-[16px_16px_0_0] shadow-2xl w-full max-h-[85vh] overflow-y-auto text-left animate-in fade-in duration-150">
-            <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto mt-2 mb-1" />
-
-            {/* Header del Sheet */}
-            <div className="flex justify-between items-center px-4 py-3 border-b-2 border-gray-100 bg-gray-50">
+        <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
+            {/* Header del Modal */}
+            <div className="flex justify-between items-center border-b border-gray-100 pb-2">
               <div className="flex items-center gap-2">
                 <Info size={16} className="text-[#0E5E6F]" />
-                <h3 className="text-xs font-black text-gray-900 tracking-wide uppercase">Detalles de la Misión</h3>
+                <h3 className="text-xs font-bold text-gray-900 tracking-wide">Detalles de la Misión</h3>
               </div>
               <button onClick={() => setEditingMission(null)} className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer">
                 <X size={16} />
@@ -2098,16 +2294,16 @@ export const PilotoMisionesView = () => {
             </div>
 
             {/* Cuerpo con Información Completa */}
-            <div className="p-4 space-y-3.5 text-xs">
+            <div className="space-y-3.5 text-xs">
 
               {/* Código y Categoría */}
               <div className="flex items-center justify-between bg-gray-50 p-2.5 border border-gray-200 rounded-[4px]">
                 <div>
-                  <span className="text-[9px] font-bold text-gray-400 block uppercase">Código</span>
+                  <span className="text-[9px] font-bold text-gray-400 block">Código</span>
                   <span className="font-mono font-bold text-gray-800 text-sm">{editingMission.id}</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[9px] font-bold text-gray-400 block uppercase">Categoría</span>
+                  <span className="text-[9px] font-bold text-gray-400 block">Categoría</span>
                   <span className="font-bold text-[#0E5E6F] text-xs uppercase tracking-wider">{editingMission.category}</span>
                 </div>
               </div>
@@ -2115,13 +2311,13 @@ export const PilotoMisionesView = () => {
               {/* Fila: Cliente y Cultivo */}
               <div className="grid grid-cols-2 gap-2">
                 <div className="p-2 border border-gray-100 rounded-[4px] bg-gray-50/50">
-                  <span className="text-[9px] font-bold text-gray-400 flex items-center gap-1 uppercase">
+                  <span className="text-[9px] font-bold text-gray-400 flex items-center gap-1">
                     <User size={10} /> Cliente
                   </span>
                   <p className="font-bold text-gray-900 mt-0.5">{editingMission.clientName}</p>
                 </div>
                 <div className="p-2 border border-gray-100 rounded-[4px] bg-gray-50/50">
-                  <span className="text-[9px] font-bold text-gray-400 flex items-center gap-1 uppercase">
+                  <span className="text-[9px] font-bold text-gray-400 flex items-center gap-1">
                     <Layers size={10} /> Cultivo
                   </span>
                   <p className="font-bold text-[#0E5E6F] mt-0.5">{editingMission.cropType}</p>
@@ -2131,13 +2327,13 @@ export const PilotoMisionesView = () => {
               {/* Fila: Dron y Ubicación */}
               <div className="grid grid-cols-2 gap-2">
                 <div className="p-2 border border-gray-100 rounded-[4px] bg-gray-50/50">
-                  <span className="text-[9px] font-bold text-gray-400 flex items-center gap-1 uppercase">
+                  <span className="text-[9px] font-bold text-gray-400 flex items-center gap-1">
                     <Cpu size={10} /> Dron
                   </span>
                   <p className="font-bold text-gray-800 mt-0.5">{editingMission.droneAssigned}</p>
                 </div>
                 <div className="p-2 border border-gray-100 rounded-[4px] bg-gray-50/50">
-                  <span className="text-[9px] font-bold text-gray-400 flex items-center gap-1 uppercase">
+                  <span className="text-[9px] font-bold text-gray-400 flex items-center gap-1">
                     <MapPin size={10} /> Ubicación
                   </span>
                   <p className="font-bold text-gray-800 mt-0.5 truncate">{editingMission.location}</p>
@@ -2147,11 +2343,11 @@ export const PilotoMisionesView = () => {
               {/* Fila: Área y Fecha */}
               <div className="grid grid-cols-2 gap-2">
                 <div className="p-2 border border-gray-100 rounded-[4px] bg-gray-50/50">
-                  <span className="text-[9px] font-bold text-gray-400 flex items-center gap-1 uppercase">Área Cobertura</span>
+                  <span className="text-[9px] font-bold text-gray-400 flex items-center gap-1">Área Cobertura</span>
                   <p className="font-bold text-gray-800 mt-0.5">{editingMission.areaSize}</p>
                 </div>
                 <div className="p-2 border border-gray-100 rounded-[4px] bg-gray-50/50">
-                  <span className="text-[9px] font-bold text-gray-400 flex items-center gap-1 uppercase">
+                  <span className="text-[9px] font-bold text-gray-400 flex items-center gap-1">
                     <Calendar size={10} /> Fecha Programada
                   </span>
                   <p className="font-bold text-gray-800 mt-0.5">{editingMission.date}</p>
@@ -2160,7 +2356,7 @@ export const PilotoMisionesView = () => {
 
               {/* Descripción */}
               <div className="p-2.5 border border-gray-100 rounded-[4px] bg-gray-50/50">
-                <span className="text-[9px] font-bold text-gray-400 block uppercase mb-1">Descripción / Instrucciones</span>
+                <span className="text-[9px] font-bold text-gray-400 block mb-1">Descripción / Instrucciones</span>
                 <p className="text-[11px] text-gray-600 leading-normal">{editingMission.description}</p>
               </div>
 
@@ -2181,11 +2377,11 @@ export const PilotoMisionesView = () => {
               </div>
 
               {/* Botones */}
-              <div className="flex gap-2 pt-3 border-t border-gray-100 pb-1">
-                <button onClick={() => setEditingMission(null)} className="flex-1 px-3 py-2.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer">
+              <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                <button onClick={() => setEditingMission(null)} className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer">
                   Cancelar
                 </button>
-                <button onClick={handleSaveEditedMission} className="flex-1 px-4 py-2.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs">
+                <button onClick={handleSaveEditedMission} className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs">
                   Guardar Cambios
                 </button>
               </div>
@@ -2194,13 +2390,11 @@ export const PilotoMisionesView = () => {
         </div>
       )}
 
-      {/* BOTTOM SHEET ELIMINAR CON INFORMACIÓN RESUMIDA DE LA MISIÓN */}
+      {/* MODAL ELIMINAR CON INFORMACIÓN RESUMIDA DE LA MISIÓN */}
       {deletingMission && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
-          <div className="bg-white border-t-2 border-gray-200 rounded-[16px_16px_0_0] shadow-2xl w-full overflow-hidden text-left p-4 space-y-3">
-            <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto -mt-1 mb-1" />
-
-            <div className="flex items-center gap-2 text-red-600 font-bold text-xs">
+        <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
+            <div className="flex items-center gap-2 border-b border-gray-100 pb-2 text-red-600 font-bold text-xs">
               <AlertTriangle size={16} /> <span>¿Confirmar eliminación?</span>
             </div>
 
@@ -2212,11 +2406,11 @@ export const PilotoMisionesView = () => {
 
             <p className="text-[11px] text-gray-600">Esta acción no se puede deshacer y borrará la misión del sistema.</p>
 
-            <div className="flex gap-2 pt-2 border-t border-gray-100 pb-1">
-              <button onClick={() => setDeletingMission(null)} className="flex-1 px-3 py-2.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer">
+            <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+              <button onClick={() => setDeletingMission(null)} className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer">
                 Cancelar
               </button>
-              <button onClick={() => handleDeleteMission(deletingMission.id)} className="flex-1 px-3 py-2.5 bg-red-600 text-white font-bold text-xs rounded-[4px] hover:bg-red-700 cursor-pointer shadow-xs">
+              <button onClick={() => handleDeleteMission(deletingMission.id)} className="px-4 py-1.5 bg-red-600 text-white font-bold text-xs rounded-[4px] hover:bg-red-700 cursor-pointer shadow-xs">
                 Eliminar Misión
               </button>
             </div>
@@ -2469,7 +2663,7 @@ export const PilotoDronView = () => {
     };
 
     return (
-        <div style={{ fontFamily: "'Roboto', sans-serif" }} className="p-3 max-w-md mx-auto flex flex-col gap-4 text-left min-h-screen">
+        <div style={{ fontFamily: "'Roboto', sans-serif" }} className="p-3 max-w-md mx-auto flex flex-col gap-4 text-left min-h-screen relative">
             {/* Estilos para ocultar barras de scroll */}
             <style>{`
                 .scrollbar-hidden {
@@ -2533,7 +2727,7 @@ export const PilotoDronView = () => {
                 )}
             </div>
 
-            {/* ZONA DE COMPRA: CHECKOUT (PASARELA CON DISEÑO DE 3.TXT) */}
+            {/* ZONA DE COMPRA: CHECKOUT */}
             {selectedDroneForCheckout ? (
                 <div className="flex flex-col gap-3 animate-in fade-in duration-200">
                     <button
@@ -2557,7 +2751,7 @@ export const PilotoDronView = () => {
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 gap-3 items-stretch">
-                            {/* FORMULARIO DE PAGO (SEGUNDO BLOQUE CON EL FORMATO Y MICROINTERACCIONES DE 3.TXT) */}
+                            {/* FORMULARIO DE PAGO */}
                             <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
                                 <div>
                                     {/* Selector de Método de Pago */}
@@ -2834,7 +3028,7 @@ export const PilotoDronView = () => {
                                     )}
                                 </button>
                             </div>
-                            {/* RESUMEN DEL DRON (PRIMER BLOQUE SEGÚN DISEÑO DE 3.TXT) */}
+                            {/* RESUMEN DEL DRON */}
                             <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
                                 <div>
                                     <Title
@@ -3208,45 +3402,42 @@ export const PilotoDronView = () => {
             {/* MODAL DE SOLICITUD DE AYUDA TÉCNICA */}
             {/* ============================================================ */}
             {supportDrone && (
-                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-end justify-center overscroll-none">
-                    <div 
-                        className="scrollbar-hidden bg-white w-full max-w-md mx-auto max-h-[90dvh] overflow-y-auto overflow-x-hidden rounded-t-2xl p-5 pb-6 space-y-4 animate-in fade-in slide-in-from-bottom duration-200"
-                    >
-                        <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto -mt-1 mb-1" />
-
-                        <div className="flex justify-between items-center border-b border-gray-100 pb-3">
-                            <div className="flex items-center gap-2">
-                                <Headphones className="text-[#0E5E6F]" size={20} />
-                                <h3 className="font-extrabold text-base text-gray-900">Solicitud de Ayuda Técnica</h3>
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 font-sans">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3">
+                        <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                            <div className="flex items-center gap-1.5">
+                                <Headphones className="text-[#0E5E6F]" size={16} />
+                                <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                                    Solicitud de Ayuda Técnica
+                                </h3>
                             </div>
                             <button 
                                 onClick={closeSupportModal} 
-                                style={{ borderRadius: "4px" }}
-                                className="text-gray-400 hover:text-gray-600 cursor-pointer p-1"
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
                             >
-                                <X size={18} />
+                                <X size={16} />
                             </button>
                         </div>
 
                         {!supportSubmitted ? (
-                            <form onSubmit={handleSendSupportRequest} className="space-y-4">
-                                <div className="bg-gray-50 p-3 rounded-[4px] border border-gray-200 flex items-center gap-3">
-                                    <div className="w-16 h-16 bg-gray-200 rounded shrink-0 border border-gray-300 overflow-hidden">
+                            <form onSubmit={handleSendSupportRequest} className="space-y-3">
+                                <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px] flex items-center gap-2.5">
+                                    <div className="w-12 h-12 bg-gray-200 rounded-[4px] shrink-0 border border-gray-300 overflow-hidden">
                                         <img src={supportDrone.imagen} alt={supportDrone.nombre} className="w-full h-full object-cover" />
                                     </div>
-                                    <div className="text-xs space-y-0.5">
-                                        <p className="font-extrabold text-gray-900">{supportDrone.nombre}</p>
-                                        <p className="text-gray-500">Modelo: <span className="font-medium text-gray-700">{supportDrone.modelo}</span></p>
-                                        <p className="text-gray-500 font-mono text-[11px]">N/S: {supportDrone.numeroSerie}</p>
+                                    <div className="text-[10px] space-y-0.5">
+                                        <p className="font-bold text-gray-800">{supportDrone.nombre}</p>
+                                        <p className="text-gray-500">Modelo: <span className="font-semibold text-gray-700">{supportDrone.modelo}</span></p>
+                                        <p className="text-gray-400 font-mono text-[9px]">N/S: {supportDrone.numeroSerie}</p>
                                         <p className="text-gray-500">
-                                            Estado: <span className="font-bold text-gray-700">{supportDrone.estado}</span> | Batería: <span className="font-bold text-gray-700">{supportDrone.bateria}%</span>
+                                            Estado: <span className="font-bold text-gray-700">{supportDrone.estado}</span> | Bat: <span className="font-bold text-gray-700">{supportDrone.bateria}%</span>
                                         </p>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-xs font-bold text-gray-700 mb-1">
-                                        Razón de la petición
+                                    <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                                        Razón de la Petición
                                     </label>
                                     <textarea
                                         required
@@ -3254,48 +3445,48 @@ export const PilotoDronView = () => {
                                         value={supportReason}
                                         onChange={(e) => setSupportReason(e.target.value)}
                                         placeholder="Describe brevemente el problema o requerimiento técnico..."
-                                        style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                        className="w-full border border-gray-300 p-2.5 text-xs outline-none focus:border-[#0E5E6F] focus:ring-1 focus:ring-[#0E5E6F]"
+                                        className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs text-gray-800 focus:border-[#0E5E6F] outline-none"
                                     />
                                 </div>
 
-                                <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">
-                                    <button
-                                        type="submit"
-                                        style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                        className="w-full px-4 py-2.5 bg-[#0E5E6F] hover:bg-[#0A4552] text-white font-bold text-xs shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
-                                    >
-                                        <Send size={14} /> Enviar Solicitud
-                                    </button>
+                                <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
                                     <button
                                         type="button"
                                         onClick={closeSupportModal}
-                                        style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                        className="w-full px-4 py-2.5 border border-gray-300 text-xs font-bold text-gray-600 hover:bg-gray-50 cursor-pointer"
+                                        className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
                                     >
                                         Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs flex items-center gap-1"
+                                    >
+                                        <Send size={12} />
+                                        <span>Enviar Solicitud</span>
                                     </button>
                                 </div>
                             </form>
                         ) : (
-                            <div className="py-4 text-center space-y-3 animate-in fade-in duration-200">
-                                <div 
-                                    style={{ borderRadius: "9999px" }}
-                                    className="w-12 h-12 bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto"
-                                >
-                                    <CheckCircle2 size={28} />
+                            <div className="space-y-3 py-1">
+                                <div className="p-2 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-2">
+                                    <div className="p-1 bg-emerald-100 text-emerald-700 rounded-[4px] shrink-0">
+                                        <CheckCircle2 size={16} />
+                                    </div>
+                                    <span className="text-[11px] font-bold text-emerald-800">
+                                        ¡Solicitud Enviada Exitosamente!
+                                    </span>
                                 </div>
-                                <h4 className="font-extrabold text-base text-gray-900">¡Solicitud Enviada Exitosamente!</h4>
-                                <p className="text-xs text-gray-600 leading-relaxed max-w-xs mx-auto">
-                                    Hemos recibido la solicitud para el equipo <strong>{supportDrone.nombre}</strong>. Pronto un técnico se pondrá en contacto contigo.
+                                <p className="text-xs text-gray-600 font-normal">
+                                    Hemos recibido la solicitud para el equipo <span className="font-bold text-gray-800">{supportDrone.nombre}</span>. Pronto un técnico se pondrá en contacto contigo.
                                 </p>
-                                <button
-                                    onClick={closeSupportModal}
-                                    style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                    className="mt-3 w-full px-5 py-2.5 bg-[#0E5E6F] text-white font-bold text-xs hover:bg-[#0A4552] transition cursor-pointer"
-                                >
-                                    Entendido
-                                </button>
+                                <div className="flex justify-end pt-2 border-t border-gray-100">
+                                    <button
+                                        onClick={closeSupportModal}
+                                        className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
+                                    >
+                                        Entendido
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -3303,77 +3494,65 @@ export const PilotoDronView = () => {
             )}
 
             {/* ============================================================ */}
-            {/* MODAL DE FICHA TÉCNICA */}
+            {/* MODAL DE FICHA TÉCNICA (DISEÑO APLICADO DESDE 2.TXT) */}
             {/* ============================================================ */}
             {selectedDrone && (
-                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-end justify-center overscroll-none">
-                    <div 
-                        className="scrollbar-hidden bg-white w-full max-w-md mx-auto max-h-[90dvh] overflow-y-auto overflow-x-hidden rounded-t-2xl p-5 space-y-4 animate-in fade-in slide-in-from-bottom duration-200"
-                    >
-                        {/* Cabecera */}
-                        <div className="flex justify-between items-center border-b border-gray-200 pb-3">
-                            <div className="flex items-center gap-2 min-w-0">
-                                <Title as="h2" className="text-base font-black text-gray-900 truncate">
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 font-sans">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3">
+                        <div className="flex justify-between items-center border-b border-gray-100 pb-2">
+                            <div className="flex items-center gap-1.5 min-w-0">
+                                <Title as="h2" className="text-xs font-bold text-gray-900 tracking-wide uppercase truncate">
                                     {selectedDrone.nombre}
                                 </Title>
-                                <span 
-                                    style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                    className="text-[10px] font-black tracking-wider bg-[#0E5E6F]/10 text-[#0E5E6F] px-2 py-0.5 border border-[#0E5E6F]/20 shrink-0"
-                                >
+                                <span className="text-[9px] font-bold text-[#0E5E6F] bg-[#0E5E6F]/10 px-1.5 py-0.2 rounded-[4px] border border-[#0E5E6F]/20 shrink-0">
                                     {selectedDrone.etiqueta}
                                 </span>
                             </div>
                             <button
                                 onClick={() => setSelectedDrone(null)}
-                                style={{ borderRadius: "4px" }}
-                                className="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-200 transition cursor-pointer shrink-0"
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
                             >
-                                <X size={18} />
+                                <X size={16} />
                             </button>
                         </div>
 
-                        {/* Contenido */}
-                        <div className="flex flex-col gap-4">
-                            <div 
-                                style={{ borderRadius: "4px" }}
-                                className="flex flex-col bg-gray-50 border border-gray-200 overflow-hidden"
-                            >
-                                <div className="relative w-full h-48 bg-gray-100">
+                        <div className="space-y-3">
+                            <div className="bg-gray-50 border border-gray-200 rounded-[4px] overflow-hidden">
+                                <div className="relative w-full h-32 bg-gray-100">
                                     <img
                                         src={selectedDrone.imagen}
                                         alt={selectedDrone.nombre}
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
-                                <div className="p-3.5 bg-white border-t border-gray-200">
-                                    <Text className="text-[10px] text-gray-400 font-extrabold block">
+                                <div className="p-2.5 bg-white border-t border-gray-200">
+                                    <Text className="text-[9px] text-gray-400 font-bold block">
                                         Precio Comercial
                                     </Text>
-                                    <Text className="text-xl font-black text-[#0E5E6F] block mb-1">
+                                    <Text className="text-base font-black text-[#0E5E6F] block mb-1">
                                         {selectedDrone.precio}
                                     </Text>
-                                    <Text className="text-xs text-gray-600 font-medium leading-relaxed block">
+                                    <Text className="text-[11px] text-gray-600 leading-tight block">
                                         {selectedDrone.descripcion}
                                     </Text>
                                 </div>
                             </div>
 
                             <div>
-                                <Text className="text-[11px] font-bold text-gray-400 tracking-wider mb-2 block">
+                                <Text className="text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-1.5 block">
                                     Especificaciones Técnicas
                                 </Text>
-                                <div className="grid grid-cols-2 gap-2">
+                                <div className="grid grid-cols-2 gap-1.5">
                                     {Object.entries(selectedDrone.especificaciones).map(
                                         ([clave, valor]: any) => (
                                             <div
                                                 key={clave}
-                                                style={{ borderRadius: "4px" }}
-                                                className="p-2.5 bg-gray-50 border border-gray-200 flex flex-col justify-center"
+                                                className="p-1.5 bg-gray-50 border border-gray-200 rounded-[4px] flex flex-col justify-center"
                                             >
-                                                <span className="text-[9px] text-gray-400 font-bold truncate">
+                                                <span className="text-[8px] text-gray-400 font-bold truncate">
                                                     {clave}
                                                 </span>
-                                                <span className="text-xs font-bold text-gray-800 truncate">
+                                                <span className="text-[10px] font-bold text-gray-800 truncate">
                                                     {valor}
                                                 </span>
                                             </div>
@@ -3383,22 +3562,19 @@ export const PilotoDronView = () => {
                             </div>
                         </div>
 
-                        {/* Botones */}
-                        <div className="pt-3 border-t border-gray-200 flex flex-col gap-2">
-                            <button
-                                onClick={() => iniciarCompra(selectedDrone)}
-                                style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                className="w-full px-4 py-2.5 bg-[#0E5E6F] hover:bg-[#0A4552] text-white text-xs font-bold transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
-                            >
-                                <ShoppingBag size={14} />
-                                Comprar
-                            </button>
+                        <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
                             <button
                                 onClick={() => setSelectedDrone(null)}
-                                style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                className="w-full px-4 py-2.5 border border-gray-300 text-xs font-bold text-gray-700 bg-white hover:bg-gray-100 cursor-pointer"
+                                className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
                             >
                                 Cerrar
+                            </button>
+                            <button
+                                onClick={() => iniciarCompra(selectedDrone)}
+                                className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs flex items-center gap-1"
+                            >
+                                <ShoppingBag size={12} />
+                                <span>Comprar</span>
                             </button>
                         </div>
                     </div>
@@ -3421,8 +3597,7 @@ export const PilotoMapsView = () => {
     const [showHeatmap, setShowHeatmap] = useState(false);
     const [showBoundaries, setShowBoundaries] = useState(true);
 
-    // Panel móvil activo: en vez de colapsar/expandir 2 columnas laterales,
-    // en móvil solo un panel se muestra a la vez como bottom sheet sobre el mapa
+    // Panel móvil activo
     const [activePanel, setActivePanel] = useState<"capas" | "dron" | null>(null);
 
     // Parámetros de la Misión
@@ -3698,7 +3873,7 @@ export const PilotoMapsView = () => {
                         </button>
                     </div>
 
-                    {/* FABs: abren los bottom sheets de Capas y Control de dron */}
+                    {/* FABs: abren las secciones flotantes de Capas y Control de dron */}
                     <div className="absolute bottom-3 right-3 flex flex-col gap-2 z-10">
                         <button
                             onClick={() => setActivePanel("capas")}
@@ -3734,16 +3909,12 @@ export const PilotoMapsView = () => {
                 </div>
             </main>
 
-            {/* ================= BOTTOM SHEET: CAPAS Y EDICIÓN ACTIVA ================= */}
+            {/* ================= PANEL FLOTANTE / PANEL DENTRO DE MODAL: CAPAS ================= */}
             {activePanel === "capas" && (
-                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
-                    <div className="bg-white w-full rounded-t-2xl shadow-2xl border-t-2 border-gray-200 flex flex-col max-h-[75%] font-sans">
-                        <div className="flex justify-center pt-2.5 pb-1 shrink-0">
-                            <span className="w-10 h-1.5 bg-gray-300 rounded-full" />
-                        </div>
-
-                        <div className="px-4 pb-2 flex items-center justify-between border-b border-gray-100 shrink-0">
-                            <h2 className="text-xs font-bold tracking-wider text-gray-800 uppercase">
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
+                        <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                            <h2 className="text-xs font-bold text-gray-900 tracking-wide uppercase">
                                 Capas Del Mapa
                             </h2>
                             <button
@@ -3756,7 +3927,7 @@ export const PilotoMapsView = () => {
                             </button>
                         </div>
 
-                        <div className="p-4 flex flex-col gap-3 overflow-y-auto no-scrollbar text-left">
+                        <div className="flex flex-col gap-3 text-left">
                             {/* SECCIÓN EDICIÓN ACTIVA */}
                             <div 
                                 onClick={handleOpenIdModal}
@@ -3849,16 +4020,12 @@ export const PilotoMapsView = () => {
                 </div>
             )}
 
-            {/* ================= BOTTOM SHEET: CONTROL DEL DRON ================= */}
+            {/* ================= PANEL FLOTANTE / PANEL DENTRO DE MODAL: CONTROL DEL DRON ================= */}
             {activePanel === "dron" && (
-                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
-                    <div className="bg-white w-full rounded-t-2xl shadow-2xl border-t-2 border-gray-200 flex flex-col max-h-[88%] font-sans">
-                        <div className="flex justify-center pt-2.5 pb-1 shrink-0">
-                            <span className="w-10 h-1.5 bg-gray-300 rounded-full" />
-                        </div>
-
-                        <div className="px-4 pb-2 flex items-center justify-between border-b-2 border-gray-100 shrink-0">
-                            <h2 className="text-[11px] font-bold tracking-wider text-gray-800">
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
+                        <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                            <h2 className="text-xs font-bold text-gray-900 tracking-wide uppercase">
                                 Control Del Dron
                             </h2>
                             <button
@@ -3871,7 +4038,7 @@ export const PilotoMapsView = () => {
                             </button>
                         </div>
 
-                        <div className="p-4 flex flex-col gap-2.5 overflow-y-auto no-scrollbar text-left">
+                        <div className="flex flex-col gap-2.5 text-left">
                             {/* CARD ESTADO DRON */}
                             <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px] space-y-1.5 shrink-0">
                                 <div className="flex justify-between items-center text-[11px]">
@@ -4008,7 +4175,7 @@ export const PilotoMapsView = () => {
                         </div>
 
                         {/* BOTONES INFERIORES */}
-                        <div className="p-3 space-y-1.5 border-t border-gray-100 shrink-0">
+                        <div className="pt-2 space-y-1.5 border-t border-gray-100 shrink-0">
                             <button 
                                 onClick={handleApproveMapping}
                                 className="w-full py-2 bg-[#0E5E6F] hover:bg-[#0a4754] border-2 border-[#0E5E6F] text-white font-bold text-[11px] rounded-[4px] flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer"
@@ -4031,106 +4198,94 @@ export const PilotoMapsView = () => {
                 </div>
             )}
 
-            {/* BOTTOM SHEET CAMBIO DE ID DE MAPEO */}
+            {/* MODAL CENTRADO: CAMBIO DE ID DE MAPEO */}
             {isIdModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
-                    <div className="bg-white border-t-2 border-gray-200 rounded-t-2xl shadow-2xl w-full overflow-hidden text-left animate-in fade-in duration-150 font-sans">
-                        <div className="flex justify-center pt-2.5 pb-1">
-                            <span className="w-10 h-1.5 bg-gray-300 rounded-full" />
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
+                        <div className="flex justify-between items-center border-b border-gray-100 pb-2">
+                            <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                                Cambiar ID de Misión para Mapeo
+                            </h3>
+                            <button
+                                onClick={() => setIsIdModalOpen(false)}
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
                         </div>
 
-                        <div className="px-4 pb-3 space-y-3">
-                            <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                                <h3 className="text-xs font-bold text-gray-900 tracking-wide">
-                                    Cambiar ID de misión para mapeo
-                                </h3>
-                                <button
-                                    onClick={() => setIsIdModalOpen(false)}
-                                    className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
+                        <form onSubmit={handleSaveId} className="space-y-3">
+                            <div>
+                                <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                                    Código / ID de la Misión
+                                </label>
+                                <input
+                                    type="text"
+                                    value={tempMappingId}
+                                    onChange={(e) => setTempMappingId(e.target.value)}
+                                    placeholder="Ej. MIS-FUM-001"
+                                    className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-mono font-bold text-gray-800 focus:border-[#0E5E6F] outline-none"
+                                    autoFocus
+                                />
+                                <p className="text-[10px] text-gray-400 mt-1">
+                                    Ingresa el código único de la misión para cargar y editar su mapa correspondiente.
+                                </p>
                             </div>
 
-                            <form onSubmit={handleSaveId} className="space-y-3">
-                                <div>
-                                    <label className="block text-[10px] font-bold text-gray-500 mb-1">
-                                        Código / ID de la Misión
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={tempMappingId}
-                                        onChange={(e) => setTempMappingId(e.target.value)}
-                                        placeholder="Ej. MIS-FUM-001"
-                                        className="w-full border-2 border-gray-200 rounded-[4px] p-2.5 text-xs font-mono font-bold text-gray-800 focus:border-[#0E5E6F] outline-none"
-                                        autoFocus
-                                    />
-                                    <p className="text-[10px] text-gray-400 mt-1">
-                                        Ingresa el código único de la misión para cargar y editar su mapa correspondiente.
-                                    </p>
-                                </div>
-
-                                <div className="flex gap-2 pt-2 border-t border-gray-100">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsIdModalOpen(false)}
-                                        className="flex-1 px-3 py-2 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
-                                    >
-                                        Cancelar
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="flex-1 px-4 py-2 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
-                                    >
-                                        Guardar ID
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                            <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsIdModalOpen(false)}
+                                    className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
+                                >
+                                    Guardar ID
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}
 
-            {/* BOTTOM SHEET CONFIRMACIÓN DE APROBACIÓN DE MAPEO */}
+            {/* MODAL CENTRADO: CONFIRMACIÓN DE APROBACIÓN DE MAPEO */}
             {isApprovalModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end justify-center">
-                    <div className="bg-white border-t-2 border-gray-200 rounded-t-2xl shadow-2xl w-full overflow-hidden text-left animate-in fade-in duration-150 font-sans">
-                        <div className="flex justify-center pt-2.5 pb-1">
-                            <span className="w-10 h-1.5 bg-gray-300 rounded-full" />
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
+                        <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
+                            <div className="p-1 bg-amber-100 text-amber-700 rounded-[4px]">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                                Mapeo Enviado a Revisión
+                            </h3>
                         </div>
 
-                        <div className="px-4 pb-4 space-y-3">
-                            <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
-                                <div className="p-1 bg-amber-100 text-amber-700 rounded-[4px]">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </div>
-                                <h3 className="text-xs font-bold text-gray-900 tracking-wide">
-                                    Mapeo enviado a revisión
-                                </h3>
+                        <div className="space-y-2 text-xs text-gray-600 font-normal">
+                            <p>
+                                La edición del mapa para la misión <span className="font-bold text-gray-800">#{mappingId}</span> ha sido enviada exitosamente a uno de los administradores.
+                            </p>
+                            <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] text-[11px] text-amber-800 font-medium">
+                                Estado: En espera de ser aprobada por el administrador.
                             </div>
+                        </div>
 
-                            <div className="space-y-2 text-xs text-gray-600 font-medium">
-                                <p>
-                                    La edición del mapa para la misión <span className="font-bold text-gray-800">#{mappingId}</span> ha sido enviada exitosamente a uno de los administradores.
-                                </p>
-                                <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] text-[11px] text-amber-800 font-semibold">
-                                    Estado: En espera de ser aprobada por el administrador.
-                                </div>
-                            </div>
-
-                            <div className="pt-2 border-t border-gray-100">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsApprovalModalOpen(false)}
-                                    className="w-full px-4 py-2.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
-                                >
-                                    Entendido
-                                </button>
-                            </div>
+                        <div className="flex justify-end pt-2 border-t border-gray-100">
+                            <button
+                                type="button"
+                                onClick={() => setIsApprovalModalOpen(false)}
+                                className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
+                            >
+                                Entendido
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -5777,7 +5932,7 @@ export const PilotoHelpView = () => {
     dron: 'Dron #2 - DJI Agras T40',
     categoria: 'Falla de Telemetría / GPS',
     prioridad: 'Alta (En Campo)',
-    descripcion: '',
+    descripcion: 'Hola, este es un mensaje para solicitar asistencia.',
   });
 
   const activeChat = chats.find((c) => c.id === activeChatId) || chats[0];
@@ -5835,7 +5990,7 @@ export const PilotoHelpView = () => {
       dron: 'Dron #2 - DJI Agras T40',
       categoria: 'Falla de Telemetría / GPS',
       prioridad: 'Alta (En Campo)',
-      descripcion: '',
+      descripcion: 'Descripción...',
     });
   };
 
@@ -6466,13 +6621,16 @@ export const PilotoHelpView = () => {
 
 // 8. Perfil de piloto
 export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
+    // Estado para las pestañas de métricas y credenciales
+    const [activeProfileTab, setActiveProfileTab] = useState<"metricas" | "credenciales">("metricas");
+
     // Configuración exclusiva para el Piloto
     const initialProfile = {
         initials: "CP",
         name: "Carlos Sosa",
         email: "carlos_sosa@agroaguante.hn",
         phone: "+504 9544-1234",
-        password: "••••••••••••",
+        password: "password123",
         avatar: "src/img/piloto_perfil.png",
         avatarBg: "bg-[#0E5E6F] text-white",
         roleLabel: "Piloto · Operador de Drones",
@@ -6588,116 +6746,137 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                     </div>
                 </div>
 
-                {/* MÉTRICAS PRINCIPALES — grid 2x2 táctil */}
-                <div className="grid grid-cols-2 divide-x-2 divide-y-2 divide-gray-100 bg-white border-b-2 border-gray-200 text-left">
-                    {/* Base Regional */}
-                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
-                        <div className="flex items-center gap-1.5">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
-                                <MapPin size={14} />
-                            </div>
-                            <span className="text-[9px] font-black text-gray-400 tracking-widest block">
-                                Base Regional
-                            </span>
-                        </div>
-                        <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
-                            {profileData.location}
-                        </span>
-                    </div>
-
-                    {/* Cobertura */}
-                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
-                        <div className="flex items-center gap-1.5">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
-                                <Layers size={14} />
-                            </div>
-                            <span className="text-[9px] font-black text-gray-400 tracking-widest block">
-                                Cobertura Total
-                            </span>
-                        </div>
-                        <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
-                            {profileData.area}
-                        </span>
-                    </div>
-
-                    {/* Historial */}
-                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
-                        <div className="flex items-center gap-1.5">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
-                                <BarChart2 size={14} />
-                            </div>
-                            <span className="text-[9px] font-black text-gray-400 tracking-widest block">
-                                Historial
-                            </span>
-                        </div>
-                        <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5 w-full">
-                            {profileData.services}
-                        </span>
-                    </div>
-
-                    {/* Estado */}
-                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
-                        <div className="flex items-center gap-1.5">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
-                                <CheckCircle size={14} />
-                            </div>
-                            <span className="text-[9px] font-black text-gray-400 tracking-widest block">
-                                Estado
-                            </span>
-                        </div>
-                        <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] inline-block mt-0.5">
-                            {profileData.standing}
-                        </span>
-                    </div>
+                {/* SELECTOR DE PESTAÑAS PARA MÉTRICAS Y CREDENCIALES */}
+                <div className="flex border-b-2 border-gray-200 bg-gray-100">
+                    <button
+                        type="button"
+                        onClick={() => setActiveProfileTab("metricas")}
+                        className={`flex-1 py-2 text-xs font-black transition-colors cursor-pointer ${
+                            activeProfileTab === "metricas"
+                                ? "bg-white text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
+                                : "text-gray-500 hover:text-gray-700"
+                        }`}
+                    >
+                        Métricas
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setActiveProfileTab("credenciales")}
+                        className={`flex-1 py-2 text-xs font-black transition-colors cursor-pointer ${
+                            activeProfileTab === "credenciales"
+                                ? "bg-white text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
+                                : "text-gray-500 hover:text-gray-700"
+                        }`}
+                    >
+                        Credenciales
+                    </button>
                 </div>
 
-                {/* DATOS DE CONTACTO Y CREDENCIALES */}
-                <div className="p-3.5 bg-white flex-1 flex flex-col justify-center">
-                    <div className="flex flex-col gap-2 mb-2.5 pb-2 border-b-2 border-gray-100">
-                        <div className="flex items-center gap-2">
-                            <Settings size={15} className="text-[#0E5E6F]" />
-                            <h3 className="text-xs font-black text-gray-800 normal-case">
-                                Credenciales y Datos de Contacto
-                            </h3>
+                {/* CONTENIDO DE PESTAÑA: MÉTRICAS */}
+                {activeProfileTab === "metricas" && (
+                    <div className="grid grid-cols-2 bg-white border-b-2 border-gray-200 text-left flex-1 content-center">
+                        {/* Base Regional */}
+                        <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+                            <div className="flex items-center gap-1.5">
+                                <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                                    <MapPin size={14} />
+                                </div>
+                                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                    Base Regional
+                                </span>
+                            </div>
+                            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
+                                {profileData.location}
+                            </span>
                         </div>
 
-                        <button
-                            onClick={handleOpenModal}
-                            className="w-full py-2 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] text-xs flex items-center justify-center gap-1.5 transition-colors active:scale-95 shadow-xs cursor-pointer"
-                        >
-                            <Edit2 size={13} className="text-[#0E5E6F]" /> Editar información
-                        </button>
+                        {/* Cobertura Total */}
+                        <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+                            <div className="flex items-center gap-1.5">
+                                <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                                    <Layers size={14} />
+                                </div>
+                                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                    Cobertura Total
+                                </span>
+                            </div>
+                            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
+                                {profileData.area}
+                            </span>
+                        </div>
+
+                        {/* Historial */}
+                        <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+                            <div className="flex items-center gap-1.5">
+                                <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                                    <BarChart2 size={14} />
+                                </div>
+                                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                    Historial
+                                </span>
+                            </div>
+                            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5 w-full">
+                                {profileData.services}
+                            </span>
+                        </div>
+
+                        {/* Estado */}
+                        <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+                            <div className="flex items-center gap-1.5">
+                                <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                                    <CheckCircle size={14} />
+                                </div>
+                                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                    Estado
+                                </span>
+                            </div>
+                            <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] inline-block mt-0.5">
+                                {profileData.standing}
+                            </span>
+                        </div>
                     </div>
+                )}
 
-                    <div className="grid grid-cols-1 gap-2.5 text-left">
-                        <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-                            <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
-                                <Phone size={12} className="text-[#0E5E6F]" /> Teléfono
-                            </span>
-                            <p className="font-bold text-xs text-gray-800 mt-0.5">
-                                {profileData.phone}
-                            </p>
+                {/* CONTENIDO DE PESTAÑA: CREDENCIALES */}
+                {activeProfileTab === "credenciales" && (
+                    <div className="p-2 bg-white flex-1 flex flex-col justify-center">
+                        <div className="flex flex-col gap-2 mb-2.5 pb-2 border-b-2 border-gray-100">
+                            <div className="flex items-center gap-2">
+                                <Settings size={15} className="text-[#0E5E6F]" />
+                                <h3 className="text-xs font-black text-gray-800 normal-case">
+                                    Credenciales y Datos de Contacto
+                                </h3>
+                            </div>
+
+                            <button
+                                onClick={handleOpenModal}
+                                className="w-full py-2 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] text-xs flex items-center justify-center gap-1.5 transition-colors active:scale-95 shadow-xs cursor-pointer"
+                            >
+                                <Edit2 size={13} className="text-[#0E5E6F]" /> Editar información
+                            </button>
                         </div>
 
-                        <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-                            <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
-                                <Mail size={12} className="text-[#0E5E6F]" /> Correo
-                            </span>
-                            <p className="font-bold text-xs text-gray-800 mt-0.5 truncate">
-                                {profileData.email}
-                            </p>
-                        </div>
+                        <div className="grid grid-cols-1 gap-1 text-left">
+                            <div className="p-2 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
+                                <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
+                                    <Phone size={12} className="text-[#0E5E6F]" /> Teléfono
+                                </span>
+                                <p className="font-bold text-xs text-gray-800 mt-0.5">
+                                    {profileData.phone}
+                                </p>
+                            </div>
 
-                        <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-                            <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
-                                <Lock size={12} className="text-[#0E5E6F]" /> Contraseña
-                            </span>
-                            <p className="font-mono font-bold text-xs text-gray-800 mt-0.5">
-                                ••••••••••••
-                            </p>
+                            <div className="p-2 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
+                                <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
+                                    <Mail size={12} className="text-[#0E5E6F]" /> Correo
+                                </span>
+                                <p className="font-bold text-xs text-gray-800 mt-0.5 truncate">
+                                    {profileData.email}
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
 
                 {/* PIE DE PÁGINA */}
                 <div className="border-t-2 border-gray-200 px-4 py-2.5 bg-gray-50 flex flex-col items-stretch gap-2">
@@ -6795,23 +6974,6 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                                         />
                                     </div>
                                 </div>
-
-                                <div>
-                                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
-                                        Correo electrónico
-                                    </label>
-                                    <div className="relative">
-                                        <Mail size={13} className="absolute left-3 top-2.5 text-gray-400" />
-                                        <input
-                                            type="email"
-                                            value={editForm.email}
-                                            onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                                            className="w-full pl-8 pr-3 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
                                 <div>
                                     <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
                                         Nueva contraseña
@@ -6834,7 +6996,28 @@ export const PilotoProfileView = ({ onLogout }: PilotoProfileViewProps) => {
                                         </button>
                                     </div>
                                 </div>
-
+                                <div>
+                                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                                        Repetir contraseña
+                                    </label>
+                                    <div className="relative">
+                                        <Lock size={13} className="absolute left-3 top-2.5 text-gray-400" />
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            value={editForm.password}
+                                            onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
+                                            className="w-full pl-8 pr-8 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-2.5 top-2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                                        >
+                                            {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                                        </button>
+                                    </div>
+                                </div>
                                 <div className="flex gap-2 pt-1.5 border-t border-gray-100">
                                     <button
                                         type="button"

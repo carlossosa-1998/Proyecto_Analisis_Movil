@@ -750,7 +750,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
       <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-gray-100 relative">
         <div className="text-left space-y-0.5 min-w-0">
           <h1 className="text-base font-black text-gray-900 tracking-tight leading-snug">
-            Servicios Y Beneficios
+            Servicios y Beneficios
           </h1>
           <p className="text-gray-500 text-[10px] font-medium tracking-wide leading-snug truncate">
             Consola del cliente • Monitoreo operacional
@@ -765,7 +765,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
               className="px-2.5 py-0.5 border border-emerald-300 flex items-center gap-1.5 shadow-xs w-fit"
             >
               <span className="w-1.5 h-1.5 bg-[#065F46] rounded-full animate-pulse"></span>
-              <span className="text-[9px] font-bold tracking-wider uppercase">Suscripción VIP</span>
+              <span className="text-[9px] font-bold tracking-wider">Suscripción VIP</span>
             </div>
           </div>
         </div>
@@ -849,7 +849,7 @@ export const ClienteDashboardView: React.FC<ClienteDashboardProps> = ({ onNaviga
                               backgroundColor: n.colorBg,
                               color: n.textColor,
                             }}
-                            className="px-1.5 py-0.5 text-[8px] font-extrabold flex items-center gap-1 uppercase tracking-wider rounded-[4px] truncate"
+                            className="px-1.5 py-0.5 text-[8px] font-extrabold flex items-center gap-1 tracking-wider rounded-[4px] truncate"
                           >
                             {n.icono}
                             <span className="truncate">{n.titulo}</span>
@@ -1303,8 +1303,6 @@ export const ClienteServiciosView = () => {
 
     const serviciosScroll = useDragScroll();
     const formScroll = useDragScroll();
-    const leftSheetScroll = useDragScroll();
-    const rightSheetScroll = useDragScroll();
 
     const [step, setStep] = useState<number>(1);
     const [requestSuccess, setRequestSuccess] = useState<boolean>(false);
@@ -1383,17 +1381,24 @@ export const ClienteServiciosView = () => {
         setIsCopySuccessModalOpen(true);
     };
 
-    const [selectedTool, setSelectedTool] = useState<"polygon" | "octagon" | "delete" | "move" | "measure">("polygon");
+    // ESTADOS DEL EDITOR DE MAPAS
+    const [selectedTool, setSelectedTool] = useState<
+        "polygon" | "octagon" | "delete" | "move" | "measure"
+    >("polygon");
     const [mapLayer, setMapLayer] = useState<"satellite" | "hybrid" | "terrain">("satellite");
     const [showZones, setShowZones] = useState(true);
     const [showHeatmap, setShowHeatmap] = useState(false);
     const [showBoundaries, setShowBoundaries] = useState(true);
-    const [isLeftCollapsed, setIsLeftCollapsed] = useState(true);
-    const [isRightCollapsed, setIsRightCollapsed] = useState(true);
+
+    // Panel móvil activo
+    const [activePanel, setActivePanel] = useState<"capas" | "dron" | null>(null);
+
+    // Parámetros de la Misión
     const [altitude, setAltitude] = useState(45);
     const [speed, setSpeed] = useState(20);
     const [rate, setRate] = useState(2.5);
 
+    // Estado del ID de mapeo y modales
     const [mappingId, setMappingId] = useState("MIS-FUM-001");
     const [tempMappingId, setTempMappingId] = useState("MIS-FUM-001");
     const [isIdModalOpen, setIsIdModalOpen] = useState(false);
@@ -1413,9 +1418,8 @@ export const ClienteServiciosView = () => {
         setIsIdModalOpen(false);
     };
 
-    const handleCopyMapId = () => {
-        navigator.clipboard.writeText(mappingId);
-        setIsCopySuccessModalOpen(true);
+    const handleApproveMapping = () => {
+        setIsApprovalModalOpen(true);
     };
 
     const InputField = ({ label, type = "text", value, onChange, placeholder, required = false }: any) => (
@@ -1802,279 +1806,571 @@ export const ClienteServiciosView = () => {
 
                 {/* VISTA 2: EDITOR DE MAPAS */}
                 {activeTab === "mapas" && (
-                    <div className="w-full h-full min-h-0 bg-white antialiased select-none flex flex-col text-gray-800 overflow-hidden relative font-sans">
+                    <div 
+                        className="w-full h-full min-h-0 bg-white antialiased select-none flex flex-col text-gray-800 overflow-hidden relative font-sans"
+                        style={{ fontFamily: "'Roboto', sans-serif" }}
+                    >
+                        {/* Estilos para ocultar scrollbars */}
+                        <style>{`
+                            .no-scrollbar::-webkit-scrollbar { display: none; }
+                            .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+                        `}</style>
+
+                        {/* BARRA SUPERIOR DE COMANDO */}
                         <header className="bg-gray-50 border-b-2 border-gray-200 px-3 flex items-center justify-between shrink-0 h-12 z-30 w-full">
                             <div className="flex items-center gap-2 min-w-0">
                                 <div className="p-1 bg-[#0E5E6F] text-white rounded-[4px] shadow-xs shrink-0">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg
+                                        className="w-4 h-4"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
                                         <circle cx="12" cy="12" r="10" strokeWidth="2" />
-                                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" strokeWidth="2" />
+                                        <polygon
+                                            points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"
+                                            strokeWidth="2"
+                                        />
                                     </svg>
                                 </div>
                                 <div className="text-left min-w-0">
-                                    <div className="flex items-center gap-1">
+                                    <div className="flex items-center gap-1.5">
                                         <h1 className="text-xs font-bold text-gray-900 tracking-tight truncate">
                                             Editor de mapas
                                         </h1>
-
                                     </div>
+                                    <button
+                                        onClick={handleOpenIdModal}
+                                        className="text-[10px] text-gray-500 font-medium leading-none truncate hover:text-[#0E5E6F] transition-colors cursor-pointer text-left block"
+                                        title="Cambiar ID de misión"
+                                    >
+                                        ID: #{mappingId}
+                                    </button>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-1 shrink-0">
-                                <button className="p-2 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 rounded-[4px] transition-colors active:scale-95 shadow-xs cursor-pointer" title="Exportar">
-                                    <Download size={14} />
+                            <div className="flex items-center gap-1.5 shrink-0">
+                                <button 
+                                    className="p-1.5 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] flex items-center justify-center transition-colors active:scale-95 shadow-xs cursor-pointer"
+                                    title="Borrar selección"
+                                >
+                                    <svg
+                                        className="w-3.5 h-3.5 text-rose-600"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                        />
+                                    </svg>
                                 </button>
-                                <button className="p-2 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 rounded-[4px] transition-colors active:scale-95 shadow-xs cursor-pointer" title="Compartir">
-                                    <Share2 size={14} />
-                                </button>
-                                <button className="p-2 bg-white border-2 border-gray-200 hover:border-gray-300 text-rose-600 rounded-[4px] transition-colors active:scale-95 shadow-xs cursor-pointer" title="Borrar selección">
-                                    <Trash2 size={14} />
-                                </button>
-                                <button className="p-2 bg-[#0E5E6F] border-2 border-[#0E5E6F] hover:bg-[#0a4754] text-white rounded-[4px] transition-all active:scale-95 shadow-xs cursor-pointer" title="Guardar mapa">
-                                    <Save size={14} />
+                                <button className="py-1 px-2.5 bg-[#0E5E6F] border-2 border-[#0E5E6F] hover:bg-[#0a4754] text-white font-bold rounded-[4px] text-[11px] flex items-center gap-1 transition-all active:scale-95 shadow-xs cursor-pointer">
+                                    <svg
+                                        className="w-3.5 h-3.5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+                                        />
+                                    </svg>
+                                    <span>Guardar mapa</span>
                                 </button>
                             </div>
                         </header>
 
-                        <main className="flex-1 flex overflow-hidden relative min-h-0 w-full">
-                            <div className="flex-1 bg-slate-900 relative overflow-hidden h-full w-full">
+                        {/* ÁREA PRINCIPAL DEL EDITOR */}
+                        <main className="flex-1 relative overflow-hidden min-h-0 w-full">
+                            {/* MAPA INTERACTIVO (ÁREA CENTRAL, pantalla completa) */}
+                            <div className="absolute inset-0 bg-slate-900 overflow-hidden">
                                 <div
                                     className="absolute inset-0 bg-cover bg-center w-full h-full object-cover pointer-events-none rounded-[4px]"
-                                    style={{ backgroundImage: `url(src/img/editor_mapas.png)` }}
+                                    style={{
+                                        backgroundImage: `url(src/img/editor_mapas.png)`,
+                                    }}
                                 />
-                                <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1000 600" preserveAspectRatio="none">
-                                    <polygon points="350,150 480,150 540,280 480,420 350,420 290,280" fill="rgba(14, 94, 111, 0.45)" stroke="#0E5E6F" strokeWidth="3" strokeDasharray="6 3" className="pointer-events-auto cursor-pointer" />
-                                    {[[350, 150], [480, 150], [540, 280], [480, 420], [350, 420], [290, 280]].map(([x, y], i) => (
-                                        <circle key={i} cx={x} cy={y} r="4" fill="#ffffff" stroke="#0E5E6F" strokeWidth="2" />
-                                    ))}
-                                    <text x="415" y="280" fill="#ffffff" fontSize="12" fontWeight="bold" textAnchor="middle" fontFamily="Roboto, sans-serif">Zona A: Fertilizante</text>
 
-                                    <polygon points="620,230 710,280 680,410 570,410 550,290" fill="rgba(217, 119, 6, 0.45)" stroke="#d97706" strokeWidth="3" className="pointer-events-auto cursor-pointer" />
-                                    {[[620, 230], [710, 280], [680, 410], [570, 410], [550, 290]].map(([x, y], i) => (
-                                        <circle key={i} cx={x} cy={y} r="4" fill="#ffffff" stroke="#d97706" strokeWidth="2" />
+                                <svg
+                                    className="absolute inset-0 w-full h-full pointer-events-none"
+                                    viewBox="0 0 1000 600"
+                                    preserveAspectRatio="none"
+                                >
+                                    <polygon
+                                        points="350,150 480,150 540,280 480,420 350,420 290,280"
+                                        fill="rgba(14, 94, 111, 0.45)"
+                                        stroke="#0E5E6F"
+                                        strokeWidth="3"
+                                        strokeDasharray="6 3"
+                                        className="pointer-events-auto cursor-pointer"
+                                    />
+                                    {[
+                                        [350, 150],
+                                        [480, 150],
+                                        [540, 280],
+                                        [480, 420],
+                                        [350, 420],
+                                        [290, 280],
+                                    ].map(([x, y], i) => (
+                                        <circle
+                                            key={i}
+                                            cx={x}
+                                            cy={y}
+                                            r="4"
+                                            fill="#ffffff"
+                                            stroke="#0E5E6F"
+                                            strokeWidth="2"
+                                        />
                                     ))}
-                                    <text x="625" y="320" fill="#ffffff" fontSize="11" fontWeight="bold" textAnchor="middle" fontFamily="Roboto, sans-serif">Zona B: Fumigación</text>
+                                    <text
+                                        x="415"
+                                        y="280"
+                                        fill="#ffffff"
+                                        fontSize="12"
+                                        fontWeight="bold"
+                                        textAnchor="middle"
+                                        fontFamily="sans-serif"
+                                    >
+                                        Zona A: Fertilizante
+                                    </text>
+
+                                    <polygon
+                                        points="620,230 710,280 680,410 570,410 550,290"
+                                        fill="rgba(217, 119, 6, 0.45)"
+                                        stroke="#d97706"
+                                        strokeWidth="3"
+                                        className="pointer-events-auto cursor-pointer"
+                                    />
+                                    {[
+                                        [620, 230],
+                                        [710, 280],
+                                        [680, 410],
+                                        [570, 410],
+                                        [550, 290],
+                                    ].map(([x, y], i) => (
+                                        <circle
+                                            key={i}
+                                            cx={x}
+                                            cy={y}
+                                            r="4"
+                                            fill="#ffffff"
+                                            stroke="#d97706"
+                                            strokeWidth="2"
+                                        />
+                                    ))}
+                                    <text
+                                        x="625"
+                                        y="320"
+                                        fill="#ffffff"
+                                        fontSize="11"
+                                        fontWeight="bold"
+                                        textAnchor="middle"
+                                        fontFamily="sans-serif"
+                                    >
+                                        Zona B: Fumigación
+                                    </text>
                                 </svg>
 
-                                <div className="absolute top-3 right-3 flex flex-col gap-1 z-10">
-                                    <button className="w-8 h-8 bg-white border-2 border-gray-200 rounded-[4px] shadow-md hover:bg-gray-50 text-gray-700 font-bold flex items-center justify-center text-sm cursor-pointer">+</button>
-                                    <button className="w-8 h-8 bg-white border-2 border-gray-200 rounded-[4px] shadow-md hover:bg-gray-50 text-gray-700 font-bold flex items-center justify-center text-sm cursor-pointer">-</button>
-                                </div>
-
-                                <div className="absolute top-3 left-3 z-10 bg-white/95 backdrop-blur-xs border-2 border-gray-200 rounded-[4px] px-2 py-1 shadow-md">
-                                    <p className="text-[7px] text-gray-400 font-bold uppercase tracking-wider leading-none">Misión activa</p>
-                                    <p className="text-[11px] font-bold text-gray-800 leading-tight">#{mappingId}</p>
-                                </div>
-
-                                {/* BOTONES FLOTANTES SOBRE EL MAPA */}
-                                <div className="absolute bottom-5 right-3 z-20 flex flex-col gap-2.5">
+                                {/* DOCK FLOTANTE: HERRAMIENTAS DE DIBUJO */}
+                                <div className="absolute top-3 left-3 flex flex-col gap-1 z-10 bg-white/95 backdrop-blur-xs p-1 rounded-[4px] border-2 border-gray-200 shadow-md">
                                     <button
-                                        onClick={() => setIsRightCollapsed(false)}
-                                        className="w-11 h-11 rounded-[4px] bg-[#0E5E6F] shadow-lg flex items-center justify-center text-white active:scale-95 transition-transform cursor-pointer border border-[#0E5E6F]"
+                                        onClick={() => setSelectedTool("polygon")}
+                                        className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${
+                                            selectedTool === "polygon"
+                                                ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
+                                                : "border-transparent text-gray-600 hover:bg-gray-50"
+                                        }`}
+                                        title="Pentágono"
+                                    >
+                                        <div className="w-3 h-3 border-2 border-current rounded-xs" />
+                                    </button>
+
+                                    <button
+                                        onClick={() => setSelectedTool("octagon")}
+                                        className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${
+                                            selectedTool === "octagon"
+                                                ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
+                                                : "border-transparent text-gray-600 hover:bg-gray-50"
+                                        }`}
+                                        title="Octágono"
+                                    >
+                                        <div className="w-3 h-3 border-2 border-current rounded-full" />
+                                    </button>
+
+                                    <button
+                                        onClick={() => setSelectedTool("delete")}
+                                        className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${
+                                            selectedTool === "delete"
+                                                ? "border-rose-500 bg-rose-50 text-rose-700"
+                                                : "border-transparent text-gray-600 hover:bg-gray-50"
+                                        }`}
+                                        title="Eliminar"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                            />
+                                        </svg>
+                                    </button>
+
+                                    <button
+                                        onClick={() => setSelectedTool("move")}
+                                        className={`w-8 h-8 flex items-center justify-center rounded-[4px] border-2 transition-all cursor-pointer ${
+                                            selectedTool === "move"
+                                                ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]"
+                                                : "border-transparent text-gray-600 hover:bg-gray-50"
+                                        }`}
+                                        title="Mover nodos"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h16M4 16h16" />
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                {/* ZOOM */}
+                                <div className="absolute top-3 right-3 flex flex-col gap-1 z-10">
+                                    <button className="w-7 h-7 bg-white border-2 border-gray-200 rounded-[4px] shadow-md hover:bg-gray-50 text-gray-700 font-bold flex items-center justify-center text-xs cursor-pointer">
+                                        +
+                                    </button>
+                                    <button className="w-7 h-7 bg-white border-2 border-gray-200 rounded-[4px] shadow-md hover:bg-gray-50 text-gray-700 font-bold flex items-center justify-center text-xs cursor-pointer">
+                                        -
+                                    </button>
+                                </div>
+
+                                {/* FABs: abren las secciones flotantes de Capas y Control de dron */}
+                                <div className="absolute bottom-3 right-3 flex flex-col gap-2 z-10">
+                                    <button
+                                        onClick={() => setActivePanel("capas")}
+                                        className="w-11 h-11 bg-white border-2 border-gray-200 rounded-full shadow-lg hover:border-[#0E5E6F] hover:text-[#0E5E6F] text-gray-700 flex items-center justify-center cursor-pointer active:scale-95 transition-all"
+                                        title="Capas del mapa"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
+                                                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+                                            />
+                                        </svg>
+                                    </button>
+
+                                    <button
+                                        onClick={() => setActivePanel("dron")}
+                                        className="w-11 h-11 bg-[#0E5E6F] border-2 border-[#0E5E6F] rounded-full shadow-lg text-white flex items-center justify-center cursor-pointer active:scale-95 transition-all relative"
                                         title="Control del dron"
                                     >
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
-                                    </button>
-                                    <button
-                                        onClick={() => setIsLeftCollapsed(false)}
-                                        className="w-11 h-11 rounded-[4px] bg-white border-2 border-gray-200 shadow-lg flex items-center justify-center text-gray-700 active:scale-95 transition-transform cursor-pointer"
-                                        title="Herramientas y capas"
-                                    >
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg>
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
+                                                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                                            />
+                                        </svg>
+                                        <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 border-2 border-white rounded-full" />
                                     </button>
                                 </div>
                             </div>
                         </main>
 
-                        {/* BOTTOM SHEET 1 */}
-                        {!isLeftCollapsed && (
-                            <>
-                                <div onClick={() => setIsLeftCollapsed(true)} className="absolute inset-0 z-40 bg-black/50 backdrop-blur-xs" />
-                                <div
-                                    ref={leftSheetScroll.ref}
-                                    {...leftSheetScroll.events}
-                                    className="absolute inset-x-0 bottom-0 z-50 bg-white rounded-t-[4px] border-t-2 border-gray-200 shadow-2xl max-h-[75vh] overflow-y-auto touch-drag"
-                                >
-                                    <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mt-2.5" />
-                                    <div className="flex items-center justify-between px-3.5 pt-2 pb-2 border-b border-gray-100 sticky top-0 bg-white">
-                                        <h2 className="text-xs font-bold text-gray-800">Herramientas y Capas</h2>
-                                        <button onClick={() => setIsLeftCollapsed(true)} className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"><X size={16} /></button>
+                        {/* ================= PANEL FLOTANTE / PANEL DENTRO DE MODAL: CAPAS ================= */}
+                        {activePanel === "capas" && (
+                            <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+                                <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
+                                    <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                                        <h2 className="text-xs font-bold text-gray-900 tracking-wide uppercase">
+                                            Capas Del Mapa
+                                        </h2>
+                                        <button
+                                            onClick={() => setActivePanel(null)}
+                                            className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
                                     </div>
 
-                                    <div className="p-3.5 flex flex-col gap-3">
-                                        <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px] flex items-center justify-between group">
-                                            <div
-                                                onClick={handleOpenIdModal}
-                                                className="cursor-pointer flex-1"
-                                                title="Hacer clic para cambiar ID de misión"
-                                            >
-                                                <h2 className="text-[9px] font-bold text-gray-400 block">
-                                                    Edición Activa
-                                                </h2>
+                                    <div className="flex flex-col gap-3 text-left">
+                                        {/* SECCIÓN EDICIÓN ACTIVA */}
+                                        <div 
+                                            onClick={handleOpenIdModal}
+                                            className="p-2 bg-gray-50 hover:bg-[#0E5E6F]/5 border-2 border-gray-200 hover:border-[#0E5E6F] rounded-[4px] shrink-0 cursor-pointer transition-all flex items-center justify-between group"
+                                            title="Hacer clic para cambiar ID de misión"
+                                        >
+                                            <div>
+                                                <span className="text-[9px] font-bold tracking-wider text-gray-400 block">
+                                                    Edición activa
+                                                </span>
                                                 <span className="text-[11px] font-bold text-gray-800 block mt-0.5 group-hover:text-[#0E5E6F]">
                                                     ID: #{mappingId}
                                                 </span>
                                             </div>
-                                            <button
-                                                onClick={handleCopyMapId}
-                                                className="p-1.5 bg-gray-200 hover:bg-[#0E5E6F] text-gray-600 hover:text-white rounded-[4px] transition-colors shadow-xs ml-2 cursor-pointer"
-                                                title="Copiar ID para usar en formularios"
+                                            <svg
+                                                className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#0E5E6F] transition-colors shrink-0"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
                                             >
-                                                <ClipboardCopy size={14} />
-                                            </button>
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                                                />
+                                            </svg>
                                         </div>
 
                                         <div>
-                                            <h2 className="text-[9px] font-bold text-gray-400 block mb-1">
-                                                Herramientas de Dibujo
-                                            </h2>
-                                            <div className="grid grid-cols-2 gap-1.5">
-                                                <button onClick={() => setSelectedTool("polygon")} className={`flex items-center justify-between p-2 rounded-[4px] border-2 text-[11px] font-bold transition-all cursor-pointer ${selectedTool === "polygon" ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]" : "border-gray-200 bg-white text-gray-700"}`}>
-                                                    <div className="flex items-center gap-1.5">
-                                                        <div className="w-3 h-3 border-2 border-current rounded-[2px]" />
-                                                        <span>Pentágono</span>
-                                                    </div>
-                                                </button>
-
-                                                <button onClick={() => setSelectedTool("octagon")} className={`flex items-center justify-between p-2 rounded-[4px] border-2 text-[11px] font-bold transition-all cursor-pointer ${selectedTool === "octagon" ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]" : "border-gray-200 bg-white text-gray-700"}`}>
-                                                    <div className="flex items-center gap-1.5">
-                                                        <div className="w-3 h-3 border-2 border-current rounded-[2px]" />
-                                                        <span>Octágono</span>
-                                                    </div>
-                                                </button>
-
-                                                <button onClick={() => setSelectedTool("delete")} className={`flex items-center gap-1.5 p-2 rounded-[4px] border-2 text-[11px] font-bold transition-all cursor-pointer ${selectedTool === "delete" ? "border-rose-500 bg-rose-50 text-rose-700" : "border-gray-200 bg-white text-gray-700"}`}>
-                                                    <Trash2 size={13} />
-                                                    <span>Eliminar</span>
-                                                </button>
-
-                                                <button onClick={() => setSelectedTool("move")} className={`flex items-center gap-1.5 p-2 rounded-[4px] border-2 text-[11px] font-bold transition-all cursor-pointer ${selectedTool === "move" ? "border-[#0E5E6F] bg-[#0E5E6F]/10 text-[#0E5E6F]" : "border-gray-200 bg-white text-gray-700"}`}>
-                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h16M4 16h16" /></svg>
-                                                    <span>Mover</span>
-                                                </button>
+                                            <h3 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1 uppercase">
+                                                Capas Del Mapa
+                                            </h3>
+                                            <div className="space-y-0.5 mb-1.5">
+                                                {[
+                                                    { id: "satellite", label: "Satélite" },
+                                                    { id: "hybrid", label: "Híbrido" },
+                                                    { id: "terrain", label: "Terreno" },
+                                                ].map((layer) => (
+                                                    <label
+                                                        key={layer.id}
+                                                        className="flex items-center gap-1.5 text-[11px] font-bold text-gray-700 cursor-pointer p-1 hover:bg-gray-50 rounded-[4px]"
+                                                    >
+                                                        <input
+                                                            type="radio"
+                                                            name="mapLayer"
+                                                            checked={mapLayer === layer.id}
+                                                            onChange={() => setMapLayer(layer.id as any)}
+                                                            className="accent-[#0E5E6F]"
+                                                        />
+                                                        <span>{layer.label}</span>
+                                                    </label>
+                                                ))}
                                             </div>
                                         </div>
 
                                         <hr className="border-gray-200" />
 
-                                        <div>
-                                            <h2 className="text-[9px] font-bold text-gray-400 block mb-1">Capas del Mapa</h2>
-                                            <div className="space-y-0.5 mb-1.5">
-                                                {[{ id: "satellite", label: "Satélite" }, { id: "hybrid", label: "Híbrido" }, { id: "terrain", label: "Terreno" }].map((layer) => (
-                                                    <label key={layer.id} className="flex items-center gap-1.5 text-[11px] font-bold text-gray-700 cursor-pointer p-1 hover:bg-gray-50 rounded-[4px]">
-                                                        <input type="radio" name="mapLayer" checked={mapLayer === layer.id} onChange={() => setMapLayer(layer.id as any)} className="accent-[#0E5E6F]" />
-                                                        <span>{layer.label}</span>
-                                                    </label>
-                                                ))}
+                                        <div className="space-y-1.5">
+                                            <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                                <span>Zonas</span>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={showZones}
+                                                    onChange={(e) => setShowZones(e.target.checked)}
+                                                    className="accent-[#0E5E6F] cursor-pointer"
+                                                />
                                             </div>
-
-                                            <div className="space-y-1 pt-1.5 border-t border-gray-100">
-                                                <div className="flex items-center justify-between text-[11px] font-bold text-gray-700 p-0.5">
-                                                    <span>Zonas</span>
-                                                    <input type="checkbox" checked={showZones} onChange={(e) => setShowZones(e.target.checked)} className="accent-[#0E5E6F] cursor-pointer" />
-                                                </div>
-                                                <div className="flex items-center justify-between text-[11px] font-bold text-gray-700 p-0.5">
-                                                    <span>Mapa NDVI</span>
-                                                    <input type="checkbox" checked={showHeatmap} onChange={(e) => setShowHeatmap(e.target.checked)} className="accent-[#0E5E6F] cursor-pointer" />
-                                                </div>
-                                                <div className="flex items-center justify-between text-[11px] font-bold text-gray-700 p-0.5">
-                                                    <span>Límites</span>
-                                                    <input type="checkbox" checked={showBoundaries} onChange={(e) => setShowBoundaries(e.target.checked)} className="accent-[#0E5E6F] cursor-pointer" />
-                                                </div>
+                                            <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                                <span>Mapa NDVI</span>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={showHeatmap}
+                                                    onChange={(e) => setShowHeatmap(e.target.checked)}
+                                                    className="accent-[#0E5E6F] cursor-pointer"
+                                                />
+                                            </div>
+                                            <div className="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                                <span>Límites</span>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={showBoundaries}
+                                                    onChange={(e) => setShowBoundaries(e.target.checked)}
+                                                    className="accent-[#0E5E6F] cursor-pointer"
+                                                />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </>
+                            </div>
                         )}
 
-                        {/* BOTTOM SHEET 2 */}
-                        {!isRightCollapsed && (
-                            <>
-                                <div onClick={() => setIsRightCollapsed(true)} className="absolute inset-0 z-40 bg-black/50 backdrop-blur-xs" />
-                                <div
-                                    ref={rightSheetScroll.ref}
-                                    {...rightSheetScroll.events}
-                                    className="absolute inset-x-0 bottom-0 z-50 bg-white rounded-t-[4px] border-t-2 border-gray-200 shadow-2xl max-h-[80vh] overflow-y-auto touch-drag flex flex-col"
-                                >
-                                    <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mt-2.5 shrink-0" />
-                                    <div className="flex items-center justify-between px-3.5 pt-0 pb-0 border-b border-gray-100 sticky top-0 bg-white shrink-0">
-                                        <h2 className="text-xs font-bold text-gray-800">Control del Dron</h2>
-                                        <button onClick={() => setIsRightCollapsed(true)} className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"><X size={16} /></button>
+                        {/* ================= PANEL FLOTANTE / PANEL DENTRO DE MODAL: CONTROL DEL DRON ================= */}
+                        {activePanel === "dron" && (
+                            <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center px-3">
+                                <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-1 font-sans">
+                                    <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                                        <h2 className="text-xs font-bold text-gray-900 tracking-wide">
+                                            Control del Dron
+                                        </h2>
+                                        <button
+                                            onClick={() => setActivePanel(null)}
+                                            className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
                                     </div>
 
-                                    <div className="p-3.5 flex flex-col gap-3">
-                                        <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px] space-y-1.5">
+                                    <div className="flex flex-col gap-2.5 text-left">
+                                        {/* CARD ESTADO DRON */}
+                                        <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px] space-y-1.5 shrink-0">
                                             <div className="flex justify-between items-center text-[11px]">
-                                                <span className="font-bold text-gray-700">Dron Agras T50</span>
-                                                <span className="text-[8px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-1 py-0.2 rounded-[4px]">En línea</span>
+                                                <span className="font-bold text-gray-700">
+                                                    Dron Agras T50
+                                                </span>
+                                                <span className="text-[8px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-1 py-0.2 rounded-[4px]">
+                                                    En línea
+                                                </span>
                                             </div>
+
                                             <div className="grid grid-cols-2 gap-1 text-[10px] font-semibold text-gray-600">
                                                 <div>Batería: 88%</div>
                                                 <div>GPS: 19 satélites</div>
                                                 <div>Velocidad: {speed} km/h</div>
                                                 <div>Altitud: {altitude} m</div>
                                             </div>
-                                            <div className="w-full bg-gray-200 h-1.5 rounded-[4px] overflow-hidden mt-1">
+
+                                            <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden mt-1">
                                                 <div className="bg-[#0E5E6F] h-full w-[88%] transition-all duration-300" />
                                             </div>
                                         </div>
 
-                                        <div>
-                                            <h2 className="text-[9px] font-bold text-gray-400 block mb-1.5">Parámetros de Vuelo</h2>
+                                        <div className="shrink-0">
+                                            <h3 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1.5 uppercase">
+                                                Parámetros De Vuelo
+                                            </h3>
+
                                             <div className="space-y-3">
+                                                {/* ALTITUD (#CA5116) */}
                                                 <div>
                                                     <div className="flex justify-between text-[11px] font-bold text-gray-700 mb-1">
                                                         <span>Altitud</span>
-                                                        <span className="font-bold" style={{ color: "#CA5116" }}>{altitude} m</span>
+                                                        <span className="font-bold" style={{ color: "#CA5116" }}>
+                                                            {altitude} m
+                                                        </span>
                                                     </div>
-                                                    <div className="relative w-full h-2 bg-gray-200 rounded-[4px] flex items-center">
-                                                        <div className="h-full rounded-[4px] transition-all" style={{ width: `${((altitude - 10) / 90) * 100}%`, backgroundColor: "#CA5116" }} />
-                                                        <div className="absolute w-3.5 h-3.5 rounded-[4px] shadow-md -translate-x-1/2 transition-all cursor-pointer" style={{ left: `${((altitude - 10) / 90) * 100}%`, backgroundColor: "#CA5116" }} />
-                                                        <input type="range" min="10" max="100" value={altitude} onChange={(e) => setAltitude(Number(e.target.value))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                                                    <div className="relative w-full h-2 bg-gray-200 rounded-full flex items-center">
+                                                        <div
+                                                            className="h-full rounded-full transition-all"
+                                                            style={{
+                                                                width: `${((altitude - 10) / 90) * 100}%`,
+                                                                backgroundColor: "#CA5116",
+                                                            }}
+                                                        />
+                                                        <div
+                                                            className="absolute w-3.5 h-3.5 rounded-full shadow-md -translate-x-1/2 transition-all cursor-pointer"
+                                                            style={{
+                                                                left: `${((altitude - 10) / 90) * 100}%`,
+                                                                backgroundColor: "#CA5116",
+                                                            }}
+                                                        />
+                                                        <input
+                                                            type="range"
+                                                            min="10"
+                                                            max="100"
+                                                            value={altitude}
+                                                            onChange={(e) => setAltitude(Number(e.target.value))}
+                                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                                        />
                                                     </div>
                                                 </div>
 
+                                                {/* VELOCIDAD (#2994B2) */}
                                                 <div>
                                                     <div className="flex justify-between text-[11px] font-bold text-gray-700 mb-1">
                                                         <span>Velocidad</span>
-                                                        <span className="font-bold" style={{ color: "#2994B2" }}>{speed} km/h</span>
+                                                        <span className="font-bold" style={{ color: "#2994B2" }}>
+                                                            {speed} km/h
+                                                        </span>
                                                     </div>
-                                                    <div className="relative w-full h-2 bg-gray-200 rounded-[4px] flex items-center">
-                                                        <div className="h-full rounded-[4px] transition-all" style={{ width: `${((speed - 5) / 35) * 100}%`, backgroundColor: "#2994B2" }} />
-                                                        <div className="absolute w-3.5 h-3.5 rounded-[4px] shadow-md -translate-x-1/2 transition-all cursor-pointer" style={{ left: `${((speed - 5) / 35) * 100}%`, backgroundColor: "#2994B2" }} />
-                                                        <input type="range" min="5" max="40" value={speed} onChange={(e) => setSpeed(Number(e.target.value))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                                                    <div className="relative w-full h-2 bg-gray-200 rounded-full flex items-center">
+                                                        <div
+                                                            className="h-full rounded-full transition-all"
+                                                            style={{
+                                                                width: `${((speed - 5) / 35) * 100}%`,
+                                                                backgroundColor: "#2994B2",
+                                                            }}
+                                                        />
+                                                        <div
+                                                            className="absolute w-3.5 h-3.5 rounded-full shadow-md -translate-x-1/2 transition-all cursor-pointer"
+                                                            style={{
+                                                                left: `${((speed - 5) / 35) * 100}%`,
+                                                                backgroundColor: "#2994B2",
+                                                            }}
+                                                        />
+                                                        <input
+                                                            type="range"
+                                                            min="5"
+                                                            max="40"
+                                                            value={speed}
+                                                            onChange={(e) => setSpeed(Number(e.target.value))}
+                                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                                        />
                                                     </div>
                                                 </div>
 
+                                                {/* DOSIS QUÍMICA (#B165E0) */}
                                                 <div>
                                                     <div className="flex justify-between text-[11px] font-bold text-gray-700 mb-1">
                                                         <span>Dosis química</span>
-                                                        <span className="font-bold" style={{ color: "#B165E0" }}>{rate} L/ha</span>
+                                                        <span className="font-bold" style={{ color: "#B165E0" }}>
+                                                            {rate} L/ha
+                                                        </span>
                                                     </div>
-                                                    <div className="relative w-full h-2 bg-gray-200 rounded-[4px] flex items-center">
-                                                        <div className="h-full rounded-[4px] transition-all" style={{ width: `${((rate - 0.5) / 9.5) * 100}%`, backgroundColor: "#B165E0" }} />
-                                                        <div className="absolute w-3.5 h-3.5 rounded-[4px] shadow-md -translate-x-1/2 transition-all cursor-pointer" style={{ left: `${((rate - 0.5) / 9.5) * 100}%`, backgroundColor: "#B165E0" }} />
-                                                        <input type="range" min="0.5" max="10" step="0.5" value={rate} onChange={(e) => setRate(Number(e.target.value))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                                                    <div className="relative w-full h-2 bg-gray-200 rounded-full flex items-center">
+                                                        <div
+                                                            className="h-full rounded-full transition-all"
+                                                            style={{
+                                                                width: `${((rate - 0.5) / 9.5) * 100}%`,
+                                                                backgroundColor: "#B165E0",
+                                                            }}
+                                                        />
+                                                        <div
+                                                            className="absolute w-3.5 h-3.5 rounded-full shadow-md -translate-x-1/2 transition-all cursor-pointer"
+                                                            style={{
+                                                                left: `${((rate - 0.5) / 9.5) * 100}%`,
+                                                                backgroundColor: "#B165E0",
+                                                            }}
+                                                        />
+                                                        <input
+                                                            type="range"
+                                                            min="0.5"
+                                                            max="10"
+                                                            step="0.5"
+                                                            value={rate}
+                                                            onChange={(e) => setRate(Number(e.target.value))}
+                                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <hr className="border-gray-200" />
+                                    {/* BOTONES INFERIORES */}
+                                    <div className="pt-2 space-y-1.5 border-t border-gray-100 shrink-0">
+                                        <button 
+                                            onClick={handleApproveMapping}
+                                            className="w-full py-2 bg-[#0E5E6F] hover:bg-[#0a4754] border-2 border-[#0E5E6F] text-white font-bold text-[11px] rounded-[4px] flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer"
+                                        >
+                                            <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                                                <polygon points="5 3 19 12 5 21 5 3" />
+                                            </svg>
+                                            <span>Enviar edición</span>
+                                        </button>
 
-                                        <div className="space-y-1.5 pb-1">
-                                            <button onClick={() => setIsApprovalModalOpen(true)} className="w-full py-2.5 bg-[#0E5E6F] hover:bg-[#0a4754] border-2 border-[#0E5E6F] text-white font-bold text-[11px] rounded-[4px] flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer">
-                                                <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3" /></svg>
-                                                <span>Enviar edición</span>
-                                            </button>
-                                            <button className="w-full py-2 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">Auto-dibujar zona</button>
-                                            <button className="w-full py-2 bg-white border-2 border-rose-200 hover:bg-rose-50 text-rose-600 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">Cancelar edición</button>
-                                        </div>
+                                        <button className="w-full py-1.5 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
+                                            Auto-dibujar zona
+                                        </button>
+
+                                        <button className="w-full py-1.5 bg-white border-2 border-rose-200 hover:bg-rose-50 text-rose-600 font-bold text-[11px] rounded-[4px] flex items-center justify-center transition-colors cursor-pointer">
+                                            Cancelar edición
+                                        </button>
                                     </div>
                                 </div>
-                            </>
+                            </div>
                         )}
                     </div>
                 )}
@@ -2103,44 +2399,94 @@ export const ClienteServiciosView = () => {
                 </div>
             )}
 
-            {/* Modal Cambio de ID */}
+            {/* MODAL CENTRADO: CAMBIO DE ID DE MAPEO */}
             {isIdModalOpen && (
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
                         <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                            <h3 className="text-xs font-bold text-gray-900">Cambiar ID de Misión para Mapeo</h3>
-                            <button onClick={() => setIsIdModalOpen(false)} className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"><X size={16} /></button>
+                            <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                                Cambiar ID de Misión para Mapeo
+                            </h3>
+                            <button
+                                onClick={() => setIsIdModalOpen(false)}
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
                         </div>
+
                         <form onSubmit={handleSaveId} className="space-y-3">
                             <div>
-                                <label className="block text-[10px] font-bold text-gray-500 mb-1">Código / ID de la misión</label>
-                                <input type="text" value={tempMappingId} onChange={(e) => setTempMappingId(e.target.value)} placeholder="Ej. MIS-FUM-001" className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-mono font-bold text-gray-800 focus:border-[#0E5E6F] outline-none" autoFocus />
+                                <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                                    Código / ID de la Misión
+                                </label>
+                                <input
+                                    type="text"
+                                    value={tempMappingId}
+                                    onChange={(e) => setTempMappingId(e.target.value)}
+                                    placeholder="Ej. MIS-FUM-001"
+                                    className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-mono font-bold text-gray-800 focus:border-[#0E5E6F] outline-none"
+                                    autoFocus
+                                />
+                                <p className="text-[10px] text-gray-400 mt-1">
+                                    Ingresa el código único de la misión para cargar y editar su mapa correspondiente.
+                                </p>
                             </div>
+
                             <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
-                                <button type="button" onClick={() => setIsIdModalOpen(false)} className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer">Cancelar</button>
-                                <button type="submit" className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs">Guardar ID</button>
+                                <button
+                                    type="button"
+                                    onClick={() => setIsIdModalOpen(false)}
+                                    className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
+                                >
+                                    Guardar ID
+                                </button>
                             </div>
                         </form>
                     </div>
                 </div>
             )}
 
-            {/* Modal Aprobación */}
+            {/* MODAL CENTRADO: CONFIRMACIÓN DE APROBACIÓN DE MAPEO */}
             {isApprovalModalOpen && (
                 <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
                     <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
                         <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
-                            <div className="p-1 bg-amber-100 text-amber-700 rounded-[4px]"><Check size={16} /></div>
-                            <h3 className="text-xs font-bold text-gray-900">Mapeo Enviado a Revisión</h3>
+                            <div className="p-1 bg-amber-100 text-amber-700 rounded-[4px]">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                                Mapeo Enviado a Revisión
+                            </h3>
                         </div>
+
                         <div className="space-y-2 text-xs text-gray-600 font-normal">
-                            <p>La edición del mapa para la misión <span className="font-bold text-gray-800">#{mappingId}</span> ha sido enviada exitosamente a uno de los administradores.</p>
+                            <p>
+                                La edición del mapa para la misión <span className="font-bold text-gray-800">#{mappingId}</span> ha sido enviada exitosamente a uno de los administradores.
+                            </p>
                             <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] text-[11px] text-amber-800 font-medium">
                                 Estado: En espera de ser aprobada por el administrador.
                             </div>
                         </div>
+
                         <div className="flex justify-end pt-2 border-t border-gray-100">
-                            <button type="button" onClick={() => setIsApprovalModalOpen(false)} className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs">Entendido</button>
+                            <button
+                                type="button"
+                                onClick={() => setIsApprovalModalOpen(false)}
+                                className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
+                            >
+                                Entendido
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -2456,65 +2802,7 @@ export const ClienteSuscripcionesView = () => {
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 gap-3 items-stretch">
-                                {/* RESUMEN DEL PLAN */}
-                                <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
-                                    <div>
-                                        <Title
-                                            as="h3"
-                                            className="text-xs font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
-                                        >
-                                            Resumen de la Orden
-                                        </Title>
 
-                                        <div className="bg-gray-50 p-2.5 rounded-[4px] border border-gray-200 flex flex-col gap-1 mb-2">
-                                            <span className="text-[9px] text-[#0E5E6F] bg-[#0E5E6F]/10 px-2 py-0.5 rounded-[4px] border border-[#0E5E6F]/20 w-fit">
-                                                {selectedPlanForCheckout.etiqueta}
-                                            </span>
-                                            <Title
-                                                as="h2"
-                                                className="text-base font-black text-gray-900"
-                                            >
-                                                {selectedPlanForCheckout.nombre}
-                                            </Title>
-                                            <Text className="text-[11px] text-gray-600 block leading-tight">
-                                                {selectedPlanForCheckout.descripcion}
-                                            </Text>
-                                            <div className="mt-1.5 pt-1.5 border-t border-gray-200 flex justify-between items-baseline">
-                                                <span className="text-[11px] text-gray-500">
-                                                    Total a pagar:
-                                                </span>
-                                                <span className="text-lg font-black text-[#0E5E6F]">
-                                                    {selectedPlanForCheckout.precio}{" "}
-                                                    <span className="text-[9px] text-gray-500 font-normal">
-                                                        {selectedPlanForCheckout.periodo}
-                                                    </span>
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <Text className="text-[10px] text-gray-700 block mb-1">
-                                            Detalles incluidos:
-                                        </Text>
-                                        <ul className="flex flex-col gap-1 text-[11px] text-gray-600">
-                                            {selectedPlanForCheckout.caracteristicas.map(
-                                                (item: string, idx: number) => (
-                                                    <li key={idx} className="flex items-center gap-1.5">
-                                                        <CheckCircle2
-                                                            size={12}
-                                                            className="text-[#0E5E6F] shrink-0"
-                                                        />
-                                                        <span>{item}</span>
-                                                    </li>
-                                                ),
-                                            )}
-                                        </ul>
-                                    </div>
-
-                                    <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-900 text-[10px]">
-                                        <ShieldCheck size={14} className="text-amber-600 shrink-0" />
-                                        <span>Garantía de servicio y soporte de la red BIODRON.</span>
-                                    </div>
-                                </div>
 
                                 {/* FORMULARIO DE PAGO */}
                                 <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
@@ -2830,6 +3118,65 @@ export const ClienteSuscripcionesView = () => {
                                             </>
                                         )}
                                     </button>
+                                </div>
+                                {/* RESUMEN DEL PLAN */}
+                                <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
+                                    <div>
+                                        <Title
+                                            as="h3"
+                                            className="text-xs font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
+                                        >
+                                            Resumen de la Orden
+                                        </Title>
+
+                                        <div className="bg-gray-50 p-2.5 rounded-[4px] border border-gray-200 flex flex-col gap-1 mb-2">
+                                            <span className="text-[9px] text-[#0E5E6F] bg-[#0E5E6F]/10 px-2 py-0.5 rounded-[4px] border border-[#0E5E6F]/20 w-fit">
+                                                {selectedPlanForCheckout.etiqueta}
+                                            </span>
+                                            <Title
+                                                as="h2"
+                                                className="text-base font-black text-gray-900"
+                                            >
+                                                {selectedPlanForCheckout.nombre}
+                                            </Title>
+                                            <Text className="text-[11px] text-gray-600 block leading-tight">
+                                                {selectedPlanForCheckout.descripcion}
+                                            </Text>
+                                            <div className="mt-1.5 pt-1.5 border-t border-gray-200 flex justify-between items-baseline">
+                                                <span className="text-[11px] text-gray-500">
+                                                    Total a pagar:
+                                                </span>
+                                                <span className="text-lg font-black text-[#0E5E6F]">
+                                                    {selectedPlanForCheckout.precio}{" "}
+                                                    <span className="text-[9px] text-gray-500 font-normal">
+                                                        {selectedPlanForCheckout.periodo}
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <Text className="text-[10px] text-gray-700 block mb-1">
+                                            Detalles incluidos:
+                                        </Text>
+                                        <ul className="flex flex-col gap-1 text-[11px] text-gray-600">
+                                            {selectedPlanForCheckout.caracteristicas.map(
+                                                (item: string, idx: number) => (
+                                                    <li key={idx} className="flex items-center gap-1.5">
+                                                        <CheckCircle2
+                                                            size={12}
+                                                            className="text-[#0E5E6F] shrink-0"
+                                                        />
+                                                        <span>{item}</span>
+                                                    </li>
+                                                ),
+                                            )}
+                                        </ul>
+                                    </div>
+
+                                    <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-900 text-[10px]">
+                                        <ShieldCheck size={14} className="text-amber-600 shrink-0" />
+                                        <span>Garantía de servicio y soporte de la red BIODRON.</span>
+                                    </div>
                                 </div>
                             </div>
                         )}
@@ -3498,72 +3845,6 @@ export const ClienteDronView = ({
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 gap-3 items-stretch">
-                            {/* RESUMEN DEL DRON */}
-                            <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
-                                <div>
-                                    <Title
-                                        as="h3"
-                                        className="text-xs font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
-                                    >
-                                        Resumen de la Orden
-                                    </Title>
-
-                                    <div className="bg-gray-50 p-2.5 rounded-[4px] border border-gray-200 flex flex-col gap-1 mb-2">
-                                        <div className="flex gap-3 mb-2">
-                                            <div className="w-20 h-20 bg-gray-200 rounded shrink-0 border border-gray-300 overflow-hidden">
-                                                <img src={selectedDroneForCheckout.imagen} alt="drone" className="w-full h-full object-cover" />
-                                            </div>
-                                            <div>
-                                                <span className="text-[9px] text-[#0E5E6F] bg-[#0E5E6F]/10 px-2 py-0.5 rounded-[4px] border border-[#0E5E6F]/20 w-fit block mb-1">
-                                                    {selectedDroneForCheckout.etiqueta}
-                                                </span>
-                                                <Title
-                                                    as="h2"
-                                                    className="text-base font-black text-gray-900 leading-tight"
-                                                >
-                                                    {selectedDroneForCheckout.nombre}
-                                                </Title>
-                                            </div>
-                                        </div>
-                                        
-                                        <Text className="text-[11px] text-gray-600 block leading-tight mb-2">
-                                            {selectedDroneForCheckout.descripcion}
-                                        </Text>
-                                        
-                                        <div className="mt-1.5 pt-1.5 border-t border-gray-200 flex justify-between items-baseline">
-                                            <span className="text-[11px] text-gray-500">
-                                                Total a pagar:
-                                            </span>
-                                            <span className="text-lg font-black text-[#0E5E6F]">
-                                                {selectedDroneForCheckout.precio}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <Text className="text-[10px] text-gray-700 block mb-1 font-bold">
-                                        Especificaciones del equipo:
-                                    </Text>
-                                    <ul className="flex flex-col gap-1 text-[11px] text-gray-600">
-                                        {Object.entries(selectedDroneForCheckout.especificaciones).map(
-                                            ([key, val]: any, idx: number) => (
-                                                <li key={idx} className="flex items-center gap-1.5">
-                                                    <CheckCircle2
-                                                        size={12}
-                                                        className="text-[#0E5E6F] shrink-0"
-                                                    />
-                                                    <span><strong>{key}:</strong> {val}</span>
-                                                </li>
-                                            ),
-                                        )}
-                                    </ul>
-                                </div>
-
-                                <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-900 text-[10px]">
-                                    <ShieldCheck size={14} className="text-amber-600 shrink-0" />
-                                    <span>Garantía de hardware y soporte comercial de la red BIODRON.</span>
-                                </div>
-                            </div>
-
                             {/* FORMULARIO DE PAGO */}
                             <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
                                 <div>
@@ -3838,6 +4119,72 @@ export const ClienteDronView = ({
                                         </>
                                     )}
                                 </button>
+                            </div>
+
+                            {/* RESUMEN DEL DRON */}
+                            <div className="bg-white border border-gray-200 rounded-[4px] p-3.5 shadow-xs flex flex-col justify-between gap-2">
+                                <div>
+                                    <Title
+                                        as="h3"
+                                        className="text-xs font-bold text-gray-900 border-b border-gray-100 pb-1.5 mb-2"
+                                    >
+                                        Resumen de la Orden
+                                    </Title>
+
+                                    <div className="bg-gray-50 p-2.5 rounded-[4px] border border-gray-200 flex flex-col gap-1 mb-2">
+                                        <div className="flex gap-3 mb-2">
+                                            <div className="w-20 h-20 bg-gray-200 rounded shrink-0 border border-gray-300 overflow-hidden">
+                                                <img src={selectedDroneForCheckout.imagen} alt="drone" className="w-full h-full object-cover" />
+                                            </div>
+                                            <div>
+                                                <span className="text-[9px] text-[#0E5E6F] bg-[#0E5E6F]/10 px-2 py-0.5 rounded-[4px] border border-[#0E5E6F]/20 w-fit block mb-1">
+                                                    {selectedDroneForCheckout.etiqueta}
+                                                </span>
+                                                <Title
+                                                    as="h2"
+                                                    className="text-base font-black text-gray-900 leading-tight"
+                                                >
+                                                    {selectedDroneForCheckout.nombre}
+                                                </Title>
+                                            </div>
+                                        </div>
+                                        
+                                        <Text className="text-[11px] text-gray-600 block leading-tight mb-2">
+                                            {selectedDroneForCheckout.descripcion}
+                                        </Text>
+                                        
+                                        <div className="mt-1.5 pt-1.5 border-t border-gray-200 flex justify-between items-baseline">
+                                            <span className="text-[11px] text-gray-500">
+                                                Total a pagar:
+                                            </span>
+                                            <span className="text-lg font-black text-[#0E5E6F]">
+                                                {selectedDroneForCheckout.precio}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <Text className="text-[10px] text-gray-700 block mb-1 font-bold">
+                                        Especificaciones del equipo:
+                                    </Text>
+                                    <ul className="flex flex-col gap-1 text-[11px] text-gray-600">
+                                        {Object.entries(selectedDroneForCheckout.especificaciones).map(
+                                            ([key, val]: any, idx: number) => (
+                                                <li key={idx} className="flex items-center gap-1.5">
+                                                    <CheckCircle2
+                                                        size={12}
+                                                        className="text-[#0E5E6F] shrink-0"
+                                                    />
+                                                    <span><strong>{key}:</strong> {val}</span>
+                                                </li>
+                                            ),
+                                        )}
+                                    </ul>
+                                </div>
+
+                                <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-900 text-[10px]">
+                                    <ShieldCheck size={14} className="text-amber-600 shrink-0" />
+                                    <span>Garantía de hardware y soporte comercial de la red BIODRON.</span>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -4197,48 +4544,45 @@ export const ClienteDronView = ({
             )}
 
             {/* ============================================================ */}
-            {/* MODAL DE SOLICITUD DE AYUDA TÉCNICA (CORREGIDO) */}
+            {/* MODAL DE SOLICITUD DE AYUDA TÉCNICA (DISEÑO 1.TXT) */}
             {/* ============================================================ */}
             {supportDrone && (
-                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-end justify-center overscroll-none">
-                    <div 
-                        className="scrollbar-hidden bg-white w-full max-w-md mx-auto max-h-[90dvh] overflow-y-auto overflow-x-hidden rounded-t-2xl p-5 pb-6 space-y-4 animate-in fade-in slide-in-from-bottom duration-200"
-                    >
-                        <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto -mt-1 mb-1" />
-
-                        <div className="flex justify-between items-center border-b border-gray-100 pb-3">
-                            <div className="flex items-center gap-2">
-                                <Headphones className="text-[#0E5E6F]" size={20} />
-                                <h3 className="font-extrabold text-base text-gray-900">Solicitud de Ayuda Técnica</h3>
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 font-sans">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3">
+                        <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                            <div className="flex items-center gap-1.5">
+                                <Headphones className="text-[#0E5E6F]" size={16} />
+                                <h3 className="text-xs font-bold text-gray-900 tracking-wide">
+                                    Solicitud de Ayuda Técnica
+                                </h3>
                             </div>
                             <button 
                                 onClick={closeSupportModal} 
-                                style={{ borderRadius: "4px" }}
-                                className="text-gray-400 hover:text-gray-600 cursor-pointer p-1"
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
                             >
-                                <X size={18} />
+                                <X size={16} />
                             </button>
                         </div>
 
                         {!supportSubmitted ? (
-                            <form onSubmit={handleSendSupportRequest} className="space-y-4">
-                                <div className="bg-gray-50 p-3 rounded-[4px] border border-gray-200 flex items-center gap-3">
-                                    <div className="w-16 h-16 bg-gray-200 rounded shrink-0 border border-gray-300 overflow-hidden">
+                            <form onSubmit={handleSendSupportRequest} className="space-y-3">
+                                <div className="p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px] flex items-center gap-2.5">
+                                    <div className="w-12 h-12 bg-gray-200 rounded-[4px] shrink-0 border border-gray-300 overflow-hidden">
                                         <img src={supportDrone.imagen} alt={supportDrone.nombre} className="w-full h-full object-cover" />
                                     </div>
-                                    <div className="text-xs space-y-0.5">
-                                        <p className="font-extrabold text-gray-900">{supportDrone.nombre}</p>
-                                        <p className="text-gray-500">Modelo: <span className="font-medium text-gray-700">{supportDrone.modelo}</span></p>
-                                        <p className="text-gray-500 font-mono text-[11px]">N/S: {supportDrone.numeroSerie}</p>
+                                    <div className="text-[10px] space-y-0.5">
+                                        <p className="font-bold text-gray-800">{supportDrone.nombre}</p>
+                                        <p className="text-gray-500">Modelo: <span className="font-semibold text-gray-700">{supportDrone.modelo}</span></p>
+                                        <p className="text-gray-400 font-mono text-[9px]">N/S: {supportDrone.numeroSerie}</p>
                                         <p className="text-gray-500">
-                                            Estado: <span className="font-bold text-gray-700">{supportDrone.estado}</span> | Batería: <span className="font-bold text-gray-700">{supportDrone.bateria}%</span>
+                                            Estado: <span className="font-bold text-gray-700">{supportDrone.estado}</span> | Bat: <span className="font-bold text-gray-700">{supportDrone.bateria}%</span>
                                         </p>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-xs font-bold text-gray-700 mb-1">
-                                        Razón de la petición
+                                    <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                                        Razón de la Petición
                                     </label>
                                     <textarea
                                         required
@@ -4246,48 +4590,48 @@ export const ClienteDronView = ({
                                         value={supportReason}
                                         onChange={(e) => setSupportReason(e.target.value)}
                                         placeholder="Describe brevemente el problema o requerimiento técnico..."
-                                        style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                        className="w-full border border-gray-300 p-2.5 text-xs outline-none focus:border-[#0E5E6F] focus:ring-1 focus:ring-[#0E5E6F]"
+                                        className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs text-gray-800 focus:border-[#0E5E6F] outline-none"
                                     />
                                 </div>
 
-                                <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">
-                                    <button
-                                        type="submit"
-                                        style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                        className="w-full px-4 py-2.5 bg-[#0E5E6F] hover:bg-[#0A4552] text-white font-bold text-xs shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
-                                    >
-                                        <Send size={14} /> Enviar Solicitud
-                                    </button>
+                                <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
                                     <button
                                         type="button"
                                         onClick={closeSupportModal}
-                                        style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                        className="w-full px-4 py-2.5 border border-gray-300 text-xs font-bold text-gray-600 hover:bg-gray-50 cursor-pointer"
+                                        className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
                                     >
                                         Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs flex items-center gap-1"
+                                    >
+                                        <Send size={12} />
+                                        <span>Enviar Solicitud</span>
                                     </button>
                                 </div>
                             </form>
                         ) : (
-                            <div className="py-4 text-center space-y-3 animate-in fade-in duration-200">
-                                <div 
-                                    style={{ borderRadius: "9999px" }}
-                                    className="w-12 h-12 bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto"
-                                >
-                                    <CheckCircle2 size={28} />
+                            <div className="space-y-3 py-1">
+                                <div className="p-2 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-2">
+                                    <div className="p-1 bg-emerald-100 text-emerald-700 rounded-[4px] shrink-0">
+                                        <CheckCircle2 size={16} />
+                                    </div>
+                                    <span className="text-[11px] font-bold text-emerald-800">
+                                        ¡Solicitud Enviada Exitosamente!
+                                    </span>
                                 </div>
-                                <h4 className="font-extrabold text-base text-gray-900">¡Solicitud Enviada Exitosamente!</h4>
-                                <p className="text-xs text-gray-600 leading-relaxed max-w-xs mx-auto">
-                                    Hemos recibido la solicitud para el equipo <strong>{supportDrone.nombre}</strong>. Pronto un técnico se pondrá en contacto contigo.
+                                <p className="text-xs text-gray-600 font-normal">
+                                    Hemos recibido la solicitud para el equipo <span className="font-bold text-gray-800">{supportDrone.nombre}</span>. Pronto un técnico se pondrá en contacto contigo.
                                 </p>
-                                <button
-                                    onClick={closeSupportModal}
-                                    style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                    className="mt-3 w-full px-5 py-2.5 bg-[#0E5E6F] text-white font-bold text-xs hover:bg-[#0A4552] transition cursor-pointer"
-                                >
-                                    Entendido
-                                </button>
+                                <div className="flex justify-end pt-2 border-t border-gray-100">
+                                    <button
+                                        onClick={closeSupportModal}
+                                        className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
+                                    >
+                                        Entendido
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -4295,77 +4639,65 @@ export const ClienteDronView = ({
             )}
 
             {/* ============================================================ */}
-            {/* MODAL DE FICHA TÉCNICA (CORREGIDO) */}
+            {/* MODAL DE FICHA TÉCNICA (DISEÑO 1.TXT) */}
             {/* ============================================================ */}
             {selectedDrone && (
-                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-end justify-center overscroll-none">
-                    <div 
-                        className="scrollbar-hidden bg-white w-full max-w-md mx-auto max-h-[90dvh] overflow-y-auto overflow-x-hidden rounded-t-2xl p-5 space-y-4 animate-in fade-in slide-in-from-bottom duration-200"
-                    >
-                        {/* Cabecera */}
-                        <div className="flex justify-between items-center border-b border-gray-200 pb-3">
-                            <div className="flex items-center gap-2 min-w-0">
-                                <Title as="h2" className="text-base font-black text-gray-900 truncate">
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 font-sans">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3">
+                        <div className="flex justify-between items-center border-b border-gray-100 pb-2">
+                            <div className="flex items-center gap-1.5 min-w-0">
+                                <Title as="h2" className="text-xs font-bold text-gray-900 tracking-wide uppercase truncate">
                                     {selectedDrone.nombre}
                                 </Title>
-                                <span 
-                                    style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                    className="text-[10px] font-black tracking-wider bg-[#0E5E6F]/10 text-[#0E5E6F] px-2 py-0.5 border border-[#0E5E6F]/20 shrink-0"
-                                >
+                                <span className="text-[9px] font-bold text-[#0E5E6F] bg-[#0E5E6F]/10 px-1.5 py-0.2 rounded-[4px] border border-[#0E5E6F]/20 shrink-0">
                                     {selectedDrone.etiqueta}
                                 </span>
                             </div>
                             <button
                                 onClick={() => setSelectedDrone(null)}
-                                style={{ borderRadius: "4px" }}
-                                className="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-200 transition cursor-pointer shrink-0"
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
                             >
-                                <X size={18} />
+                                <X size={16} />
                             </button>
                         </div>
 
-                        {/* Contenido */}
-                        <div className="flex flex-col gap-4">
-                            <div 
-                                style={{ borderRadius: "4px" }}
-                                className="flex flex-col bg-gray-50 border border-gray-200 overflow-hidden"
-                            >
-                                <div className="relative w-full h-48 bg-gray-100">
+                        <div className="space-y-3">
+                            <div className="border-2 border-gray-200 rounded-[4px] overflow-hidden bg-gray-50">
+                                <div className="relative w-full h-36 bg-gray-100">
                                     <img
                                         src={selectedDrone.imagen}
                                         alt={selectedDrone.nombre}
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
-                                <div className="p-3.5 bg-white border-t border-gray-200">
-                                    <Text className="text-[10px] text-gray-400 font-extrabold block">
+                                <div className="p-2.5 bg-white border-t border-gray-200">
+                                    <span className="text-[9px] text-gray-400 font-bold block uppercase tracking-wider">
                                         Precio Comercial
-                                    </Text>
-                                    <Text className="text-xl font-black text-[#0E5E6F] block mb-1">
+                                    </span>
+                                    <span className="text-lg font-black text-[#0E5E6F] block mb-1">
                                         {selectedDrone.precio}
-                                    </Text>
-                                    <Text className="text-xs text-gray-600 font-medium leading-relaxed block">
+                                    </span>
+                                    <p className="text-[11px] text-gray-600 leading-tight">
                                         {selectedDrone.descripcion}
-                                    </Text>
+                                    </p>
                                 </div>
                             </div>
 
                             <div>
-                                <Text className="text-[11px] font-bold text-gray-400 tracking-wider mb-2 block">
+                                <h3 className="text-[9px] font-bold tracking-widest text-gray-400 block mb-1.5 uppercase">
                                     Especificaciones Técnicas
-                                </Text>
-                                <div className="grid grid-cols-2 gap-2">
+                                </h3>
+                                <div className="grid grid-cols-2 gap-1.5">
                                     {Object.entries(selectedDrone.especificaciones).map(
                                         ([clave, valor]: any) => (
                                             <div
                                                 key={clave}
-                                                style={{ borderRadius: "4px" }}
-                                                className="p-2.5 bg-gray-50 border border-gray-200 flex flex-col justify-center"
+                                                className="p-1.5 bg-gray-50 border border-gray-200 rounded-[4px] flex flex-col justify-center"
                                             >
-                                                <span className="text-[9px] text-gray-400 font-bold truncate">
+                                                <span className="text-[8px] text-gray-400 font-bold truncate">
                                                     {clave}
                                                 </span>
-                                                <span className="text-xs font-bold text-gray-800 truncate">
+                                                <span className="text-[10px] font-bold text-gray-800 truncate">
                                                     {valor}
                                                 </span>
                                             </div>
@@ -4375,26 +4707,27 @@ export const ClienteDronView = ({
                             </div>
 
                             {selectedCategory !== "micro" && (
-                                <div 
-                                    style={{ borderRadius: "4px" }}
-                                    className="p-2.5 bg-amber-50 border border-amber-200 flex items-center gap-2.5 text-amber-900 text-[11px] font-medium"
-                                >
-                                    <ShieldAlert size={16} className="shrink-0 text-amber-600" />
+                                <div className="p-2 bg-amber-50 border border-amber-200 rounded-[4px] flex items-center gap-1.5 text-amber-800 text-[10px] font-medium">
+                                    <ShieldAlert size={14} className="shrink-0 text-amber-600" />
                                     <span>Requiere Cuenta de Piloto verificada para la compra.</span>
                                 </div>
                             )}
                         </div>
 
-                        {/* Botones */}
-                        <div className="pt-3 border-t border-gray-200 flex flex-col gap-2">
+                        <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+                            <button
+                                onClick={() => setSelectedDrone(null)}
+                                className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
+                            >
+                                Cerrar
+                            </button>
                             {selectedCategory === "micro" ? (
                                 <button
                                     onClick={() => iniciarCompra(selectedDrone)}
-                                    style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                    className="w-full px-4 py-2.5 bg-[#0E5E6F] hover:bg-[#0A4552] text-white text-xs font-bold transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                                    className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs flex items-center gap-1"
                                 >
-                                    <ShoppingBag size={14} />
-                                    Comprar
+                                    <ShoppingBag size={12} />
+                                    <span>Comprar</span>
                                 </button>
                             ) : (
                                 <button
@@ -4402,131 +4735,124 @@ export const ClienteDronView = ({
                                         setSelectedDrone(null);
                                         setIsPilotModalOpen(true);
                                     }}
-                                    style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                    className="w-full px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                                    className="px-4 py-1.5 bg-amber-600 text-white font-bold text-xs rounded-[4px] hover:bg-amber-700 cursor-pointer shadow-xs flex items-center gap-1"
                                 >
-                                    <Lock size={14} />
-                                    Requiere cuenta Piloto
+                                    <Lock size={12} />
+                                    <span>Requiere cuenta Piloto</span>
                                 </button>
                             )}
-                            <button
-                                onClick={() => setSelectedDrone(null)}
-                                style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                className="w-full px-4 py-2.5 border border-gray-300 text-xs font-bold text-gray-700 bg-white hover:bg-gray-100 cursor-pointer"
-                            >
-                                Cerrar
-                            </button>
                         </div>
                     </div>
                 </div>
             )}
 
             {/* ============================================================ */}
-            {/* MODAL DE CAMBIO A CUENTA PILOTO (CORREGIDO) */}
+            {/* MODAL DE CAMBIO A CUENTA PILOTO (DISEÑO 1.TXT) */}
             {/* ============================================================ */}
             {isPilotModalOpen && (
-                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-end justify-center overscroll-none">
-                    <div 
-                        className="scrollbar-hidden bg-white w-full max-w-md mx-auto max-h-[90dvh] overflow-y-auto overflow-x-hidden rounded-t-2xl p-5 pb-6 space-y-4 animate-in fade-in slide-in-from-bottom duration-200"
-                    >
-                        <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto -mt-1 mb-1" />
-
-                        <div className="flex justify-between items-center border-b border-gray-100 pb-3">
-                            <div className="flex items-center gap-2">
-                                <Award className="text-amber-600" size={20} />
-                                <h3 className="font-extrabold text-base text-gray-900">Solicitud de cuenta de Piloto</h3>
+                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 font-sans">
+                    <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3">
+                        <div className="flex justify-between items-center border-b border-gray-100 pb-2">
+                            <div className="flex items-center gap-1.5">
+                                <Award className="text-amber-600" size={16} />
+                                <h3 className="text-xs font-bold text-gray-900 tracking-wide uppercase">
+                                    Solicitud De Cuenta De Piloto
+                                </h3>
                             </div>
                             <button 
                                 onClick={resetPilotForm} 
-                                style={{ borderRadius: "4px" }}
-                                className="text-gray-400 hover:text-gray-600 cursor-pointer p-1"
+                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
                             >
-                                <X size={18} />
+                                <X size={16} />
                             </button>
                         </div>
 
                         {!isSubmitted ? (
-                            <form onSubmit={handlePilotSubmit} className="space-y-4">
-                                <p className="text-xs text-gray-600 leading-relaxed">
-                                    Para adquirir aeronaves de mayor categoría, ingresa tus credenciales y tu <strong>Código de la AHAC</strong> (Agencia Hondureña de Aeronáutica Civil).
+                            <form onSubmit={handlePilotSubmit} className="space-y-3">
+                                <p className="text-[11px] text-gray-600 font-normal leading-tight">
+                                    Para adquirir aeronaves de mayor categoría, ingresa tus credenciales y tu <strong className="text-gray-800">Código de la AHAC</strong> (Agencia Hondureña de Aeronáutica Civil).
                                 </p>
 
                                 <div>
-                                    <label className="block text-xs font-bold text-gray-700 mb-1">Correo Electrónico</label>
+                                    <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                                        Correo Electrónico
+                                    </label>
                                     <input
                                         type="email"
                                         required
                                         value={pilotFormData.email}
                                         onChange={(e) => setPilotFormData({ ...pilotFormData, email: e.target.value })}
                                         placeholder="correo@ejemplo.com"
-                                        style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                        className="w-full border border-gray-300 p-2.5 text-xs outline-none focus:border-[#0E5E6F] focus:ring-1 focus:ring-[#0E5E6F]"
+                                        className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-medium text-gray-800 focus:border-[#0E5E6F] outline-none"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-xs font-bold text-gray-700 mb-1">Contraseña</label>
+                                    <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                                        Contraseña
+                                    </label>
                                     <input
                                         type="password"
                                         required
                                         value={pilotFormData.password}
                                         onChange={(e) => setPilotFormData({ ...pilotFormData, password: e.target.value })}
                                         placeholder="••••••••"
-                                        style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                        className="w-full border border-gray-300 p-2.5 text-xs outline-none focus:border-[#0E5E6F] focus:ring-1 focus:ring-[#0E5E6F]"
+                                        className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-medium text-gray-800 focus:border-[#0E5E6F] outline-none"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-xs font-bold text-gray-700 mb-1">Código o Licencia AHAC</label>
+                                    <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                                        Código o Licencia AHAC
+                                    </label>
                                     <input
                                         type="text"
                                         required
                                         value={pilotFormData.ahacCode}
                                         onChange={(e) => setPilotFormData({ ...pilotFormData, ahacCode: e.target.value.toUpperCase() })}
                                         placeholder="AHAC-PIL-2026-X"
-                                        style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                        className="w-full border border-gray-300 p-2.5 text-xs font-mono font-bold uppercase outline-none focus:border-[#0E5E6F] focus:ring-1 focus:ring-[#0E5E6F]"
+                                        className="w-full border-2 border-gray-200 rounded-[4px] p-2 text-xs font-mono font-bold uppercase text-gray-800 focus:border-[#0E5E6F] outline-none"
                                     />
                                 </div>
 
-                                <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">
-                                    <button
-                                        type="submit"
-                                        style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                        className="w-full px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
-                                    >
-                                        <Send size={14} /> Enviar Solicitud
-                                    </button>
+                                <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
                                     <button
                                         type="button"
                                         onClick={resetPilotForm}
-                                        style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                        className="w-full px-4 py-2.5 border border-gray-300 text-xs font-bold text-gray-600 hover:bg-gray-50 cursor-pointer"
+                                        className="px-3 py-1.5 border border-gray-300 text-gray-700 font-bold text-xs rounded-[4px] hover:bg-gray-100 cursor-pointer"
                                     >
                                         Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="px-4 py-1.5 bg-amber-600 text-white font-bold text-xs rounded-[4px] hover:bg-amber-700 cursor-pointer shadow-xs flex items-center gap-1"
+                                    >
+                                        <Send size={12} />
+                                        <span>Enviar Solicitud</span>
                                     </button>
                                 </div>
                             </form>
                         ) : (
-                            <div className="py-4 text-center space-y-3">
-                                <div 
-                                    style={{ borderRadius: "9999px" }}
-                                    className="w-12 h-12 bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto"
-                                >
-                                    <CheckCircle2 size={28} />
+                            <div className="space-y-3 py-1">
+                                <div className="p-2 bg-emerald-50 border border-emerald-200 rounded-[4px] flex items-center gap-2">
+                                    <div className="p-1 bg-emerald-100 text-emerald-700 rounded-[4px] shrink-0">
+                                        <CheckCircle2 size={16} />
+                                    </div>
+                                    <span className="text-[11px] font-bold text-emerald-800">
+                                        ¡Solicitud Enviada Exitosamente!
+                                    </span>
                                 </div>
-                                <h4 className="font-extrabold text-base text-gray-900">¡Solicitud Enviada Exitosamente!</h4>
-                                <p className="text-xs text-gray-600 leading-relaxed max-w-xs mx-auto">
-                                    Tu solicitud ha sido enviada. Un <strong>administrador</strong> revisará tu código de la AHAC y se pondrá en contacto contigo en breve para completar la validación de tu cuenta.
+                                <p className="text-xs text-gray-600 font-normal">
+                                    Tu solicitud ha sido enviada. Un <strong className="text-gray-800">administrador</strong> revisará tu código de la AHAC y se pondrá en contacto contigo en breve para completar la validación de tu cuenta.
                                 </p>
-                                <button
-                                    onClick={resetPilotForm}
-                                    style={{ borderRadius: "4px", fontFamily: "'Roboto', sans-serif" }}
-                                    className="mt-3 w-full px-5 py-2.5 bg-[#0E5E6F] text-white font-bold text-xs hover:bg-[#0A4552] transition cursor-pointer"
-                                >
-                                    Entendido
-                                </button>
+                                <div className="flex justify-end pt-2 border-t border-gray-100">
+                                    <button
+                                        onClick={resetPilotForm}
+                                        className="px-4 py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
+                                    >
+                                        Entendido
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -4728,7 +5054,7 @@ export const ClienteHistoryView = () => {
               <Plane size={14} />
             </div>
           </div>
-          <p className="text-lg font-black text-gray-900 mb-0.5 whitespace-nowrap">24 Operaciones</p>
+          <p className="text-sm font-black text-gray-900 mb-0.5 whitespace-nowrap">24 Operaciones</p>
           <p className="text-[9px] text-gray-400 font-semibold">Registros consolidados</p>
         </div>
 
@@ -4751,7 +5077,7 @@ export const ClienteHistoryView = () => {
               <MapPin size={14} />
             </div>
           </div>
-          <p className="text-lg font-black text-gray-900 mb-0.5 whitespace-nowrap">187.5 Ha</p>
+          <p className="text-sm font-black text-gray-900 mb-0.5 whitespace-nowrap">187.5 Ha</p>
           <p className="text-[9px] text-gray-400 font-semibold">Superficie analizada</p>
         </div>
 
@@ -4774,7 +5100,7 @@ export const ClienteHistoryView = () => {
               <FileText size={14} />
             </div>
           </div>
-          <p className="text-lg font-black text-gray-900 mb-0.5 whitespace-nowrap">19 Archivos</p>
+          <p className="text-sm font-black text-gray-900 mb-0.5 whitespace-nowrap">19 Archivos</p>
           <p className="text-[9px] text-gray-400 font-semibold">Documentos PDF listos</p>
         </div>
 
@@ -4797,7 +5123,7 @@ export const ClienteHistoryView = () => {
               <CreditCard size={14} />
             </div>
           </div>
-          <p className="text-lg font-black text-gray-900 mb-0.5 whitespace-nowrap">Corporativo</p>
+          <p className="text-sm font-black text-gray-900 mb-0.5 whitespace-nowrap">Corporativo</p>
           <p className="text-[9px] text-gray-400 font-semibold">Plan de cobertura total</p>
         </div>
       </div>
@@ -5137,24 +5463,21 @@ export const ClienteHistoryView = () => {
         </button>
       </div>
 
-      {/* BOTTOM SHEET: DETALLES DEL VUELO */}
+      {/* MODAL CENTRADO: DETALLES DEL VUELO */}
       {selectedVuelo && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center overscroll-none">
-          <div
-            style={{ borderRadius: "16px 16px 0 0", scrollbarWidth: "none", msOverflowStyle: "none" }}
-            className="bg-white border-t-2 border-gray-300 w-full max-h-[85%] p-5 text-left space-y-4 shadow-xl overflow-y-auto overscroll-contain [&::-webkit-scrollbar]:hidden"
-          >
-            <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto -mt-1 mb-1" />
-
-            <div className="flex justify-between items-center border-b pb-2">
-              <h3 className="text-sm font-black text-gray-900">
+        <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3">
+          <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+              <h3 className="text-xs font-bold text-gray-900 tracking-wide">
                 Detalles del Vuelo {selectedVuelo.id}
               </h3>
               <button
                 onClick={() => setSelectedVuelo(null)}
-                className="text-gray-400 hover:text-gray-600 cursor-pointer"
+                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
               >
-                <X size={18} />
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
 
@@ -5167,23 +5490,23 @@ export const ClienteHistoryView = () => {
               <p><strong>Piloto responsable:</strong> {selectedVuelo.piloto}</p>
 
               {selectedVuelo.detallesTecnicos && (
-                <div className="mt-3 p-3 bg-gray-50 border border-gray-200 rounded space-y-1">
-                  <p className="font-bold text-gray-900 border-b pb-1 mb-1">
+                <div className="mt-3 p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px] space-y-1">
+                  <p className="font-bold text-gray-900 border-b pb-1 mb-1 text-[11px]">
                     Parámetros de Telemetría y Misión
                   </p>
-                  <p><strong>Altura promedio:</strong> {selectedVuelo.detallesTecnicos.alturaPromedio}</p>
-                  <p><strong>Duración del vuelo:</strong> {selectedVuelo.detallesTecnicos.duracionVuelo}</p>
-                  <p><strong>Resolución GSD:</strong> {selectedVuelo.detallesTecnicos.resolucionGSD}</p>
-                  <p><strong>Condiciones climáticas:</strong> {selectedVuelo.detallesTecnicos.condicionClimatica}</p>
+                  <p className="text-[10px]"><strong>Altura promedio:</strong> {selectedVuelo.detallesTecnicos.alturaPromedio}</p>
+                  <p className="text-[10px]"><strong>Duración del vuelo:</strong> {selectedVuelo.detallesTecnicos.duracionVuelo}</p>
+                  <p className="text-[10px]"><strong>Resolución GSD:</strong> {selectedVuelo.detallesTecnicos.resolucionGSD}</p>
+                  <p className="text-[10px]"><strong>Condiciones climáticas:</strong> {selectedVuelo.detallesTecnicos.condicionClimatica}</p>
                 </div>
               )}
             </div>
 
-            <div className="pt-2 pb-1">
+            <div className="flex justify-end pt-2 border-t border-gray-100">
               <button
+                type="button"
                 onClick={() => setSelectedVuelo(null)}
-                style={{ borderRadius: "4px", backgroundColor: HEX_COLORS.brandGreen }}
-                className="px-4 py-2.5 text-white text-xs font-bold cursor-pointer w-full"
+                className="w-full py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
               >
                 Cerrar
               </button>
@@ -5192,24 +5515,21 @@ export const ClienteHistoryView = () => {
         </div>
       )}
 
-      {/* BOTTOM SHEET: RECIBO DE FACTURA */}
+      {/* MODAL CENTRADO: RECIBO DE FACTURA */}
       {selectedFactura && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center overscroll-none">
-          <div
-            style={{ borderRadius: "16px 16px 0 0", scrollbarWidth: "none", msOverflowStyle: "none" }}
-            className="bg-white border-t-2 border-gray-300 w-full max-h-[85%] p-5 text-left space-y-4 shadow-xl overflow-y-auto overscroll-contain [&::-webkit-scrollbar]:hidden"
-          >
-            <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto -mt-1 mb-1" />
-
-            <div className="flex justify-between items-center border-b pb-2">
-              <h3 className="text-sm font-black text-gray-900">
+        <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-gray-200 rounded-[4px] shadow-2xl max-w-xs w-full overflow-hidden text-left p-4 space-y-3 font-sans">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+              <h3 className="text-xs font-bold text-gray-900 tracking-wide">
                 Comprobante de Pago {selectedFactura.id}
               </h3>
               <button
                 onClick={() => setSelectedFactura(null)}
-                className="text-gray-400 hover:text-gray-600 cursor-pointer"
+                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer"
               >
-                <X size={18} />
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
 
@@ -5220,24 +5540,24 @@ export const ClienteHistoryView = () => {
               <p><strong>Estado:</strong> {selectedFactura.estado}</p>
 
               {selectedFactura.detallesPago && (
-                <div className="mt-3 p-3 bg-gray-50 border border-gray-200 rounded space-y-1">
-                  <p><strong>Subtotal:</strong> {selectedFactura.detallesPago.subtotal}</p>
-                  <p><strong>Impuesto (15%):</strong> {selectedFactura.detallesPago.impuesto}</p>
-                  <p className="font-bold text-gray-900 text-sm pt-1 border-t">
+                <div className="mt-3 p-2 bg-gray-50 border-2 border-gray-200 rounded-[4px] space-y-1">
+                  <p className="text-[10px]"><strong>Subtotal:</strong> {selectedFactura.detallesPago.subtotal}</p>
+                  <p className="text-[10px]"><strong>Impuesto (15%):</strong> {selectedFactura.detallesPago.impuesto}</p>
+                  <p className="font-bold text-gray-900 text-xs pt-1 border-t border-gray-200">
                     Total pagado: {selectedFactura.monto}
                   </p>
-                  <p className="text-[10px] text-gray-400 pt-1">
+                  <p className="text-[9px] text-gray-400 pt-0.5">
                     Transacción ID: {selectedFactura.detallesPago.numTransaccion}
                   </p>
                 </div>
               )}
             </div>
 
-            <div className="pt-2 pb-1">
+            <div className="flex justify-end pt-2 border-t border-gray-100">
               <button
+                type="button"
                 onClick={() => setSelectedFactura(null)}
-                style={{ borderRadius: "4px", backgroundColor: HEX_COLORS.brandGreen }}
-                className="px-4 py-2.5 text-white text-xs font-bold cursor-pointer w-full"
+                className="w-full py-1.5 bg-[#0E5E6F] text-white font-bold text-xs rounded-[4px] hover:bg-[#0a4754] cursor-pointer shadow-xs"
               >
                 Cerrar
               </button>
@@ -5381,7 +5701,7 @@ export const ClienteHelpView = () => {
   const [helpForm, setHelpForm] = useState({
     categoria: 'Incidencia técnica',
     prioridad: 'Media',
-    mensaje: '',
+    mensaje: 'Hola, este es un mensaje para solicitar asistencia.',
   });
 
   const activeChat = chats.find((c) => c.id === activeChatId) || chats[0];
@@ -6026,6 +6346,9 @@ export const ClienteHelpView = () => {
 
 // Perfil de cliente
 export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
+  // Estado para las pestañas de métricas y credenciales
+  const [activeProfileTab, setActiveProfileTab] = useState<"metricas" | "credenciales">("metricas");
+
   // Datos de prueba iniciales
   const [profileData, setProfileData] = useState({
     initials: "MA",
@@ -6172,116 +6495,137 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
           </div>
         </div>
 
-        {/* MÉTRICAS PRINCIPALES — grid 2x2 táctil */}
-        <div className="grid grid-cols-2 divide-x-2 divide-y-2 divide-gray-100 bg-white border-b-2 border-gray-200 text-left">
-          {/* Base Regional */}
-          <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
-            <div className="flex items-center gap-1.5">
-              <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
-                <MapPin size={14} />
-              </div>
-              <span className="text-[9px] font-black text-gray-400 tracking-widest block">
-                Base regional
-              </span>
-            </div>
-            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
-              {profileData.location}
-            </span>
-          </div>
-
-          {/* Extensión */}
-          <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
-            <div className="flex items-center gap-1.5">
-              <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
-                <Layers size={14} />
-              </div>
-              <span className="text-[9px] font-black text-gray-400 tracking-widest block">
-                Extensión
-              </span>
-            </div>
-            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
-              {profileData.area}
-            </span>
-          </div>
-
-          {/* Actividad */}
-          <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
-            <div className="flex items-center gap-1.5">
-              <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
-                <BarChart2 size={14} />
-              </div>
-              <span className="text-[9px] font-black text-gray-400 tracking-widest block">
-                Actividad
-              </span>
-            </div>
-            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5 w-full">
-              {profileData.services}
-            </span>
-          </div>
-
-          {/* Estado */}
-          <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
-            <div className="flex items-center gap-1.5">
-              <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
-                <CheckCircle size={14} />
-              </div>
-              <span className="text-[9px] font-black text-gray-400 tracking-widest block">
-                Estado
-              </span>
-            </div>
-            <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] inline-block mt-0.5">
-              {profileData.standing}
-            </span>
-          </div>
+        {/* SELECTOR DE PESTAÑAS PARA MÉTRICAS Y CREDENCIALES */}
+        <div className="flex border-b-2 border-gray-200 bg-gray-100">
+          <button
+            type="button"
+            onClick={() => setActiveProfileTab("metricas")}
+            className={`flex-1 py-2 text-xs font-black transition-colors cursor-pointer ${
+              activeProfileTab === "metricas"
+                ? "bg-white text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            Métricas
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveProfileTab("credenciales")}
+            className={`flex-1 py-2 text-xs font-black transition-colors cursor-pointer ${
+              activeProfileTab === "credenciales"
+                ? "bg-white text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            Credenciales
+          </button>
         </div>
 
-        {/* DATOS DE CONTACTO Y CREDENCIALES */}
-        <div className="p-3.5 bg-white flex-1 flex flex-col justify-center">
-          <div className="flex flex-col gap-2 mb-2.5 pb-2 border-b-2 border-gray-100">
-            <div className="flex items-center gap-2">
-              <Settings size={15} className="text-[#0E5E6F]" />
-              <h3 className="text-xs font-black text-gray-800 normal-case">
-                Credenciales y Datos de Contacto
-              </h3>
+        {/* CONTENIDO DE PESTAÑA: MÉTRICAS */}
+        {activeProfileTab === "metricas" && (
+          <div className="grid grid-cols-2 bg-white border-b-2 border-gray-200 text-left flex-1 content-center">
+            {/* Base Regional */}
+            <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+              <div className="flex items-center gap-1.5">
+                <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                  <MapPin size={14} />
+                </div>
+                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                  Base regional
+                </span>
+              </div>
+              <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
+                {profileData.location}
+              </span>
             </div>
 
-            <button
-              onClick={handleOpenModal}
-              className="w-full py-2 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] text-xs flex items-center justify-center gap-1.5 transition-colors active:scale-95 shadow-xs cursor-pointer"
-            >
-              <Edit2 size={13} className="text-[#0E5E6F]" /> Editar información
-            </button>
+            {/* Extensión */}
+            <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+              <div className="flex items-center gap-1.5">
+                <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                  <Layers size={14} />
+                </div>
+                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                  Extensión
+                </span>
+              </div>
+              <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
+                {profileData.area}
+              </span>
+            </div>
+
+            {/* Actividad */}
+            <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+              <div className="flex items-center gap-1.5">
+                <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                  <BarChart2 size={14} />
+                </div>
+                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                  Actividad
+                </span>
+              </div>
+              <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5 w-full">
+                {profileData.services}
+              </span>
+            </div>
+
+            {/* Estado */}
+            <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+              <div className="flex items-center gap-1.5">
+                <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                  <CheckCircle size={14} />
+                </div>
+                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                  Estado
+                </span>
+              </div>
+              <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] inline-block mt-0.5">
+                {profileData.standing}
+              </span>
+            </div>
           </div>
+        )}
 
-          <div className="grid grid-cols-1 gap-2.5 text-left">
-            <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-              <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
-                <Phone size={12} className="text-[#0E5E6F]" /> Teléfono
-              </span>
-              <p className="font-bold text-xs text-gray-800 mt-0.5">
-                {profileData.phone}
-              </p>
+        {/* CONTENIDO DE PESTAÑA: CREDENCIALES */}
+        {activeProfileTab === "credenciales" && (
+          <div className="p-2 bg-white flex-1 flex flex-col justify-center">
+            <div className="flex flex-col gap-2 mb-2.5 pb-2 border-b-2 border-gray-100">
+              <div className="flex items-center gap-2">
+                <Settings size={15} className="text-[#0E5E6F]" />
+                <h3 className="text-xs font-black text-gray-800 normal-case">
+                  Credenciales y Datos de Contacto
+                </h3>
+              </div>
+
+              <button
+                onClick={handleOpenModal}
+                className="w-full py-2 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] text-xs flex items-center justify-center gap-1.5 transition-colors active:scale-95 shadow-xs cursor-pointer"
+              >
+                <Edit2 size={13} className="text-[#0E5E6F]" /> Editar información
+              </button>
             </div>
 
-            <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-              <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
-                <Mail size={12} className="text-[#0E5E6F]" /> Correo
-              </span>
-              <p className="font-bold text-xs text-gray-800 mt-0.5 truncate">
-                {profileData.email}
-              </p>
-            </div>
+            <div className="grid grid-cols-1 gap-1 text-left">
+              <div className="p-2 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
+                <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
+                  <Phone size={12} className="text-[#0E5E6F]" /> Teléfono
+                </span>
+                <p className="font-bold text-xs text-gray-800 mt-0.5">
+                  {profileData.phone}
+                </p>
+              </div>
 
-            <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-              <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
-                <Lock size={12} className="text-[#0E5E6F]" /> Contraseña
-              </span>
-              <p className="font-mono font-bold text-xs text-gray-800 mt-0.5">
-                ••••••••••••
-              </p>
+              <div className="p-2 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
+                <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
+                  <Mail size={12} className="text-[#0E5E6F]" /> Correo
+                </span>
+                <p className="font-bold text-xs text-gray-800 mt-0.5 truncate">
+                  {profileData.email}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* PIE DE PÁGINA */}
         <div className="border-t-2 border-gray-200 px-4 py-2.5 bg-gray-50 flex flex-col items-stretch gap-2">
@@ -6378,26 +6722,31 @@ export const ClienteProfileView = ({ onLogout }: ClienteProfileViewProps) => {
                     />
                   </div>
                 </div>
-
-                <div>
-                  <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
-                    Correo electrónico
-                  </label>
-                  <div className="relative">
-                    <Mail size={13} className="absolute left-3 top-2.5 text-gray-400" />
-                    <input
-                      type="email"
-                      value={editForm.email}
-                      onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                      className="w-full pl-8 pr-3 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
-                      required
-                    />
-                  </div>
-                </div>
-
                 <div>
                   <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
                     Nueva contraseña
+                  </label>
+                  <div className="relative">
+                    <Lock size={13} className="absolute left-3 top-2.5 text-gray-400" />
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={editForm.password}
+                      onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
+                      className="w-full pl-8 pr-8 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-2.5 top-2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                    >
+                      {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                    Repetir contraseña
                   </label>
                   <div className="relative">
                     <Lock size={13} className="absolute left-3 top-2.5 text-gray-400" />

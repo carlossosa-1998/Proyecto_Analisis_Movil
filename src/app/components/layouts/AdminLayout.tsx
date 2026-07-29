@@ -96,7 +96,7 @@ export const AdminLayout: React.FC<LayoutProps> = ({ children, currentView, onNa
             {isSidebarOpen && (
                 <div className="absolute inset-0 top-14 z-40 flex">
                     {/* Contenido del Sidebar */}
-                    <aside className="w-64 bg-white h-full border-r border-slate-200 shadow-2xl flex flex-col justify-between p-3 z-50 animate-in slide-in-from-left duration-200">
+                    <aside className="w-45 bg-white h-full border-r border-slate-200 shadow-2xl flex flex-col justify-between p-3 z-50 animate-in slide-in-from-left duration-200">
                         <div>
                             {/* Información del Perfil en el Sidebar */}
                             <div className="flex items-center gap-3 p-2 mb-3 bg-slate-50 rounded-[4px] border border-slate-200">
@@ -107,8 +107,8 @@ export const AdminLayout: React.FC<LayoutProps> = ({ children, currentView, onNa
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
-                                <div className="text-left leading-tight truncate">
-                                    <p className="font-bold text-xs text-slate-900 truncate">
+                                <div className="text-left leading-tight">
+                                    <p className="font-bold text-xs text-slate-900">
                                         Carlos Rodríguez
                                     </p>
                                     <span className="text-[10px] text-[#0E5E6F] font-semibold block truncate">

@@ -150,6 +150,11 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
     const [statusFilter, setStatusFilter] = useState<string>("todos");
     const [hoveredBar, setHoveredBar] = useState<number | null>(null);
 
+    // Estados para simular el gesto táctil de deslizar (swipe down) en el modal
+    const [dragY, setDragY] = useState<number>(0);
+    const touchStartY = useRef<number>(0);
+    const isDraggingModal = useRef<boolean>(false);
+
     // Paleta de colores
     const HEX_COLORS = {
         brandGreen: "#0E5E6F",
@@ -208,6 +213,29 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
             unread: false,
         },
     ]);
+
+    // Manejadores para el gesto táctil de cierre rápido del modal
+    const handleTouchStartModal = (e: React.TouchEvent) => {
+        touchStartY.current = e.touches[0].clientY;
+        isDraggingModal.current = true;
+    };
+
+    const handleTouchMoveModal = (e: React.TouchEvent) => {
+        if (!isDraggingModal.current) return;
+        const currentY = e.touches[0].clientY;
+        const deltaY = currentY - touchStartY.current;
+        if (deltaY > 0) {
+            setDragY(deltaY);
+        }
+    };
+
+    const handleTouchEndModal = () => {
+        isDraggingModal.current = false;
+        if (dragY > 50) {
+            setShowNotifications(false);
+        }
+        setDragY(0);
+    };
 
     const handleGoToSupportLogs = () => {
         if (typeof onNavigate === "function") {
@@ -479,7 +507,7 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
             className="p-4 w-full mx-auto bg-white antialiased text-gray-800 font-sans"
         >
             {/* BARRA SUPERIOR */}
-            <div className="flex flex-col gap-3 mb-5 pb-4 border-b-2 border-gray-100 select-none">
+            <div className="flex flex-col gap-3 mb-5 pb-4 border-b-2 border-gray-100 select-none relative">
                 <div className="flex items-start justify-between gap-2">
                     <div className="text-left space-y-0.5 min-w-0">
                         <h1 className="text-base font-black text-gray-900 tracking-tight leading-tight">
@@ -490,25 +518,118 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                         </p>
                     </div>
 
-                    {/* CAMPANA */}
-                    <button
-                        onClick={() => setShowNotifications(true)}
-                        style={{ borderRadius: "4px" }}
-                        className="relative p-2 bg-white border-2 border-gray-200 hover:border-gray-300 transition-colors shadow-xs active:scale-95 flex items-center justify-center shrink-0"
-                    >
-                        <Bell size={17} className="text-gray-600" />
-                        {unreadCount > 0 && (
-                            <span
-                                style={{
-                                    backgroundColor: HEX_COLORS.red,
-                                    borderRadius: "4px",
-                                }}
-                                className="absolute -top-1 -right-1 px-1 py-0.2 text-[9px] text-white font-black shadow-xs"
-                            >
-                                {unreadCount}
-                            </span>
+                    {/* CAMPANA Y CONTENEDOR DE NOTIFICACIONES */}
+        <div className="relative shrink-0 mt-0.5">
+          <button
+            type="button"
+            onClick={() => setShowNotifications(!showNotifications)}
+            style={{ borderRadius: "4px" }}
+            className="relative p-2.5 bg-white border border-gray-200 hover:border-gray-300 active:scale-95 transition-all shadow-md flex items-center justify-center cursor-pointer touch-manipulation"
+          >
+            <Bell size={18} className="text-gray-700" />
+            {unreadCount > 0 && (
+              <span
+                style={{ backgroundColor: HEX_COLORS.red, borderRadius: "4px" }}
+                className="absolute -top-1 -right-1 px-1.5 py-0.5 text-[9px] text-white font-black shadow-xs"
+              >
+                {unreadCount}
+              </span>
+            )}
+          </button>
+
+                        {/* POPUP MODAL/CARD QUE NACE DEL BOTÓN DE NOTIFICACIONES */}
+                        {showNotifications && (
+                            <>
+                                {/* BACKDROP TRANSPARENTE QUE CIERRA AL TOCAR AFUERA */}
+                                <div
+                                    className="fixed inset-0 z-40 bg-black/20"
+                                    onClick={() => setShowNotifications(false)}
+                                />
+
+                                {/* CARD COMPACTO ADAPTADO DE 1.TXT */}
+                                <div
+                                    onTouchStart={handleTouchStartModal}
+                                    onTouchMove={handleTouchMoveModal}
+                                    onTouchEnd={handleTouchEndModal}
+                                    style={{
+                                        transform: `translateY(${dragY}px)`,
+                                        transition: isDraggingModal.current ? "none" : "transform 0.2s cubic-bezier(0,0,0.2,1)",
+                                    }}
+                                    className="absolute top-12 right-0 z-50 bg-white border-2 border-gray-300 rounded-[4px] w-66 max-w-[calc(100vw-2rem)] shadow-2xl flex flex-col text-left origin-top-right animate-in zoom-in-95 duration-150"
+                                >
+                                    {/* Píldora táctil indicadora */}
+                                    <div className="flex justify-center pt-2 pb-1 cursor-grab active:cursor-grabbing">
+                                        <div className="w-8 h-1 bg-gray-300 rounded-full" />
+                                    </div>
+
+                                    <div className="p-2.5 space-y-2">
+                                        {/* Encabezado */}
+                                        <div className="flex items-center justify-between pb-1.5 border-b-2 border-gray-100">
+                                            <div className="flex items-center gap-1.5">
+                                                <div className="p-1 bg-[#0E5E6F]/10 rounded-[4px] text-[#0E5E6F]">
+                                                    <Bell size={12} />
+                                                </div>
+                                                <h3 className="text-xs font-black text-gray-800 normal-case">
+                                                    Notificaciones
+                                                </h3>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowNotifications(false)}
+                                                className="p-1 text-gray-400 hover:text-gray-600 rounded-[4px] cursor-pointer touch-manipulation"
+                                            >
+                                                <X size={13} />
+                                            </button>
+                                        </div>
+
+                                        {/* Lista de Notificaciones compacta */}
+                                        <div className="space-y-1.5 max-h-60 overflow-hidden">
+                                            {notificaciones.map((n) => (
+                                                <div
+                                                    key={n.id}
+                                                    className={`p-2 border rounded-[4px] text-xs transition-colors ${
+                                                        n.unread ? "bg-gray-50/90 border-gray-200" : "bg-white border-gray-100"
+                                                    }`}
+                                                >
+                                                    <div className="flex justify-between items-start gap-1 mb-1">
+                                                        <span
+                                                            style={{
+                                                                backgroundColor: n.colorBg,
+                                                                color: n.textColor,
+                                                            }}
+                                                            className="px-1.5 py-0.5 text-[8px] font-extrabold flex items-center gap-1 tracking-wider rounded-[4px] truncate"
+                                                        >
+                                                            {n.icono}
+                                                            <span className="truncate">{n.titulo}</span>
+                                                        </span>
+                                                        <span className="text-[8px] font-mono font-medium text-gray-400 shrink-0">
+                                                            {n.tiempo}
+                                                        </span>
+                                                    </div>
+                                                    <p className="text-gray-700 font-medium text-[10px] leading-snug">
+                                                        {n.detalle}
+                                                    </p>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Pie del modal */}
+                                        <div className="pt-1.5 border-t border-gray-100 text-center">
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setNotificaciones(notificaciones.map((n) => ({ ...n, unread: false })));
+                                                }}
+                                                className="w-full py-1 px-2 bg-white border border-gray-200 hover:border-gray-300 text-[#0E5E6F] font-bold rounded-[4px] text-[10px] transition-colors active:scale-95 shadow-xs cursor-pointer touch-manipulation"
+                                            >
+                                                Marcar todas como leídas
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
                         )}
-                    </button>
+                    </div>
                 </div>
 
                 {/* Badge Nivel Técnico */}
@@ -524,78 +645,6 @@ export const TecnicoDashboardView: React.FC<TecnicoDashboardProps> = ({ onNaviga
                     <span className="text-[10px] font-bold">Técnico certificado master</span>
                 </div>
             </div>
-
-            {/* BOTTOM SHEET DE NOTIFICACIONES */}
-            {showNotifications && (
-                <div className="fixed inset-0 z-50 flex items-end justify-center">
-                    <div
-                        className="absolute inset-0 bg-black/40 animate-in fade-in duration-150"
-                        onClick={() => setShowNotifications(false)}
-                    ></div>
-
-                    <div
-                        style={{ borderRadius: "12px 12px 0 0" }}
-                        className="relative w-full max-h-[80vh] bg-white border-t-2 border-gray-200 shadow-2xl p-4 text-left animate-in slide-in-from-bottom duration-200 flex flex-col"
-                    >
-                        <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-3"></div>
-
-                        <div className="flex justify-between items-center pb-2.5 mb-2.5 border-b border-gray-100">
-                            <div className="flex items-center gap-2">
-                                <Bell size={15} className="text-gray-700" />
-                                <h3 className="text-xs font-black text-gray-900">
-                                    Centro de Alertas Técnicas
-                                </h3>
-                            </div>
-                            <button
-                                onClick={() => setShowNotifications(false)}
-                                className="text-gray-400 hover:text-gray-600 p-1"
-                            >
-                                <X size={16} />
-                            </button>
-                        </div>
-
-                        <div className="space-y-2 overflow-y-auto custom-scrollbar pr-1">
-                            {notificaciones.map((n) => (
-                                <div
-                                    key={n.id}
-                                    style={{ borderRadius: "4px" }}
-                                    className={`p-2.5 border text-xs transition-colors ${n.unread ? "bg-gray-50 border-gray-200" : "bg-white border-gray-100"
-                                        }`}
-                                >
-                                    <div className="flex justify-between items-start gap-2 mb-1">
-                                        <span
-                                            style={{
-                                                backgroundColor: n.colorBg,
-                                                color: n.textColor,
-                                                borderRadius: "4px",
-                                            }}
-                                            className="px-2 py-0.5 text-[9px] font-bold flex items-center gap-1"
-                                        >
-                                            {n.icono}
-                                            {n.titulo}
-                                        </span>
-                                        <span className="text-[9px] font-mono text-gray-400 shrink-0">{n.tiempo}</span>
-                                    </div>
-                                    <p className="text-gray-700 font-medium text-[11px] leading-snug">
-                                        {n.detalle}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="pt-2.5 mt-2.5 border-t border-gray-100 text-center">
-                            <button
-                                onClick={() => {
-                                    setNotificaciones(notificaciones.map((n) => ({ ...n, unread: false })));
-                                }}
-                                className="text-[11px] font-bold text-[#0E5E6F] hover:underline"
-                            >
-                                Marcar todas como leídas
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {/* MÉTRICAS SUMMARY */}
             <div className="grid grid-cols-2 gap-3 mb-6 text-left">
@@ -3239,7 +3288,7 @@ export const TecnicoHelpView = () => {
     equipo: 'DJI Agras T40',
     categoria: 'Falla mecánica / motores',
     prioridad: 'Alta',
-    descripcion: '',
+    descripcion: 'Hola, este es un mensaje para solicitar asistencia.',
   });
 
   const activeChat = chats.find((c) => c.id === activeChatId) || chats[0];
@@ -3297,7 +3346,7 @@ export const TecnicoHelpView = () => {
       equipo: 'DJI Agras T40',
       categoria: 'Falla mecánica / motores',
       prioridad: 'Alta',
-      descripcion: '',
+      descripcion: 'Descripción...',
     });
   };
 
@@ -3929,13 +3978,16 @@ export const TecnicoHelpView = () => {
 
 // Perfil de tecnico
 export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
+    // Estado para las pestañas de métricas y credenciales
+    const [activeProfileTab, setActiveProfileTab] = useState<"metricas" | "credenciales">("metricas");
+
     // Configuración exclusiva para el Técnico Agrónomo
     const initialProfile = {
         initials: "MA",
         name: "Ing. Mario Alberto Alvarado",
         email: "mario.alvarado@agroaguante.hn",
         phone: "+504 9876-5432",
-        password: "••••••••••••",
+        password: "password123",
         avatar: "src/img/tecnico_perfil.png",
         avatarBg: "bg-[#0E5E6F] text-white",
         roleLabel: "Técnico Agrónomo · Analista de Campo",
@@ -3953,7 +4005,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
     const [saveSuccess, setSaveSuccess] = useState(false);
     const [imgError, setImgError] = useState(false);
 
-    // Estados cosméticos para simular la subida de foto
+    // Estados cosméticos para simular la subida sin abrir nada
     const [isUploading, setIsUploading] = useState(false);
     const [simulatedFile, setSimulatedFile] = useState<string>("");
 
@@ -3974,7 +4026,7 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
         setIsModalOpen(true);
     };
 
-    // Simula que procesa una foto sin abrir la ventana de archivos
+    // Simula que procesa una foto sin abrir la ventana de archivos de la PC
     const handleFakeUpload = () => {
         if (isUploading) return;
         setIsUploading(true);
@@ -4051,116 +4103,137 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                     </div>
                 </div>
 
-                {/* MÉTRICAS PRINCIPALES — grid 2x2 táctil */}
-                <div className="grid grid-cols-2 divide-x-2 divide-y-2 divide-gray-100 bg-white border-b-2 border-gray-200 text-left">
-                    {/* Estación Asignada */}
-                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
-                        <div className="flex items-center gap-1.5">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
-                                <MapPin size={14} />
-                            </div>
-                            <span className="text-[9px] font-black text-gray-400 tracking-widest block">
-                                Estación Asignada
-                            </span>
-                        </div>
-                        <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
-                            {profileData.location}
-                        </span>
-                    </div>
-
-                    {/* Área Monitoreada */}
-                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
-                        <div className="flex items-center gap-1.5">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
-                                <Layers size={14} />
-                            </div>
-                            <span className="text-[9px] font-black text-gray-400 tracking-widest block">
-                                Área Monitoreada
-                            </span>
-                        </div>
-                        <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
-                            {profileData.area}
-                        </span>
-                    </div>
-
-                    {/* Diagnósticos */}
-                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
-                        <div className="flex items-center gap-1.5">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
-                                <BarChart2 size={14} />
-                            </div>
-                            <span className="text-[9px] font-black text-gray-400 tracking-widest block">
-                                Diagnósticos
-                            </span>
-                        </div>
-                        <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5 w-full">
-                            {profileData.services}
-                        </span>
-                    </div>
-
-                    {/* Estado */}
-                    <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
-                        <div className="flex items-center gap-1.5">
-                            <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
-                                <CheckCircle size={14} />
-                            </div>
-                            <span className="text-[9px] font-black text-gray-400 tracking-widest block">
-                                Estado
-                            </span>
-                        </div>
-                        <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] inline-block mt-0.5">
-                            {profileData.standing}
-                        </span>
-                    </div>
+                {/* SELECTOR DE PESTAÑAS PARA MÉTRICAS Y CREDENCIALES */}
+                <div className="flex border-b-2 border-gray-200 bg-gray-100">
+                    <button
+                        type="button"
+                        onClick={() => setActiveProfileTab("metricas")}
+                        className={`flex-1 py-2 text-xs font-black transition-colors cursor-pointer ${
+                            activeProfileTab === "metricas"
+                                ? "bg-white text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
+                                : "text-gray-500 hover:text-gray-700"
+                        }`}
+                    >
+                        Métricas
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setActiveProfileTab("credenciales")}
+                        className={`flex-1 py-2 text-xs font-black transition-colors cursor-pointer ${
+                            activeProfileTab === "credenciales"
+                                ? "bg-white text-[#0E5E6F] border-b-2 border-[#0E5E6F]"
+                                : "text-gray-500 hover:text-gray-700"
+                        }`}
+                    >
+                        Credenciales
+                    </button>
                 </div>
 
-                {/* DATOS DE CONTACTO Y CREDENCIALES */}
-                <div className="p-3.5 bg-white flex-1 flex flex-col justify-center">
-                    <div className="flex flex-col gap-2 mb-2.5 pb-2 border-b-2 border-gray-100">
-                        <div className="flex items-center gap-2">
-                            <Settings size={15} className="text-[#0E5E6F]" />
-                            <h3 className="text-xs font-black text-gray-800 normal-case">
-                                Credenciales y Datos de Contacto
-                            </h3>
+                {/* CONTENIDO DE PESTAÑA: MÉTRICAS */}
+                {activeProfileTab === "metricas" && (
+                    <div className="grid grid-cols-2 bg-white border-b-2 border-gray-200 text-left flex-1 content-center">
+                        {/* Estación Asignada */}
+                        <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+                            <div className="flex items-center gap-1.5">
+                                <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                                    <MapPin size={14} />
+                                </div>
+                                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                    Estación Asignada
+                                </span>
+                            </div>
+                            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
+                                {profileData.location}
+                            </span>
                         </div>
 
-                        <button
-                            onClick={handleOpenModal}
-                            className="w-full py-2 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] text-xs flex items-center justify-center gap-1.5 transition-colors active:scale-95 shadow-xs cursor-pointer"
-                        >
-                            <Edit2 size={13} className="text-[#0E5E6F]" /> Editar información
-                        </button>
+                        {/* Área Monitoreada */}
+                        <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+                            <div className="flex items-center gap-1.5">
+                                <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                                    <Layers size={14} />
+                                </div>
+                                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                    Área Monitoreada
+                                </span>
+                            </div>
+                            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5">
+                                {profileData.area}
+                            </span>
+                        </div>
+
+                        {/* Diagnósticos */}
+                        <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+                            <div className="flex items-center gap-1.5">
+                                <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                                    <BarChart2 size={14} />
+                                </div>
+                                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                    Diagnósticos
+                                </span>
+                            </div>
+                            <span className="text-[11px] text-gray-800 font-bold block break-words leading-tight mt-0.5 w-full">
+                                {profileData.services}
+                            </span>
+                        </div>
+
+                        {/* Estado */}
+                        <div className="p-3 hover:bg-gray-50/50 transition-colors flex items-start gap-2 flex-col min-w-0">
+                            <div className="flex items-center gap-1.5">
+                                <div className="text-[#0E5E6F] shrink-0 bg-gray-50 p-1 border-2 border-gray-200 rounded-[4px]">
+                                    <CheckCircle size={14} />
+                                </div>
+                                <span className="text-[9px] font-black text-gray-400 tracking-widest block">
+                                    Estado
+                                </span>
+                            </div>
+                            <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-[4px] inline-block mt-0.5">
+                                {profileData.standing}
+                            </span>
+                        </div>
                     </div>
+                )}
 
-                    <div className="grid grid-cols-1 gap-2.5 text-left">
-                        <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-                            <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
-                                <Phone size={12} className="text-[#0E5E6F]" /> Teléfono
-                            </span>
-                            <p className="font-bold text-xs text-gray-800 mt-0.5">
-                                {profileData.phone}
-                            </p>
+                {/* CONTENIDO DE PESTAÑA: CREDENCIALES */}
+                {activeProfileTab === "credenciales" && (
+                    <div className="p-2 bg-white flex-1 flex flex-col justify-center">
+                        <div className="flex flex-col gap-2 mb-2.5 pb-2 border-b-2 border-gray-100">
+                            <div className="flex items-center gap-2">
+                                <Settings size={15} className="text-[#0E5E6F]" />
+                                <h3 className="text-xs font-black text-gray-800 normal-case">
+                                    Credenciales y Datos de Contacto
+                                </h3>
+                            </div>
+
+                            <button
+                                onClick={handleOpenModal}
+                                className="w-full py-2 px-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-bold rounded-[4px] text-xs flex items-center justify-center gap-1.5 transition-colors active:scale-95 shadow-xs cursor-pointer"
+                            >
+                                <Edit2 size={13} className="text-[#0E5E6F]" /> Editar información
+                            </button>
                         </div>
 
-                        <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-                            <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
-                                <Mail size={12} className="text-[#0E5E6F]" /> Correo
-                            </span>
-                            <p className="font-bold text-xs text-gray-800 mt-0.5 truncate">
-                                {profileData.email}
-                            </p>
-                        </div>
+                        <div className="grid grid-cols-1 gap-1 text-left">
+                            <div className="p-2 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
+                                <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
+                                    <Phone size={12} className="text-[#0E5E6F]" /> Teléfono
+                                </span>
+                                <p className="font-bold text-xs text-gray-800 mt-0.5">
+                                    {profileData.phone}
+                                </p>
+                            </div>
 
-                        <div className="p-2.5 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
-                            <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
-                                <Lock size={12} className="text-[#0E5E6F]" /> Contraseña
-                            </span>
-                            <p className="font-mono font-bold text-xs text-gray-800 mt-0.5">
-                                ••••••••••••
-                            </p>
+                            <div className="p-2 bg-gray-50 border-2 border-gray-100 rounded-[4px]">
+                                <span className="text-[10px] font-black text-gray-400 tracking-wider flex items-center gap-1">
+                                    <Mail size={12} className="text-[#0E5E6F]" /> Correo
+                                </span>
+                                <p className="font-bold text-xs text-gray-800 mt-0.5 truncate">
+                                    {profileData.email}
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
 
                 {/* PIE DE PÁGINA */}
                 <div className="border-t-2 border-gray-200 px-4 py-2.5 bg-gray-50 flex flex-col items-stretch gap-2">
@@ -4258,23 +4331,6 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                                         />
                                     </div>
                                 </div>
-
-                                <div>
-                                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
-                                        Correo electrónico
-                                    </label>
-                                    <div className="relative">
-                                        <Mail size={13} className="absolute left-3 top-2.5 text-gray-400" />
-                                        <input
-                                            type="email"
-                                            value={editForm.email}
-                                            onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                                            className="w-full pl-8 pr-3 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
                                 <div>
                                     <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
                                         Nueva contraseña
@@ -4297,7 +4353,28 @@ export const TecnicoProfileView = ({ onLogout }: TecnicoProfileViewProps) => {
                                         </button>
                                     </div>
                                 </div>
-
+                                <div>
+                                    <label className="block text-[10px] font-black text-gray-500 tracking-wider mb-1">
+                                        Repetir contraseña
+                                    </label>
+                                    <div className="relative">
+                                        <Lock size={13} className="absolute left-3 top-2.5 text-gray-400" />
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            value={editForm.password}
+                                            onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
+                                            className="w-full pl-8 pr-8 py-1.5 text-xs font-bold border-2 border-gray-200 rounded-[4px] focus:border-[#0E5E6F] focus:outline-none bg-white text-gray-800"
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-2.5 top-2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                                        >
+                                            {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                                        </button>
+                                    </div>
+                                </div>
                                 <div className="flex gap-2 pt-1.5 border-t border-gray-100">
                                     <button
                                         type="button"

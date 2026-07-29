@@ -461,10 +461,10 @@ export default function App() {
           {/* Tarjeta Informativa - Title Case */}
           <div className="mt-4 border border-dashed border-slate-700 p-2.5 rounded-[4px] bg-slate-900/50">
             <p className="text-[9px] tracking-wider text-slate-300 font-bold mb-0.5">
-              Prototipo BioDron
+              Prototipo BIODRON
             </p>
             <p className="text-[9px] text-slate-400 leading-relaxed">
-              Mapeo De vistas.
+              Mapeo de vistas.
             </p>
           </div>
         </div>

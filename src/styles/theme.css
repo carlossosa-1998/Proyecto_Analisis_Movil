@@ -2,15 +2,6 @@
 
 @import './fonts.css';
 
-@theme {
-  --font-sans: 'Roboto', system-ui, sans-serif;
-}
-
-/* Forzamos a que todo aplique la fuente Roboto */
-* {
-  font-family: 'Roboto', system-ui, sans-serif !important;
-}
-
 :root {
   --font-size: 16px;
   --background: #ffffff;
@@ -214,4 +205,13 @@
 /* Internet Explorer y Edge Legacy */
 * {
   -ms-overflow-style: none;
+}
+
+* {
+  --font-sans: 'Roboto', system-ui, sans-serif;
+}
+
+/* Forzamos a que todo aplique la fuente Roboto */
+* {
+  font-family: 'Roboto', system-ui, sans-serif !important;
 }
